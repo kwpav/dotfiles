@@ -21,9 +21,6 @@ Xcursor.theme: Adwaita
 !-------------------------------------------------------------------------------
 !! Colors
 
-! Cursor
-URxvt.cursorColor: #657b83
-
 !!Source http://github.com/altercation/solarized
  
 *background: #002b36
