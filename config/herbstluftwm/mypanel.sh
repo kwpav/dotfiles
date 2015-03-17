@@ -78,8 +78,13 @@ function gpu() {
 }
 
 function mem() {
-	smem=$(free -h | grep Mem | awk '{print $2}')
+	smem=$(free -h | grep Mem | awk '{print $7}')
 	echo -n " $smem"
+}
+
+function cpu_temp() {
+	temp=$(sensors coretemp-isa-0000 | grep "id 0" | awk '{print $4}' | tr -d '+')
+	echo -n " $temp"
 }
 
 function long_date() {
@@ -124,6 +129,10 @@ hc --idle | {
 		long_date
 		## monitor1
 		echo -n "%{S1}"
+		echo -n " CPU:"
+		cpu_temp
+		echo -n "$sep1"
+		echo -n " MEM:"
 		mem
 		echo -n "$sep1"
 		gpu
