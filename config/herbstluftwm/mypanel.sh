@@ -23,7 +23,7 @@ font1='*-gohufont-medium-r-*-*-14-*-*-*-*-*-*-*'
 
 height=20
 
-sep1=" |"
+sep1=" %{F#FF$blue}|%{F-}"
 ###
 
 ### Functions n stuff ###
@@ -78,7 +78,7 @@ function gpu() {
 }
 
 function mem() {
-	smem=$(memory)
+	smem=$(free -h | grep Mem | awk '{print $2}')
 	echo -n " $smem"
 }
 
