@@ -73,33 +73,28 @@ function print_tags() {
 }
 
 function gpu() {
-	temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)
-	echo -n " GPU: $temp°C"
+	echo -n "$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)°C"
 }
 
 function mem() {
-	smem=$(free -h | grep Mem | awk '{print $7}')
-	echo -n " $smem"
+	echo -n "$(free -h | grep Mem | awk '{print $7}')"
 }
 
 function cpu_temp() {
-	temp=$(sensors coretemp-isa-0000 | grep "id 0" | awk '{print $4}' | tr -d '+')
-	echo -n " $temp"
+	echo -n "$(sensors coretemp-isa-0000 | grep "id 0" | awk '{print $4}' | tr -d '+')"
 }
 
 function long_date() {
-	ldate=$(date "+%A %b %d %R")
-	echo -n " $ldate"
+	echo -n " $(date "+%A %b %d %R") "
 }
 
 function short_date() {
-	sdate=$(date "+%F") 
+	echo -n " $(date "+%F") "
 	echo -n " $sdate"
 }
 
 function stime() {
-	stime=$(date "+%H:%M")
-	echo -n " $stime"
+	echo -n "$(date "+%H:%M") "
 }
 
 ### Statusbar ###
@@ -111,7 +106,7 @@ hc --idle | {
 		### LEFT ###
         echo -n "%{l}"
 		## monitor0 & monitor1
-		print_tags
+		print_tags 
 		       	
 		### CENTER ###	
 		echo -n "%{c}"
@@ -119,22 +114,23 @@ hc --idle | {
 		echo -n "%{S0}"
 		echo -n "${windowtitle//^/^^}"
 		## monitor1
-		echo -n "%{S1}"
-		echo -n "${windowtitle//^/^^}"
+		#echo -n "%{S1}"
+		#echo -n "${windowtitle//^/^^}"
 	
         ### RIGHT ### 
         echo -n "%{r}"
 		## monitor0
 		echo -n "%{S0}"
-		long_date
+		long_date 
 		## monitor1
 		echo -n "%{S1}"
-		echo -n " CPU:"
+		echo -n " CPU: "
 		cpu_temp
 		echo -n "$sep1"
-		echo -n " MEM:"
+		echo -n " MEM: "
 		mem
 		echo -n "$sep1"
+		echo -n " GPU: "
 		gpu
 		echo -n "$sep1"
 		short_date
@@ -153,14 +149,15 @@ hc --idle | {
                 windowtitle="${cmd[@]:2}"
                 ;;
             quit_panel)
-                exit
-				killall bar
-                ;;
+            	killall lemonbar
+				exit
+			   	;;
             reload)
+				killall lemonbar
                 exit
-				killall bar
-                ;;
+				;;
         esac
+	#sleep 1
     done
-} 2> /dev/null | bar -u 2 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
+} 2> /dev/null | lemonbar -u 2 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
 
