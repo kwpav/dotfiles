@@ -26,12 +26,12 @@ hc keyunbind --all
 #Mod=Mod1    # Use alt as the main modifier
 Mod=Mod4   # Use the super key as the main modifier
 
-
 hc keybind $Mod-Shift-q quit
-hc keybind $Mod-Shift-r reload
+hc keybind $Mod-Shift-r reload && killall mypanel.sh
 hc keybind $Mod-Shift-c close
 hc keybind $Mod-Return spawn urxvtc
 hc keybind $Mod-d spawn dmenu_run
+#hc keybind $Mod-d spawn lighthouse
 
 # basic movement
 # focusing clients
@@ -173,7 +173,7 @@ herbstclient set tree_style '╾│ ├└╼─┐'
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
 # or simply:
 #hc detect_monitors
-hc set_monitors 1920x1080+0+0 1680x1050+1920+0
+hc set_monitors 1920x1080+0+0 1680x1050+1920+0 1920x1080+3600+0
 
 herbstclient chain $cmds&
 

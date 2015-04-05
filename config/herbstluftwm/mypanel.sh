@@ -8,14 +8,15 @@
 
 ### THEME ###
 #get the colors
+
 . ~/.config/herbstluftwm/solarized
 
-#color format for bar, first two values are opacity
+#for bar - first two values are opacity
 bgcolor="#BB$base03"
 fgcolor="#FF$base0"
 curtagbg="#DD$blue"
-atagbg="#FF$base01"
-uftagbg="#BB$violet"
+atagbg="#BB$violet"
+uftagbg="#FF$base02"
 ftagbg="#99$blue"
 urgenttagbg="#FF$red"
 
@@ -27,6 +28,13 @@ sep1=" %{F#FF$blue}|%{F-}"
 ###
 
 ### Functions n stuff ###
+
+#this probably does something important?
+function uniq_linebuffered() { 
+	awk '$0 != l { print ; l=$0 ; fflush(); }' "$@" 
+}
+
+#herbstclient shortcut
 hc() { "${herbstclient_command[@]:-herbstclient}" "$@" ;}
 
 #get a list of monitors
@@ -72,34 +80,61 @@ function print_tags() {
 	done
 }
 
-function gpu() {
-	echo -n "$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)°C"
-}
-
-function mem() {
-	echo -n "$(free -h | grep Mem | awk '{print $7}')"
-}
-
-function cpu_temp() {
-	echo -n "$(sensors coretemp-isa-0000 | grep "id 0" | awk '{print $4}' | tr -d '+')"
-}
-
-function long_date() {
-	echo -n " $(date "+%A %b %d %R") "
-}
-
-function short_date() {
-	echo -n " $(date "+%F") "
-	echo -n " $sdate"
-}
-
-function stime() {
-	echo -n "$(date "+%H:%M") "
-}
-
 ### Statusbar ###
-hc --idle | {
-    windowtitle="Dave's not here, man.." 
+
+##get the data
+{
+	#gpu
+	while true ; do
+		echo "gputemp $(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)°C"
+		sleep 5 || break
+	done > >(uniq_linebuffered) &
+	gpu_pid=$!
+
+	#free memory
+	while true ; do
+		echo "freemem $(free -h | grep Mem | awk '{print $7}')"
+		sleep 5 || break
+	done > >(uniq_linebuffered) &
+	mem_pid=$!
+
+	#cpu temp
+	while true ; do
+		echo "cputemp $(sensors coretemp-isa-0000 | grep 'id 0' | awk '{print $4}' | tr -d '+')"
+		sleep 1 || break
+	done > >(uniq_linebuffered) &
+	cpu_temp_pid=$!
+
+	#long date
+	while true ; do
+		#echo "longdate $(date '+%A %b %d')"
+		echo "longdate $(ddate)"
+		sleep 5 || break
+	done > >(uniq_linebuffered) &
+	long_date_pid=$!
+
+	#short date
+	while true ; do
+		echo "shortdate $(date '+%F')"
+		sleep 5 || break
+	done > >(uniq_linebuffered) &
+	short_date_pid=$!
+
+	#time
+	while true ; do
+		echo "time1 $(date '+%I:%M%P')"
+		sleep 1 || break
+	done > >(uniq_linebuffered) &
+	time_pid=$!
+
+	hc --idle
+
+	killall $gpu_pid $mem_pid $cpu_temp_pid $long_date_pid
+
+##now output the data
+} 2> /dev/null | {
+	windowtitle="Dave's not here, man..."
+	visible=true	
 
 	### Main Loop ###
     while true ; do
@@ -121,20 +156,18 @@ hc --idle | {
         echo -n "%{r}"
 		## monitor0
 		echo -n "%{S0}"
-		long_date 
+		echo -n " $long_date"
+		#echo -n " $stime"
 		## monitor1
 		echo -n "%{S1}"
-		echo -n " CPU: "
-		cpu_temp
+		echo -n " CPU: $cpu_temp"
 		echo -n "$sep1"
-		echo -n " MEM: "
-		mem
+		echo -n " MEM: $mem"
 		echo -n "$sep1"
-		echo -n " GPU: "
-		gpu
+		echo -n " GPU: $gpu_temp"
 		echo -n "$sep1"
-		short_date
-		stime
+		echo -n " $short_date"
+		echo -n " $stime"
 
 		### END OUTPUT ###
 		echo ""
@@ -145,11 +178,30 @@ hc --idle | {
         cmd=( $line ) 
         # find out event origin
         case "${cmd[0]}" in
-		    focus_changed|window_title_changed)
+			cputemp)
+				cpu_temp="${cmd[@]:1}"
+				;;
+			freemem)
+				mem="${cmd[@]:1}"
+				;;
+			gputemp)
+				gpu_temp="${cmd[@]:1}"
+				;;
+			longdate)
+				long_date="${cmd[@]:1}"
+				;;
+			shortdate)
+				short_date="${cmd[@]:1}"
+				;;
+			time1)
+		    	stime="${cmd[@]:1}"
+				;;
+			focus_changed|window_title_changed)
                 windowtitle="${cmd[@]:2}"
                 ;;
             quit_panel)
             	killall lemonbar
+				killall mypanel.sh
 				exit
 			   	;;
             reload)
@@ -157,7 +209,6 @@ hc --idle | {
                 exit
 				;;
         esac
-	#sleep 1
     done
 } 2> /dev/null | lemonbar -u 2 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
 
