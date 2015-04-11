@@ -28,4 +28,6 @@ Xcursor.theme: Adwaita
 !! COLORS !! 
 ! #include "/home/kevin/.config/my-colors/ocean"
 #include "/home/kevin/.config/my-colors/solarized"
+! #include "/home/kevin/.config/my-colors/zenburn"
+! #include "/home/kevin/.config/my-colors/tommorow"
 
