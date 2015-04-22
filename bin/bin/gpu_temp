@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# to be used with i3blocks
+# gets the gpu_temp and colors it nicely
+
 import subprocess
 
 command = 'nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader'
