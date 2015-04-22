@@ -3,11 +3,9 @@ managed with [gnu stow](http://brandon.invergo.net/news/2012-05-26-using-gnu-sto
 
 Create `~/dotfiles/` and:
 
-`cd dotfiles/`
-
-`stow bin/`
-
-`stow herbstluftwm/`
+    cd dotfiles/
+    stow bin/
+    stow herbstluftwm/
 
 
 etc...
