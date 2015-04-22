@@ -16,6 +16,7 @@ set background=dark
 set tabstop=4
 set number
 set mouse=a
+set paste
 filetype plugin indent on
 syntax on
 
