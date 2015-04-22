@@ -9,3 +9,7 @@ create a `~/dotfiles` folder and:
 
 
 etc...
+
+For extra laziness:
+
+`easygit "updates..."`
