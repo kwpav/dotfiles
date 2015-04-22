@@ -13,7 +13,10 @@ colorscheme sourcerer
 " colorscheme base16-ocean
 " colorscheme base16-tomorrow
 set background=dark
-set tabstop=4
+set tabstop=8
+set softtabstop=4
+set shiftwidth=4
+set expandtab
 set number
 set mouse=a
 set paste
