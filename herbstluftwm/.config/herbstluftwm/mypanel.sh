@@ -6,6 +6,8 @@
 
 #set -f
 
+## ⮂  ⮀
+
 ### THEME ###
 #get the colors
 
@@ -14,15 +16,17 @@
 #for bar - first two values are opacity
 bgcolor="#BB$base03"
 fgcolor="#FF$base0"
-curtagbg="#DD$blue"
+curtagbg="#FF$blue"
 atagbg="#BB$violet"
-uftagbg="#FF$base02"
+uftagbg="#FF$base3"
 ftagbg="#99$blue"
 urgenttagbg="#FF$red"
 
-font1='*-gohufont-medium-r-*-*-14-*-*-*-*-*-*-*'
+#font1='*-gohufont-medium-r-*-*-14-*-*-*-*-*-*-*'
+#font1='-*-tewi-medium-*-*-*-17-*-*-*-*-*-iso10646-*'
+font1='-*-tewi-medium-*-*-*-11-*-*-*-*-*-iso10646-*'
 
-height=20
+height=12
 
 sep1=" %{F#FF$blue}|%{F-}"
 ###
@@ -49,12 +53,13 @@ done
 function print_tags() {
 	for monitor in ${MONITORS[@]} ; do
 		echo -n "%{S$monitor}"
+		#echo -n "%{B#FF$base1}"
 		TAGS=( $(hc tag_status $monitor) )
 		unset TAGS[${#TAGS[@]}]
 		for i in "${TAGS[@]}" ; do
 			case ${i:0:1} in
     			'#') # current tag
-        			echo -n "%{B$curtagbg}"
+        			echo -n "%{B$curtagbg}%{+u}"
 	        	    ;;
 	    	    '+') #atag: active - active tag on other monitor
     	    	 	echo -n "%{B$atagbg}"
@@ -66,17 +71,18 @@ function print_tags() {
     	    	 	echo -n "%{B$ftagbg}"
 					;;
 	        	':') # tag is not empty
-	    	        echo -n "%{B-}"
+	    	        echo -n "%{B#FF$red}%{+u}"
 					;;
 	    	    '!') # urgent tag
 					echo -n "%{B$urgenttagbg}"
 					;;
 		        *)
-    		     	echo -n "%{B-}"
+    		     	echo -n "%{B#DD$base3}"
         		    ;;
 			esac
-			echo -n " ${i:1} "
+			echo -n " ${i:1} %{U-}%{-u}"
 		done
+		echo -n "%{B-}%{F#DD$base3}⮀%{F-}"
 	done
 }
 
@@ -104,6 +110,12 @@ function print_tags() {
 		sleep 1 || break
 	done > >(uniq_linebuffered) &
 	cpu_temp_pid=$!
+
+	#cpu speed
+	while true ; do
+		echo "cpuspeed $(cat /proc/cpuinfo | grep -m 1 'cpu MHz' | cut --characters 12-18)"
+		sleep 1 || break
+    done > >(uniq_linebuffered) &
 
 	#long date
 	while true ; do
@@ -160,14 +172,29 @@ function print_tags() {
 		#echo -n " $stime"
 		## monitor1
 		echo -n "%{S1}"
-		echo -n " CPU: $cpu_temp"
-		echo -n "$sep1"
-		echo -n " MEM: $mem"
-		echo -n "$sep1"
-		echo -n " GPU: $gpu_temp"
-		echo -n "$sep1"
-		echo -n " $short_date"
-		echo -n " $stime"
+		#cpu
+		echo -n "%{F#FF$green}⮂%{F-}" 
+		echo -n "%{B#FF$green}"
+		echo -n "%{F#FF$base03}"
+		echo -n " CPU: $cpu_speed $cpu_temp "
+		#memory
+		echo -n "%{F#FF$base3}⮂%{F-}%{B-}" 
+		echo -n "%{B#FF$base3}"
+		echo -n "%{F#FF$base03}"
+		echo -n " MEM: $mem "
+		#gpu
+		echo -n "%{F#FF$green}⮂%{F-}%{B-}"
+		echo -n "%{B#FF$green}"
+		echo -n "%{F#FF$base03}"
+		echo -n " GPU: $gpu_temp "
+		#date/time
+		echo -n "%{F#FF$base3}⮂%{F-}%{B-}" 
+		echo -n "%{B#FF$base3}"
+		echo -n "%{F#FF$base03}"
+		echo -n " $short_date "
+		echo -n "%{F#FF$green}"
+		echo -n " $stime "
+		echo -n "%{F-}%{B-}"
 
 		### END OUTPUT ###
 		echo ""
@@ -180,6 +207,9 @@ function print_tags() {
         case "${cmd[0]}" in
 			cputemp)
 				cpu_temp="${cmd[@]:1}"
+				;;
+		    cpuspeed)
+				cpu_speed="${cmd[@]:1}"
 				;;
 			freemem)
 				mem="${cmd[@]:1}"
@@ -201,7 +231,6 @@ function print_tags() {
                 ;;
             quit_panel)
             	killall lemonbar
-				killall mypanel.sh
 				exit
 			   	;;
             reload)
@@ -210,5 +239,5 @@ function print_tags() {
 				;;
         esac
     done
-} 2> /dev/null | lemonbar -u 2 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
+} 2> /dev/null | lemonbar -d -u 2 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
 

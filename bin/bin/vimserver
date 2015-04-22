@@ -1,0 +1,14 @@
+#!/bin/sh
+#~/bin/vimserver
+#a vimserver script
+
+#check to see if the vimserver is running
+if [ $(vim --serverlist) ]
+then 
+		#open the file in a new tab
+		vim --servername VIMSERVER --remote-tab $1
+else 
+		#start the server
+		vim --servername VIMSERVER $1
+fi
+

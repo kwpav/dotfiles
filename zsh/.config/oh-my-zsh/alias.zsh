@@ -22,4 +22,6 @@ alias shutdown='sudo shutdown -h 0'
 
 alias hc='herbstclient'
 
-alias say='toilet --gay -f smmono12'
+alias say='toilet --gay -f 3d'
+
+alias vim='vimserver'

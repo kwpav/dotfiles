@@ -9,6 +9,8 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " colorscheme zenburn
 colorscheme solarized
+" colorscheme base16-ocean
+" colorscheme base16-tomorrow
 set background=dark
 set tabstop=4
 set number
@@ -21,7 +23,11 @@ if has('gui_running')
   set guifont=Tewi
 endif
 
+
+" powerline
+set rtp+=/home/kevin/powerline/powerline/bindings/vim
+
 " airline options
 " make pretty arrows:
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 
