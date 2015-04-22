@@ -26,8 +26,8 @@ URxvt*pointerBlink: true
 Xcursor.theme: Adwaita
 
 !! COLORS !! 
-! #include "/home/kevin/.config/my-colors/ocean"
-#include "/home/kevin/.config/my-colors/solarized"
-! #include "/home/kevin/.config/my-colors/zenburn"
-! #include "/home/kevin/.config/my-colors/tommorow"
+! #include "/home/kevin/.config/xrcolors/ocean"
+#include "/home/kevin/.config/xrcolors/solarized"
+! #include "/home/kevin/.config/xrcolors/zenburn"
+! #include "/home/kevin/.config/xrcolors/tommorow"
 
