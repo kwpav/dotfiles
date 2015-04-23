@@ -19,7 +19,7 @@ set shiftwidth=4
 set expandtab
 set number
 set mouse=a
-set paste
+" set paste
 filetype plugin indent on
 syntax on
 
