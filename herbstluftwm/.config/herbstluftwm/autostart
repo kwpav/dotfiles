@@ -164,4 +164,3 @@ herbstclient chain $cmds&
 
 panel=~/.config/herbstluftwm/mypanel.sh
 "$panel" &
-hc spawn plank
