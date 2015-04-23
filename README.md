@@ -11,12 +11,19 @@ Cloning creates `~/dotfiles/`. Use stow to create some symlinks:
 etc...
 
 # vim
-Install [pathogen](https://github.com/tpope/vim-pathogen):
+Install these plugins...
+
+[pathogen](https://github.com/tpope/vim-pathogen):
 
     mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
-Install [nerdtree](https://github.com/scrooloose/nerdtree):
+[vim-sensible](https://github.com/tpope/vim-sensible):
+
+    cd ~/.vim/bundle
+    git clone git://github.com/tpope/vim-sensible.git
+
+[nerdtree](https://github.com/scrooloose/nerdtree):
 
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/nerdtree.git
