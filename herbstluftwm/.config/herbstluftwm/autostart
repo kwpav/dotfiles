@@ -2,7 +2,7 @@
 
 hc() {
     #herbstclient "$@"
-	cmds="$cmds , $@"
+    cmds="$cmds , $@"
 }
 
 hc emit_hook reload
