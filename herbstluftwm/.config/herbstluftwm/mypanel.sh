@@ -1,6 +1,7 @@
 #!/bin/bash
-# taken from the default and some other configs I found
-# ...sorry for stealing your code!
+#
+# ~/.config/herbstluftwm/mypanel.sh
+#
 # disable path name expansion or * will be expanded in the line.
 # cmd ( $line )
 
