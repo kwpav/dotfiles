@@ -23,8 +23,12 @@ set expandtab
 
 " lines
 set number
+
+" use the rat
 set mouse=a
+
 " set paste
+
 filetype plugin indent on
 syntax on
 
