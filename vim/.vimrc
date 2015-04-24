@@ -1,3 +1,5 @@
+" ~/.vimrc
+
 runtime! archlinux.vim
 
 " pathogen
