@@ -1,8 +1,9 @@
 # dotfiles
-managed with [gnu stow](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html)
+Now using [gnu stow](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html)
 
 Cloning creates `~/dotfiles/`. Use stow to create some symlinks:
 
+    git clone git://github.com/kpavao84/dotfiles.git
     cd dotfiles/
     stow bin/
     stow herbstluftwm/
@@ -30,6 +31,10 @@ Install these plugins...
 
    
 # bin
+`vimserver` is a quick and dirty script that creates a vimserver on the first run, and then if `vimserver` is called again, a new tab will open with the file. It is probably full of errors. 
+
 For extra laziness:
 
 `easygit "updates..."`
+
+
