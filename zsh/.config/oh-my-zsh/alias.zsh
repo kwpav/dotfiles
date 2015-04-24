@@ -14,10 +14,6 @@ alias server_start='sudo systemctl start nginx && sudo systemctl start php-fpm.s
 alias server_stop='sudo systemctl stop nginx && sudo systemctl stop php-fpm.service && sudo systemctl stop mysqld.service'
 alias server_restart='sudo systemctl restart nginx && sudo systemctl restart php-fpm.service && sudo systemctl restart mysqld.service'
 
-alias sushi='ssh kevin@66.228.62.98'
-#alias sushicp='scp kevin@66.228.62.98'
-alias sspi='ssh kevin@192.168.1.150'
-
 alias shutdown='sudo shutdown -h 0'
 
 alias hc='herbstclient'
