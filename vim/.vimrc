@@ -7,16 +7,21 @@ execute pathogen#infect()
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
+"" THEMES 
 " colorscheme zenburn
 " colorscheme solarized
 colorscheme sourcerer
 " colorscheme base16-ocean
 " colorscheme base16-tomorrow
 set background=dark
+
+" tab options
 set tabstop=8
 set softtabstop=4
 set shiftwidth=4
 set expandtab
+
+" lines
 set number
 set mouse=a
 " set paste
@@ -25,7 +30,7 @@ syntax on
 
 " set gvim font
 if has('gui_running')
-  set guifont=Tewi
+    set guifont=Tewi
 endif
 
 
