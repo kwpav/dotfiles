@@ -34,6 +34,14 @@ set mouse=a
 filetype plugin indent on
 syntax on
 
+" omni complete
+set omnifunc=syntaxcomplete#Complete
+
+" py complete
+let g:pydiction_location = '/home/kevin/.vim/bundle/pydiction/complete-dict'
+" change height of menu, default is 8
+" let g:pydiction_menu_height = 3
+
 " set gvim font
 if has('gui_running')
     set guifont=Tewi
@@ -46,4 +54,3 @@ set rtp+=/home/kevin/powerline/powerline/bindings/vim
 " airline options
 " make pretty arrows:
 " let g:airline_powerline_fonts = 1
-
