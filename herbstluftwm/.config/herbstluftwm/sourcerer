@@ -1,0 +1,48 @@
+# sourcerer colors for herbstluftwm
+
+base03='222222' #CHANGED
+base02='073642'
+base01='586e75'
+base00='657b83'
+base0='272822' #CHANGED doesnt seem to work?
+base1='93a1a1'
+base2='eee8du'
+base3='c2c2b0' #CHANGED
+yellow='cc8800' #CHANGED
+orange='cb4b16'
+red='aa4450' #CHANGED
+magenta='8f6f8f' #CHANGED
+violet='6c71c4'
+blue='6688aa' #CHANGED
+cyan='528b8b' #CHANGED
+green='719611' #CHANGED
+
+
+
+# *.foreground:   #c2c2b0
+# *.background:   #222222
+# *.cursorColor:  #c2c2b0
+# ! black
+# *.color0:       #222222
+# *.color8:       #272822
+# ! red
+# *.color1:       #aa4450
+# * .color9:       #ff6a6a
+# ! green
+# *.color2:       #719611
+# *.color10:      #b1d631
+# ! yellow
+# *.color3:       #cc8800
+# *.color11:      #ff9800
+# ! blue
+# *.color4:       #6688aa
+# * .color12:      #90b0d1
+# ! magenta
+# *.color5:       #8f6f8f
+# *.color13:      #8181a6
+# ! cyan
+# *.color6:       #528b8b
+# *.color14:      #87ceeb
+# ! white
+# *.color7:       #d3d3d3
+# *.color15:      #c1cdc1

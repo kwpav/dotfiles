@@ -10,7 +10,9 @@ hc() {
 hc emit_hook reload
 
 #get the colors
-. ~/.config/herbstluftwm/solarized
+# . ~/.config/herbstluftwm/solarized
+. ~/.config/herbstluftwm/sourcerer
+
 
 #lock tags to monitors
 #hc lock_tag 0

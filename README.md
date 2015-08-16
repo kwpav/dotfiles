@@ -7,7 +7,6 @@ Create `~/dotfiles/`. Use stow to create some symlinks:
     stow bin/
     stow herbstluftwm/
 
-
 etc...
 
 # bin
@@ -33,5 +32,4 @@ Then:
 - [vim-fugitive](https://github.com/tpope/vim-fugitive)
 - [nerdtree](https://github.com/scrooloose/nerdtree)
 - [pydiction](https://github.com/rkulla/pydiction)
-
 

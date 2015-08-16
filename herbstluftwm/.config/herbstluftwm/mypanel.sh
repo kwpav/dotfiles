@@ -7,29 +7,33 @@
 
 #set -f
 
-## ⮂  ⮀
+### █▓░
+##  
 
 ### THEME ###
 #get the colors
 
-. ~/.config/herbstluftwm/solarized
+# . ~/.config/herbstluftwm/solarized
+. ~/.config/herbstluftwm/sourcerer
 
 #for bar - first two values are opacity
 bgcolor="#BB$base03"
 fgcolor="#FF$base0"
 curtagbg="#FF$blue"
-atagbg="#BB$violet"
+atagbg="#BB$cyan"
 uftagbg="#FF$base3"
 ftagbg="#99$blue"
+# ftagfg=#"FF$base03"
 urgenttagbg="#FF$red"
 
 #font1='*-gohufont-medium-r-*-*-14-*-*-*-*-*-*-*'
 #font1='-*-tewi-medium-*-*-*-17-*-*-*-*-*-iso10646-*'
-font1='-*-tewi-medium-*-*-*-11-*-*-*-*-*-iso10646-*'
+#font1='-*-tewi-medium-*-*-*-11-*-*-*-*-*-iso10646-*'
+#font1='*-hermit-medium-*-*-*-*-*-*-*-*-*-*-*'
+font1='Hermit:pixelsize=12'
 
-height=12
-
-sep1=" %{F#FF$blue}|%{F-}"
+height=14
+#sep1=" %{F#FF$blue}|%{F-}"
 ###
 
 ### Functions n stuff ###
@@ -60,30 +64,38 @@ function print_tags() {
         for i in "${TAGS[@]}" ; do
             case ${i:0:1} in
                 '#') # current tag
-                    echo -n "%{B$curtagbg}%{+u}"
+                    #echo -n "%{B$curtagbg}%{U#FF$green}%{+u}"
+                    echo -n "%{B$curtagbg}"
                     ;;
                 '+') #atag: active - active tag on other monitor
+                    #echo -n "%{B$atagbg}%{U#FF$base03}%{+u}"
                     echo -n "%{B$atagbg}"
                     ;;
-                '-') #uftag: unfocued - tag viewed on different monitor, but monitor not focused
-    	    	    echo -n "%{B$uftagbg}"
+                    '-') #uftag: unfocued - tag viewed on different monitor, but monitor not focused
+    	    	    #echo -n "%{B$uftagbg}%{U#FF$base03}%{+u}"
+                    echo -n "%{B$uftagbg}"
                     ;;
                 '%') #ftag: focused - tag viewed on different monitor and is focused
+                    #echo -n "%{B$ftagbg}%{U#FF$green}%{+u}"
                     echo -n "%{B$ftagbg}"
                     ;;
                 ':') # tag is not empty
-                    echo -n "%{B#FF$red}%{+u}"
+                    #echo -n "%{B#FF$red}%{U#FF$base03}%{+u}"
+                    echo -n "%{B#FF$red}"
                     ;;
                 '!') # urgent tag
+                    #echo -n "%{B$urgenttagbg}%{U#FF$base03}%{+u}"
                     echo -n "%{B$urgenttagbg}"
                     ;;
                 *)
+                    #echo -n "%{B#DD$base3}%{U#FF$base03}%{+u}"
                     echo -n "%{B#DD$base3}"
                     ;;
             esac
             echo -n " ${i:1} %{U-}%{-u}"
 	done
-	echo -n "%{B-}%{F#DD$base3}⮀%{F-}"
+	#echo -n "%{B-}%{F#DD$base3}%{U#FF$base03}%{+u}%{-u}%{F-}"
+        echo -n "%{B-}%{F#DD$base3}%{F-}"
     done
 }
 
@@ -160,10 +172,11 @@ function print_tags() {
 	echo -n "%{c}"
 	## monitor0
 	echo -n "%{S0}"
+        echo -n "%{F#FF$base3}"
 	echo -n "${windowtitle//^/^^}"
 	## monitor1
-	#echo -n "%{S1}"
-	#echo -n "${windowtitle//^/^^}"
+	echo -n "%{S1}"
+	echo -n "${windowtitle//^/^^}"
 	
         ### RIGHT ### 
         echo -n "%{r}"
@@ -174,26 +187,26 @@ function print_tags() {
 	## monitor1
 	echo -n "%{S1}"
 	#cpu
-	echo -n "%{F#FF$green}⮂%{F-}" 
-	echo -n "%{B#FF$green}"
-	echo -n "%{F#FF$base03}"
+	echo -n "%{F#FF$blue}%{F-}" 
+	echo -n "%{B#FF$blue}"
+	echo -n "%{F#FF$base3}"
 	echo -n " CPU: $cpu_speed $cpu_temp "
 	#memory
-	echo -n "%{F#FF$base3}⮂%{F-}%{B-}" 
-	echo -n "%{B#FF$base3}"
-	echo -n "%{F#FF$base03}"
+	echo -n "%{F#FF$violet}%{F-}%{B-}" 
+	echo -n "%{B#FF$violet}"
+	echo -n "%{F#FF$base3}"
 	echo -n " MEM: $mem "
 	#gpu
-	echo -n "%{F#FF$green}⮂%{F-}%{B-}"
-	echo -n "%{B#FF$green}"
-	echo -n "%{F#FF$base03}"
+	echo -n "%{F#FF$blue}%{F-}%{B-}"
+	echo -n "%{B#FF$blue}"
+	echo -n "%{F#FF$base3}"
 	echo -n " GPU: $gpu_temp "
 	#date/time
-	echo -n "%{F#FF$base3}⮂%{F-}%{B-}" 
-	echo -n "%{B#FF$base3}"
-	echo -n "%{F#FF$base03}"
+	echo -n "%{F#FF$violet}%{F-}%{B-}" 
+	echo -n "%{B#FF$violet}"
+	echo -n "%{F#FF$base3}"
 	echo -n " $short_date "
-	echo -n "%{F#FF$green}"
+	echo -n "%{F#FF$base3}"
 	echo -n " $stime "
 	echo -n "%{F-}%{B-}"
 
@@ -240,5 +253,5 @@ function print_tags() {
                 ;;
         esac
     done
-} 2> /dev/null | lemonbar -d -u 2 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
+} 2> /dev/null | lemonbar -d -u 3 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
 

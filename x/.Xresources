@@ -1,13 +1,15 @@
 !! NON-POWERLINE FONTS !!
-!URxvt*font: *-gohufont-medium-r-*-*-14-*-*-*-*-*-*-*
+#URxvt*font: *-gohufont-medium-r-*-*-14-*-*-*-*-*-*-*
 !*font:	xft:GohuFont:pixelsize=14
 !URxvt*font: -*-erusfont-medium-*-*-*-*-*-*-*-*-*-iso10646-*
 !URxvt*font: xft:erusfont:pixelsize=11
 
 !! POWERLINE FONTS !!
 !URxvt*font: -*-tewi-medium-*-*-*-*-*-*-*-*-*-iso10646-*
-URxvt*font: xft:Tewi:pixelsize=11
+!URxvt*font: xft:Tewi:pixelsize=11
 !URxvt*font: -*-terminesspowerline-medium-*-*-*-*-*-*-*-*-*-iso10646-*
+URxvt*font: xft:Hermit:pixelsize=11
+
 
 !! XFT STUFF !!
 !Xft.autohint: true
