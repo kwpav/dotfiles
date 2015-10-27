@@ -16,7 +16,7 @@ fi
 
 export PATH=$PATH:~/bin/
 export BROWSER=firefox
-export EDITOR=vim
+export EDITOR=emacs
 export TERM=urxvtc
 export POWERLINE_CONFIG_COMMAND=/home/kevin/powerline/scripts/powerline-config
 
