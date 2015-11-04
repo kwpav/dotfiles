@@ -20,3 +20,4 @@ alias hc='herbstclient'
 
 alias say='toilet --gay -f smblock'
 
+

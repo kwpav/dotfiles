@@ -14,7 +14,9 @@
 #get the colors
 
 # . ~/.config/herbstluftwm/solarized
-. ~/.config/herbstluftwm/sourcerer
+# . ~/.config/herbstluftwm/sourcerer
+. ~/.config/herbstluftwm/ocean
+
 
 #for bar - first two values are opacity
 bgcolor="#BB$base03"
@@ -89,13 +91,14 @@ function print_tags() {
                     ;;
                 *)
                     #echo -n "%{B#DD$base3}%{U#FF$base03}%{+u}"
-                    echo -n "%{B#DD$base3}"
+                    echo -n "%{B#DD$base01}"
                     ;;
             esac
             echo -n " ${i:1} %{U-}%{-u}"
 	done
 	#echo -n "%{B-}%{F#DD$base3}%{U#FF$base03}%{+u}%{-u}%{F-}"
-        echo -n "%{B-}%{F#DD$base3}%{F-}"
+        #echo -n "%{B-}%{F#DD$base3}%{F-}"
+	echo -n "%{F-}%{B-}"
     done
 }
 
@@ -254,4 +257,3 @@ function print_tags() {
         esac
     done
 } 2> /dev/null | lemonbar -d -u 3 -g x$height -B "$bgcolor" -F "$fgcolor" -f "$font1" $1
-

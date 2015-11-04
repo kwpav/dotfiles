@@ -25,9 +25,14 @@ sh ~/.fehbg &
 urxvtd &
 compton --config ~/.config/compton.conf -b &
 
+# swap ctrl / capslock
+setxkbmap -option 'ctrl:nocaps'
+#setxkbmap -option 'ctrl:swapcaps'
+
 #exec i3
 #exec ratpoison
 exec herbstluftwm --locked
+#exec stumpwm
 
 #export PANEL_FIFO=/tmp/panel-fifo
 #sxhkd &

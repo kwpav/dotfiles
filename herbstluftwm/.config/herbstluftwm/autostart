@@ -11,8 +11,8 @@ hc emit_hook reload
 
 #get the colors
 # . ~/.config/herbstluftwm/solarized
-. ~/.config/herbstluftwm/sourcerer
-
+# . ~/.config/herbstluftwm/sourcerer
+. ~/.config/herbstluftwm/ocean
 
 #lock tags to monitors
 #hc lock_tag 0
@@ -27,7 +27,8 @@ Mod=Mod4   # Use the super key as the main modifier
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload && killall mypanel.sh
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Return spawn urxvtc
+# Start tmux with urxvt
+hc keybind $Mod-Return spawn urxvtc -e zsh -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER@$HOSTNAME"
 hc keybind $Mod-d spawn dmenu_run
 hc keybind $Mod-e spawn emacs
 hc keybind $Mod-a spawn firefox
