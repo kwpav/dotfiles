@@ -23,7 +23,8 @@ antigen bundle python
 #antigen bundle npm
 
 # theme
-antigen theme agnoster
+#antigen theme agnoster
+antigen theme bureau
 
 antigen apply
 
