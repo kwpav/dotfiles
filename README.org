@@ -1,0 +1,12 @@
+* ~/dotfiles/...
+
+Using gnu stow
+
+After cloning, use stow to create some symlinks:
+
+#+BEGIN_SRC bash
+cd ~/dotfiles/
+stow emacs
+#+END_SRC
+
+etc...
