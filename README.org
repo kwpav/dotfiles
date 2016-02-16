@@ -1,10 +1,9 @@
 * ~/dotfiles/...
+This is my collection of configuration files. To manage them, I use [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][gnu stow]].
 
-Using gnu stow
+After cloning, run:
 
-After cloning, use stow to create some symlinks:
-
-#+BEGIN_SRC bash
+#+BEGIN_SRC shell
 cd ~/dotfiles/
 stow emacs
 #+END_SRC
