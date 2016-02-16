@@ -4,8 +4,11 @@
 
 (use-package nyan-mode
   :ensure t
+  :init
+  (setq nyan-wavy-trail t)
   :config
-  (nyan-mode 1))
+  (nyan-mode 1)
+  (nyan-start-animation))
 
 ;(require 'spaceline-config)
 ;(spaceline-spacemacs-theme)
