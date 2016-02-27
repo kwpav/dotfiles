@@ -1,327 +1,358 @@
-* init.org
-** package setup
-#+BEGIN_SRC emacs-lisp
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-(package-initialize)
+* starting.org
+** What is this?
+This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/emacs.d/starting.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as [[http://pages.sachachua.com/.emacs.d/Sacha.html][this one]].
 
-(require 'use-package)
+** Some good keys to remember
+| Key   | Action                                                     |
+|-------+------------------------------------------------------------|
+| F8    | Open/close neo-tree.                                       |
+| C-c ' | Edit code within org-mode code blocks in their native mode |
+| C-x u | Open undo-tree                                             |
+| C-c h | Open helm-mini to navigate buffers                         |
+
+** Package Setup
+Setup the package repositories and startup use-package.
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (package-initialize)
+
+  (require 'use-package)
 #+END_SRC
 
-** evil mode
+** Emacs
+*** evil mode
+Because I like still like my modal editing. 
 #+BEGIN_SRC emacs-lisp
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1))
-
-;;; esc quits
-;(define-key evil-normal-state-map [escape] 'keyboard-quit)
-;(define-key evil-visual-state-map [escape] 'keyboard-quit)
-;(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-;(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-;(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-;(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-;(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-;;;;;;;;;;;;;;;;;
+  (use-package evil
+    :ensure t
+    :config
+    (evil-mode 1))
 #+END_SRC
 
-** org mode
+**** TODO fix up the esc keys
 #+BEGIN_SRC emacs-lisp
-;;;;;;;;;;;;;;;;;
-;; org-mode
-;; TODO: get org contrib to work!
-(use-package org-plus-contrib
-  :ensure t)
-(use-package babel
-  :ensure t)
-;;;;;;;;;;;;;;;;;
+  ;;; esc quits
+  ;(define-key evil-normal-state-map [escape] 'keyboard-quit)
+  ;(define-key evil-visual-state-map [escape] 'keyboard-quit)
+  ;(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+  ;(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+  ;(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+  ;(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+  ;(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+  ;;;;;;;;;;;;;;;;;
 #+END_SRC
 
-** yasnippet
-*** TODO mess with this some more
+*** org mode
+org-plus-contrib should give some other export options but it doesn't seem to work right now. It also removes language syntax highlighting in org-mode for some reason.
+babel is to load this file.
 #+BEGIN_SRC emacs-lisp
-;(use-package yasnippet
-;  :ensure t
-;  :init
-;  (setq yas-snippet-dirs
-;	'("~/.emacs.d/snippets"))
-;  :config
-;  (yas-global-mode 1))
+  ;(use-package org-plus-contrib
+  ;  :ensure t)
+  (use-package babel
+    :ensure t)
 #+END_SRC
 
-** python
+Use syntax highlighting within #+BEGIN_SRC blocks for html exports
 #+BEGIN_SRC emacs-lisp
-(use-package jedi
-  :ensure t
-  :init
-  (setq jedi:complete-on-dot t)
-  :config
-  (add-hook 'python-mode-hook 'jedi:setup))
-  ;;(setq jedi:tooltip-show t)
-  ;;(setq jedi:tooltip-method '(popup)))
+  (use-package htmlize
+     :ensure t)
+  (setq org-src-fontify-natively t)
 #+END_SRC
 
+*** TODO yasnippet
+I should probably use this at some point.
 #+BEGIN_SRC emacs-lisp
-;;;;;;;;;;;;;;;;;
-;; c#
-(use-package csharp-mode
-  :ensure t
-  :init
-  ;(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
-  (setq auto-mode-alist
-     (append '(("\\.cs$" . csharp-mode)) auto-mode-alist)))
+  ;(use-package yasnippet
+  ;  :ensure t
+  ;  :init
+  ;  (setq yas-snippet-dirs
+  ;       '("~/.emacs.d/snippets"))
+  ;  :config
+  ;  (yas-global-mode 1))
+#+END_SRC
 
-;; omnisharp should load after a csharp file is loaded
-(use-package omnisharp
-  :ensure t
-  :init
-  (setq omnisharp-server-executable-path "~/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe")
-  :config
-  (add-hook 'csharp-mode-hook 'omnisharp-mode))
+*** autocomplete
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :config
+    (ac-config-default))
+#+END_SRC
 
-;; omnisharp evil-mode keys...
-;; taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-config-for-evil-mode.el
-(evil-define-key 'insert omnisharp-mode-map (kbd "M-.") 'omnisharp-auto-complete)
-(evil-define-key 'normal omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition)
-(evil-define-key 'normal omnisharp-mode-map (kbd "g u") 'omnisharp-find-usages)
-(evil-define-key 'normal omnisharp-mode-map (kbd "g I") 'omnisharp-find-implementations) ; g i is taken
-(evil-define-key 'normal omnisharp-mode-map (kbd "g o") 'omnisharp-go-to-definition)
-(evil-define-key 'normal omnisharp-mode-map (kbd "g r") 'omnisharp-run-code-action-refactoring)
-(evil-define-key 'normal omnisharp-mode-map (kbd "g f") 'omnisharp-fix-code-issue-at-point)
-(evil-define-key 'normal omnisharp-mode-map (kbd "g F") 'omnisharp-fix-usings)
-(evil-define-key 'normal omnisharp-mode-map (kbd "g R") 'omnisharp-rename)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", i") 'omnisharp-current-type-information)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", I") 'omnisharp-current-type-documentation)
-(evil-define-key 'insert omnisharp-mode-map (kbd ".") 'omnisharp-add-dot-and-auto-complete)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", n t") 'omnisharp-navigate-to-current-file-member)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", n s") 'omnisharp-navigate-to-solution-member)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", n f") 'omnisharp-navigate-to-solution-file-then-file-member)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", n F") 'omnisharp-navigate-to-solution-file)
-(evil-define-key 'normal omnisharp-mode-map (kbd ", n r") 'omnisharp-navigate-to-region)
-(evil-define-key 'normal omnisharp-mode-map (kbd "<f12>") 'omnisharp-show-last-auto-complete-result)
-(evil-define-key 'insert omnisharp-mode-map (kbd "<f12>") 'omnisharp-show-last-auto-complete-result)
-(evil-define-key 'normal omnisharp-mode-map (kbd ",.") 'omnisharp-show-overloads-at-point)
-(evil-define-key 'normal omnisharp-mode-map (kbd ",rl") 'recompile)
+*** neotree
+Emacs version of NERDTree, press <f8> to open.
+#+BEGIN_SRC emacs-lisp
+  (use-package neotree
+    :ensure t
+    :config
+    (global-set-key [f8] 'neotree-toggle)
+    (add-hook 'neotree-mode-hook
+              (lambda ()
+                (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "q") 'neotree-enter))))
+#+END_SRC
 
-(evil-define-key 'normal omnisharp-mode-map (kbd ",rt")
-  (lambda() (interactive) (omnisharp-unit-test "single")))
+*** slime
+Using this to mess with stumpwm right now.
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :ensure t
+    :init
+    (setq inferior-list-program "sbcl"))
+#+END_SRC
 
-(evil-define-key 'normal omnisharp-mode-map
-  (kbd ",rf")
-  (lambda() (interactive) (omnisharp-unit-test "fixture")))
+*** undo-tree
+press <C-x u> to use and <q> to quit.
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :defer t
+    :ensure t
+    :diminish undo-tree-mode
+    :config
+    (progn
+      (global-undo-tree-mode)
+      (setq undo-tree-visualizer-timestamps t)
+      (setq undo-tree-visualizer-diff t)))
+#+END_SRC
 
-(evil-define-key 'normal omnisharp-mode-map
-  (kbd ",ra")
-  (lambda() (interactive) (omnisharp-unit-test "all")))
+*** magit
+I should probably learn how to use this.
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :config
+    (global-set-key (kbd "C-x g") 'magit-status))
+#+END_SRC
 
-;; Speed up auto-complete on mono drastically. This comes with the
-;; downside that documentation is impossible to fetch.
-(setq omnisharp-auto-complete-want-documentation nil)
-;;;;;;;;;;;;;;;;;
+*** helm
+#+BEGIN_SRC emacs-lisp 
+  (use-package helm
+    :ensure t
+    :init
+    (require 'helm-config)
+    (helm-mode 1)
+    (helm-autoresize-mode 1)
+    (setq helm-autoresize-max-height 40)
+    :bind
+    ("C-c h" . helm-mini)
+    ("C-c a" . helm-apropos)
+    ("M-x" . helm-M-x)
+    ("C-x f" . helm-find-files))
+#+END_SRC
 
-;;;;;;;;;;;;;;;;;
-;; autocomplete
-(use-package auto-complete
-  :ensure t
-  :config
-  (ac-config-default))
-;;;;;;;;;;;;;;;;;
+*** custom keys
+Buffer movement
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<C-S-up>")     'buf-move-up)
+  (global-set-key (kbd "<C-S-down>")   'buf-move-down)
+  (global-set-key (kbd "<C-S-left>")   'buf-move-left)
+  (global-set-key (kbd "<C-S-right>")  'buf-move-right)
+#+END_SRC
 
-;;;;;;;;;;;;;;;;;
-;; neotree
-(use-package neotree
-  :ensure t
-  :config
-  (global-set-key [f8] 'neotree-toggle)
-  (add-hook 'neotree-mode-hook
-	    (lambda ()
-	      (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-	      (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
-	      (define-key evil-normal-state-local-map (kbd "q") 'neotree-enter))))
-;;;;;;;;;;;;;;;;;
+*** random things
+Change "yes or no" to "y or n"
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+** Languages
+*** python
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi
+    :init
+    (setq jedi:complete-on-dot t)
+    :config
+    (add-hook 'python-mode-hook 'jedi:setup))
+    ;;(setq jedi:tooltip-show t)
+    ;;(setq jedi:tooltip-method '(popup)))
+#+END_SRC
 
-;;;;;;;;;;;;;;;;;
-;; slime
-(use-package slime
-  :ensure t
-  :init
-  (setq inferior-list-program "sbcl"))
-;;;;;;;;;;;;;;;;;
+*** C#
+#+BEGIN_SRC emacs-lisp
+  (use-package csharp-mode
+    :ensure t
+    :init
+    ;(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+    (setq auto-mode-alist
+       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist)))
+#+END_SRC
+Omnisharp should load after a csharp file is loaded
+#+BEGIN_SRC emacs-lisp
+  (use-package omnisharp
+    :ensure t
+    :init
+    (setq omnisharp-server-executable-path "~/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe")
+    :config
+    (add-hook 'csharp-mode-hook 'omnisharp-mode))
+#+END_SRC
+omnisharp evil-mode keys...
+taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-config-for-evil-mode.el
+#+BEGIN_SRC emacs-lisp
+  (evil-define-key 'insert omnisharp-mode-map (kbd "M-.") 'omnisharp-auto-complete)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "<f12>") 'omnisharp-go-to-definition)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g u") 'omnisharp-find-usages)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g I") 'omnisharp-find-implementations) ; g i is taken
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g o") 'omnisharp-go-to-definition)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g r") 'omnisharp-run-code-action-refactoring)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g f") 'omnisharp-fix-code-issue-at-point)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g F") 'omnisharp-fix-usings)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "g R") 'omnisharp-rename)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", i") 'omnisharp-current-type-information)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", I") 'omnisharp-current-type-documentation)
+  (evil-define-key 'insert omnisharp-mode-map (kbd ".") 'omnisharp-add-dot-and-auto-complete)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", n t") 'omnisharp-navigate-to-current-file-member)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", n s") 'omnisharp-navigate-to-solution-member)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", n f") 'omnisharp-navigate-to-solution-file-then-file-member)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", n F") 'omnisharp-navigate-to-solution-file)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ", n r") 'omnisharp-navigate-to-region)
+  (evil-define-key 'normal omnisharp-mode-map (kbd "<f12>") 'omnisharp-show-last-auto-complete-result)
+  (evil-define-key 'insert omnisharp-mode-map (kbd "<f12>") 'omnisharp-show-last-auto-complete-result)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ",.") 'omnisharp-show-overloads-at-point)
+  (evil-define-key 'normal omnisharp-mode-map (kbd ",rl") 'recompile)
 
-;;;;;;;;;;;;;;;;;
-;; undo-tree
-;; press <C-x u> to use
-(use-package undo-tree
-  :defer t
-  :ensure t
-  :diminish undo-tree-mode
-  :config
-  (progn
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)))
-;;;;;;;;;;;;;;;;;
+  (evil-define-key 'normal omnisharp-mode-map (kbd ",rt")
+    (lambda() (interactive) (omnisharp-unit-test "single")))
 
-;;;;;;;;;;;;;;;;;
-;; magit
-(global-set-key (kbd "C-x g") 'magit-status)
-;;;;;;;;;;;;;;;;;
+  (evil-define-key 'normal omnisharp-mode-map
+    (kbd ",rf")
+    (lambda() (interactive) (omnisharp-unit-test "fixture")))
 
-;;;;;;;;;;;;;;;;;
-;; helm
-(use-package helm
-  :ensure t
-;  ;;:diminish helm-mode
-  :init
-  (require 'helm-config)
-  (helm-mode 1)
-  (helm-autoresize-mode 1)
-  (setq helm-autoresize-max-height 40)
-  :bind
-  ("C-c h" . helm-mini)
-  ("C-c a" . helm-apropos)
-  ("M-x" . helm-M-x)
-  ("C-x f" . helm-find-files))
-;;;;;;;;;;;;;;;;;
+  (evil-define-key 'normal omnisharp-mode-map
+    (kbd ",ra")
+    (lambda() (interactive) (omnisharp-unit-test "all")))
 
-;;;;;;;;;;;;;;;;;
-;; CUSTOM KEYS
-;; buffer movement
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
-;; TODO: make this work!!
-;;(global-set-key [f1] '(menu-bar-mode -1))
-;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;
-;; random things
-
-;; change "yes or no" to "y or n"
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;;;;;;;;;;;;;;;;;
+  ;; Speed up auto-complete on mono drastically. This comes with the
+  ;; downside that documentation is impossible to fetch.
+  (setq omnisharp-auto-complete-want-documentation nil)
 #+END_SRC
 
 * modeline
+Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
-(use-package nyan-mode
-  :ensure t
-  :init
-  (setq nyan-wavy-trail t)
-  :config
-  (nyan-mode 1)
-  (nyan-start-animation))
+  (use-package nyan-mode
+    :ensure t
+    :init
+    (setq nyan-wavy-trail t)
+    :config
+    (nyan-mode 1)
+    (nyan-start-animation))
+#+END_SRC
 
-;(require 'spaceline-config)
-;(spaceline-spacemacs-theme)
-;(setq powerline-default-separator 'wave)
+Unused spacemacs modeline settings
+#+BEGIN_SRC emacs-lisp
+  ;(require 'spaceline-config)
+  ;(spaceline-spacemacs-theme)
+  ;(setq powerline-default-separator 'wave)
+#+END_SRC
 
-;;;;;;;;;;;;;;;;;
-;; custom modeline
-;; TODO: make these work!
-;;(set-variable 'nyan-wavy-trail t)
-;;(setq nyan-start-animation 't)
+My custom modeline
+#+BEGIN_SRC emacs-lisp
+  (setq-default mode-line-format
+                (list
+       "-- " 
+       ;; the buffer name; the file name as a tool tip
+       '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+                          'help-echo (buffer-file-name)))
 
-(setq-default mode-line-format
-	      (list
-     "-- " 
-     ;; the buffer name; the file name as a tool tip
-     '(:eval (propertize "%b " 'face 'font-lock-keyword-face
- 			'help-echo (buffer-file-name)))
+      ;; the current major mode for the buffer.
+       "["
 
-    ;; the current major mode for the buffer.
-     "["
+       '(:eval (propertize "%m" 'face 'font-lock-string-face
+                           'help-echo buffer-file-coding-system))
+       " -"
+       minor-mode-alist ;; the minor modes for the current buffer
+       "] "
 
-     '(:eval (propertize "%m" 'face 'font-lock-string-face
-			 'help-echo buffer-file-coding-system))
-     " -"
-     minor-mode-alist ;; the minor modes for the current buffer
-     "] "
+       "[" ;; insert vs overwrite mode, input-method in a tooltip
+       '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+              'face 'font-lock-preprocessor-face
+              'help-echo (concat "Buffer is in "
+                              (if overwrite-mode "overwrite" "insert") " mode")))
 
-     "[" ;; insert vs overwrite mode, input-method in a tooltip
-     '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
- 	    'face 'font-lock-preprocessor-face
- 	    'help-echo (concat "Buffer is in "
-                            (if overwrite-mode "overwrite" "insert") " mode")))
+       ;; was this buffer modified since the last save? 
+       '(:eval (when (buffer-modified-p)
+              (concat ","  (propertize "Mod"
+              'face 'font-lock-warning-face
+                                'help-echo "Buffer has been modified"))))
 
-     ;; was this buffer modified since the last save? 
-     '(:eval (when (buffer-modified-p)
- 	    (concat ","  (propertize "Mod"
- 	    'face 'font-lock-warning-face
-                              'help-echo "Buffer has been modified"))))
+       ;; is this buffer read-only?
+       '(:eval (when buffer-read-only
+                 (concat ","  (propertize "RO"
+                                'face 'font-lock-type-face
+                                'help-echo "Buffer is read-only"))))  
+       "] "
+      
+       ;; line and column
+       "(" ;; '%02' to set to 2 chars at least; prevents flickering
+         (propertize "%02l" 'face 'font-lock-type-face) ","
+         (propertize "%02c" 'face 'font-lock-type-face) 
+       ") "
 
-     ;; is this buffer read-only?
-     '(:eval (when buffer-read-only
-               (concat ","  (propertize "RO"
-                              'face 'font-lock-type-face
-                              'help-echo "Buffer is read-only"))))  
-     "] "
-    
-     ;; line and column
-     "(" ;; '%02' to set to 2 chars at least; prevents flickering
-       (propertize "%02l" 'face 'font-lock-type-face) ","
-       (propertize "%02c" 'face 'font-lock-type-face) 
-     ") "
+       '(:eval (list (nyan-create)))
+      
+       ;; relative position, size of file
+       "["
+       (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+       ;;"/"
+       ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
+       "] "
 
-     '(:eval (list (nyan-create)))
-    
-     ;; relative position, size of file
-     "["
-     (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
-     ;;"/"
-     ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
-     "] "
+       " %-" ;; fill with '-'
+       ))
+#+END_SRC
 
-     " %-" ;; fill with '-'
-     ))
-
-;; change mode-line color by evil state
-;;(lexical-let ((default-color (cons (face-background 'mode-line)
-;;				    (face-foreground 'mode-line))))
-;;    (add-hook 'post-command-hook
-;;    (lambda ()
-;;	(let ((color (cond ((minibufferp) default-color)
-;;			((evil-insert-state-p) '("#eee" . "#ffffff"))
-;;			((evil-emacs-state-p)  '("#444488" . "#ffffff"))
-;;			((buffer-modified-p)   '("#006fa0" . "#ffffff"))
-;;			(t default-color))))
-;;	(set-face-background 'mode-line (car color))
-;;	(set-face-foreground 'mode-line (cdr color))))))
-
-;;;;;;;;;;;;;;;;;
+**** TODO make the color of the bar change when switching between evil modes
+#+BEGIN_SRC emacs-lisp
+  ;; change mode-line color by evil state
+  ;;(lexical-let ((default-color (cons (face-background 'mode-line)
+  ;;                                  (face-foreground 'mode-line))))
+  ;;    (add-hook 'post-command-hook
+  ;;    (lambda ()
+  ;;      (let ((color (cond ((minibufferp) default-color)
+  ;;                      ((evil-insert-state-p) '("#eee" . "#ffffff"))
+  ;;                      ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+  ;;                      ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
+  ;;                      (t default-color))))
+  ;;      (set-face-background 'mode-line (car color))
+  ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
 
 * themes
+Theme I'm currently using
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'base16-ocean-dark)
+#+END_SRC
+
+Some dark themes I Like
+#+BEGIN_SRC emacs-lisp
+  ;;(load-theme 'spacemacs-dark)
+  ;;(load-theme 'base16-tomorrow-dark)
+  ;;(load-theme 'base16-twilight-dark)
+  ;;(load-theme 'base16-default-dark)
+  ;;(load-theme 'solarized-dark)
+  ;;(setq solarized-distinct-fringe-background t)
+#+END_SRC
+
+Some light themes I like
 #+BEGIN_SRC emacs-lisp
 
-;; dark themes i like...
-;;(load-theme 'spacemacs-dark)
-(load-theme 'base16-ocean-dark)
-;;(load-theme 'base16-tomorrow-dark)
-;;(load-theme 'base16-twilight-dark)
-;;(load-theme 'base16-default-dark)
-;;(load-theme 'solarized-dark)
-;;(setq solarized-distinct-fringe-background t)
+  ;; light themes i like...
+  ;;(load-theme 'spacemacs-light)
+  ;;(load-theme 'light-soap)
+  ;;(load-theme 'solarized-light)
+#+END_SRC
 
-;; light themes i like...
-;;(load-theme 'spacemacs-light)
-;;(load-theme 'light-soap)
-;;(load-theme 'solarized-light)
+Setup the font, hide some stuff
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-9" ))
+  ;;(add-to-list 'default-frame-alist '(font . "Hermit-9" ))
+  ;;(add-to-list 'default-frame-alist '(font . "GohuFont-11" ))
 
-;; font
-(add-to-list 'default-frame-alist '(font . "Input Mono Narrow-9" ))
-;;(add-to-list 'default-frame-alist '(font . "Hermit-9" ))
-;;(add-to-list 'default-frame-alist '(font . "GohuFont-11" ))
-
-;; hide the toolbar
-(tool-bar-mode -1)
-;; hide the scrollbar
-(scroll-bar-mode -1)
-(blink-cursor-mode 0)
+  (tool-bar-mode -1) ;; hide the toolbar
+  (scroll-bar-mode -1) ;; hide the scrollbar 
+  (blink-cursor-mode 0) ;; dont blink the cursor
 #+END_SRC
