@@ -42,3 +42,5 @@ if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
                         TERM=screen
         esac
 fi
+
+command fortune
