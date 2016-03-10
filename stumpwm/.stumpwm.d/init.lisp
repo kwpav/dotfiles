@@ -10,10 +10,26 @@
 
 ;;;;
 ;; appearance
-(set-frame-outline-width 2)
-;(set-fg-color (make-color-hex "#D7D0C7"))
-;(set-bg-color (make-color-hex "#101010"))
-;(set-border-color (make-color-hex "#E84F4F"))
+(defparameter *foreground-color* "grey53")
+(defparameter *background-color* "grey9")
+(defparameter *border-color* "Dark Slate Gray")
+
+;; stump msg window
+(setf *message-window-gravity* :top-right
+      *input-window-gravity* :top-right
+      *window-border-style* :thin)
+(set-msg-border-width 1)
+(set-fg-color *foreground-color*)
+(set-bg-color *background-color*)
+(set-border-color *border-color*)
+
+;; frame borders
+(setf *normal-border-width* 1
+      *maxsize-border-width* 1
+      *transient-border-width* 1)
+(set-focus-color *border-color*)
+(set-unfocus-color *background-color*)
+(set-frame-outline-width 1)
 
 ;;;;
 ;; programs
@@ -64,6 +80,10 @@
 (define-key *top-map* (kbd "s-o") "hsplit")
 (define-key *top-map* (kbd "s-u") "vsplit")
 (define-key *top-map* (kbd "s-r") "remove")
+;; resize
+;; TODO: figure out how to tell which window is selected in order to resize like other WMs
+(define-key *top-map* (kbd "C-s-l") "resize 10 0")
+(define-key *top-map* (kbd "C-s-k") "resize 0 10")
 ;; groups
 (define-key *top-map* (kbd "s-]") "gnext")
 (define-key *top-map* (kbd "s-[") "gprev")
@@ -80,5 +100,5 @@
 (setf *mode-line-pad-y* 5)
 (setf *mode-line-pad-x* 10)
 (setf *mode-line-timeout* 1)
-(setf *mode-line-background-color* "#2b303b")
-(setf *mode-line-foreground-color* "#eff1f5")
+(setf *mode-line-background-color* *background-color*)
+(setf *mode-line-foreground-color* *foreground-color*)
