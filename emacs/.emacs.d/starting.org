@@ -125,14 +125,15 @@ I should probably learn how to use this.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
-    :config
-    (global-set-key (kbd "C-x g") 'magit-status))
+    :bind
+    ("C-x g" . magit-status))
 #+END_SRC
 
 *** helm
 #+BEGIN_SRC emacs-lisp 
   (use-package helm
     :ensure t
+    :diminish helm-mode
     :init
     (require 'helm-config)
     (helm-mode 1)
@@ -161,8 +162,10 @@ Change "yes or no" to "y or n"
 #+END_SRC
 ** Languages
 *** python
+Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
   (use-package jedi
+    :ensure t
     :init
     (setq jedi:complete-on-dot t)
     :config
@@ -230,7 +233,14 @@ taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-con
   (setq omnisharp-auto-complete-want-documentation nil)
 #+END_SRC
 
-* modeline
+*** C
+**** TODO set this up using use-package
+Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Indenting C]]
+#+BEGIN_SRC emacs-lisp
+  (setq c-default-style "linux"
+        c-basic-offset 4)
+#+END_SRC
+* Modeline
 Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
   (use-package nyan-mode
@@ -321,7 +331,7 @@ My custom modeline
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
 
-* themes
+* Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   (load-theme 'base16-ocean-dark)
@@ -339,19 +349,20 @@ Some dark themes I Like
 
 Some light themes I like
 #+BEGIN_SRC emacs-lisp
-
-  ;; light themes i like...
   ;;(load-theme 'spacemacs-light)
   ;;(load-theme 'light-soap)
   ;;(load-theme 'solarized-light)
 #+END_SRC
 
-Setup the font, hide some stuff
+Setup the font
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-9" ))
   ;;(add-to-list 'default-frame-alist '(font . "Hermit-9" ))
   ;;(add-to-list 'default-frame-alist '(font . "GohuFont-11" ))
+#+END_SRC
 
+Hide some of the gui
+#+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1) ;; hide the toolbar
   (scroll-bar-mode -1) ;; hide the scrollbar 
   (blink-cursor-mode 0) ;; dont blink the cursor
