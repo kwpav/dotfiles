@@ -17,9 +17,9 @@ Setup the package repositories and startup use-package.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  ;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (package-initialize)
 
   (require 'use-package)
@@ -51,15 +51,15 @@ Because I like like my modal editing.
 ** org mode
 org-plus-contrib should give some other export options but it doesn't seem to work right now. It also removes language syntax highlighting in org-mode for some reason.
 #+BEGIN_SRC emacs-lisp
-  (use-package org-plus-contrib
-    :ensure t)
+  ;(use-package org-plus-contrib
+  ;  :ensure t)
 #+END_SRC
 
 Use syntax highlighting within #+BEGIN_SRC blocks for html exports
 #+BEGIN_SRC emacs-lisp
-  (use-package htmlize
-     :ensure t)
-  (setq org-src-fontify-natively t)
+  ;(use-package htmlize
+  ;   :ensure t)
+  ;(setq org-src-fontify-natively t)
 #+END_SRC
 
 ** TODO yasnippet

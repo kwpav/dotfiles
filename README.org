@@ -1,4 +1,6 @@
-* ~/dotfiles/...
+* Literate ~/dotfiles/...
+Using =org= and =babel=. Press =C-c C-v t= to create the file.
+
 This is my collection of GNU/Linux configuration files. I use [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][gnu stow]] to keep everything in a single, version controlled, directory.
 
 For example, after cloning, run:
