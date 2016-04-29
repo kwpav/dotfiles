@@ -1,11 +1,20 @@
 * ~/dotfiles/...
-This is my collection of configuration files. To manage them, I use [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][gnu stow]].
+This is my collection of GNU/Linux configuration files. I use [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][gnu stow]] to keep everything in a single, version controlled, directory.
 
-After cloning, run:
+For example, after cloning, run:
 
 #+BEGIN_SRC shell
 cd ~/dotfiles/
 stow emacs
 #+END_SRC
 
-etc...
+This creates symlinks for each file/folder in the specified directory, i.e. the =/emacs= folder, appear in the parent directory, which in this case will be the home directory.
+
+* Current Setup
+I am currently using:
+
+| wm       | xmonad     | 
+| panel    | xmobar     |
+| shell    | zsh + tmux |
+| terminal | urxvt      |
+| editor   | emacs      |

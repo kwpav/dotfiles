@@ -30,7 +30,8 @@ setxkbmap -option 'ctrl:nocaps'
 #exec i3
 #exec ratpoison
 #exec herbstluftwm --locked
-exec stumpwm
+#exec stumpwm
+exec xmonad
 
 #export PANEL_FIFO=/tmp/panel-fifo
 #sxhkd &

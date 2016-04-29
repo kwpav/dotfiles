@@ -1,0 +1,21 @@
+Config { bgColor = "#2b303b"
+       , font = "xft:Input Mono Narrow:size=10:antialias=true"
+
+       , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
+                             , "--Low"      , "70"        -- units: °C
+                             , "--High"     , "80"        -- units: °C
+                             , "--low"      , "#a3be8c"
+                             , "--normal"   , "#ebcb8b"
+                             , "--high"     , "bf616a"
+                             ] 50
+                      
+                     , Run Cpu ["-L","15","-H","50","--normal","#a3be8c","--high","bf616a"] 10
+                          
+                     , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                       
+                     , Run StdinReader
+                     ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %coretemp% | %cpu% | %date%"
+    }

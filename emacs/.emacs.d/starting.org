@@ -1,7 +1,9 @@
 * starting.org
 ** What is this?
-This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/emacs.d/starting.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as [[http://pages.sachachua.com/.emacs.d/Sacha.html][this one]].
-
+This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/emacs.d/starting.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as [[http://pages.sachachua.com/.emacs.d/Sacha.html][this one]]. 
+** How to Add/Modify 
+To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
+To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
 ** Some good keys to remember
 | Key   | Action                                                     |
 |-------+------------------------------------------------------------|
@@ -23,9 +25,9 @@ Setup the package repositories and startup use-package.
   (require 'use-package)
 #+END_SRC
 
-** Emacs
-*** evil mode
-Because I like still like my modal editing. 
+* Emacs
+** evil mode
+Because I like like my modal editing. 
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
@@ -46,13 +48,10 @@ Because I like still like my modal editing.
   ;;;;;;;;;;;;;;;;;
 #+END_SRC
 
-*** org mode
+** org mode
 org-plus-contrib should give some other export options but it doesn't seem to work right now. It also removes language syntax highlighting in org-mode for some reason.
-babel is to load this file.
 #+BEGIN_SRC emacs-lisp
-  ;(use-package org-plus-contrib
-  ;  :ensure t)
-  (use-package babel
+  (use-package org-plus-contrib
     :ensure t)
 #+END_SRC
 
@@ -63,7 +62,7 @@ Use syntax highlighting within #+BEGIN_SRC blocks for html exports
   (setq org-src-fontify-natively t)
 #+END_SRC
 
-*** TODO yasnippet
+** TODO yasnippet
 I should probably use this at some point.
 #+BEGIN_SRC emacs-lisp
   ;(use-package yasnippet
@@ -75,7 +74,7 @@ I should probably use this at some point.
   ;  (yas-global-mode 1))
 #+END_SRC
 
-*** autocomplete
+** autocomplete
 #+BEGIN_SRC emacs-lisp
   (use-package auto-complete
     :ensure t
@@ -83,7 +82,7 @@ I should probably use this at some point.
     (ac-config-default))
 #+END_SRC
 
-*** neotree
+** neotree
 Emacs version of NERDTree, press <f8> to open.
 #+BEGIN_SRC emacs-lisp
   (use-package neotree
@@ -97,7 +96,7 @@ Emacs version of NERDTree, press <f8> to open.
                 (define-key evil-normal-state-local-map (kbd "q") 'neotree-enter))))
 #+END_SRC
 
-*** slime
+** slime
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
   (use-package slime
@@ -106,7 +105,7 @@ Using this to mess with stumpwm right now.
     (setq inferior-list-program "sbcl"))
 #+END_SRC
 
-*** undo-tree
+** undo-tree
 press <C-x u> to use and <q> to quit.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
@@ -120,7 +119,7 @@ press <C-x u> to use and <q> to quit.
       (setq undo-tree-visualizer-diff t)))
 #+END_SRC
 
-*** magit
+** magit
 I should probably learn how to use this.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -129,7 +128,7 @@ I should probably learn how to use this.
     ("C-x g" . magit-status))
 #+END_SRC
 
-*** helm
+** helm
 #+BEGIN_SRC emacs-lisp 
   (use-package helm
     :ensure t
@@ -146,7 +145,7 @@ I should probably learn how to use this.
     ("C-x f" . helm-find-files))
 #+END_SRC
 
-*** custom keys
+** custom keys
 Buffer movement
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "<C-S-up>")     'buf-move-up)
@@ -155,13 +154,13 @@ Buffer movement
   (global-set-key (kbd "<C-S-right>")  'buf-move-right)
 #+END_SRC
 
-*** random things
+** random things
 Change "yes or no" to "y or n"
 #+BEGIN_SRC emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
-** Languages
-*** python
+* Languages
+*** Python
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
   (use-package jedi
@@ -239,6 +238,35 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "linux"
         c-basic-offset 4)
+#+END_SRC
+*** Lisp
+- =show-paren-mode= highlights matching parentheses 
+- =rainbow-delimiter
+s= is a minor mode with highlights parentheses, brackets, and braces according to their depth.
+- =paredit= inserts matching parentheses, among other things..
+#+BEGIN_SRC emacs-lisp
+  (setq show-paren-delay 0)
+  (show-paren-mode 1)
+
+  (use-package paredit
+    :ensure t
+    :init
+    (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+    (add-hook 'lisp-mode-hook 'paredit-mode))
+
+  (use-package rainbow-delimiters
+    :ensure t
+    :init
+    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode))
+#+END_SRC
+*** Haskell
+For xmonad and beyond
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :ensure t
+    :init
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
 #+END_SRC
 * Modeline
 Add an animated nyan-cat to indicate the buffer position, because why not?
@@ -331,7 +359,13 @@ My custom modeline
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
 
-* Theme
+* Look and Feel 
+** Menu Bar
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -99)
+#+END_SRC
+
+** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   (load-theme 'base16-ocean-dark)
@@ -353,16 +387,18 @@ Some light themes I like
   ;;(load-theme 'light-soap)
   ;;(load-theme 'solarized-light)
 #+END_SRC
-
-Setup the font
+** Font
+Setup the font.
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-9" ))
+  (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
   ;;(add-to-list 'default-frame-alist '(font . "Hermit-9" ))
   ;;(add-to-list 'default-frame-alist '(font . "GohuFont-11" ))
 #+END_SRC
-
-Hide some of the gui
+** Other stuff
+Hide the gui and use a non-blinking cursoe for a more zen-like experience.
+Use C-mouse3 to open the menu-bar as a popup menu
 #+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -99)
   (tool-bar-mode -1) ;; hide the toolbar
   (scroll-bar-mode -1) ;; hide the scrollbar 
   (blink-cursor-mode 0) ;; dont blink the cursor

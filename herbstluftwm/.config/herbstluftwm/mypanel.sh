@@ -32,9 +32,10 @@ urgenttagbg="#FF$red"
 #font1='-*-tewi-medium-*-*-*-17-*-*-*-*-*-iso10646-*'
 #font1='-*-tewi-medium-*-*-*-11-*-*-*-*-*-iso10646-*'
 #font1='*-hermit-medium-*-*-*-*-*-*-*-*-*-*-*'
-font1='Hermit:pixelsize=12'
+#font1='Hermit:pixelsize=12'
+font1='Input Mono Narrow:pixelsize=14'
 
-height=14
+height=16
 #sep1=" %{F#FF$blue}|%{F-}"
 ###
 
@@ -161,7 +162,7 @@ function print_tags() {
 
 ##now output the data
 } 2> /dev/null | {
-    windowtitle="Dave's not here, man..."
+    #windowtitle="Dave's not here, man..."
     visible=true	
 
     ### Main Loop ###
@@ -176,10 +177,10 @@ function print_tags() {
 	## monitor0
 	echo -n "%{S0}"
         echo -n "%{F#FF$base3}"
-	echo -n "${windowtitle//^/^^}"
+	#echo -n "${windowtitle//^/^^}"
 	## monitor1
 	echo -n "%{S1}"
-	echo -n "${windowtitle//^/^^}"
+	#echo -n "${windowtitle//^/^^}"
 	
         ### RIGHT ### 
         echo -n "%{r}"
@@ -243,9 +244,9 @@ function print_tags() {
             time1)
                 stime="${cmd[@]:1}"
                 ;;
-            focus_changed|window_title_changed)
-                windowtitle="${cmd[@]:2}"
-                ;;
+            #focus_changed|window_title_changed)
+            #    windowtitle="${cmd[@]:2}"
+            #    ;;
             quit_panel)
                 killall lemonbar
                 exit
