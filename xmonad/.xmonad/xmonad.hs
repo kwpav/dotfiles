@@ -1,24 +1,17 @@
--------------------------
--- ~/.xmonad/xmonad.hs --
--------------------------
 
--- base
 import XMonad
 import XMonad.Config.Desktop
--- config
+
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP) -- emacs style keybinds
 import XMonad.Actions.Submap
 import XMonad.Actions.WindowGo
--- bar
+
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe, hPutStrLn)
--- TODO gaps    
+
 import XMonad.Layout.Gaps
 
-
--- COLORS
--- base16-ocean-dark
 base00 = "#2b303b"
 base01 = "#343d46"
 base02 = "#4f5b66"
@@ -36,7 +29,6 @@ base0D = "#8fa1b3"
 base0E = "#b48ead"
 base0F = "#ab7967"
 
--- BORDERS
 myBorderWidth = 3
 myNormalBorderColor = base02
 myFocusedBorderColor = base0D
@@ -44,18 +36,14 @@ myFocusedBorderColor = base0D
 -- TERMINAL
 myTerm = "urxvtc -e tmux"
 
--- KEYS
--- "M" is the XMonad modkey, not Alt as in emacs
 myKeys =
     [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
     , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
     , ("M-b", sendMessage ToggleStruts)
     ]
 
--- WORKSPACES
 myWorkspaces = ["1:dev", "2:www", "3", "4", "5", "6", "7", "8", "9"]
 
--- HOOKS
 myManageHook = composeAll
                [ manageHook desktopConfig
                , manageDocks
@@ -67,7 +55,6 @@ myLayoutHook = avoidStruts $ layoutHook desktopConfig
 
 myHandleEventHook = docksEventHook <+> handleEventHook desktopConfig
 
----- here we go!
 main = do
   xmproc <- spawnPipe "xmobar"
   -- TODO
