@@ -1,0 +1,67 @@
+#+TITLE: ~/.zshrc
+* Antigen
+Using [[http://github.com/zsh-users/antigen][Antigen]] to handle plugins.
+
+** Setup
+First we load antigen
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  source ~/.zsh/antigen/antigen.zsh
+#+END_SRC
+Then load some of my custom aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  source ~/.config/zsh/alias.zsh
+  source ~/.config/zsh/ssh.zsh
+#+END_SRC
+
+Use the core =oh-my-zsh= library for themes and other plugins
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  antigen use oh-my-zsh
+#+END_SRC
+
+** Plugins
+Now we load some plugins
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+
+  antigen bundle git
+  #antigen bundle zsh-users/zsh-syntax-highlighting
+  antigen bundle zsh-users/zsh-completions
+  antigen bundle command-not-found
+
+  antigen bundle python
+
+  # theme
+  #antigen theme agnoster
+  antigen theme bureau
+#+END_SRC
+
+** Apply
+Finally we can apply all the antigen settings
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  antigen apply
+#+END_SRC
+
+* Paths
+Set the executable paths
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  export PATH=$HOME/bin:/usr/local/bin:$PATH
+#+END_SRC
+
+* Tmux Workaround
+Workaround for handling TERM variable in multiple tmux sessions properly from http://sourceforge.net/p/tmux/mailman/message/32751663/ by Nicholas Marriott
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
+          case $(tmux showenv TERM 2>/dev/null) in
+                  ,*256color) ;&
+                  TERM=rxvt-unicode-256color)
+                          TERM=screen-256color ;;
+                  ,*)
+                          TERM=screen
+          esac
+  fi
+#+END_SRC
+
+* Extra
+Print a quote whenever I start a new session
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  command fortune
+#+END_SRC
