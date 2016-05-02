@@ -7,35 +7,6 @@ Literate programming is an approach to programming introduced by Donald Knuth in
 
 This is my attempt at literate GNU/Linux configuration files. To achieve this, I am using [[http://orgmode.org][org-mode]] and [[http://orgmode.org/worg/org-contrib/babel/intro.html][babel]] for [[https://www.gnu.org/software/emacs/][emacs]]. I am also using [[https://www.gnu.org/software/stow/stow.html][stow]] to keep everything in a single, version controlled, directory.
 
-* How it works
-** Stow
-To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
-
-For example, you would use the =~/dotfiles/xmonad/.xmonad/= folder to hold all of the XMonad configuration files. Once all the files are created, use =stow= to create a symlink, =~/.xmonad=, pointing to =~/dotfiles/xmonad/.xmonad/=
-
-This is as simple as running:
-#+BEGIN_SRC sh
-  stow xmonad
-#+END_SRC
-In the ~/dotfiles/ directory
-
-You only need to do this initially and if any other new configuration files are added.
-
-** Org and Babel
-Babel allows you to put code snippets with an org file and then =tangle= (combine) the snippets to a file in a specified location.
-
-For example, to if you wanted to create your XMonad configuration file and store it in =~/dotfiles/.xmonad/xmonad.hs=, you would use:
-=#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs=
-=Insert some code here...=
-Then you end the code block by using:
-=#+END_SRC=
-
-Inside the =SRC= block, press =C-c '= to open the snippet in a new buffer and edit it in the languages native mode. Press =C-c '= again to save the changes.
-
-Finally, press =C-c C-v t= to combine all the snippets and create =xmonad.hs= inide of =~/dotfiles/xmonad/.xmonad=.
-
-If you wanted to simplify things a bit, you could avoid using =stow= and only use =org-mode= and =babel= by pointing tangle to the home directory instead, i.e. =~/.xmonad/xmonad.hs=
-
 * Current Setup
 I am currently using:
 
@@ -44,3 +15,34 @@ I am currently using:
 | shell    | [[file:zshrc.org][zsh]] + tmux |
 | terminal | urxvt      |
 | editor   | [[file:emacs/.emacs.d/starting.org][emacs]] [[file:emacs][ ]]    |
+
+* How it works
+** Stow
+To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
+
+For example, I am using the =~/dotfiles/xmonad/.xmonad/= directory to hold all of the XMonad configuration files. Once all the files are created, I used =stow= to create a symlink, =~/.xmonad=, pointing to =~/dotfiles/xmonad/.xmonad/=
+
+For example, if you cloned this directory, you could run:
+#+BEGIN_SRC sh
+  stow xmonad
+#+END_SRC
+To use my XMonad configuration.
+
+You only need run =stow= initially, or if any other new configuration files are added. Once the symlink is created, you can open the file within the home directory and it will use the symlinked file within =~/dotfiles=.
+
+** Org and Babel
+Babel allows you to put code snippets with an org file and then use =:tangle <directory>= to combine the snippets to a file in the specified directory.
+
+For example, if you wanted to create your XMonad configuration file and store it in =~/dotfiles/.xmonad/xmonad.hs=, you would use:
+#+BEGIN_SRC org -r -k
+  ,#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
+  <Insert code snippet here...>
+  ,#+END_SRC
+#+END_SRC
+
+You can edit the code in the =SRC= block by pressing =C-c '=. This opens the snippet in a new buffer in the languages native mode. Press =C-c '= again to save the changes.
+
+Finally, press =C-c C-v t= to =tangle= (combine) all the snippets and create =xmonad.hs= inide of =~/dotfiles/xmonad/.xmonad=.
+
+If you wanted to simplify things a bit, you could avoid using =stow= and only use =org-mode= and =babel= by pointing tangle to the home directory instead, i.e. =~/.xmonad/xmonad.hs=
+
