@@ -1,14 +1,15 @@
-#+TITLE: ~/.xmonad/xmonad.hs
+#+TITLE: ~/.xmonad/xmonad.hs + ~/.xmobarrc
 
-* Imports
-** Base
+* XMonad
+** Imports
+*** Base
 Import the basic things for configuration
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   import XMonad
   import XMonad.Config.Desktop
 #+END_SRC
 
-** Extra Configuration Options
+*** Extra Configuration Options
 =EZConfig= is for emacs style keybindings
 =Actions.Submap= is for emacs style keys, i.e. =M-x f=
 =Actions.WindowGo= is for runOrRaise
@@ -18,7 +19,7 @@ Import the basic things for configuration
   import XMonad.Actions.WindowGo
 #+END_SRC
 
-** Bar
+*** Bar
 Stuff that loads the bar and prints to it
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   import XMonad.Hooks.DynamicLog
@@ -26,15 +27,16 @@ Stuff that loads the bar and prints to it
   import XMonad.Util.Run (spawnPipe, hPutStrLn)
 #+END_SRC
 
-** TODO Gaps
+*** TODO Gaps
 Useless gaps!
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   import XMonad.Layout.Gaps
 #+END_SRC
 
-* Colors
+** Colors
 Define the variables for the color scheme.
-** Current colorscheme: base16-ocean-dark
+*** Current colorscheme
+base16-ocean-dark
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   base00 = "#2b303b"
   base01 = "#343d46"
@@ -53,22 +55,22 @@ Define the variables for the color scheme.
   base0E = "#b48ead"
   base0F = "#ab7967"
 #+END_SRC
-
-* Borders
+   
+** Borders
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   myBorderWidth = 3
   myNormalBorderColor = base02
   myFocusedBorderColor = base0D
 #+END_SRC
 
-* Terminal
+** Terminal
 Set the default terminal
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   -- TERMINAL
   myTerm = "urxvtc -e tmux"
 #+END_SRC
 
-* Keys
+** Keys
 Define extra hotkeys in emacs style thanks to =additionalKeysP=.
 "M" is the Xmonad modkey (=mod4= in my case), not =alt= as in emacs.
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
@@ -79,13 +81,13 @@ Define extra hotkeys in emacs style thanks to =additionalKeysP=.
       ]
 #+END_SRC
 
-* Workspaces
+** Workspaces
 Define custom names for workspaces
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   myWorkspaces = ["1:dev", "2:www", "3", "4", "5", "6", "7", "8", "9"]
 #+END_SRC
 
-* Hooks
+** Hooks
 ** Manage Hook
 =g= is for GNU, also because =M-e= is used to switch between monitors
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
@@ -108,7 +110,7 @@ Define custom names for workspaces
   myHandleEventHook = docksEventHook <+> handleEventHook desktopConfig
 #+END_SRC
 
-* Main
+** Main
 Where all the magic hapens
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   main = do
@@ -131,4 +133,32 @@ Where all the magic hapens
                          , ppTitle = xmobarColor base0C ""
                          }
              }`additionalKeysP` myKeys
+#+END_SRC
+
+* Bar
+Currently using xmobar but I plan on using lemonbar eventually
+** xmobar
+This is mostly copied from the Arch wiki..
+#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmobarrc
+  Config { bgColor = "#2b303b"
+         , font = "xft:Input Mono Narrow:size=10:antialias=true"
+
+         , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
+                               , "--Low"      , "70"        -- units: °C
+                               , "--High"     , "80"        -- units: °C
+                               , "--low"      , "#a3be8c"
+                               , "--normal"   , "#ebcb8b"
+                               , "--high"     , "bf616a"
+                               ] 50
+                        
+                       , Run Cpu ["-L","15","-H","50","--normal","#a3be8c","--high","bf616a"] 10
+                            
+                       , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                         
+                       , Run StdinReader
+                       ]
+         , sepChar = "%"
+         , alignSep = "}{"
+         , template = "%StdinReader% }{ %coretemp% | %cpu% | %date%"
+      }
 #+END_SRC
