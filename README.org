@@ -43,4 +43,4 @@ I am currently using:
 | panel    | [[file:xmonad.org][xmobar]]     |
 | shell    | [[file:zshrc.org][zsh]] + tmux |
 | terminal | urxvt      |
-| editor   | [[file:emacs][ emacs]]     |
+| editor   | [[file:emacs/.emacs.d/starting.org][emacs]] [[file:emacs][ ]]    |
