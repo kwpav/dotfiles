@@ -39,11 +39,11 @@ If you wanted to simplify things a bit, you could avoid using =stow= and only us
 * Current Setup
 I am currently using:
 
-wm :: [[file:xmonad.org][xmonad]]
+wm :: 
 
 
-| wm       | xmonad     |
-| panel    | xmobar     |
-| shell    | zsh + tmux |
+| wm       | [[file:xmonad.org][xmonad]]     |
+| panel    | [[file:xmonad.org][xmobar]]     |
+| shell    | [[file:zshrc.org][zsh]] + tmux |
 | terminal | urxvt      |
-| editor   | emacs      |
+| editor   | [[file:emacs][ emacs]]     |
