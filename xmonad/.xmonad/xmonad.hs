@@ -11,6 +11,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe, hPutStrLn)
 
 import XMonad.Layout.Gaps
+import XMonad.Layout.Spacing
 
 base00 = "#2b303b"
 base01 = "#343d46"
@@ -29,17 +30,17 @@ base0D = "#8fa1b3"
 base0E = "#b48ead"
 base0F = "#ab7967"
 
-myBorderWidth = 3
+myBorderWidth = 4 
 myNormalBorderColor = base02
 myFocusedBorderColor = base0D
 
--- TERMINAL
 myTerm = "urxvtc -e tmux"
 
 myKeys =
     [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
     , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
     , ("M-b", sendMessage ToggleStruts)
+    , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
     ]
 
 myWorkspaces = ["1:dev", "2:www", "3", "4", "5", "6", "7", "8", "9"]
@@ -51,14 +52,20 @@ myManageHook = composeAll
                , className =? "Firefox" --> doShift "2:www"
                ]
 
-myLayoutHook = avoidStruts $ layoutHook desktopConfig
+--myLayoutHook = avoidStruts $ layoutHook desktopConfig
+myLayoutHook = avoidStruts $ layouts
+
+layouts = tiled ||| Mirror tiled ||| Full
+    where
+      tiled = smartSpacing 5 $ Tall nmaster delta ratio
+      nmaster = 1
+      delta = 3/100
+      ratio = 1/2
 
 myHandleEventHook = docksEventHook <+> handleEventHook desktopConfig
 
 main = do
   xmproc <- spawnPipe "xmobar"
-  -- TODO
-  --xmproc <- spawnPipe "~/.xmonad/mybar.sh"
   xmonad $ desktopConfig
            { terminal = myTerm
            , modMask = mod4Mask

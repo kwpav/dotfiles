@@ -14,7 +14,7 @@ Import the basic things for configuration
 =Actions.Submap= is for emacs style keys, i.e. =M-x f=
 =Actions.WindowGo= is for runOrRaise
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  import XMonad.Util.EZConfig (additionalKeysP, removeKeysP) -- emacs style keybinds
+  import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
   import XMonad.Actions.Submap
   import XMonad.Actions.WindowGo
 #+END_SRC
@@ -31,6 +31,7 @@ Stuff that loads the bar and prints to it
 Useless gaps!
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   import XMonad.Layout.Gaps
+  import XMonad.Layout.Spacing
 #+END_SRC
 
 ** Colors
@@ -57,16 +58,16 @@ base16-ocean-dark
 #+END_SRC
    
 ** Borders
+Set the borderwidth and colors
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  myBorderWidth = 3
+  myBorderWidth = 4 
   myNormalBorderColor = base02
   myFocusedBorderColor = base0D
 #+END_SRC
 
 ** Terminal
-Set the default terminal
+Set the default terminal to urxvt with a tmux session started
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  -- TERMINAL
   myTerm = "urxvtc -e tmux"
 #+END_SRC
 
@@ -78,6 +79,7 @@ Define extra hotkeys in emacs style thanks to =additionalKeysP=.
       [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
       , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
       , ("M-b", sendMessage ToggleStruts)
+      , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
       ]
 #+END_SRC
 
@@ -88,7 +90,7 @@ Define custom names for workspaces
 #+END_SRC
 
 ** Hooks
-** Manage Hook
+*** Manage Hook
 =g= is for GNU, also because =M-e= is used to switch between monitors
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   myManageHook = composeAll
@@ -99,10 +101,22 @@ Define custom names for workspaces
                  ]
 #+END_SRC
 
-** Layout Hook
-=avoidStruts= allows me to toggle the bar on/off
+*** Layout Hook
+=avoidStruts= allows me to toggle the bar on/off. 
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  myLayoutHook = avoidStruts $ layoutHook desktopConfig
+  --myLayoutHook = avoidStruts $ layoutHook desktopConfig
+  myLayoutHook = avoidStruts $ layouts
+#+END_SRC
+
+**** TODO Layouts
+Overwrite the default Tall layout to use gaps.
+#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
+  layouts = tiled ||| Mirror tiled ||| Full
+      where
+        tiled = smartSpacing 5 $ Tall nmaster delta ratio
+        nmaster = 1
+        delta = 3/100
+        ratio = 1/2
 #+END_SRC
 
 ** Event Handle Hook
@@ -115,8 +129,6 @@ Where all the magic hapens
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   main = do
     xmproc <- spawnPipe "xmobar"
-    -- TODO
-    --xmproc <- spawnPipe "~/.xmonad/mybar.sh"
     xmonad $ desktopConfig
              { terminal = myTerm
              , modMask = mod4Mask
@@ -133,6 +145,11 @@ Where all the magic hapens
                          , ppTitle = xmobarColor base0C ""
                          }
              }`additionalKeysP` myKeys
+#+END_SRC
+
+*** TODO Replace xmobar with lemonbar
+#+BEGIN_SRC haskell
+    xmproc <- spawnPipe "~/.xmonad/mybar.sh"
 #+END_SRC
 
 * Bar
