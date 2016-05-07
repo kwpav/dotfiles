@@ -49,10 +49,9 @@ Because I like like my modal editing.
 #+END_SRC
 
 ** org mode
-org-plus-contrib should give some other export options but it doesn't seem to work right now. It also removes language syntax highlighting in org-mode for some reason.
+Syntax highlithing for =SRC= blocks
 #+BEGIN_SRC emacs-lisp
-  ;(use-package org-plus-contrib
-  ;  :ensure t)
+  (setq org-src-fontify-natively t)
 #+END_SRC
 
 Use syntax highlighting within #+BEGIN_SRC blocks for html exports
