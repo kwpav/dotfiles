@@ -25,6 +25,14 @@ Setup the package repositories and startup use-package.
   (require 'use-package)
 #+END_SRC
 
+* TODO Things to change [0/4]
+- [ ] Clean up org-mode stuff [0/3]
+  + [ ] use use-package
+  + [ ] make the bullets prettier
+  + [ ] make the headers bigger
+- [ ] Learn to use/configure magit
+- [ ] Learn to use/configure yasnippet
+- [ ] Configure C#
 * Emacs
 ** evil mode
 Because I like like my modal editing. 
@@ -49,9 +57,23 @@ Because I like like my modal editing.
 #+END_SRC
 
 ** org mode
+Set the indent mode so all text is indented 
 Syntax highlithing for =SRC= blocks
 #+BEGIN_SRC emacs-lisp
   (setq org-src-fontify-natively t)
+#+END_SRC
+
+Prettier bullets for the headers
+#+BEGIN_SRC emacs-lisp
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-bullets-mode 1)))
+#+END_SRC
+
+Indent mode indents all text blocks per header
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'org-indent-mode)
 #+END_SRC
 
 Use syntax highlighting within #+BEGIN_SRC blocks for html exports
@@ -159,7 +181,7 @@ Change "yes or no" to "y or n"
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 * Languages
-*** Python
+** Python
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
   (use-package jedi
@@ -172,7 +194,7 @@ Jedi is used for autocompletion.
     ;;(setq jedi:tooltip-method '(popup)))
 #+END_SRC
 
-*** C#
+** C#
 #+BEGIN_SRC emacs-lisp
   (use-package csharp-mode
     :ensure t
@@ -231,14 +253,14 @@ taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-con
   (setq omnisharp-auto-complete-want-documentation nil)
 #+END_SRC
 
-*** C
+** C
 **** TODO set this up using use-package
 Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Indenting C]]
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "linux"
         c-basic-offset 4)
 #+END_SRC
-*** Lisp
+** Lisp
 - =show-paren-mode= highlights matching parentheses 
 - =rainbow-delimiter
 s= is a minor mode with highlights parentheses, brackets, and braces according to their depth.
@@ -259,7 +281,7 @@ s= is a minor mode with highlights parentheses, brackets, and braces according t
     (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
     (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
-*** Haskell
+** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
@@ -378,6 +400,12 @@ Some dark themes I Like
   ;;(load-theme 'base16-default-dark)
   ;;(load-theme 'solarized-dark)
   ;;(setq solarized-distinct-fringe-background t)
+  ;;(load-theme 'base16-ocean-dark)
+  ;;(load-theme 'material)
+  ;;(load-theme 'spacegray)
+
+  ;;(load-theme 'reykjavik)
+  ;;(set-cursor-color "gainsboro")
 #+END_SRC
 
 Some light themes I like
@@ -389,16 +417,17 @@ Some light themes I like
 ** Font
 Setup the font.
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Hermit-9" ))
-  ;;(add-to-list 'default-frame-alist '(font . "GohuFont-11" ))
+  ;;(add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
+  ;;(add-to-list 'default-frame-alist '(font . "Hermit-10" ))
+  (add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
 #+END_SRC
 ** Other stuff
-Hide the gui and use a non-blinking cursoe for a more zen-like experience.
+Hide the gui and use a non-blinking cursor for a more zen-like experience.
 Use C-mouse3 to open the menu-bar as a popup menu
 #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -99)
   (tool-bar-mode -1) ;; hide the toolbar
   (scroll-bar-mode -1) ;; hide the scrollbar 
   (blink-cursor-mode 0) ;; dont blink the cursor
+  (set-fringe-mode '(0 . 0)) ;; remove the extra border around frames
 #+END_SRC
