@@ -26,8 +26,8 @@ Setup the package repositories and startup use-package.
 #+END_SRC
 
 * TODO Things to change [0/4]
-- [ ] Clean up org-mode stuff [0/3]
-  + [ ] use use-package
+- [-] Clean up org-mode stuff [1/3]
+  + [X] use use-package
   + [ ] make the bullets prettier
   + [ ] make the headers bigger
 - [ ] Learn to use/configure magit
@@ -57,31 +57,25 @@ Because I like like my modal editing.
 #+END_SRC
 
 ** org mode
-Set the indent mode so all text is indented 
-Syntax highlithing for =SRC= blocks
+This stuff is mostly for making org-mode prettier:
+- =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
+- =org-bullets= provides prettier bullets for the header
+- =indent-mode= indents each header and text block
+- =turn-on-visual-line-mode= is for visual word wrap
 #+BEGIN_SRC emacs-lisp
-  (setq org-src-fontify-natively t)
+  (use-package org
+    :ensure org-bullets
+    :init
+    (setq org-src-fontify-natively t)
+    :config
+    (add-hook 'org-mode-hook 'org-indent-mode)
+    (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (org-bullets-mode 1))))
 #+END_SRC
 
-Prettier bullets for the headers
-#+BEGIN_SRC emacs-lisp
-  (require 'org-bullets)
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (org-bullets-mode 1)))
-#+END_SRC
-
-Indent mode indents all text blocks per header
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
-#+END_SRC
-
-Use visual line wrap
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
-#+END_SRC
-
-Use syntax highlighting within #+BEGIN_SRC blocks for html exports
+I wasn't able to get this to work, but it's supposed to use syntax highlighting for =#+SRC= blocks in html exports
 #+BEGIN_SRC emacs-lisp
   ;(use-package htmlize
   ;   :ensure t)
