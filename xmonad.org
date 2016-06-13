@@ -73,7 +73,7 @@ Set the default terminal to urxvt with a tmux session started
 
 ** Keys
 Define extra hotkeys in emacs style thanks to =additionalKeysP=.
-"M" is the Xmonad modkey (=mod4= in my case), not =alt= as in emacs.
+"M" is the XMonad modkey (=mod4= in my case), not =alt= as in emacs.
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   myKeys =
       [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
@@ -91,7 +91,7 @@ Define custom names for workspaces
 
 ** Hooks
 *** Manage Hook
-=g= is for GNU, also because =M-e= is used to switch between monitors
+Right now I am just using this to manage which applications open on what workspaces.
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   myManageHook = composeAll
                  [ manageHook desktopConfig
@@ -158,7 +158,9 @@ Currently using xmobar but I plan on using lemonbar eventually
 This is mostly copied from the Arch wiki..
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmobarrc
   Config { bgColor = "#2b303b"
-         , font = "xft:Input Mono Narrow:size=10:antialias=true"
+         --, font = "xft:Input Mono Narrow:size=10:antialias=true"
+           --, font = "xft:GohuFont:size=14"
+           , font = "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*"
 
          , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
                                , "--Low"      , "70"        -- units: °C

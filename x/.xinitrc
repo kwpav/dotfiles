@@ -1,4 +1,3 @@
-
 #!/bin/sh
 
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
@@ -20,7 +19,7 @@ sh ~/.fehbg &
 
 urxvtd &
 
-#compton --config ~/.config/compton.conf -b &
+compton --config ~/.config/compton.conf -b &
 
 setxkbmap -option 'ctrl:nocaps'
 

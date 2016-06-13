@@ -2,7 +2,7 @@
 import XMonad
 import XMonad.Config.Desktop
 
-import XMonad.Util.EZConfig (additionalKeysP, removeKeysP) -- emacs style keybinds
+import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Actions.Submap
 import XMonad.Actions.WindowGo
 

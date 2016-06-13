@@ -39,10 +39,10 @@ Set up the urxvtd daemon. This speeds up urxvt among other things.
   urxvtd &
 #+END_SRC
 
-* TODO Compton
+* Compton
 Pretty shadows.
 #+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  #compton --config ~/.config/compton.conf -b &
+  compton --config ~/.config/compton.conf -b &
 #+END_SRC
 
 * Keyboard
