@@ -1,37 +1,22 @@
-!! NON-POWERLINE FONTS !!
-! URxvt*font: *-gohufont-medium-r-*-*-9-*-*-*-*-*-*-*
-*font: -*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*
-! URxvt*font:	xft:GohuFont:pixelsize=14
-! URxvt*font: -*-erusfont-medium-*-*-*-*-*-*-*-*-*-iso10646-*
-! URxvt*font: xft:erusfont:pixelsize=11
 
-!! POWERLINE FONTS !!
-! URxvt*font: -*-tewi-medium-*-*-*-*-*-*-*-*-*-iso10646-*
-! URxvt*font: xft:Tewi:pixelsize=11
-! URxvt*font: -*-terminesspowerline-medium-*-*-*-*-*-*-*-*-*-iso10646-*
-! URxvt*font: xft:Hermit:pixelsize=11
-! URxvt*font:  xft:Input Mono Narrow:pixelsize=12
-! URxvt*letterSpace: -1
+URxvt*font: xft:Monaco:pixelsize=11
 
-!! XFT STUFF !!
-!Xft.autohint: true
-!Xft.antialias: true
-!Xft.hinting: true
-!Xft.hintstyle: hintslight
-!Xft.dpi: 96
-!Xft.rgba: rgb
-!Xft.lcdfilter: lcddefault
+!URxvt*font: *-gohufont-medium-r-*-*-9-*-*-*-*-*-*-*
+!*font: -*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*
+!URxvt*font: xft:GohuFont:pixelsize=14
+!URxvt*font: -*-erusfont-medium-*-*-*-*-*-*-*-*-*-iso10646-*
+!URxvt*font: xft:erusfont:pixelsize=11
 
-!! OPTIONS !!
 URxvt*scrollBar: false
 URxvt*cursorBlink: false
 URxvt*pointerBlink: false
 
 Xcursor.theme: Adwaita
 
+#include "/home/kevin/.config/xrcolors/tommorow"
+
 !! COLORS !! 
-#include "/home/kevin/.config/xrcolors/ocean"
-! #include "/home/kevin/.config/xrcolors/solarized"
-! #include "/home/kevin/.config/xrcolors/sourcerer"
-! #include "/home/kevin/.config/xrcolors/zenburn"
-! #include "/home/kevin/.config/xrcolors/tommorow"
+!#include "/home/kevin/.config/xrcolors/ocean"
+!#include "/home/kevin/.config/xrcolors/solarized"
+!#include "/home/kevin/.config/xrcolors/sourcerer"
+!#include "/home/kevin/.config/xrcolors/zenburn"
