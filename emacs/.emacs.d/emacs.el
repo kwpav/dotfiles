@@ -25,14 +25,25 @@
 
 (use-package org
   :ensure org-bullets
-  ;;:ensure org-plus-contrib
   :config
   (setq org-src-fontify-natively t)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
   (add-hook 'org-mode-hook
             (lambda ()
-              (org-bullets-mode 1))))
+              (org-bullets-mode 1)))
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+   '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
+   '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
+   '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
+   '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
+
+(font-lock-add-keywords 'org-mode
+                        '(("^ +\\([-*]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+(setq org-hide-emphasis-markers t)
 
 ;(use-package htmlize
 ;   :ensure t)
@@ -104,6 +115,11 @@
 (global-set-key (kbd "<C-S-right>")  'buf-move-right)
 
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package jedi
   :ensure t
@@ -177,16 +193,15 @@
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode))
 
-(use-package rainbow-delimiters
-  :ensure t
-  :init
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode))
-
 (use-package haskell-mode
   :ensure t
   :init
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (define-key prog-mode-map "\C-ck" 'comment-region)
+            (define-key prog-mode-map "\C-cu" 'uncomment-region)))
 
 (menu-bar-mode -99)
 
@@ -210,19 +225,39 @@
 ;;(load-theme 'light-soap)
 ;;(load-theme 'solarized-light)
 
-(add-to-list 'default-frame-alist '(font . "Monaco-10" ))
+(add-to-list 'default-frame-alist '(font . "envypn-11" ))
 
 ;;(add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
 ;;(add-to-list 'default-frame-alist '(font . "Hermit-10" ))
 ;;(add-to-list 'default-frame-alist '(font . "Monaco-10" ))
 ;;(add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
 ;;(add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
+;;(add-to-list 'default-frame-alist '(font . "envypn-11" ))
 
 (menu-bar-mode -99)
 (tool-bar-mode -1) ;; hide the toolbar
 (scroll-bar-mode -1) ;; hide the scrollbar 
 (blink-cursor-mode 0) ;; dont blink the cursor
 (set-fringe-mode '(0 . 0)) ;; remove the extra border around frames
+
+(add-hook 'prog-mode-hook 'linum-mode)
+
+;; (setq linum-format "%4d \u2502")
+;; (setq linum-format "%d ")
+
+(add-hook 'linum-before-numbering-hook
+          (lambda ()
+            (setq-local linum-format-fmt
+                        (let ((w (length (number-to-string
+                                          (count-lines (point-min) (point-max))))))
+                          (concat "%" (number-to-string w) "d")))))
+
+(defun linum-format-func (line)
+  (concat
+   (propertize (format linum-format-fmt line) 'face 'linum)
+   (propertize " " 'face 'mode-line)))
+
+(setq linum-format 'linum-format-func)
 
 (use-package nyan-mode
   :ensure t
