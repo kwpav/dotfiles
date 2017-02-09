@@ -1,11 +1,12 @@
 
-URxvt*font: xft:Monaco:pixelsize=11
+URxvt*font: xft:envypn:pixelsize=11
 
 !URxvt*font: *-gohufont-medium-r-*-*-9-*-*-*-*-*-*-*
 !*font: -*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*
 !URxvt*font: xft:GohuFont:pixelsize=14
 !URxvt*font: -*-erusfont-medium-*-*-*-*-*-*-*-*-*-iso10646-*
 !URxvt*font: xft:erusfont:pixelsize=11
+!URxvt*font: xft:Monaco:pixelsize=11
 
 URxvt*scrollBar: false
 URxvt*cursorBlink: false

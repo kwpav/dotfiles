@@ -10,6 +10,14 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe, hPutStrLn)
 
+import XMonad.Layout.Accordion
+import XMonad.Layout.Tabbed
+import XMonad.Layout.Spiral
+import XMonad.Layout.CenteredMaster
+import XMonad.Layout.Column
+import XMonad.Layout.Grid
+import XMonad.Layout.ThreeColumns
+
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 
@@ -37,7 +45,7 @@ myFocusedBorderColor = base0D
 myTerm = "urxvtc -e tmux"
 
 myKeys =
-    [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
+    [ ("M-g", runOrRaise "emc" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
     , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
     , ("M-b", sendMessage ToggleStruts)
     , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
@@ -55,7 +63,7 @@ myManageHook = composeAll
 --myLayoutHook = avoidStruts $ layoutHook desktopConfig
 myLayoutHook = avoidStruts $ layouts
 
-layouts = tiled ||| Mirror tiled ||| Full
+layouts = tiled ||| Mirror tiled ||| Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
     where
       tiled = smartSpacing 5 $ Tall nmaster delta ratio
       nmaster = 1

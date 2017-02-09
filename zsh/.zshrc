@@ -21,6 +21,8 @@ antigen apply
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+export EDITOR=emc
+
 if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
         case $(tmux showenv TERM 2>/dev/null) in
                 *256color) ;&

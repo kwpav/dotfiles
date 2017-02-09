@@ -1,8 +1,8 @@
 #+TITLE: emacs.org
 
-* starting.org
+* emacs.org
 ** What is this?
-This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/emacs.d/starting.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as [[http://pages.sachachua.com/.emacs.d/Sacha.html][this one]]. 
+This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/dotfiles/emacs.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as [[http://pages.sachachua.com/.emacs.d/Sacha.html][this one]]. 
 ** How to Add/Modify 
 To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
@@ -30,7 +30,7 @@ Setup the package repositories and startup use-package.
 * TODO Things to do 
 An on-going list of things I want to change
 
-- [ ] move this file to ~/dotfiles/emacs.org
+- [X] move this file to ~/dotfiles/emacs.org
 - [ ]fix evil escape keys
 - [-] Clean up org-mode stuff [2/3]
   + [X] use use-package
@@ -75,7 +75,6 @@ This stuff is mostly for making org-mode prettier:
 - =indent-mode= indents each header and text block
 - =turn-on-visual-line-mode= is for visual word wrap
 
-I
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure org-bullets
@@ -132,6 +131,8 @@ Emacs version of NERDTree, press <f8> to open.
 #+BEGIN_SRC emacs-lisp
   (use-package neotree
     :ensure t
+    :init
+    (setq neo-theme 'ascii)
     :config
     (global-set-key [f8] 'neotree-toggle)
     (add-hook 'neotree-mode-hook
@@ -139,6 +140,8 @@ Emacs version of NERDTree, press <f8> to open.
                 (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
                 (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
                 (define-key evil-normal-state-local-map (kbd "q") 'neotree-enter))))
+
+
 #+END_SRC
 
 ** slime
@@ -236,21 +239,21 @@ Jedi is used for autocompletion.
 
 ** C#
 #+BEGIN_SRC emacs-lisp
-  (use-package csharp-mode
-    :ensure t
-    :init
-    ;(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
-    (setq auto-mode-alist
-       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist)))
+  ;; (use-package csharp-mode
+  ;;   :ensure t
+  ;;   :init
+  ;;   ;(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+  ;;   (setq auto-mode-alist
+  ;;      (append '(("\\.cs$" . csharp-mode)) auto-mode-alist)))
 #+END_SRC
 Omnisharp should load after a csharp file is loaded
 #+BEGIN_SRC emacs-lisp
-  (use-package omnisharp
-    :ensure t
-    :init
-    (setq omnisharp-server-executable-path "~/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe")
-    :config
-    (add-hook 'csharp-mode-hook 'omnisharp-mode))
+  ;; (use-package omnisharp
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq omnisharp-server-executable-path "~/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe")
+  ;;   :config
+  ;;  (add-hook 'csharp-mode-hook 'omnisharp-mode))
 #+END_SRC
 omnisharp evil-mode keys...
 taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-config-for-evil-mode.el
@@ -302,8 +305,7 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
 #+END_SRC
 ** Lisp
 - =show-paren-mode= highlights matching parentheses 
-- =rainbow-delimiter
-s= is a minor mode with highlights parentheses, brackets, and braces according to their depth.
+- =rainbow-delimiters= is a minor mode with highlights parentheses, brackets, and braces according to their depth.
 - =paredit= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
   (setq show-paren-delay 0)
@@ -323,6 +325,43 @@ For xmonad and beyond
     :init
     (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
 #+END_SRC
+** Javascript
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :init
+    (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
+    (add-to-list `auto-mode-alist '("\\.json\\'" . js2-mode))
+    (add-hook 'js2-mode-hook
+              (lambda ()
+                (setq-default js2-basic-offset 2))))
+#+END_SRC
+** Web Mode
+Set up web mode for html, css, and js files
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode 
+    :ensure t
+    :init
+    (setq web-mode-ac-sources-alist
+          '(("css" . (ac-source-css-property))
+            ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+    (add-hook 'web-mode-before-auto-complete-hooks
+              '(lambda ()
+                 (let ((web-mode-cur-language
+                        (web-mode-language-at-pos))))))
+    (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
+    (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode))
+    ;;(add-to-list `auto-mode-alist '("\\.js\\'" . web-mode))
+    (add-hook 'web-mode-hook
+              (lambda ()
+                ; set the html indent to 2
+                (setq web-mode-markup-indent-offset 2)
+                (setq evil-shift-width 2)
+                ; highlight matching elements in html
+                (setq web-mode-enable-current-element-highlight 1)))
+    )
+#+END_SRC
+
 * Custom Keys
 ** Programming Mode Keys
 These keys apply to all programming modes
@@ -342,7 +381,7 @@ These keys apply to all programming modes
 ** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'base16-tomorrow-dark)
+  (load-theme 'base16-tomorrow-night)
 #+END_SRC
 
 Some dark themes I Like
@@ -371,7 +410,7 @@ Some light themes I like
 ** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "envypn-11" ))
+  (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
 #+END_SRC
 
 Other fonts I like

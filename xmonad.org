@@ -27,6 +27,16 @@ Stuff that loads the bar and prints to it
   import XMonad.Util.Run (spawnPipe, hPutStrLn)
 #+END_SRC
 
+*** Layouts
+#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
+  import XMonad.Layout.Accordion
+  import XMonad.Layout.Tabbed
+  import XMonad.Layout.Spiral
+  import XMonad.Layout.CenteredMaster
+  import XMonad.Layout.Column
+  import XMonad.Layout.Grid
+  import XMonad.Layout.ThreeColumns
+#+END_SRC
 *** TODO Gaps
 Useless gaps!
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
@@ -76,7 +86,7 @@ Define extra hotkeys in emacs style thanks to =additionalKeysP=.
 "M" is the XMonad modkey (=mod4= in my case), not =alt= as in emacs.
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
   myKeys =
-      [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
+      [ ("M-g", runOrRaise "emc" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
       , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
       , ("M-b", sendMessage ToggleStruts)
       , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
@@ -109,9 +119,10 @@ Right now I am just using this to manage which applications open on what workspa
 #+END_SRC
 
 **** TODO Layouts
-Overwrite the default Tall layout to use gaps.
+- [ ] Overwrite the default Tall layout to use gaps.
+- [ ] Decide on which layouts i want
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  layouts = tiled ||| Mirror tiled ||| Full
+  layouts = tiled ||| Mirror tiled ||| Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
       where
         tiled = smartSpacing 5 $ Tall nmaster delta ratio
         nmaster = 1
@@ -147,20 +158,21 @@ Where all the magic hapens
              }`additionalKeysP` myKeys
 #+END_SRC
 
-*** TODO Replace xmobar with lemonbar
+*** TODO Replace xmobar with lemonbar or yabar
 #+BEGIN_SRC haskell
     xmproc <- spawnPipe "~/.xmonad/mybar.sh"
 #+END_SRC
 
 * Bar
-Currently using xmobar but I plan on using lemonbar eventually
+Currently using xmobar but I plan on using lemonbar or yabar eventually
 ** xmobar
 This is mostly copied from the Arch wiki..
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmobarrc
   Config { bgColor = "#2b303b"
          --, font = "xft:Input Mono Narrow:size=10:antialias=true"
-           --, font = "xft:GohuFont:size=14"
-           , font = "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*"
+         --, font = "xft:GohuFont:size=14"
+           -- , font = "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*"
+           , font = "xft:envypn:size=12"
 
          , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
                                , "--Low"      , "70"        -- units: °C

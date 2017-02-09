@@ -52,9 +52,9 @@ Set the =Caps Lock= key to =Control=. Makes Emacs key chords easier.
 #+END_SRC
 
 * Start the WM
-Using XMonad currently
 #+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
   exec xmonad
+  #exec stumpwm
 #+END_SRC
 
 ** Some other WM's
@@ -74,4 +74,6 @@ Other WM's I have used in the past
 
   sxhkd -c ~/.config/swm/sxhkd &
   exec swm
+
+  exec xmonad
 #+END_SRC
