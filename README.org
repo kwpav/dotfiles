@@ -1,20 +1,48 @@
-* ~/dotfiles/...
-This is my collection of GNU/Linux configuration files. I use [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][gnu stow]] to keep everything in a single, version controlled, directory.
+#+TITLE: Literate ~/dotfiles/...
 
-For example, after cloning, run:
+From [[https://en.wikipedia.org/wiki/Literate_programming][Wikipedia]]:
+#+BEGIN_QUOTE
+Literate programming is an approach to programming introduced by Donald Knuth in whch a program is given as an explanation of the program logic in a natural language, such as English, interspersed with snippets of macros and traditional source code, from which a compilable source code can be generated.
+#+END_QUOTE
 
-#+BEGIN_SRC shell
-cd ~/dotfiles/
-stow emacs
-#+END_SRC
-
-This creates symlinks for each file/folder in the specified directory, i.e. the =/emacs= folder, appear in the parent directory, which in this case will be the home directory.
+This is my attempt at literate GNU/Linux configuration files. To achieve this, I am using [[http://orgmode.org][org-mode]] and [[http://orgmode.org/worg/org-contrib/babel/intro.html][babel]] for [[https://www.gnu.org/software/emacs/][emacs]]. I am also using [[https://www.gnu.org/software/stow/stow.html][stow]] to keep everything in a single, version controlled, directory.
 
 * Current Setup
 I am currently using:
 
-| wm       | xmonad     | 
-| panel    | xmobar     |
-| shell    | zsh + tmux |
+| wm       | [[file:xmonad.org][xmonad]]     |
+| panel    | [[file:xmonad.org][xmobar]]     |
+| shell    | [[file:zshrc.org][zsh]] + tmux |
 | terminal | urxvt      |
-| editor   | emacs      |
+| editor   | [[file:emacs/.emacs.d/starting.org][emacs]] [[file:emacs][ ]]    |
+
+* How it works
+** Stow
+To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
+
+For example, I am using the =~/dotfiles/xmonad/.xmonad/= directory to hold all of the XMonad configuration files. Once all the files are created, I used =stow= to create a symlink, =~/.xmonad=, pointing to =~/dotfiles/xmonad/.xmonad/=
+
+If you cloned this directory, you could run:
+#+BEGIN_SRC sh
+  stow xmonad
+#+END_SRC
+To use my XMonad configuration.
+
+You only need run =stow= initially, or if any other new files are added. Once the symlink is created, you can open the file within the home directory and it will use the symlinked file within =~/dotfiles=.
+
+** Org and Babel
+Babel allows you to put code snippets with an org file and then use =:tangle <directory>= to combine the snippets to a file in the specified directory.
+
+For example, if you wanted to create your XMonad configuration file and store it in =~/dotfiles/.xmonad/xmonad.hs=, you would use:
+#+BEGIN_SRC org -r -k
+  ,#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
+  <Insert code snippet here...>
+  ,#+END_SRC
+#+END_SRC
+
+You can edit the code in the =SRC= block by pressing <C-c '>  This opens the snippet in a new buffer in the languages native mode. Press <C-c '> again to save the changes.
+
+Once you are happy with the changes, press <C-c C-v t> to =tangle= (combine in this case) all the snippets and create =xmonad.hs= inide of =~/dotfiles/xmonad/.xmonad=.
+
+If you wanted to simplify things a bit, you could avoid using =stow= and only use =org-mode= and =babel= by pointing tangle to the home directory instead, i.e. =~/.xmonad/xmonad.hs=
+

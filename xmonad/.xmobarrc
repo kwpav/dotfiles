@@ -1,5 +1,9 @@
+
 Config { bgColor = "#2b303b"
-       , font = "xft:Input Mono Narrow:size=10:antialias=true"
+       --, font = "xft:Input Mono Narrow:size=10:antialias=true"
+       --, font = "xft:GohuFont:size=14"
+         -- , font = "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*"
+         , font = "xft:envypn:size=12"
 
        , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
                              , "--Low"      , "70"        -- units: °C

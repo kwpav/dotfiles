@@ -1,3 +1,17 @@
-*.*\~
 zsh/.config/zsh/ssh.zsh
 vim/.vim/
+
+# xmonad ignores
+/xmonad/.xmonad/xmonad-x86_64-linux
+/xmonad/.xmonad/xmonad.o
+/xmonad/.xmonad/xmonad.hi
+/xmonad/.xmonad/xmonad_test.hs
+
+# emacs ignores
+emacs/emacs.d/elpa
+emacs/.emacs.d/recentf
+
+# ignore emacs temp files
+[#]*[#]
+*~
+.\#*

@@ -1,0 +1,79 @@
+#+TITLE: ~/.xinitrc
+
+Start with the hashbang...
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  #!/bin/sh
+#+END_SRC
+
+From the default /etc/X11/xinit/xinitrc
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  if [ -d /etc/X11/xinit/xinitrc.d ]; then
+    for f in /etc/X11/xinit/xinitrc.d/*; do
+      [ -x "$f" ] && . "$f"
+    done
+    unset f
+  fi
+
+  [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+#+END_SRC
+
+* Defaults
+Set some default applications
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  export PATH=$PATH:~/bin/:~/omnisharp-server
+  export BROWSER=firefox
+  export EDITOR=emacs
+  export TERM=urxvtc
+  #export POWERLINE_CONFIG_COMMAND=/home/kevin/powerline/scripts/powerline-config
+#+END_SRC
+
+* Background
+Set up the background using feh. =~/.fehgb= sets the background to the last background used.
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  sh ~/.fehbg &
+#+END_SRC
+
+* Daemons
+Set up the urxvtd daemon. This speeds up urxvt among other things.
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  urxvtd &
+#+END_SRC
+
+* Compton
+Pretty shadows.
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  compton --config ~/.config/compton.conf -b &
+#+END_SRC
+
+* Keyboard
+Set the =Caps Lock= key to =Control=. Makes Emacs key chords easier.
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  setxkbmap -option 'ctrl:nocaps'
+#+END_SRC
+
+* Start the WM
+#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  exec xmonad
+  #exec stumpwm
+#+END_SRC
+
+** Some other WM's
+Other WM's I have used in the past
+#+BEGIN_SRC sh
+  exec i3
+
+  exec ratpoison
+
+  exec herbstluftwm --locked
+
+  exec stumpwm
+
+  export PANEL_FIFO=/tmp/panel-fifo
+  sxhkd &
+  exec bspwm
+
+  sxhkd -c ~/.config/swm/sxhkd &
+  exec swm
+
+  exec xmonad
+#+END_SRC

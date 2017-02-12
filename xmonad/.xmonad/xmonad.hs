@@ -1,24 +1,26 @@
--------------------------
--- ~/.xmonad/xmonad.hs --
--------------------------
 
--- base
 import XMonad
 import XMonad.Config.Desktop
--- config
-import XMonad.Util.EZConfig (additionalKeysP, removeKeysP) -- emacs style keybinds
+
+import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Actions.Submap
 import XMonad.Actions.WindowGo
--- bar
+
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe, hPutStrLn)
--- TODO gaps    
+
+import XMonad.Layout.Accordion
+import XMonad.Layout.Tabbed
+import XMonad.Layout.Spiral
+import XMonad.Layout.CenteredMaster
+import XMonad.Layout.Column
+import XMonad.Layout.Grid
+import XMonad.Layout.ThreeColumns
+
 import XMonad.Layout.Gaps
+import XMonad.Layout.Spacing
 
-
--- COLORS
--- base16-ocean-dark
 base00 = "#2b303b"
 base01 = "#343d46"
 base02 = "#4f5b66"
@@ -36,26 +38,21 @@ base0D = "#8fa1b3"
 base0E = "#b48ead"
 base0F = "#ab7967"
 
--- BORDERS
-myBorderWidth = 3
+myBorderWidth = 4 
 myNormalBorderColor = base02
 myFocusedBorderColor = base0D
 
--- TERMINAL
 myTerm = "urxvtc -e tmux"
 
--- KEYS
--- "M" is the XMonad modkey, not Alt as in emacs
 myKeys =
-    [ ("M-g", runOrRaise "emacs" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
+    [ ("M-g", runOrRaise "emc" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
     , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
     , ("M-b", sendMessage ToggleStruts)
+    , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
     ]
 
--- WORKSPACES
 myWorkspaces = ["1:dev", "2:www", "3", "4", "5", "6", "7", "8", "9"]
 
--- HOOKS
 myManageHook = composeAll
                [ manageHook desktopConfig
                , manageDocks
@@ -63,15 +60,20 @@ myManageHook = composeAll
                , className =? "Firefox" --> doShift "2:www"
                ]
 
-myLayoutHook = avoidStruts $ layoutHook desktopConfig
+--myLayoutHook = avoidStruts $ layoutHook desktopConfig
+myLayoutHook = avoidStruts $ layouts
+
+layouts = tiled ||| Mirror tiled ||| Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
+    where
+      tiled = smartSpacing 5 $ Tall nmaster delta ratio
+      nmaster = 1
+      delta = 3/100
+      ratio = 1/2
 
 myHandleEventHook = docksEventHook <+> handleEventHook desktopConfig
 
----- here we go!
 main = do
   xmproc <- spawnPipe "xmobar"
-  -- TODO
-  --xmproc <- spawnPipe "~/.xmonad/mybar.sh"
   xmonad $ desktopConfig
            { terminal = myTerm
            , modMask = mod4Mask
