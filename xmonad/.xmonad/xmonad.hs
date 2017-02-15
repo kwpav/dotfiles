@@ -17,6 +17,7 @@ import XMonad.Layout.CenteredMaster
 import XMonad.Layout.Column
 import XMonad.Layout.Grid
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.NoBorders
 
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
@@ -38,7 +39,7 @@ base0D = "#8fa1b3"
 base0E = "#b48ead"
 base0F = "#ab7967"
 
-myBorderWidth = 4 
+myBorderWidth = 2 
 myNormalBorderColor = base02
 myFocusedBorderColor = base0D
 
@@ -48,7 +49,7 @@ myKeys =
     [ ("M-g", runOrRaise "emc" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
     , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
     , ("M-b", sendMessage ToggleStruts)
-    , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
+    , ("M-d", spawn "rofi -font 'Monaco 10' -show run")
     ]
 
 myWorkspaces = ["1:dev", "2:www", "3", "4", "5", "6", "7", "8", "9"]
@@ -63,9 +64,9 @@ myManageHook = composeAll
 --myLayoutHook = avoidStruts $ layoutHook desktopConfig
 myLayoutHook = avoidStruts $ layouts
 
-layouts = tiled ||| Mirror tiled ||| Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
+layouts = smartBorders tiled ||| Mirror tiled ||| noBorders Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
     where
-      tiled = smartSpacing 5 $ Tall nmaster delta ratio
+      tiled = Tall nmaster delta ratio
       nmaster = 1
       delta = 3/100
       ratio = 1/2

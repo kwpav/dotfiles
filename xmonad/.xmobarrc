@@ -1,25 +1,40 @@
 
 Config { bgColor = "#2b303b"
-       --, font = "xft:Input Mono Narrow:size=10:antialias=true"
-       --, font = "xft:GohuFont:size=14"
-         -- , font = "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*"
-         , font = "xft:envypn:size=12"
+       , font = "xft:Monaco:size=9"
 
-       , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
-                             , "--Low"      , "70"        -- units: °C
-                             , "--High"     , "80"        -- units: °C
-                             , "--low"      , "#a3be8c"
-                             , "--normal"   , "#ebcb8b"
-                             , "--high"     , "bf616a"
+       , commands = [ Run Cpu [ "--template", "CPU: <total>%"
+                              ,"-L","15"
+                              ,"-H","50"
+                              ,"--normal","#a3be8c"
+                              ,"--high","bf616a"
+                              ] 10
+
+                    , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+
+                    , Run Battery [ "--template" , "B: <acstatus>"
+
+                             , "--Low"      , "10"        -- units: %
+                             , "--High"     , "80"        -- units: %
+                             , "--low"      , "darkred"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "#a3be8c"
+
+                             , "--" -- battery specific options
+                                       -- discharging status
+                                       , "-o"   , "<left>% (<timeleft>)"
+                                       -- AC "on" status
+                                       , "-O"   , "<fc=#dAA520>Charging</fc>"
+                                       -- charged status
+                                       , "-i"   , "<fc=#ebcb8b>Charged</fc>"
                              ] 50
-                      
-                     , Run Cpu ["-L","15","-H","50","--normal","#a3be8c","--high","bf616a"] 10
-                          
-                     , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
-                       
+
+                     , Run DynNetwork [] 10
+
+                     , Run Wireless "wlp4s0" [ "--template" , "W: <essid> (<quality>%)" ] 50
+
                      , Run StdinReader
                      ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %coretemp% | %cpu% | %date%"
+       , template = "%StdinReader% }{ %wlp4s0wi% [%dynnetwork%] | %battery% | %cpu% | %date%"
     }
