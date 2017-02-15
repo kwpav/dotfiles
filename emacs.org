@@ -215,6 +215,14 @@ Change "yes or no" to "y or n"
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
+Frames only mode to use my WM
+#+BEGIN_SRC emacs-lisp
+  (use-package frames-only-mode
+    :ensure t
+    :init
+    (frames-only-mode))
+#+END_SRC
+
 ** rainbow delimiters
 Add rainbow delimiters in all programming language modes
 #+BEGIN_SRC emacs-lisp 
