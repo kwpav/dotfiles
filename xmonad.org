@@ -36,6 +36,7 @@ Stuff that loads the bar and prints to it
   import XMonad.Layout.Column
   import XMonad.Layout.Grid
   import XMonad.Layout.ThreeColumns
+  import XMonad.Layout.NoBorders
 #+END_SRC
 *** TODO Gaps
 Useless gaps!
@@ -70,7 +71,7 @@ base16-ocean-dark
 ** Borders
 Set the borderwidth and colors
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  myBorderWidth = 4 
+  myBorderWidth = 2 
   myNormalBorderColor = base02
   myFocusedBorderColor = base0D
 #+END_SRC
@@ -89,7 +90,7 @@ Define extra hotkeys in emacs style thanks to =additionalKeysP=.
       [ ("M-g", runOrRaise "emc" (className =? "Emacs")) -- g is for GNU, and because M-e switches screens
       , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
       , ("M-b", sendMessage ToggleStruts)
-      , ("M-d", spawn "rofi -font 'Input Mono Narrow 10' -show run")
+      , ("M-d", spawn "rofi -font 'Monaco 10' -show run")
       ]
 #+END_SRC
 
@@ -122,9 +123,9 @@ Right now I am just using this to manage which applications open on what workspa
 - [ ] Overwrite the default Tall layout to use gaps.
 - [ ] Decide on which layouts i want
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  layouts = tiled ||| Mirror tiled ||| Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
+  layouts = smartBorders tiled ||| Mirror tiled ||| noBorders Full ||| ThreeCol 1 (3/100) (1/2) ||| Accordion ||| spiral (6/7)
       where
-        tiled = smartSpacing 5 $ Tall nmaster delta ratio
+        tiled = Tall nmaster delta ratio
         nmaster = 1
         delta = 3/100
         ratio = 1/2
@@ -169,27 +170,42 @@ Currently using xmobar but I plan on using lemonbar or yabar eventually
 This is mostly copied from the Arch wiki..
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmobarrc
   Config { bgColor = "#2b303b"
-         --, font = "xft:Input Mono Narrow:size=10:antialias=true"
-         --, font = "xft:GohuFont:size=14"
-           -- , font = "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*"
-           , font = "xft:envypn:size=12"
+         , font = "xft:Monaco:size=9"
 
-         , commands = [ Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
-                               , "--Low"      , "70"        -- units: °C
-                               , "--High"     , "80"        -- units: °C
-                               , "--low"      , "#a3be8c"
-                               , "--normal"   , "#ebcb8b"
-                               , "--high"     , "bf616a"
+         , commands = [ Run Cpu [ "--template", "CPU: <total>%"
+                                ,"-L","15"
+                                ,"-H","50"
+                                ,"--normal","#a3be8c"
+                                ,"--high","bf616a"
+                                ] 10
+
+                      , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+
+                      , Run Battery [ "--template" , "B: <acstatus>"
+
+                               , "--Low"      , "10"        -- units: %
+                               , "--High"     , "80"        -- units: %
+                               , "--low"      , "darkred"
+                               , "--normal"   , "darkorange"
+                               , "--high"     , "#a3be8c"
+
+                               , "--" -- battery specific options
+                                         -- discharging status
+                                         , "-o"   , "<left>% (<timeleft>)"
+                                         -- AC "on" status
+                                         , "-O"   , "<fc=#dAA520>Charging</fc>"
+                                         -- charged status
+                                         , "-i"   , "<fc=#ebcb8b>Charged</fc>"
                                ] 50
-                        
-                       , Run Cpu ["-L","15","-H","50","--normal","#a3be8c","--high","bf616a"] 10
-                            
-                       , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
-                         
+
+                       , Run DynNetwork [] 10
+
+                       , Run Wireless "wlp4s0" [ "--template" , "W: <essid> (<quality>%)" ] 50
+
                        , Run StdinReader
                        ]
          , sepChar = "%"
          , alignSep = "}{"
-         , template = "%StdinReader% }{ %coretemp% | %cpu% | %date%"
+         , template = "%StdinReader% }{ %wlp4s0wi% [%dynnetwork%] | %battery% | %cpu% | %date%"
       }
 #+END_SRC
