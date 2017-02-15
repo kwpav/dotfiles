@@ -465,7 +465,7 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
   (use-package nyan-mode
     :ensure t
     :init
-    (setq nyan-wavy-trail t)
+    (setq nyan-wavy-trail f)
     :config
     (nyan-mode 1)
     (nyan-start-animation))
