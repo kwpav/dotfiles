@@ -22,6 +22,7 @@ Setup the package repositories and startup use-package.
   ;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives '("elpy" . "https://jorgenschaefer.github.io/packages/"))
   (package-initialize)
 
   (require 'use-package)
@@ -235,14 +236,30 @@ Add rainbow delimiters in all programming language modes
 ** Python
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
-  (use-package jedi
-    :ensure t
-    :init
-    (setq jedi:complete-on-dot t)
-    :config
-    (add-hook 'python-mode-hook 'jedi:setup))
+  ;; (use-package jedi
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq jedi:complete-on-dot t)
+  ;;   :config
+  ;;   (add-hook 'python-mode-hook 'jedi:setup))
     ;;(setq jedi:tooltip-show t)
     ;;(setq jedi:tooltip-method '(popup)))
+#+END_SRC
+
+Autopep8 automatically formats python code to pep8 standards. 
+#+BEGIN_SRC emacs-lisp
+  (use-package py-autopep8
+    :ensure t)
+#+END_SRC
+
+Elpy provides an ide-like environment for python
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :config
+    (elpy-enable)
+    (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
 #+END_SRC
 
 ** C#
@@ -418,7 +435,7 @@ Some light themes I like
 ** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
+  (add-to-list 'default-frame-alist '(font . "Monaco-8" ))
 #+END_SRC
 
 Other fonts I like
@@ -472,8 +489,8 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
   (use-package nyan-mode
     :ensure t
-    :init
-    (setq nyan-wavy-trail f)
+    ;:init
+    ;(setq nyan-wavy-trail f)
     :config
     (nyan-mode 1)
     (nyan-start-animation))

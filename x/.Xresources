@@ -1,5 +1,5 @@
 
-URxvt*font: xft:envypn:pixelsize=11
+URxvt*font: xft:Monaco:pixelsize=9
 
 !URxvt*font: *-gohufont-medium-r-*-*-9-*-*-*-*-*-*-*
 !*font: -*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*

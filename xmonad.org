@@ -170,7 +170,7 @@ Currently using xmobar but I plan on using lemonbar or yabar eventually
 This is mostly copied from the Arch wiki..
 #+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmobarrc
   Config { bgColor = "#2b303b"
-         , font = "xft:Monaco:size=9"
+         , font = "xft:Monaco:size=8"
 
          , commands = [ Run Cpu [ "--template", "CPU: <total>%"
                                 ,"-L","15"

@@ -5,7 +5,7 @@ This file mainly controls my URxvt options
 * Fonts
 Font I'm currently using
 #+BEGIN_SRC conf :tangle ~/dotfiles/x/.Xresources
-  URxvt*font: xft:envypn:pixelsize=11
+  URxvt*font: xft:Monaco:pixelsize=9
 #+END_SRC
 
 Other fonts I like

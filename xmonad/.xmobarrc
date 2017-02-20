@@ -1,6 +1,6 @@
 
 Config { bgColor = "#2b303b"
-       , font = "xft:Monaco:size=9"
+       , font = "xft:Monaco:size=8"
 
        , commands = [ Run Cpu [ "--template", "CPU: <total>%"
                               ,"-L","15"
