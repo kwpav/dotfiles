@@ -49,6 +49,20 @@ An on-going list of things I want to change
 ** evil mode
 Because I like like my modal editing. 
 #+BEGIN_SRC emacs-lisp
+  (use-package evil-leader
+    :ensure t
+    :config
+    (global-evil-leader-mode)
+    (evil-leader/set-leader "<SPC>")
+    (evil-leader/set-key "f" 'helm-find-files)
+    (evil-leader/set-key "b" 'helm-mini)
+    (evil-leader/set-key "cc" 'comment-region)
+    (evil-leader/set-key "cu" 'uncomment-region)
+    (evil-leader/set-key "e" 'eval-buffer)
+    (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
     :config
@@ -197,9 +211,22 @@ Get evil-mode to play nicely
     ("C-c h" . helm-mini)
     ("C-c a" . helm-apropos)
     ("M-x" . helm-M-x)
-    ("C-x f" . helm-find-files))
+    ("C-x f" . helm-find-files)
+    ("C-x C-f" . helm-find-files)
+    ("<tab>" . helm-execute-persistent-action)
+    ("S-<tab>" . helm-select-action))
 #+END_SRC
 
+** which-key
+show keyboard shortcuts after pressing a key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode)
+    (which-key-setup-side-window-bottom)
+    (setq which-key-idle-delay 0.5))
+#+END_SRC
 ** custom keys
 Buffer movement
 #+BEGIN_SRC emacs-lisp
@@ -222,6 +249,15 @@ Add rainbow delimiters in all programming language modes
     :ensure t
     :init
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+#+END_SRC
+
+** flycheck
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    ;; :config
+    ;; (global-flycheck-mode)
+    )
 #+END_SRC
 * Languages
 ** Python
@@ -336,6 +372,15 @@ For xmonad and beyond
               (lambda ()
                 (setq-default js2-basic-offset 2))))
 #+END_SRC
+
+Setup for eslint
+#+BEGIN_SRC emacs-lisp
+  (setq-default flycheck-disabled-checkers
+                (append flycheck-disabled-checkers
+                        '(javascript-jshint)))
+
+  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+#+END_SRC
 ** Web Mode
 Set up web mode for html, css, and js files
 #+BEGIN_SRC emacs-lisp
@@ -372,7 +417,7 @@ These keys apply to all programming modes
               (define-key prog-mode-map "\C-ck" 'comment-region)
               (define-key prog-mode-map "\C-cu" 'uncomment-region)))
 #+END_SRC
-* Look and Feel 
+* Look and Feel
 ** Menu Bar
 #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -99)
@@ -471,8 +516,32 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
     (nyan-start-animation))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package eyebrowse
+  ;;   :ensure t
+  ;;   :config
+  ;;   (eyebrowse-mode t))
+
+  ;; (use-package persp-mode
+  ;;   :ensure t)
+
+  ;; (use-package window-numbering
+  ;;   :ensure t
+  ;;   :config
+  ;;   (window-numbering-mode))
+
+#+END_SRC
+
 Unused spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
+  (use-package spaceline
+    :ensure t
+    :init
+    (require 'spaceline-config)
+    :config
+    (setq powerline-default-separator 'wave)
+    (spaceline-spacemacs-theme)
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
   ;(require 'spaceline-config)
   ;(spaceline-spacemacs-theme)
   ;(setq powerline-default-separator 'wave)
@@ -480,58 +549,58 @@ Unused spacemacs modeline settings
 
 My custom modeline
 #+BEGIN_SRC emacs-lisp
-  (setq-default mode-line-format
-                (list
-       "-- " 
-       ;; the buffer name; the file name as a tool tip
-       '(:eval (propertize "%b " 'face 'font-lock-keyword-face
-                          'help-echo (buffer-file-name)))
+  ;; (setq-default mode-line-format
+  ;;               (list
+  ;;      "-- " 
+  ;;      ;; the buffer name; the file name as a tool tip
+  ;;      '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+  ;;                         'help-echo (buffer-file-name)))
 
-      ;; the current major mode for the buffer.
-       "["
+  ;;     ;; the current major mode for the buffer.
+  ;;      "["
 
-       '(:eval (propertize "%m" 'face 'font-lock-string-face
-                           'help-echo buffer-file-coding-system))
-       " -"
-       minor-mode-alist ;; the minor modes for the current buffer
-       "] "
+  ;;      '(:eval (propertize "%m" 'face 'font-lock-string-face
+  ;;                          'help-echo buffer-file-coding-system))
+  ;;      " -"
+  ;;      minor-mode-alist ;; the minor modes for the current buffer
+  ;;      "] "
 
-       "[" ;; insert vs overwrite mode, input-method in a tooltip
-       '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
-              'face 'font-lock-preprocessor-face
-              'help-echo (concat "Buffer is in "
-                              (if overwrite-mode "overwrite" "insert") " mode")))
+  ;;      "[" ;; insert vs overwrite mode, input-method in a tooltip
+  ;;      '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+  ;;             'face 'font-lock-preprocessor-face
+  ;;             'help-echo (concat "Buffer is in "
+  ;;                             (if overwrite-mode "overwrite" "insert") " mode")))
 
-       ;; was this buffer modified since the last save? 
-       '(:eval (when (buffer-modified-p)
-              (concat ","  (propertize "Mod"
-              'face 'font-lock-warning-face
-                                'help-echo "Buffer has been modified"))))
+  ;;      ;; was this buffer modified since the last save? 
+  ;;      '(:eval (when (buffer-modified-p)
+  ;;             (concat ","  (propertize "Mod"
+  ;;             'face 'font-lock-warning-face
+  ;;                               'help-echo "Buffer has been modified"))))
 
-       ;; is this buffer read-only?
-       '(:eval (when buffer-read-only
-                 (concat ","  (propertize "RO"
-                                'face 'font-lock-type-face
-                                'help-echo "Buffer is read-only"))))  
-       "] "
+  ;;      ;; is this buffer read-only?
+  ;;      '(:eval (when buffer-read-only
+  ;;                (concat ","  (propertize "RO"
+  ;;                               'face 'font-lock-type-face
+  ;;                               'help-echo "Buffer is read-only"))))  
+  ;;      "] "
       
-       ;; line and column
-       "(" ;; '%02' to set to 2 chars at least; prevents flickering
-         (propertize "%02l" 'face 'font-lock-type-face) ","
-         (propertize "%02c" 'face 'font-lock-type-face) 
-       ") "
+  ;;      ;; line and column
+  ;;      "(" ;; '%02' to set to 2 chars at least; prevents flickering
+  ;;        (propertize "%02l" 'face 'font-lock-type-face) ","
+  ;;        (propertize "%02c" 'face 'font-lock-type-face) 
+  ;;      ") "
 
-       '(:eval (list (nyan-create)))
+  ;;      '(:eval (list (nyan-create)))
       
-       ;; relative position, size of file
-       "["
-       (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
-       ;;"/"
-       ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
-       "] "
+  ;;      ;; relative position, size of file
+  ;;      "["
+  ;;      (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+  ;;      ;;"/"
+  ;;      ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
+  ;;      "] "
 
-       " %-" ;; fill with '-'
-       ))
+  ;;      " %-" ;; fill with '-'
+  ;;      ))
 #+END_SRC
 
 ***** TODO make the color of the bar change when switching between evil modes
