@@ -1,4 +1,4 @@
-#+TITLE: emacs.org
+#+TITLE: ~/dotfiles/emacs.org
 
 * emacs.org
 ** What is this?
@@ -44,10 +44,14 @@ An on-going list of things I want to change
   + [ ] configure
 - [ ] Configure C#
 - [ ] add and consolidate more custom keys
+- [ ] fix eslint/js2
 
 * Emacs
 ** evil mode
 Because I like like my modal editing. 
+
+=evil-leader= is an easy way to make shortcuts
+press the leader key (I like space) and then the key
 #+BEGIN_SRC emacs-lisp
   (use-package evil-leader
     :ensure t
@@ -56,8 +60,7 @@ Because I like like my modal editing.
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key "f" 'helm-find-files)
     (evil-leader/set-key "b" 'helm-mini)
-    (evil-leader/set-key "cc" 'comment-region)
-    (evil-leader/set-key "cu" 'uncomment-region)
+    (evil-leader/set-key "c" 'comment-dwim)
     (evil-leader/set-key "e" 'eval-buffer)
     (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle))
 #+END_SRC
@@ -83,6 +86,11 @@ Because I like like my modal editing.
 #+END_SRC
 
 ** org mode
+Trying out org agenda
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files (list "~/org/agenda/"))
+#+END_SRC
+
 This stuff is mostly for making org-mode prettier:
 - =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
 - =org-bullets= provides prettier bullets for the header
@@ -106,11 +114,14 @@ This stuff is mostly for making org-mode prettier:
      '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
      '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
 
+  (setq org-todo-keywords
+        '((sequence "TODO" "CURRENT" "|" "DONE")))
+
   (font-lock-add-keywords 'org-mode
                           '(("^ +\\([-*]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-  (setq org-hide-emphasis-markers t)
+  ;(setq org-hide-emphasis-markers t)
 #+END_SRC
 
 I wasn't able to get this to work, but it's supposed to use syntax highlighting for =#+SRC= blocks in html exports
@@ -222,6 +233,7 @@ show keyboard shortcuts after pressing a key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
+    :diminish which-key-mode
     :config
     (which-key-mode)
     (which-key-setup-side-window-bottom)
@@ -251,15 +263,20 @@ Add rainbow delimiters in all programming language modes
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
+* Languages
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
-    ;; :config
-    ;; (global-flycheck-mode)
-    )
+    :config
+    (global-flycheck-mode)
+    (setq-default flycheck-disabled-checkers
+                  (append flycheck-disabled-checkers
+                          '(javascript-jshint)))
+
+    (setq flycheck-checkers '(javascript-eslint))
+    (flycheck-add-mode 'javascript-eslint 'js2-mode))
 #+END_SRC
-* Languages
 ** Python
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
@@ -367,19 +384,16 @@ For xmonad and beyond
     :ensure t
     :init
     (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
-    (add-to-list `auto-mode-alist '("\\.json\\'" . js2-mode))
-    (add-hook 'js2-mode-hook
-              (lambda ()
-                (setq-default js2-basic-offset 2))))
+    (add-to-list `auto-mode-alist '("\\.json\\'" . js2-mode)))
 #+END_SRC
 
 Setup for eslint
 #+BEGIN_SRC emacs-lisp
-  (setq-default flycheck-disabled-checkers
-                (append flycheck-disabled-checkers
-                        '(javascript-jshint)))
+  ;; (setq-default flycheck-disabled-checkers
+  ;;               (append flycheck-disabled-checkers
+  ;;                       '(javascript-jshint)))
 
-  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+  ;; (flycheck-add-mode 'javascript-eslint 'js2-mode)
 #+END_SRC
 ** Web Mode
 Set up web mode for html, css, and js files
@@ -517,31 +531,37 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package eyebrowse
-  ;;   :ensure t
-  ;;   :config
-  ;;   (eyebrowse-mode t))
+  (use-package eyebrowse
+    :ensure t
+    :config
+    (eyebrowse-mode t))
 
-  ;; (use-package persp-mode
-  ;;   :ensure t)
+  (use-package persp-mode
+    :ensure t)
 
-  ;; (use-package window-numbering
-  ;;   :ensure t
-  ;;   :config
-  ;;   (window-numbering-mode))
+  (use-package window-numbering
+    :ensure t
+    :config
+    (window-numbering-mode))
 
 #+END_SRC
 
 Unused spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
   (use-package spaceline
-    :ensure t
-    :init
-    (require 'spaceline-config)
+    :ensure t)
+
+  (use-package spaceline-config
+    :ensure spaceline
+    ;; :init
+    ;; (require 'spaceline-config)
     :config
     (setq powerline-default-separator 'wave)
     (spaceline-spacemacs-theme)
-    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+    (spaceline-helm-mode)
+    (setq spaceline-workspace-numbers-unicode t)
+    (setq spaceline-window-numbers-unicode t))
   ;(require 'spaceline-config)
   ;(spaceline-spacemacs-theme)
   ;(setq powerline-default-separator 'wave)
