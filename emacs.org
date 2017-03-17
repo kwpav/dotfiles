@@ -270,12 +270,18 @@ Add rainbow delimiters in all programming language modes
     :ensure t
     :config
     (global-flycheck-mode)
-    (setq-default flycheck-disabled-checkers
-                  (append flycheck-disabled-checkers
-                          '(javascript-jshint)))
+    ;; (setq-default flycheck-disabled-checkers
+    ;;               (append flycheck-disabled-checkers
+    ;;                       'javascript-jshint))
+    )
 
-    (setq flycheck-checkers '(javascript-eslint))
-    (flycheck-add-mode 'javascript-eslint 'js2-mode))
+  ;(setq flycheck-disabled-checkers '(javascript-jshint))
+  ;(setq flycheck-checkers '(javascript-eslint))
+
+					  ;(flycheck-add-mode 'javascript-eslint 'javascript-mode)
+  ;(flycheck-add-mode 'javascript-eslint 'js2-mode)
+
+
 #+END_SRC
 ** Python
 Jedi is used for autocompletion.
@@ -387,14 +393,6 @@ For xmonad and beyond
     (add-to-list `auto-mode-alist '("\\.json\\'" . js2-mode)))
 #+END_SRC
 
-Setup for eslint
-#+BEGIN_SRC emacs-lisp
-  ;; (setq-default flycheck-disabled-checkers
-  ;;               (append flycheck-disabled-checkers
-  ;;                       '(javascript-jshint)))
-
-  ;; (flycheck-add-mode 'javascript-eslint 'js2-mode)
-#+END_SRC
 ** Web Mode
 Set up web mode for html, css, and js files
 #+BEGIN_SRC emacs-lisp
