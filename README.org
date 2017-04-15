@@ -1,10 +1,5 @@
 #+TITLE: Literate ~/dotfiles/...
 
-From [[https://en.wikipedia.org/wiki/Literate_programming][Wikipedia]]:
-#+BEGIN_QUOTE
-Literate programming is an approach to programming introduced by Donald Knuth in whch a program is given as an explanation of the program logic in a natural language, such as English, interspersed with snippets of macros and traditional source code, from which a compilable source code can be generated.
-#+END_QUOTE
-
 This is my attempt at literate GNU/Linux configuration files. To achieve this, I am using [[http://orgmode.org][org-mode]] and [[http://orgmode.org/worg/org-contrib/babel/intro.html][babel]] for [[https://www.gnu.org/software/emacs/][emacs]]. I am also using [[https://www.gnu.org/software/stow/stow.html][stow]] to keep everything in a single, version controlled, directory.
 
 * Current Setup
@@ -20,13 +15,13 @@ I am currently using:
 ** Stow
 To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
 
-For example, I am using the =~/dotfiles/xmonad/.xmonad/= directory to hold all of the XMonad configuration files. Once all the files are created, I used =stow= to create a symlink, =~/.xmonad=, pointing to =~/dotfiles/xmonad/.xmonad/=
+For example, the =~/dotfiles/xmonad/.xmonad/= directory holds all of the XMonad configuration files. Once all the files are created, use:
 
-If you cloned this directory, you could run:
 #+BEGIN_SRC sh
   stow xmonad
 #+END_SRC
-To use my XMonad configuration.
+
+to create a symlink, =~/.xmonad=, pointing to =~/dotfiles/xmonad/.xmonad/=
 
 You only need run =stow= initially, or if any other new files are added. Once the symlink is created, you can open the file within the home directory and it will use the symlinked file within =~/dotfiles=.
 
