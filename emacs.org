@@ -58,10 +58,12 @@ press the leader key (I like space) and then the key
     :config
     (global-evil-leader-mode)
     (evil-leader/set-leader "<SPC>")
-    (evil-leader/set-key "f" 'helm-find-files)
+    (evil-leader/set-key "f" 'counsel-find-file)
     (evil-leader/set-key "b" 'helm-mini)
     (evil-leader/set-key "c" 'comment-dwim)
     (evil-leader/set-key "e" 'eval-buffer)
+    (evil-leader/set-key "RET" 'make-frame-command)
+    (evil-leader/set-key "x" 'counsel-M-x)
     (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle))
 #+END_SRC
 
@@ -144,13 +146,20 @@ I should probably use this at some point.
 #+END_SRC
 
 ** autocomplete
+# #+BEGIN_SRC emacs-lisp
+#   (use-package auto-complete
+#     :ensure t
+#     :config
+#     (ac-config-default))
+# #+END_SRC
+
+** company
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
+  (use-package company
     :ensure t
     :config
-    (ac-config-default))
+    (global-company-mode))
 #+END_SRC
-
 ** neotree
 Emacs version of NERDTree, press <f8> to open.
 #+BEGIN_SRC emacs-lisp
@@ -215,17 +224,74 @@ Get evil-mode to play nicely
     :diminish helm-mode
     :init
     (require 'helm-config)
-    (helm-mode 1)
+    ;; (helm-mode 1)
     (helm-autoresize-mode 1)
     (setq helm-autoresize-max-height 40)
     :bind
-    ("C-c h" . helm-mini)
+    ;("C-c h" . helm-mini)
     ("C-c a" . helm-apropos)
-    ("M-x" . helm-M-x)
-    ("C-x f" . helm-find-files)
-    ("C-x C-f" . helm-find-files)
-    ("<tab>" . helm-execute-persistent-action)
-    ("S-<tab>" . helm-select-action))
+    ;("M-x" . helm-M-x)
+    ;("C-x f" . helm-find-files)
+    ;("C-x C-f" . helm-find-files)
+    ;; ("<tab>" . helm-execute-persistent-action)
+    ;; ("S-<tab>" . helm-select-action)
+    )
+#+END_SRC
+
+** ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :bind
+    ("M-x" . counsel-M-x)
+    ("C-x C-f" . counsel-find-file)
+    ("<f1> f" . counsel-describe-function)
+    ("<f1> v" . counsel-describe-variable)
+    ("<f1> l" . counsel-find-library)
+    ("<f2> i" . counsel-info-lookup-symbol)
+    ("<f2> u" . counsel-unicode-char)
+    ("C-c g" . counsel-git)
+    ("C-c j" . counsel-git-grep)
+    ("C-c k" . counsel-ag)
+    ("C-x l" . counsel-locate)
+    ("C-S-o" . counsel-rhythmbox)
+    ("C-S-r" . counsel-expression-history))
+
+  (use-package swiper
+    :ensure t
+    :bind
+    ("C-s" . swiper))
+
+  (use-package ivy
+    :ensure t
+    :init
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-height 20)
+    :bind
+    ("<f6>" . ivy-resume))
+
+  ;; (ivy-mode 1)
+  ;; (setq ivy-use-virtual-buffers t)
+  ;; (setq enable-recursive-minibuffers t)
+  ;; (global-set-key "\C-s" 'swiper)
+  ;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  ;; (global-set-key (kbd "<f6>") 'ivy-resume)
+  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
+  ;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  ;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  ;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  ;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  ;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  ;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  ;; (global-set-key (kbd "C-c g") 'counsel-git)
+  ;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  ;; (global-set-key (kbd "C-c k") 'counsel-ag)
+  ;; (global-set-key (kbd "C-x l") 'counsel-locate)
+  ;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  ;; (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
 #+END_SRC
 
 ** which-key
@@ -237,7 +303,7 @@ show keyboard shortcuts after pressing a key
     :config
     (which-key-mode)
     (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0.5))
+    (setq which-key-idle-delay 0.25))
 #+END_SRC
 ** custom keys
 Buffer movement
@@ -263,6 +329,19 @@ Add rainbow delimiters in all programming language modes
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
+** projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t)
+#+END_SRC
+
+** dashboard
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package dashboard
+  ;;   :ensure t
+  ;;   :config
+  ;;   (dashboard-setup-startup-hook))
+#+END_SRC
 * Languages
 ** flycheck
 #+BEGIN_SRC emacs-lisp
@@ -375,6 +454,11 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
     :init
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
     (add-hook 'lisp-mode-hook 'paredit-mode))
+
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
 #+END_SRC
 ** Haskell
 For xmonad and beyond
@@ -385,23 +469,51 @@ For xmonad and beyond
     (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
 #+END_SRC
 ** Javascript
+*** Vanilla
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
     :ensure t
     :init
-    (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
-    (add-to-list `auto-mode-alist '("\\.json\\'" . js2-mode)))
+    (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode)))
+#+END_SRC
+*** JSON
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode
+    :ensure t
+    :init
+    (add-to-list `auto-mode-alist '("\\.json\\'" . json-mode)))
+#+END_SRC
+*** TypeScript
+#+BEGIN_SRC emacs-lisp
+  (use-package tide
+    :ensure t)
+
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1))
+
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save)
+
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
 #+END_SRC
 
 ** Web Mode
-Set up web mode for html, css, and js files
+Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode 
     :ensure t
     :init
-    (setq web-mode-ac-sources-alist
-          '(("css" . (ac-source-css-property))
-            ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+    ;; (setq web-mode-ac-sources-alist
+    ;;       '(("css" . (ac-source-css-property))
+    ;;         ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
     (add-hook 'web-mode-before-auto-complete-hooks
               '(lambda ()
                  (let ((web-mode-cur-language
@@ -430,11 +542,6 @@ These keys apply to all programming modes
               (define-key prog-mode-map "\C-cu" 'uncomment-region)))
 #+END_SRC
 * Look and Feel
-** Menu Bar
-#+BEGIN_SRC emacs-lisp
-  (menu-bar-mode -99)
-#+END_SRC
-
 ** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
@@ -537,14 +644,14 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
   (use-package persp-mode
     :ensure t)
 
-  (use-package window-numbering
-    :ensure t
-    :config
-    (window-numbering-mode))
+  ;; (use-package window-numbering
+  ;;   :ensure t
+  ;;   :config
+  ;;   (window-numbering-mode))
 
 #+END_SRC
 
-Unused spacemacs modeline settings
+spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
   (use-package spaceline
     :ensure t)
