@@ -43,7 +43,8 @@ An on-going list of things I want to change
   + [ ] learn to use
   + [ ] configure
 - [ ] Configure C#
-- [ ] add and consolidate more custom keys
+- [X] add and consolidate more custom keys
+  - using =evil-leader=
 - [ ] fix eslint/js2
 
 * Emacs
@@ -59,11 +60,22 @@ press the leader key (I like space) and then the key
     (global-evil-leader-mode)
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key "f" 'counsel-find-file)
-    (evil-leader/set-key "b" 'helm-mini)
+    ;; (evil-leader/set-key "b" 'helm-mini)
+    (evil-leader/set-key "bb" 'switch-to-buffer)
+    (evil-leader/set-key "bk" 'kill-buffer)
     (evil-leader/set-key "c" 'comment-dwim)
     (evil-leader/set-key "e" 'eval-buffer)
     (evil-leader/set-key "RET" 'make-frame-command)
     (evil-leader/set-key "x" 'counsel-M-x)
+    (evil-leader/set-key "p" 'projectile-find-file)
+    (evil-leader/set-key "g" 'magit-status)
+    (evil-leader/set-key "w/" 'split-window-horizontally)
+    (evil-leader/set-key "w-" 'split-window-vertically)
+    (evil-leader/set-key "wd" 'delete-window)
+    (evil-leader/set-key "wh" 'windmove-left)
+    (evil-leader/set-key "wj" 'windmove-down)
+    (evil-leader/set-key "wk" 'windmove-up)
+    (evil-leader/set-key "wl" 'windmove-right)
     (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle))
 #+END_SRC
 
@@ -71,7 +83,8 @@ press the leader key (I like space) and then the key
   (use-package evil
     :ensure t
     :config
-    (evil-mode 1))
+    (evil-mode 1)
+    )
 #+END_SRC
 
 *** TODO fix up the esc keys
@@ -174,8 +187,6 @@ Emacs version of NERDTree, press <f8> to open.
                 (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
                 (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
                 (define-key evil-normal-state-local-map (kbd "q") 'neotree-enter))))
-
-
 #+END_SRC
 
 ** slime
@@ -219,23 +230,23 @@ Get evil-mode to play nicely
 
 ** helm
 #+BEGIN_SRC emacs-lisp 
-  (use-package helm
-    :ensure t
-    :diminish helm-mode
-    :init
-    (require 'helm-config)
+  ;; (use-package helm
+  ;;   :ensure t
+  ;;   :diminish helm-mode
+  ;;   :init
+  ;;   (require 'helm-config)
     ;; (helm-mode 1)
-    (helm-autoresize-mode 1)
-    (setq helm-autoresize-max-height 40)
-    :bind
+    ;; (helm-autoresize-mode 1)
+    ;; (setq helm-autoresize-max-height 40)
+    ;; :bind
     ;("C-c h" . helm-mini)
-    ("C-c a" . helm-apropos)
+    ;; ("C-c a" . helm-apropos)
     ;("M-x" . helm-M-x)
     ;("C-x f" . helm-find-files)
     ;("C-x C-f" . helm-find-files)
     ;; ("<tab>" . helm-execute-persistent-action)
     ;; ("S-<tab>" . helm-select-action)
-    )
+    ;; )
 #+END_SRC
 
 ** ivy
@@ -260,7 +271,11 @@ Get evil-mode to play nicely
   (use-package swiper
     :ensure t
     :bind
-    ("C-s" . swiper))
+    ("C-s" . swiper)
+    :config
+    (define-key evil-normal-state-map (kbd "/") 'swiper))
+
+  ;; (evil-define-key 'normal evil-normal-state-map "/" 'swiper)
 
   (use-package ivy
     :ensure t
@@ -272,26 +287,6 @@ Get evil-mode to play nicely
     (setq ivy-height 20)
     :bind
     ("<f6>" . ivy-resume))
-
-  ;; (ivy-mode 1)
-  ;; (setq ivy-use-virtual-buffers t)
-  ;; (setq enable-recursive-minibuffers t)
-  ;; (global-set-key "\C-s" 'swiper)
-  ;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  ;; (global-set-key (kbd "<f6>") 'ivy-resume)
-  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
-  ;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  ;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  ;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  ;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  ;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  ;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  ;; (global-set-key (kbd "C-c g") 'counsel-git)
-  ;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  ;; (global-set-key (kbd "C-c k") 'counsel-ag)
-  ;; (global-set-key (kbd "C-x l") 'counsel-locate)
-  ;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  ;; (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
 #+END_SRC
 
 ** which-key
@@ -303,17 +298,10 @@ show keyboard shortcuts after pressing a key
     :config
     (which-key-mode)
     (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0.25))
+    (setq which-key-idle-delay 0.25)
+    (which-key-add-key-based-replacements "SPC w" "windows")
+    (which-key-add-key-based-replacements "SPC b" "buffers"))
 #+END_SRC
-** custom keys
-Buffer movement
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<C-S-up>")     'buf-move-up)
-  (global-set-key (kbd "<C-S-down>")   'buf-move-down)
-  (global-set-key (kbd "<C-S-left>")   'buf-move-left)
-  (global-set-key (kbd "<C-S-right>")  'buf-move-right)
-#+END_SRC
-
 ** random things
 Change "yes or no" to "y or n"
 #+BEGIN_SRC emacs-lisp
@@ -337,12 +325,27 @@ Add rainbow delimiters in all programming language modes
 
 ** dashboard
 #+BEGIN_SRC emacs-lisp
+  ;; (setq inhibit-startup-screen t)
+
   ;; (use-package dashboard
   ;;   :ensure t
   ;;   :config
   ;;   (dashboard-setup-startup-hook))
+
+  ;; (setq initial-buffer-choice "\*dashboard\*")
+#+END_SRC
+
+** windmove
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
 #+END_SRC
 * Languages
+** smartparens
+autocomplete for brackets
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure t)
+#+END_SRC
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
@@ -474,7 +477,15 @@ For xmonad and beyond
   (use-package js2-mode
     :ensure t
     :init
-    (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode)))
+                                          ;(add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
+    ;; (add-hook 'js-mode-hook 'js2-minor-mode)
+    (setq js-indent-level 2)
+    (add-hook 'js-mode-hook
+              (function (lambda ()
+                          (js2-minor-mode)
+                          (setq evil-shift-width js-indent-level)
+                          (smartparens-mode))))
+    )
 #+END_SRC
 *** JSON
 #+BEGIN_SRC emacs-lisp
@@ -503,6 +514,11 @@ For xmonad and beyond
   (add-hook 'before-save-hook 'tide-format-before-save)
 
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+  (add-hook 'tide-mode-hook
+                (lambda ()
+                  (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition)))
+
 #+END_SRC
 
 ** Web Mode
@@ -531,16 +547,6 @@ Set up web mode for html and css files
     )
 #+END_SRC
 
-* Custom Keys
-** Programming Mode Keys
-These keys apply to all programming modes
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (define-key prog-mode-map "\C-ck" 'comment-region)
-              (define-key prog-mode-map "\C-cu" 'uncomment-region)))
-#+END_SRC
 * Look and Feel
 ** Theme
 Theme I'm currently using
@@ -664,7 +670,7 @@ spacemacs modeline settings
     (setq powerline-default-separator 'wave)
     (spaceline-spacemacs-theme)
     (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-    (spaceline-helm-mode)
+    ;; (spaceline-helm-mode)
     (setq spaceline-workspace-numbers-unicode t)
     (setq spaceline-window-numbers-unicode t))
   ;(require 'spaceline-config)
