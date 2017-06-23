@@ -8,8 +8,12 @@ vim/.vim/
 /xmonad/.xmonad/xmonad_test.hs
 
 # emacs ignores
-emacs/emacs.d/elpa
-emacs/.emacs.d/recentf
+emacs.el
+/emacs/.emacs.d/elpa
+/emacs/.emacs.d/recentf
+/emacs/.emacs.d/.*
+/emacs/.emacs.d/ac*
+/emacs/.emacs.d/projectile-bookmarks*
 
 # ignore emacs temp files
 [#]*[#]

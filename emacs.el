@@ -8,6 +8,46 @@
 
 (require 'use-package)
 
+(use-package evil-leader
+  :ensure t
+  :config
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key "c" 'comment-dwim)
+  (evil-leader/set-key "g" 'magit-status)
+  ;; counsel
+  (evil-leader/set-key "f" 'counsel-find-file)
+  (evil-leader/set-key "x" 'counsel-M-x)
+  (evil-leader/set-key "pf" 'counsel-projectile-find-file)
+  (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
+  (evil-leader/set-key "pb" 'counsel-projectile-switch-to-buffer)
+  (evil-leader/set-key "pp" 'counsel-projectile-switch-project)
+  ;; buffers, frames, and windows
+  (evil-leader/set-key "bb" 'switch-to-buffer)
+  (evil-leader/set-key "bk" 'kill-buffer)
+  (evil-leader/set-key "e" 'eval-buffer)
+  (evil-leader/set-key "RET" 'make-frame-command)
+  (evil-leader/set-key "wo" 'split-window-horizontally)
+  (evil-leader/set-key "wu" 'split-window-vertically)
+  (evil-leader/set-key "wd" 'delete-window)
+  (evil-leader/set-key "wh" 'windmove-left)
+  (evil-leader/set-key "wj" 'windmove-down)
+  (evil-leader/set-key "wk" 'windmove-up)
+  (evil-leader/set-key "wl" 'windmove-right)
+  ;; mode specific
+  (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle))
+
+(use-package which-key
+  :ensure t
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  (which-key-setup-side-window-bottom)
+  (setq which-key-idle-delay 0.05)
+  (which-key-add-key-based-replacements "SPC w" "windows")
+  (which-key-add-key-based-replacements "SPC b" "buffers")
+  (which-key-add-key-based-replacements "SPC p" "projects"))
+
 (use-package evil
   :ensure t
   :config
@@ -23,8 +63,13 @@
 ;(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 ;;;;;;;;;;;;;;;;;
 
+(setq org-agenda-files (list "~/org/agenda/"))
+
 (use-package org
   :ensure org-bullets
+  :init
+    (setq org-todo-keywords
+      '((sequence "TODO" "CURRENT" "|" "DONE")))
   :config
   (setq org-src-fontify-natively t)
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -37,13 +82,19 @@
    '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
    '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
    '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
-   '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
+   '(org-level-5 ((t (:inherit outline-1 :height 1.0))))
+   (font-lock-add-keywords 'org-mode
+                           '(("^ +\\([-*]\\) "
+                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))))
 
-(font-lock-add-keywords 'org-mode
-                        '(("^ +\\([-*]\\) "
-                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+;; (setq org-todo-keywords
+;;       '((sequence "TODO" "CURRENT" "|" "DONE")))
 
-(setq org-hide-emphasis-markers t)
+;; (font-lock-add-keywords 'org-mode
+;;                         '(("^ +\\([-*]\\) "
+;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+;(setq org-hide-emphasis-markers t)
 
 ;(use-package htmlize
 ;   :ensure t)
@@ -57,10 +108,11 @@
 ;  :config
 ;  (yas-global-mode 1))
 
-(use-package auto-complete
+(use-package company
   :ensure t
   :config
-  (ac-config-default))
+  (add-to-list 'company-backends 'company-tern)
+  (global-company-mode))
 
 (use-package neotree
   :ensure t
@@ -84,10 +136,9 @@
   :ensure t
   :diminish undo-tree-mode
   :config
-  (progn
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)))
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t))
 
 (use-package magit
   :ensure t
@@ -97,24 +148,66 @@
 (use-package evil-magit
   :ensure t)
 
-(use-package helm
-  :ensure t
-  :diminish helm-mode
-  :init
-  (require 'helm-config)
-  (helm-mode 1)
-  (helm-autoresize-mode 1)
-  (setq helm-autoresize-max-height 40)
-  :bind
-  ("C-c h" . helm-mini)
-  ("C-c a" . helm-apropos)
-  ("M-x" . helm-M-x)
-  ("C-x f" . helm-find-files))
+;; (use-package helm
+;;   :ensure t
+;;   :diminish helm-mode
+;;   :init
+;;   (require 'helm-config)
+  ;; (helm-mode 1)
+  ;; (helm-autoresize-mode 1)
+  ;; (setq helm-autoresize-max-height 40)
+  ;; :bind
+  ;("C-c h" . helm-mini)
+  ;; ("C-c a" . helm-apropos)
+  ;("M-x" . helm-M-x)
+  ;("C-x f" . helm-find-files)
+  ;("C-x C-f" . helm-find-files)
+  ;; ("<tab>" . helm-execute-persistent-action)
+  ;; ("S-<tab>" . helm-select-action)
+  ;; )
 
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+(use-package projectile
+  :ensure t)
+
+(use-package counsel
+  :ensure t
+  :bind
+  ("M-x" . counsel-M-x)
+  ("C-x C-f" . counsel-find-file)
+  ("<f1> f" . counsel-describe-function)
+  ("<f1> v" . counsel-describe-variable)
+  ("<f1> l" . counsel-find-library)
+  ("<f2> i" . counsel-info-lookup-symbol)
+  ("<f2> u" . counsel-unicode-char)
+  ("C-c g" . counsel-git)
+  ("C-c j" . counsel-git-grep)
+  ("C-c k" . counsel-ag)
+  ("C-x l" . counsel-locate)
+  ("C-S-o" . counsel-rhythmbox)
+  ("C-S-r" . counsel-expression-history))
+
+(use-package swiper
+  :ensure t
+  :bind
+  ("C-s" . swiper)
+  :config
+  (define-key evil-normal-state-map (kbd "/") 'swiper))
+
+(use-package ivy
+  :ensure t
+  :init
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-height 20)
+  :bind
+  ("<f6>" . ivy-resume))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-on))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -122,6 +215,38 @@
   :ensure t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+;; (setq inhibit-startup-screen t)
+
+;; (use-package dashboard
+;;   :ensure t
+;;   :config
+;;   (dashboard-setup-startup-hook))
+
+;; (setq initial-buffer-choice "\*dashboard\*")
+
+(windmove-default-keybindings)
+
+(use-package smartparens
+  :ensure t)
+
+;; look for the eslint executable
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint (and root
+                      (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                        root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+
+(use-package flycheck
+  :ensure t
+  :config
+  (global-flycheck-mode)
+  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+  (flycheck-add-mode 'javascript-eslint 'javascript-mode))
 
 (use-package jedi
   :ensure t
@@ -195,26 +320,66 @@
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode))
 
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
 (use-package haskell-mode
   :ensure t
   :init
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
 
+(use-package tern
+  :ensure t
+  :init
+  (setq tern-command '("/home/kevin/.nvm/versions/node/v7.9.0/bin/tern")))
+
+(use-package company-tern
+  :ensure t)
+
 (use-package js2-mode
   :ensure t
   :init
-  (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
-  (add-to-list `auto-mode-alist '("\\.json\\'" . js2-mode))
-  (add-hook 'js2-mode-hook
+                                        ;(add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
+  ;; (add-hook 'js-mode-hook 'js2-minor-mode)
+  (setq js-indent-level 2)
+  (add-hook 'js-mode-hook
+            (function (lambda ()
+                        (js2-minor-mode t)
+                        (setq evil-shift-width js-indent-level)
+                        (smartparens-mode t)
+                        (tern-mode t)))))
+
+(use-package json-mode
+  :ensure t
+  :init
+  (add-to-list `auto-mode-alist '("\\.json\\'" . json-mode)))
+
+(use-package tide
+  :ensure t
+  :config
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook
             (lambda ()
-              (setq-default js2-basic-offset 2))))
+              (interactive)
+              (tide-setup)
+              (flycheck-mode +1)
+              (setq flycheck-check-syntax-automatically '(save-mode-enabled))
+              (eldoc-mode +1)
+              (tide-hl-identifier-mode +1)))
+  (add-hook 'tide-mode-hook
+            (lambda ()
+              (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition))))
 
 (use-package web-mode 
   :ensure t
   :init
-  (setq web-mode-ac-sources-alist
-        '(("css" . (ac-source-css-property))
-          ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+  ;; (setq web-mode-ac-sources-alist
+  ;;       '(("css" . (ac-source-css-property))
+  ;;         ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
   (add-hook 'web-mode-before-auto-complete-hooks
             '(lambda ()
                (let ((web-mode-cur-language
@@ -228,18 +393,12 @@
               (setq web-mode-markup-indent-offset 2)
               (setq evil-shift-width 2)
               ; highlight matching elements in html
-              (setq web-mode-enable-current-element-highlight 1)))
-  )
-
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (define-key prog-mode-map "\C-ck" 'comment-region)
-            (define-key prog-mode-map "\C-cu" 'uncomment-region)))
-
-(menu-bar-mode -99)
+              (setq web-mode-enable-current-element-highlight 1))))
 
 (load-theme 'base16-tomorrow-night)
 
+;; (load-theme 'base16-spacemacs)
+;;(load-theme 'sourcerer)
 ;;(load-theme 'spacemacs-dark)
 ;;(load-theme 'base16-tomorrow-dark)
 ;;(load-theme 'base16-twilight-dark)
@@ -271,7 +430,7 @@
 (tool-bar-mode -1) ;; hide the toolbar
 (scroll-bar-mode -1) ;; hide the scrollbar 
 (blink-cursor-mode 0) ;; dont blink the cursor
-(set-fringe-mode '(0 . 0)) ;; remove the extra border around frames
+(set-fringe-mode '(10 . 0)) ;;remove the extra border around frames
 
 (add-hook 'prog-mode-hook 'linum-mode)
 
@@ -300,62 +459,72 @@
   (nyan-mode 1)
   (nyan-start-animation))
 
-;(require 'spaceline-config)
-;(spaceline-spacemacs-theme)
-;(setq powerline-default-separator 'wave)
+(use-package spaceline
+  :ensure t)
 
-(setq-default mode-line-format
-              (list
-     "-- " 
-     ;; the buffer name; the file name as a tool tip
-     '(:eval (propertize "%b " 'face 'font-lock-keyword-face
-                        'help-echo (buffer-file-name)))
+(use-package spaceline-config
+  :ensure spaceline
+  ;; :init
+  ;; (require 'spaceline-config)
+  :config
+  (setq powerline-default-separator 'wave)
+  (spaceline-spacemacs-theme)
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  (setq spaceline-workspace-numbers-unicode t)
+  (setq spaceline-window-numbers-unicode t))
 
-    ;; the current major mode for the buffer.
-     "["
+;; (setq-default mode-line-format
+;;               (list
+;;      "-- " 
+;;      ;; the buffer name; the file name as a tool tip
+;;      '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+;;                         'help-echo (buffer-file-name)))
 
-     '(:eval (propertize "%m" 'face 'font-lock-string-face
-                         'help-echo buffer-file-coding-system))
-     " -"
-     minor-mode-alist ;; the minor modes for the current buffer
-     "] "
+;;     ;; the current major mode for the buffer.
+;;      "["
 
-     "[" ;; insert vs overwrite mode, input-method in a tooltip
-     '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
-            'face 'font-lock-preprocessor-face
-            'help-echo (concat "Buffer is in "
-                            (if overwrite-mode "overwrite" "insert") " mode")))
+;;      '(:eval (propertize "%m" 'face 'font-lock-string-face
+;;                          'help-echo buffer-file-coding-system))
+;;      " -"
+;;      minor-mode-alist ;; the minor modes for the current buffer
+;;      "] "
 
-     ;; was this buffer modified since the last save? 
-     '(:eval (when (buffer-modified-p)
-            (concat ","  (propertize "Mod"
-            'face 'font-lock-warning-face
-                              'help-echo "Buffer has been modified"))))
+;;      "[" ;; insert vs overwrite mode, input-method in a tooltip
+;;      '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+;;             'face 'font-lock-preprocessor-face
+;;             'help-echo (concat "Buffer is in "
+;;                             (if overwrite-mode "overwrite" "insert") " mode")))
 
-     ;; is this buffer read-only?
-     '(:eval (when buffer-read-only
-               (concat ","  (propertize "RO"
-                              'face 'font-lock-type-face
-                              'help-echo "Buffer is read-only"))))  
-     "] "
+;;      ;; was this buffer modified since the last save? 
+;;      '(:eval (when (buffer-modified-p)
+;;             (concat ","  (propertize "Mod"
+;;             'face 'font-lock-warning-face
+;;                               'help-echo "Buffer has been modified"))))
+
+;;      ;; is this buffer read-only?
+;;      '(:eval (when buffer-read-only
+;;                (concat ","  (propertize "RO"
+;;                               'face 'font-lock-type-face
+;;                               'help-echo "Buffer is read-only"))))  
+;;      "] "
     
-     ;; line and column
-     "(" ;; '%02' to set to 2 chars at least; prevents flickering
-       (propertize "%02l" 'face 'font-lock-type-face) ","
-       (propertize "%02c" 'face 'font-lock-type-face) 
-     ") "
+;;      ;; line and column
+;;      "(" ;; '%02' to set to 2 chars at least; prevents flickering
+;;        (propertize "%02l" 'face 'font-lock-type-face) ","
+;;        (propertize "%02c" 'face 'font-lock-type-face) 
+;;      ") "
 
-     '(:eval (list (nyan-create)))
+;;      '(:eval (list (nyan-create)))
     
-     ;; relative position, size of file
-     "["
-     (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
-     ;;"/"
-     ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
-     "] "
+;;      ;; relative position, size of file
+;;      "["
+;;      (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+;;      ;;"/"
+;;      ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
+;;      "] "
 
-     " %-" ;; fill with '-'
-     ))
+;;      " %-" ;; fill with '-'
+;;      ))
 
 ;; change mode-line color by evil state
 ;;(lexical-let ((default-color (cons (face-background 'mode-line)

@@ -34,3 +34,6 @@ if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
 fi
 
 command fortune
+
+export NVM_DIR="/home/kevin/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
