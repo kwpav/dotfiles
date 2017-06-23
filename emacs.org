@@ -36,9 +36,9 @@ An on-going list of things I want to change
   + [X] use use-package
   + [ ] make the bullets prettier
   + [X] make the headers bigger
-- [ ] magit: [0/2]
-  + [ ] learn to use
-  + [ ] configure
+- [X] magit: [2/2]
+  + [X] learn to use
+  + [X] configure
 - yasnippet: [0/2]
   + [ ] learn to use
   + [ ] configure
@@ -48,9 +48,7 @@ An on-going list of things I want to change
 - [ ] fix eslint/js2
 
 * Emacs
-** evil mode
-Because I like like my modal editing. 
-
+** keys
 =evil-leader= is an easy way to make shortcuts
 press the leader key (I like space) and then the key
 #+BEGIN_SRC emacs-lisp
@@ -59,16 +57,20 @@ press the leader key (I like space) and then the key
     :config
     (global-evil-leader-mode)
     (evil-leader/set-leader "<SPC>")
+    (evil-leader/set-key "c" 'comment-dwim)
+    (evil-leader/set-key "g" 'magit-status)
+    ;; counsel
     (evil-leader/set-key "f" 'counsel-find-file)
-    ;; (evil-leader/set-key "b" 'helm-mini)
+    (evil-leader/set-key "x" 'counsel-M-x)
+    (evil-leader/set-key "pf" 'counsel-projectile-find-file)
+    (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
+    (evil-leader/set-key "pb" 'counsel-projectile-switch-to-buffer)
+    (evil-leader/set-key "pp" 'counsel-projectile-switch-project)
+    ;; buffers, frames, and windows
     (evil-leader/set-key "bb" 'switch-to-buffer)
     (evil-leader/set-key "bk" 'kill-buffer)
-    (evil-leader/set-key "c" 'comment-dwim)
     (evil-leader/set-key "e" 'eval-buffer)
     (evil-leader/set-key "RET" 'make-frame-command)
-    (evil-leader/set-key "x" 'counsel-M-x)
-    (evil-leader/set-key "p" 'projectile-find-file)
-    (evil-leader/set-key "g" 'magit-status)
     (evil-leader/set-key "wo" 'split-window-horizontally)
     (evil-leader/set-key "wu" 'split-window-vertically)
     (evil-leader/set-key "wd" 'delete-window)
@@ -76,15 +78,32 @@ press the leader key (I like space) and then the key
     (evil-leader/set-key "wj" 'windmove-down)
     (evil-leader/set-key "wk" 'windmove-up)
     (evil-leader/set-key "wl" 'windmove-right)
+    ;; mode specific
     (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle))
 #+END_SRC
+
+show keyboard shortcuts after pressing a key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :diminish which-key-mode
+    :config
+    (which-key-mode)
+    (which-key-setup-side-window-bottom)
+    (setq which-key-idle-delay 0.05)
+    (which-key-add-key-based-replacements "SPC w" "windows")
+    (which-key-add-key-based-replacements "SPC b" "buffers")
+    (which-key-add-key-based-replacements "SPC p" "projects"))
+#+END_SRC
+
+** evil mode
+Because I like like my modal editing. 
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
     :config
-    (evil-mode 1)
-    )
+    (evil-mode 1))
 #+END_SRC
 
 *** TODO fix up the esc keys
@@ -115,6 +134,9 @@ This stuff is mostly for making org-mode prettier:
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure org-bullets
+    :init
+      (setq org-todo-keywords
+        '((sequence "TODO" "CURRENT" "|" "DONE")))
     :config
     (setq org-src-fontify-natively t)
     (add-hook 'org-mode-hook 'org-indent-mode)
@@ -127,14 +149,17 @@ This stuff is mostly for making org-mode prettier:
      '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
      '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
      '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
-     '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
+     '(org-level-5 ((t (:inherit outline-1 :height 1.0))))
+     (font-lock-add-keywords 'org-mode
+                             '(("^ +\\([-*]\\) "
+                                (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))))
 
-  (setq org-todo-keywords
-        '((sequence "TODO" "CURRENT" "|" "DONE")))
+  ;; (setq org-todo-keywords
+  ;;       '((sequence "TODO" "CURRENT" "|" "DONE")))
 
-  (font-lock-add-keywords 'org-mode
-                          '(("^ +\\([-*]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  ;; (font-lock-add-keywords 'org-mode
+  ;;                         '(("^ +\\([-*]\\) "
+  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
   ;(setq org-hide-emphasis-markers t)
 #+END_SRC
@@ -158,19 +183,12 @@ I should probably use this at some point.
   ;  (yas-global-mode 1))
 #+END_SRC
 
-** autocomplete
-# #+BEGIN_SRC emacs-lisp
-#   (use-package auto-complete
-#     :ensure t
-#     :config
-#     (ac-config-default))
-# #+END_SRC
-
 ** company
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
     :config
+    (add-to-list 'company-backends 'company-tern)
     (global-company-mode))
 #+END_SRC
 ** neotree
@@ -206,10 +224,9 @@ press <C-x u> to use and <q> to quit.
     :ensure t
     :diminish undo-tree-mode
     :config
-    (progn
-      (global-undo-tree-mode)
-      (setq undo-tree-visualizer-timestamps t)
-      (setq undo-tree-visualizer-diff t)))
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t))
 #+END_SRC
 
 ** magit
@@ -249,7 +266,17 @@ Get evil-mode to play nicely
     ;; )
 #+END_SRC
 
-** ivy
+** projectile
+Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t)
+#+END_SRC
+
+** ivy/counsel/swiper
+Some nice tools that use the minibuffer.
+
+Replace emacs commands with counsel ones.
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
     :ensure t
@@ -267,16 +294,19 @@ Get evil-mode to play nicely
     ("C-x l" . counsel-locate)
     ("C-S-o" . counsel-rhythmbox)
     ("C-S-r" . counsel-expression-history))
+#+END_SRC
 
+Replace emacs search and evil search with swiper
+#+BEGIN_SRC emacs-lisp
   (use-package swiper
     :ensure t
     :bind
     ("C-s" . swiper)
     :config
     (define-key evil-normal-state-map (kbd "/") 'swiper))
+#+END_SRC
 
-  ;; (evil-define-key 'normal evil-normal-state-map "/" 'swiper)
-
+#+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
     :init
@@ -287,20 +317,11 @@ Get evil-mode to play nicely
     (setq ivy-height 20)
     :bind
     ("<f6>" . ivy-resume))
-#+END_SRC
 
-** which-key
-show keyboard shortcuts after pressing a key
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
+  (use-package counsel-projectile
     :ensure t
-    :diminish which-key-mode
     :config
-    (which-key-mode)
-    (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0.25)
-    (which-key-add-key-based-replacements "SPC w" "windows")
-    (which-key-add-key-based-replacements "SPC b" "buffers"))
+    (counsel-projectile-on))
 #+END_SRC
 ** random things
 Change "yes or no" to "y or n"
@@ -315,12 +336,6 @@ Add rainbow delimiters in all programming language modes
     :ensure t
     :init
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-#+END_SRC
-
-** projectile
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t)
 #+END_SRC
 
 ** dashboard
@@ -339,6 +354,7 @@ Add rainbow delimiters in all programming language modes
 #+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings)
 #+END_SRC
+
 * Languages
 ** smartparens
 autocomplete for brackets
@@ -347,24 +363,27 @@ autocomplete for brackets
     :ensure t)
 #+END_SRC
 ** flycheck
+=my/use-eslint-from-node-modules= function from: https://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
 #+BEGIN_SRC emacs-lisp
+  ;; look for the eslint executable
+  (defun my/use-eslint-from-node-modules ()
+    (let* ((root (locate-dominating-file
+                  (or (buffer-file-name) default-directory)
+                  "node_modules"))
+           (eslint (and root
+                        (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                          root))))
+      (when (and eslint (file-executable-p eslint))
+        (setq-local flycheck-javascript-eslint-executable eslint))))
+
   (use-package flycheck
     :ensure t
     :config
     (global-flycheck-mode)
-    ;; (setq-default flycheck-disabled-checkers
-    ;;               (append flycheck-disabled-checkers
-    ;;                       'javascript-jshint))
-    )
-
-  ;(setq flycheck-disabled-checkers '(javascript-jshint))
-  ;(setq flycheck-checkers '(javascript-eslint))
-
-					  ;(flycheck-add-mode 'javascript-eslint 'javascript-mode)
-  ;(flycheck-add-mode 'javascript-eslint 'js2-mode)
-
-
+    (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+    (flycheck-add-mode 'javascript-eslint 'javascript-mode))
 #+END_SRC
+
 ** Python
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
@@ -473,6 +492,18 @@ For xmonad and beyond
 #+END_SRC
 ** Javascript
 *** Vanilla
+=tern= and =tern-company= are for auto completion
+#+BEGIN_SRC emacs-lisp
+  (use-package tern
+    :ensure t
+    :init
+    (setq tern-command '("/home/kevin/.nvm/versions/node/v7.9.0/bin/tern")))
+
+  (use-package company-tern
+    :ensure t)
+#+END_SRC
+
+=js2= is a javascript 'ide'
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
     :ensure t
@@ -482,10 +513,10 @@ For xmonad and beyond
     (setq js-indent-level 2)
     (add-hook 'js-mode-hook
               (function (lambda ()
-                          (js2-minor-mode)
+                          (js2-minor-mode t)
                           (setq evil-shift-width js-indent-level)
-                          (smartparens-mode))))
-    )
+                          (smartparens-mode t)
+                          (tern-mode t)))))
 #+END_SRC
 *** JSON
 #+BEGIN_SRC emacs-lisp
@@ -497,28 +528,23 @@ For xmonad and beyond
 *** TypeScript
 #+BEGIN_SRC emacs-lisp
   (use-package tide
-    :ensure t)
-
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1))
-
-  ;; aligns annotation to the right hand side
-  (setq company-tooltip-align-annotations t)
-
-  ;; formats the buffer before saving
-  (add-hook 'before-save-hook 'tide-format-before-save)
-
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-
-  (add-hook 'tide-mode-hook
-                (lambda ()
-                  (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition)))
-
+    :ensure t
+    :config
+    ;; aligns annotation to the right hand side
+    (setq company-tooltip-align-annotations t)
+    ;; formats the buffer before saving
+    (add-hook 'before-save-hook 'tide-format-before-save)
+    (add-hook 'typescript-mode-hook
+              (lambda ()
+                (interactive)
+                (tide-setup)
+                (flycheck-mode +1)
+                (setq flycheck-check-syntax-automatically '(save-mode-enabled))
+                (eldoc-mode +1)
+                (tide-hl-identifier-mode +1)))
+    (add-hook 'tide-mode-hook
+              (lambda ()
+                (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition))))
 #+END_SRC
 
 ** Web Mode
@@ -543,8 +569,7 @@ Set up web mode for html and css files
                 (setq web-mode-markup-indent-offset 2)
                 (setq evil-shift-width 2)
                 ; highlight matching elements in html
-                (setq web-mode-enable-current-element-highlight 1)))
-    )
+                (setq web-mode-enable-current-element-highlight 1))))
 #+END_SRC
 
 * Look and Feel
@@ -556,6 +581,8 @@ Theme I'm currently using
 
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
+  ;; (load-theme 'base16-spacemacs)
+  ;;(load-theme 'sourcerer)
   ;;(load-theme 'spacemacs-dark)
   ;;(load-theme 'base16-tomorrow-dark)
   ;;(load-theme 'base16-twilight-dark)
@@ -601,7 +628,7 @@ Use C-mouse3 to open the menu-bar as a popup menu
   (tool-bar-mode -1) ;; hide the toolbar
   (scroll-bar-mode -1) ;; hide the scrollbar 
   (blink-cursor-mode 0) ;; dont blink the cursor
-  (set-fringe-mode '(0 . 0)) ;; remove the extra border around frames
+  (set-fringe-mode '(10 . 0)) ;;remove the extra border around frames
 #+END_SRC
 
 Add line numbers whenever the major mode is a programming language
@@ -641,22 +668,6 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
     (nyan-start-animation))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  (use-package eyebrowse
-    :ensure t
-    :config
-    (eyebrowse-mode t))
-
-  (use-package persp-mode
-    :ensure t)
-
-  ;; (use-package window-numbering
-  ;;   :ensure t
-  ;;   :config
-  ;;   (window-numbering-mode))
-
-#+END_SRC
-
 spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
   (use-package spaceline
@@ -670,12 +681,8 @@ spacemacs modeline settings
     (setq powerline-default-separator 'wave)
     (spaceline-spacemacs-theme)
     (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-    ;; (spaceline-helm-mode)
     (setq spaceline-workspace-numbers-unicode t)
     (setq spaceline-window-numbers-unicode t))
-  ;(require 'spaceline-config)
-  ;(spaceline-spacemacs-theme)
-  ;(setq powerline-default-separator 'wave)
 #+END_SRC
 
 My custom modeline
