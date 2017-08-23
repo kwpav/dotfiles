@@ -22,6 +22,8 @@ Setup the package repositories and startup use-package.
   ;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives
+               '("elpy" . "https://jorgenschaefer.github.io/packages/"))
   (package-initialize)
 
   (require 'use-package)
@@ -385,14 +387,21 @@ autocomplete for brackets
 #+END_SRC
 
 ** Python
+[[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :config
+    (elpy-enable))
+#+END_SRC
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
-  (use-package jedi
-    :ensure t
-    :init
-    (setq jedi:complete-on-dot t)
-    :config
-    (add-hook 'python-mode-hook 'jedi:setup))
+  ;; (use-package jedi
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq jedi:complete-on-dot t)
+  ;;   :config
+  ;;   (add-hook 'python-mode-hook 'jedi:setup))
     ;;(setq jedi:tooltip-show t)
     ;;(setq jedi:tooltip-method '(popup)))
 #+END_SRC
