@@ -376,18 +376,6 @@ Add rainbow delimiters in all programming language modes
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
-** dashboard
-#+BEGIN_SRC emacs-lisp
-  ;; (setq inhibit-startup-screen t)
-
-  ;; (use-package dashboard
-  ;;   :ensure t
-  ;;   :config
-  ;;   (dashboard-setup-startup-hook))
-
-  ;; (setq initial-buffer-choice "\*dashboard\*")
-#+END_SRC
-
 ** windmove
 #+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings)
@@ -428,7 +416,10 @@ autocomplete for brackets
   (use-package elpy
     :ensure t
     :config
-    (elpy-enable))
+    (elpy-enable)
+    (add-hook 'elpy-mode-hook
+              (function (lambda ()
+                          (smartparens-mode t)))))
 #+END_SRC
 Jedi is used for autocompletion.
 #+BEGIN_SRC emacs-lisp
@@ -522,7 +513,6 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
     (add-hook 'scheme-mode-hook #'enable-paredit-mode)
     (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
-
 
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
@@ -643,7 +633,8 @@ Set up web mode for html and css files
 ** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-   (load-theme 'base16-tomorrow-night)
+  ;;(load-theme 'base16-tomorrow-night)
+  (load-theme 'kaolin-dark)
 #+END_SRC
 
 Some dark themes I Like
