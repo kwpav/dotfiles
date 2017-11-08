@@ -85,10 +85,10 @@ press the leader key (I like space) and then the key
     (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
     (evil-leader/set-key "pb" 'counsel-projectile-switch-to-buffer)
     (evil-leader/set-key "pp" 'counsel-projectile-switch-project)
+    (evil-leader/set-key "pg" 'counsel-projectile-rg) ;;ripgrep
     ;; buffers, frames, and windows
     (evil-leader/set-key "bb" 'switch-to-buffer)
     (evil-leader/set-key "bk" 'kill-buffer)
-    
     (evil-leader/set-key "RET" 'make-frame-command)
     (evil-leader/set-key "wo" 'split-window-horizontally)
     (evil-leader/set-key "wu" 'split-window-vertically)
@@ -113,7 +113,6 @@ press the leader key (I like space) and then the key
     (evil-leader/set-key-for-mode 'lisp-interaction-mode "er" 'eval-region)
     (evil-leader/set-key-for-mode 'lisp-mode "er" 'eval-region)
     (evil-leader/set-key-for-mode 'lisp-mode "ed" 'eval-defun)
-
     (evil-leader/set-key-for-mode 'scheme-mode "er" 'geiser-eval-region)
     (evil-leader/set-key-for-mode 'scheme-mode "eR" 'geiser-eval-region-and-go)
     (evil-leader/set-key-for-mode 'scheme-mode "eb" 'geiser-eval-buffer)
@@ -381,12 +380,24 @@ Add rainbow delimiters in all programming language modes
   (windmove-default-keybindings)
 #+END_SRC
 
+** editorconfig
+Use editorconfig for projects that have them
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
 * Languages
 ** smartparens
 autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
-    :ensure t)
+    :ensure t
+    :config
+    (add-hook 'python-mode-hook (function (lambda ()
+                                            (smartparens-mode t)))))
 #+END_SRC
 ** flycheck
 =my/use-eslint-from-node-modules= function from: https://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
@@ -416,23 +427,16 @@ autocomplete for brackets
   (use-package elpy
     :ensure t
     :config
-    (elpy-enable)
-    (add-hook 'elpy-mode-hook
-              (function (lambda ()
-                          (smartparens-mode t)))))
-#+END_SRC
-Jedi is used for autocompletion.
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package jedi
-  ;;   :ensure t
-  ;;   :init
-  ;;   (setq jedi:complete-on-dot t)
-  ;;   :config
-  ;;   (add-hook 'python-mode-hook 'jedi:setup))
-    ;;(setq jedi:tooltip-show t)
-    ;;(setq jedi:tooltip-method '(popup)))
+    (elpy-enable))
 #+END_SRC
 
+Let's get hy. A lisp for python
+#+BEGIN_SRC emacs-lisp
+  (use-package hy-mode
+    :ensure t
+    :config
+    (add-to-list `auto-mode-alist '("\\.hy?\\'" . hy-mode)))
+#+END_SRC
 ** C#
 #+BEGIN_SRC emacs-lisp
   ;; (use-package csharp-mode
@@ -511,6 +515,7 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
     :init
     (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+    (add-hook 'hy-mode-hook #'enable-paredit-mode)
     (add-hook 'scheme-mode-hook #'enable-paredit-mode)
     (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
 
@@ -635,6 +640,7 @@ Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   ;;(load-theme 'base16-tomorrow-night)
   (load-theme 'kaolin-dark)
+  ;;(load-theme 'kaolin-ocean)
 #+END_SRC
 
 Some dark themes I Like
