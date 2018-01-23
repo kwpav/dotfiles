@@ -347,7 +347,7 @@ Replace emacs search and evil search with swiper
   (use-package counsel-projectile
     :ensure t
     :config
-    (counsel-projectile-on))
+    (counsel-projectile-mode))
 #+END_SRC
 ** random things
 Change "yes or no" to "y or n"
