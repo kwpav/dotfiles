@@ -527,6 +527,7 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
     (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
     (add-hook 'hy-mode-hook #'enable-paredit-mode)
+    (add-hook 'inferior-hy-mode-hook #'enable-paredit-mode)
     (add-hook 'scheme-mode-hook #'enable-paredit-mode)
     (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
 

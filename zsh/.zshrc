@@ -19,9 +19,21 @@ antigen theme bureau
 
 antigen apply
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="$HOME/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+export npm_config_prefix=~/.node_modules
+
+# export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
+#Setting the GEM_PATH and GEM_HOME variables may not be necessary, check 'gem env' output to verify whether both variables already exist
+
+# GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
+# GEM_PATH=$GEM_HOME
+# export PATH=$PATH:$GEM_HOME/bin
 
 export EDITOR=emc
+
+export WORKON_HOME=~/.virtualenvs
+source /usr/bin/virtualenvwrapper.sh
 
 if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
         case $(tmux showenv TERM 2>/dev/null) in
@@ -34,6 +46,4 @@ if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
 fi
 
 command fortune
-
-export NVM_DIR="/home/kevin/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+export GPG_TTY=$(tty)
