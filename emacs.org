@@ -208,9 +208,10 @@ This stuff is mostly for making org-mode prettier:
      '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
      '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
      '(org-level-5 ((t (:inherit outline-1 :height 1.0))))
-     (font-lock-add-keywords 'org-mode
-                             '(("^ +\\([-*]\\) "
-                                (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))))
+     ;; (font-lock-add-keywords 'org-mode
+     ;;                         '(("^ +\\([-*]\\) "
+     ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+     ))
 
   ;; (setq org-todo-keywords
   ;;       '((sequence "TODO" "CURRENT" "|" "DONE")))
@@ -246,7 +247,6 @@ I should probably use this at some point.
   (use-package company
     :ensure t
     :config
-    (add-to-list 'company-backends 'company-tern)
     (global-company-mode))
 #+END_SRC
 ** neotree
@@ -316,10 +316,15 @@ Replace emacs commands with counsel ones.
     ("<f2> u" . counsel-unicode-char)
     ("C-c g" . counsel-git)
     ("C-c j" . counsel-git-grep)
-    ("C-c k" . counsel-ag)
+    ("C-c k" . counsel-rg)
     ("C-x l" . counsel-locate)
     ("C-S-o" . counsel-rhythmbox)
-    ("C-S-r" . counsel-expression-history))
+    ("C-S-r" . counsel-expression-history)
+    :config
+    ;; use ripgrep for counsel-git-grep
+    (setq counsel-git-cmd "rg --files")
+    (setq counsel-rg-base-command
+          "rg -i -M 120 --no-heading --line-number --color never %s ."))
 #+END_SRC
 
 Replace emacs search and evil search with swiper
@@ -445,17 +450,43 @@ Let's get hy. A lisp for python
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
     :ensure t
-    :config
-    (add-to-list `auto-mode-alist '("\\.hy?\\'" . hy-mode)))
+    ;:config
+    ;(add-to-list `auto-mode-alist '("\\.hy?\\'" . hy-mode))
+    )
 #+END_SRC
 ** C#
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package csharp-mode
-  ;;   :ensure t
-  ;;   :init
-  ;;   ;(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
-  ;;   (setq auto-mode-alist
-  ;;      (append '(("\\.cs$" . csharp-mode)) auto-mode-alist)))
+  (use-package csharp-mode
+    :ensure t
+    :init
+    (add-to-list 'company-backends 'company-omnisharp))
+
+  ;; from omnisharp-emacs README
+  ;; (eval-after-load
+  ;;   'company
+  ;;   '(add-to-list 'company-backends #'company-omnisharp))
+
+  (defun my-csharp-mode-setup ()
+    (omnisharp-mode)
+    (company-mode)
+    (flycheck-mode)
+
+    (setq indent-tabs-mode nil)
+    (setq c-syntactic-indentation t)
+    (c-set-style "ellemtel")
+    (setq c-basic-offset 4)
+    (setq truncate-lines t)
+    (setq tab-width 4)
+    (setq evil-shift-width 4)
+
+    ;csharp-mode README.md recommends this too
+    ;(electric-pair-mode 1)       ;; Emacs 24
+    ;(electric-pair-local-mode 1) ;; Emacs 25
+
+    (local-set-key (kbd "C-c r r") 'omnisharp-run-code-action-refactoring)
+    (local-set-key (kbd "C-c C-c") 'recompile))
+
+  (add-hook 'csharp-mode-hook 'my-csharp-mode-setup t)
 #+END_SRC
 Omnisharp should load after a csharp file is loaded
 #+BEGIN_SRC emacs-lisp
@@ -570,7 +601,9 @@ For xmonad and beyond
     (setq tern-command '("/home/kevin/.node_modules/bin/tern")))
 
   (use-package company-tern
-    :ensure t)
+    :ensure t
+    :init
+    (add-to-list 'company-backends 'company-tern))
 #+END_SRC
 
 =js2= is a javascript 'ide'
