@@ -98,12 +98,16 @@ press the leader key (I like space) and then the key
     (evil-leader/set-key "wj" 'windmove-down)
     (evil-leader/set-key "wk" 'windmove-up)
     (evil-leader/set-key "wl" 'windmove-right)
+    ;; multi-term
+    (evil-leader/set-key "tt" 'multi-term)
+    (evil-leader/set-key "tn" 'multi-term-next)
+    (evil-leader/set-key "tp" 'multi-term-prev)
     ;; bookmarks
     (evil-leader/set-key "rm" 'bookmark-set)
     (evil-leader/set-key "rb" 'bookmark-jump)
     (evil-leader/set-key "rl" 'bookmark-bmenu-list)
     ;; mode specific
-    (evil-leader/set-key-for-mode 'org-mode "t" 'org-babel-tangle)
+    (evil-leader/set-key-for-mode 'org-mode "b" 'org-babel-tangle)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "eb" 'eval-buffer)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "el" 'eval-last-sexp)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "ed" 'eval-defun)
@@ -120,7 +124,11 @@ press the leader key (I like space) and then the key
     (evil-leader/set-key-for-mode 'scheme-mode "eB" 'geiser-eval-buffer-and-go)
     (evil-leader/set-key-for-mode 'scheme-mode "ed" 'geiser-eval-definition)
     (evil-leader/set-key-for-mode 'scheme-mode "eD" 'geiser-eval-definition-and-go)
-    (evil-leader/set-key-for-mode 'scheme-mode "el" 'geiser-eval-eval-sexp))
+    (evil-leader/set-key-for-mode 'scheme-mode "el" 'geiser-eval-eval-sexp)
+    (evil-leader/set-key-for-mode 'python-mode "er" 'elpy-shell-send-region-or-buffer)
+    (evil-leader/set-key-for-mode 'python-mode "er" 'elpy-shell-send-buffer-and-go)
+    (evil-leader/set-key-for-mode 'python-mode "eb" 'elpy-shell-send-buffer)
+    (evil-leader/set-key-for-mode 'python-mode "eB" 'elpy-shell-send-buffer-and-go))
 #+END_SRC
 
 show keyboard shortcuts after pressing a key
@@ -138,6 +146,7 @@ show keyboard shortcuts after pressing a key
     (which-key-add-key-based-replacements "SPC p" "projects")
     (which-key-add-key-based-replacements "SPC b" "buffers")
     (which-key-add-key-based-replacements "SPC r" "bookmarks")
+    (which-key-add-key-based-replacements "SPC t" "terminal")
     (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC e" "eval")
     (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC e" "eval")
     (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC e" "eval"))
@@ -269,9 +278,9 @@ Emacs version of NERDTree, press <f8> to open.
 press <C-x u> to use and <q> to quit.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
+    :diminish undo-tree-mode
     :defer t
     :ensure t
-    :diminish undo-tree-mode
     :config
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t)
@@ -340,6 +349,7 @@ Replace emacs search and evil search with swiper
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
+    :diminish ivy-mode
     :init
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
@@ -379,6 +389,7 @@ Use editorconfig for projects that have them
 
 #+BEGIN_SRC emacs-lisp
   (use-package editorconfig
+    :delight
     :ensure t
     :config
     (editorconfig-mode 1))
@@ -405,6 +416,12 @@ Test RESTful APIs in emacs!
     :ensure t)
 #+END_SRC
 
+** multi-term
+run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
+#+BEGIN_SRC emacs-lisp
+  (use-package multi-term
+    :ensure t)
+#+END_SRC
 * Languages
 ** smartparens
 autocomplete for brackets
@@ -430,6 +447,7 @@ autocomplete for brackets
         (setq-local flycheck-javascript-eslint-executable eslint))))
 
   (use-package flycheck
+    :diminish flycheck-mode
     :ensure t
     :config
     (global-flycheck-mode)
@@ -790,7 +808,6 @@ spacemacs modeline settings
     ;; (setq powerline-default-separator 'alternate)
     ;; (setq powerline-default-separator 'arrow)
     ;; (setq powerline-default-separator 'arrow-fade)
-    (setq powerline-default-separator 'bar)
     ;; (setq powerline-default-separator 'box)
     ;; (setq powerline-default-separator 'brace)
     ;; (setq powerline-default-separator 'butt)
@@ -803,10 +820,19 @@ spacemacs modeline settings
     ;; (setq powerline-default-separator 'zigzag)
     ;; (setq powerline-default-separator 'utf-8)
 
+    (setq powerline-default-separator 'bar)
     (spaceline-spacemacs-theme)
     (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
     (setq spaceline-workspace-numbers-unicode t)
     (setq spaceline-window-numbers-unicode t))
+#+END_SRC
+
+doom modline
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package doom-modeline
+  ;;       :ensure t
+  ;;       :defer t
+  ;;       :hook (after-init . doom-modeline-init))
 #+END_SRC
 
 My custom modeline
@@ -845,15 +871,15 @@ My custom modeline
   ;;                               'face 'font-lock-type-face
   ;;                               'help-echo "Buffer is read-only"))))  
   ;;      "] "
-      
+
   ;;      ;; line and column
   ;;      "(" ;; '%02' to set to 2 chars at least; prevents flickering
   ;;        (propertize "%02l" 'face 'font-lock-type-face) ","
   ;;        (propertize "%02c" 'face 'font-lock-type-face) 
   ;;      ") "
 
-  ;;      '(:eval (list (nyan-create)))
-      
+  ;;      ;; '(:eval (list (nyan-create)))
+
   ;;      ;; relative position, size of file
   ;;      "["
   ;;      (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
