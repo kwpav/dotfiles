@@ -31,22 +31,14 @@ Setup the package repositories and startup use-package.
 * TODO Things to do 
 An on-going list of things I want to change
 
-- [X] move this file to ~/dotfiles/emacs.org
 - [ ]fix evil escape keys
-- [-] Clean up org-mode stuff [2/3]
-  + [X] use use-package
-  + [ ] make the bullets prettier
-  + [X] make the headers bigger
-- [X] magit: [2/2]
-  + [X] learn to use
-  + [X] configure
+- [ ] make org prettier?
+  + [ ] bullets?
 - yasnippet: [0/2]
   + [ ] learn to use
   + [ ] configure
 - [ ] Configure C#
-- [X] add and consolidate more custom keys
-  - using =evil-leader=
-- [ ] fix eslint/js2
+- [ ] fix eslint/lsp if possible
 
 * Emacs
 ** better defaults
@@ -107,7 +99,7 @@ press the leader key (I like space) and then the key
     (evil-leader/set-key "rb" 'bookmark-jump)
     (evil-leader/set-key "rl" 'bookmark-bmenu-list)
     ;; mode specific
-    (evil-leader/set-key-for-mode 'org-mode "b" 'org-babel-tangle)
+    (evil-leader/set-key-for-mode 'org-mode "mt" 'org-babel-tangle)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "eb" 'eval-buffer)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "el" 'eval-last-sexp)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "ed" 'eval-defun)
@@ -423,6 +415,37 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
     :ensure t)
 #+END_SRC
 * Languages
+** language server protocol
+Setup for Microsoft's (GASP!) Language Server Protocol.
+
+#+BEGIN_QUOTE
+The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc. 
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :defer t
+    :ensure t
+    :config
+    ;; make sure we have lsp-imenu everywhere we have LSP
+    (require 'lsp-imenu)
+    (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
+
+  ;; lsp extras
+  (use-package lsp-ui
+    :ensure t
+    :after lsp-mode
+    :hook (lsp-mode . lsp-ui-mode)
+    :config
+    (setq lsp-ui-sideline-ignore-duplicate t
+          lsp-ui-flycheck-enable t))
+
+  (use-package company-lsp
+    :ensure t
+    :after (lsp-mode company-mode)
+    :config
+    (push 'company-lsp company-backends))
+#+END_SRC
 ** smartparens
 autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
@@ -450,20 +473,53 @@ autocomplete for brackets
     :diminish flycheck-mode
     :ensure t
     :config
-    (global-flycheck-mode)
+    ;; (global-flycheck-mode)
     (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-    (flycheck-add-mode 'javascript-eslint 'javascript-mode))
+    (flycheck-add-mode 'javascript-eslint 'javascript-mode)
+    )
 #+END_SRC
 
 ** Python
-[[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
+from https://vxlabs.com/2018/06/08/python-language-server-with-emacs-and-lsp-mode/
+
+In order for this to work, you need to install https://github.com/palantir/python-language-server
+
 #+BEGIN_SRC emacs-lisp
-  (use-package elpy
+  (use-package lsp-python
     :ensure t
     :config
-    (elpy-enable))
+    ;; redefine lsp-python-enable to use projectile-project-root
+    (lsp-define-stdio-client lsp-python "python"
+                             #'projectile-project-root
+                             '("pyls"))
+    (add-hook 'python-mode-hook #'lsp-python-enable)
+
+    ;; NB: only required if you prefer flake8 instead of the default
+    ;; send pyls config via lsp-after-initialize-hook -- harmless for
+    ;; other servers due to pyls key, but would prefer only sending this
+    ;; when pyls gets initialised (:initialize function in
+    ;; lsp-define-stdio-client is invoked too early (before server
+    ;; start)) -- cpbotha
+    (defun lsp-set-cfg ()
+      (let ((lsp-cfg `(:pyls (:configurationSources ("flake8")))))
+        ;; TODO: check lsp--cur-workspace here to decide per server / project
+        (lsp--set-configuration lsp-cfg)))
+
+    (add-hook 'lsp-after-initialize-hook 'lsp-set-cfg))
 #+END_SRC
 
+**** Elpy - OLD
+trying out LSP instead of elpy, keeping this in case I want to go back.
+
+[[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package elpy
+  ;;   :ensure t
+  ;;   :config
+  ;;   (elpy-enable))
+#+END_SRC
+
+*** Hy
 Let's get hy. A lisp for python
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
@@ -611,32 +667,111 @@ For xmonad and beyond
 #+END_SRC
 ** Javascript
 *** Vanilla
+Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-files/setup-js.el
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :mode (("\\.js$" . js2-mode))
+    :hook ((js2-mode . my-js-hook))
+    :ensure-system-package ((prettier . "npm i -g prettier")
+                            (eslint . "npm i -g eslint")
+                            (eslint_d . "npm i -g eslint_d"))
+    :config
+    ;; set the indent level to 2
+    (setq js2-basic-offset 2)
+    (setq js-chain-indent t)
+    (setq js-indent-level 2)
+
+    ;; use eslint_d instead of eslint for faster linting
+    (setq flycheck-javascript-eslint-executable "eslint_d")
+
+    ;; highlight most ECMA built-ins
+    (setq js2-highlight-level 3)
+
+    ;; turn off all warnings in js2-mode
+    (setq js2-mode-show-parse-errors t)
+    (setq js2-mode-show-strict-warnings nil)
+    (setq js2-strict-missing-semi-warning nil)
+
+    (defun my-tide-setup-hook ()
+      "Configure tide"
+      (tide-setup)
+      ;; highlight identifiers
+      (tide-hl-identifier-mode +1)
+      (eldoc-mode t)
+      (flycheck-mode t)
+      ;; configure javascript-tide checker to run after your default javascript checker
+      (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+      (prettier-js-mode))
+
+    (defun my-lsp-js-setup-hook ()
+      "Fix company completions for the LSP and then enable it"
+      (defun my-company-transformer (candidates)
+        (let ((completion-ignore-case t))
+          (all-completions (company-grab-symbol) candidates)))
+      (make-local-variable 'company-transformers)
+      (push 'my-company-transformer company-transformers)
+      (lsp-javascript-typescript-enable))
+
+    (defun my-js-hook ()
+      "Set up JavaScript"
+      ;; set evil indent, ">>", to 2
+      (setq evil-shift-width js-indent-level)
+      (my-tide-setup-hook)
+      (my-lsp-js-setup-hook)
+      (smartparens-mode t)))
+#+END_SRC
+
+Set up javascript with LSP
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-javascript-typescript
+    :ensure t
+    :ensure-system-package ((javascript-typescript-langserver . "npm i -g javascript-typescript-language-server")))
+#+END_SRC
+
+Set up =tide-mode=
+#+BEGIN_SRC emacs-lisp
+  (use-package tide
+    :ensure t)
+#+END_SRC
+
+Set up =prettier-js-mode=
+#+BEGIN_SRC emacs-lisp
+  (use-package prettier-js 
+    :ensure t
+    :hook ((js2-mode . prettier-js-mode)
+           (rjsx-mode . prettier-js-mode)))
+#+END_SRC
+
+**** Old config
+Keeping this here in case I want to stop using lsp
+
 =tern= and =tern-company= are for auto completion
 #+BEGIN_SRC emacs-lisp
-  (use-package tern
-    :ensure t
-    :init
-    (setq tern-command '("/home/kevin/.node_modules/bin/tern")))
+  ;; (use-package tern
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq tern-command '("/home/kevin/.node_modules/bin/tern")))
 
-  (use-package company-tern
-    :ensure t
-    :init
-    (add-to-list 'company-backends 'company-tern))
+  ;; (use-package company-tern
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-to-list 'company-backends 'company-tern))
 #+END_SRC
 
 =js2= is a javascript 'ide'
 #+BEGIN_SRC emacs-lisp
-  (use-package js2-mode
-    :ensure t
-    :init
-    (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
-    (setq js-indent-level 2)
-    (add-hook 'js2-mode-hook
-              (function (lambda ()
-                          ;(js2-minor-mode t)
-                          (setq evil-shift-width js-indent-level)
-                          (smartparens-mode t)
-                          (tern-mode t)))))
+  ;; (use-package js2-mode
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
+  ;;   (setq js-indent-level 2)
+  ;;   (add-hook 'js2-mode-hook
+  ;;             (function (lambda ()
+  ;;                         ;(js2-minor-mode t)
+  ;;                         (setq evil-shift-width js-indent-level)
+  ;;                         (smartparens-mode t)
+  ;;                         (tern-mode t)))))
 #+END_SRC
 *** JSON
 #+BEGIN_SRC emacs-lisp
@@ -645,32 +780,34 @@ For xmonad and beyond
     :init
     (add-to-list `auto-mode-alist '("\\.json\\'" . json-mode)))
 #+END_SRC
-*** TypeScript
+*** TODO TypeScript
 #+BEGIN_SRC emacs-lisp
-  (use-package tide
-    :ensure t
-    :config
-    ;; aligns annotation to the right hand side
-    (setq company-tooltip-align-annotations t)
-    ;; formats the buffer before saving
-    (add-hook 'before-save-hook 'tide-format-before-save)
-    (add-hook 'typescript-mode-hook
-              (lambda ()
-                (interactive)
-                (tide-setup)
-                (flycheck-mode +1)
-                (setq flycheck-check-syntax-automatically '(save-mode-enabled))
-                (eldoc-mode +1)
-                (tide-hl-identifier-mode +1)))
-    (add-hook 'tide-mode-hook
-              (lambda ()
-                (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition))))
+  ;; (use-package tide
+  ;;   :ensure t
+  ;;   :config
+  ;;   ;; aligns annotation to the right hand side
+  ;;   (setq company-tooltip-align-annotations t)
+  ;;   ;; formats the buffer before saving
+  ;;   (add-hook 'before-save-hook 'tide-format-before-save)
+  ;;   (add-hook 'typescript-mode-hook
+  ;;             (lambda ()
+  ;;               (interactive)
+  ;;               (tide-setup)
+  ;;               (flycheck-mode +1)
+  ;;               (setq flycheck-check-syntax-automatically '(save-mode-enabled))
+  ;;               (eldoc-mode +1)
+  ;;               (tide-hl-identifier-mode +1)))
+  ;;   (add-hook 'tide-mode-hook
+  ;;             (lambda ()
+  ;;               (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition))))
 #+END_SRC
 *** React
 =rjsx-mode= is for editing =.jsx= files
 #+BEGIN_SRC emacs-lisp
   (use-package rjsx-mode
-    :ensure t)
+    :ensure t
+    :init
+    (add-hook 'rjsx-mode #'lsp-javascript-typescript-enable))
 #+END_SRC
 ** Web Mode
 Set up web mode for html and css files
