@@ -12,7 +12,6 @@ To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away
 | F8    | Open/close neo-tree.                                       |
 | C-c ' | Edit code within org-mode code blocks in their native mode |
 | C-x u | Open undo-tree                                             |
-| C-c h | Open helm-mini to navigate buffers                         |
 
 ** Package Setup
 Setup the package repositories and startup use-package.
@@ -71,6 +70,7 @@ press the leader key (I like space) and then the key
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key "c" 'comment-dwim)
     (evil-leader/set-key "g" 'magit-status)
+    (evil-leader/set-key "l" 'my/what-minor-mode)
     ;; counsel
     (evil-leader/set-key "f" 'counsel-find-file)
     (evil-leader/set-key "x" 'counsel-M-x)
@@ -413,6 +413,35 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure t)
+#+END_SRC
+** my custom functions
+*** what-minor-mode
+list minor modes
+- =my-active-minor-modes= is from: https://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
+- =my/active-minor-modes= is =doom/what-minor-mode= from https://github.com/hlissner/doom-emacs
+  + it uses =my-active-minor-modes= for the list of minor modes to display
+#+BEGIN_SRC emacs-lisp
+  (defun my-active-minor-modes ()
+    "Get a list of active minor-mode symbols."
+    (delq nil
+          (mapcar
+           (lambda (x)
+             (let ((car-x (car x)))
+               (when (and (symbolp car-x) (symbol-value car-x))
+                 x)))
+           minor-mode-alist)))
+
+  (defun my/what-minor-mode (mode)
+    "Get information on an active minor mode. Use `describe-minor-mode' for a
+  selection of all minor-modes, active or not."
+    (interactive
+     (list (completing-read "Minor mode: "
+                            (my-active-minor-modes))))
+    (describe-minor-mode-from-symbol
+     (cl-typecase mode
+       (string (intern mode))
+       (symbol mode)
+       (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
 #+END_SRC
 * Languages
 ** language server protocol
@@ -804,12 +833,11 @@ Keeping this here in case I want to stop using lsp
 #+END_SRC
 *** React
 =rjsx-mode= is for editing =.jsx= files
+
+Dont need too much here because it uses =js2-mode= where most of the config is done
 #+BEGIN_SRC emacs-lisp
   (use-package rjsx-mode
-    :ensure t
-    ;; :config
-    ;; (add-hook 'rjsx-mode #'lsp-javascript-typescript-enable)
-    )
+    :ensure t)
 #+END_SRC
 ** Web Mode
 Set up web mode for html and css files
@@ -880,13 +908,10 @@ Some light themes I like
 ** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
-  ;;(add-to-list 'default-frame-alist '(font . "Hack-12" ))
   (add-to-list 'default-frame-alist '(font . "Iosevka-12" ))
-
 #+END_SRC
 
 Other fonts I like
-=GohuFont= does not seem to play well with =org-bullets= sadly...
 #+BEGIN_SRC emacs-lisp
   ;;(add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
   ;;(add-to-list 'default-frame-alist '(font . "Hack-12" ))
