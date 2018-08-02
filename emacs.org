@@ -676,8 +676,8 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
     :ensure-system-package ((prettier . "npm i -g prettier")
                             (eslint . "npm i -g eslint")
                             (eslint_d . "npm i -g eslint_d"))
-    :config
-    ;; set the indent level to 2
+    :init
+     ;; set the indent level to 2
     (setq js2-basic-offset 2)
     (setq js-chain-indent t)
     (setq js-indent-level 2)
@@ -693,6 +693,7 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
     (setq js2-mode-show-strict-warnings nil)
     (setq js2-strict-missing-semi-warning nil)
 
+    :config
     (defun my-tide-setup-hook ()
       "Configure tide"
       (tide-setup)
@@ -806,8 +807,9 @@ Keeping this here in case I want to stop using lsp
 #+BEGIN_SRC emacs-lisp
   (use-package rjsx-mode
     :ensure t
-    :init
-    (add-hook 'rjsx-mode #'lsp-javascript-typescript-enable))
+    ;; :config
+    ;; (add-hook 'rjsx-mode #'lsp-javascript-typescript-enable)
+    )
 #+END_SRC
 ** Web Mode
 Set up web mode for html and css files
@@ -838,13 +840,20 @@ Set up web mode for html and css files
 ** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-  ;;(load-theme 'base16-tomorrow-night)
-  (load-theme 'kaolin-dark)
-  ;;(load-theme 'kaolin-ocean)
-#+END_SRC
+  (use-package doom-themes
+    :ensure t
+    :config
+    (load-theme 'doom-city-lights))
+  #+END_SRC
 
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
+  ;;(load-theme 'base16-tomorrow-night)
+  ;;(load-theme 'kaolin-dark)
+  ;;(load-theme 'doom-one)
+  ;;(load-theme 'doom-tomorrow-night)
+  ;;(load-theme 'doom-city-lights)
+  ;;(load-theme 'kaolin-ocean)
   ;; (load-theme 'base16-spacemacs)
   ;;(load-theme 'gruvbox-dark-hard)
   ;;(load-theme 'sourcerer)
@@ -858,7 +867,6 @@ Some dark themes I Like
   ;;(load-theme 'material)
   ;;(load-theme 'spacegray)
   ;;(load-theme 'dracula)
-
   ;;(load-theme 'reykjavik)
   ;;(set-cursor-color "gainsboro")
 #+END_SRC
@@ -872,7 +880,9 @@ Some light themes I like
 ** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Hack-12" ))
+  ;;(add-to-list 'default-frame-alist '(font . "Hack-12" ))
+  (add-to-list 'default-frame-alist '(font . "Iosevka-12" ))
+
 #+END_SRC
 
 Other fonts I like
@@ -922,6 +932,18 @@ From https://www.emacswiki.org/emacs/LineNumbers
   ;; (setq linum-format 'linum-format-func)
 #+END_SRC
 ** Modeline
+*** doom modeline
+*NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons
+    :ensure t)
+
+  (use-package doom-modeline
+        :ensure t
+        :defer t
+        :hook (after-init . doom-modeline-init))
+#+END_SRC
+*** spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nyan-mode
@@ -935,44 +957,36 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
 
 spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
-  (use-package spaceline
-    :ensure t)
+  ;; (use-package spaceline
+  ;;   :ensure t)
 
-  (use-package spaceline-config
-    :ensure spaceline
-    :config
-    ;; (setq powerline-default-separator 'wave)
-    ;; (setq powerline-default-separator 'alternate)
-    ;; (setq powerline-default-separator 'arrow)
-    ;; (setq powerline-default-separator 'arrow-fade)
-    ;; (setq powerline-default-separator 'box)
-    ;; (setq powerline-default-separator 'brace)
-    ;; (setq powerline-default-separator 'butt)
-    ;; (setq powerline-default-separator 'chamfer)
-    ;; (setq powerline-default-separator 'contour)
-    ;; (setq powerline-default-separator 'curve)
-    ;; (setq powerline-default-separator 'rounded)
-    ;; (setq powerline-default-separator 'roundstub)
-    ;; (setq powerline-default-separator 'wave)
-    ;; (setq powerline-default-separator 'zigzag)
-    ;; (setq powerline-default-separator 'utf-8)
+  ;; (use-package spaceline-config
+  ;;   :ensure spaceline
+  ;;   :config
+  ;;   ;; (setq powerline-default-separator 'wave)
+  ;;   ;; (setq powerline-default-separator 'alternate)
+  ;;   ;; (setq powerline-default-separator 'arrow)
+  ;;   ;; (setq powerline-default-separator 'arrow-fade)
+  ;;   ;; (setq powerline-default-separator 'box)
+  ;;   ;; (setq powerline-default-separator 'brace)
+  ;;   ;; (setq powerline-default-separator 'butt)
+  ;;   ;; (setq powerline-default-separator 'chamfer)
+  ;;   ;; (setq powerline-default-separator 'contour)
+  ;;   ;; (setq powerline-default-separator 'curve)
+  ;;   ;; (setq powerline-default-separator 'rounded)
+  ;;   ;; (setq powerline-default-separator 'roundstub)
+  ;;   ;; (setq powerline-default-separator 'wave)
+  ;;   ;; (setq powerline-default-separator 'zigzag)
+  ;;   ;; (setq powerline-default-separator 'utf-8)
 
-    (setq powerline-default-separator 'bar)
-    (spaceline-spacemacs-theme)
-    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-    (setq spaceline-workspace-numbers-unicode t)
-    (setq spaceline-window-numbers-unicode t))
+  ;;   (setq powerline-default-separator 'bar)
+  ;;   (spaceline-spacemacs-theme)
+  ;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  ;;   (setq spaceline-workspace-numbers-unicode t)
+  ;;   (setq spaceline-window-numbers-unicode t))
 #+END_SRC
 
-doom modline
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package doom-modeline
-  ;;       :ensure t
-  ;;       :defer t
-  ;;       :hook (after-init . doom-modeline-init))
-#+END_SRC
-
-My custom modeline
+*** My custom modeline
 #+BEGIN_SRC emacs-lisp
   ;; (setq-default mode-line-format
   ;;               (list
