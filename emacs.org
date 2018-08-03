@@ -37,7 +37,9 @@ An on-going list of things I want to change
   + [ ] learn to use
   + [ ] configure
 - [ ] Configure C#
-- [ ] fix eslint/lsp if possible
+  + use the C# lsp??
+- [ ] fix =eslint= for lsp if possible
+  + eslint works fine without the =lsp-javascript-typescript=
 
 * Emacs
 ** better defaults
@@ -485,27 +487,10 @@ autocomplete for brackets
                                             (smartparens-mode t)))))
 #+END_SRC
 ** flycheck
-=my/use-eslint-from-node-modules= function from: https://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
 #+BEGIN_SRC emacs-lisp
-  ;; look for the eslint executable
-  (defun my/use-eslint-from-node-modules ()
-    (let* ((root (locate-dominating-file
-                  (or (buffer-file-name) default-directory)
-                  "node_modules"))
-           (eslint (and root
-                        (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                          root))))
-      (when (and eslint (file-executable-p eslint))
-        (setq-local flycheck-javascript-eslint-executable eslint))))
-
   (use-package flycheck
     :diminish flycheck-mode
-    :ensure t
-    :config
-    ;; (global-flycheck-mode)
-    (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-    (flycheck-add-mode 'javascript-eslint 'javascript-mode)
-    )
+    :ensure t)
 #+END_SRC
 
 ** Python
@@ -696,6 +681,16 @@ For xmonad and beyond
 #+END_SRC
 ** Javascript
 *** Vanilla
+Setup for JavaScript using =js2-mode=.
+
+- autocomplete with =tern=
+- using =tide= for:
+  + info in the minibuffer about the highlighted item
+  + jump to defifinition / implementation
+  + linting
+- prettify the file on save using =prettier-js= along with =prettier=
+- add =eslint= to =flycheck= for linting
+
 Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-files/setup-js.el
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
@@ -734,35 +729,52 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
       (prettier-js-mode))
 
-    (defun my-lsp-js-setup-hook ()
-      "Fix company completions for the LSP and then enable it"
-      (defun my-company-transformer (candidates)
-        (let ((completion-ignore-case t))
-          (all-completions (company-grab-symbol) candidates)))
-      (make-local-variable 'company-transformers)
-      (push 'my-company-transformer company-transformers)
-      (lsp-javascript-typescript-enable))
+    ;; TODO make this work with eslint
+    ;; (defun my-lsp-js-setup-hook ()
+    ;;   "Fix company completions for the LSP and then enable it"
+    ;;   (defun my-company-transformer (candidates)
+    ;;     (let ((completion-ignore-case t))
+    ;;       (all-completions (company-grab-symbol) candidates)))
+    ;;   (make-local-variable 'company-transformers)
+    ;;   (push 'my-company-transformer company-transformers)
+    ;;   (lsp-javascript-typescript-enable))
 
     (defun my-js-hook ()
       "Set up JavaScript"
       ;; set evil indent, ">>", to 2
       (setq evil-shift-width js-indent-level)
       (my-tide-setup-hook)
-      (my-lsp-js-setup-hook)
+      ;; (my-lsp-js-setup-hook)
+      (tern-mode t)
       (smartparens-mode t)))
+#+END_SRC
+
+=tern= and =tern-company= are for auto completion
+#+BEGIN_SRC emacs-lisp
+  (use-package tern
+    :ensure t
+    :ensure-system-package ((tern . "npm i -g tern"))
+    :init
+    (setq tern-command '("/home/kevin/.node_modules/bin/tern")))
+
+  (use-package company-tern
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-tern))
 #+END_SRC
 
 Set up javascript with LSP
 #+BEGIN_SRC emacs-lisp
-  (use-package lsp-javascript-typescript
-    :ensure t
-    :ensure-system-package ((javascript-typescript-langserver . "npm i -g javascript-typescript-language-server")))
+  ;; (use-package lsp-javascript-typescript
+  ;;   :ensure t
+  ;;   :ensure-system-package ((javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")))
 #+END_SRC
 
 Set up =tide-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package tide
-    :ensure t)
+    :ensure t
+    :after (js2-mode company flycheck))
 #+END_SRC
 
 Set up =prettier-js-mode=
@@ -773,36 +785,6 @@ Set up =prettier-js-mode=
            (rjsx-mode . prettier-js-mode)))
 #+END_SRC
 
-**** Old config
-Keeping this here in case I want to stop using lsp
-
-=tern= and =tern-company= are for auto completion
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package tern
-  ;;   :ensure t
-  ;;   :init
-  ;;   (setq tern-command '("/home/kevin/.node_modules/bin/tern")))
-
-  ;; (use-package company-tern
-  ;;   :ensure t
-  ;;   :init
-  ;;   (add-to-list 'company-backends 'company-tern))
-#+END_SRC
-
-=js2= is a javascript 'ide'
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package js2-mode
-  ;;   :ensure t
-  ;;   :init
-  ;;   (add-to-list `auto-mode-alist '("\\.js\\'" . js2-mode))
-  ;;   (setq js-indent-level 2)
-  ;;   (add-hook 'js2-mode-hook
-  ;;             (function (lambda ()
-  ;;                         ;(js2-minor-mode t)
-  ;;                         (setq evil-shift-width js-indent-level)
-  ;;                         (smartparens-mode t)
-  ;;                         (tern-mode t)))))
-#+END_SRC
 *** JSON
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
