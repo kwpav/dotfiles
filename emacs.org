@@ -490,7 +490,9 @@ autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :diminish flycheck-mode
-    :ensure t)
+    :ensure t
+    :config
+    (global-flycheck-mode))
 #+END_SRC
 
 ** Python
@@ -890,11 +892,13 @@ Some light themes I like
 ** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Iosevka-12" ))
+  (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
 #+END_SRC
 
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
+  ;; (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
+  ;; (add-to-list 'default-frame-alist '(font . "Curie-14" ))
   ;;(add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
   ;;(add-to-list 'default-frame-alist '(font . "Hack-12" ))
   ;;(add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
