@@ -1,6 +1,17 @@
 (in-package :stumpwm)
 
-(setq *module-dir* "/home/kevin/.stumpwm.d/contrib")
+;; the contrib/ folder is provided with the aur package
+(set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
+
+
+;; (load-module "ttf-fonts")
+;; (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 14))
+;(load-module "ttf-fonts")
+(load-module "swm-gaps")
+
+(set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
+
+(set-prefix-key (kbd "s-SPC"))
 
 ;;;;
 ;; mouse focus 
@@ -10,22 +21,35 @@
 
 ;;;;
 ;; appearance
-(defparameter *foreground-color* "grey53")
-(defparameter *background-color* "grey9")
-(defparameter *border-color* "Dark Slate Gray")
+(defparameter *foreground-color* "#A0B3C5")
+(defparameter *background-color* "#10151C")
+(defparameter *border-color* "#28323B")
+
+(set-frame-outline-width 2)
+
+;; (set-fg-color "#eeeeee")
+;; (set-bg-color "#1C2028")
+;; (set-border-color "#232731")
+;; (set-focus-color "#3B4252")
+;; (set-unfocus-color "#232731")
+;; (set-win-bg-color "#22272F")
+;; (set-float-focus-color "#3B4252")
+;; (set-float-unfocus-color "#232731")
 
 ;; stump msg window
-(setf *message-window-gravity* :top-right
-      *input-window-gravity* :top-right
-      *window-border-style* :thin)
-(set-msg-border-width 1)
+(setf *message-window-gravity* :center
+      *input-window-gravity* :center
+      *window-border-style* :thin
+      *message-window-padding* 5
+      *input-window-padding* 5)
+(set-msg-border-width 4)
 (set-fg-color *foreground-color*)
 (set-bg-color *background-color*)
 (set-border-color *border-color*)
 
 ;; frame borders
-(setf *normal-border-width* 1
-      *maxsize-border-width* 1
+(setf *normal-border-width* 2
+      *maxsize-border-width* 4
       *transient-border-width* 1)
 (set-focus-color *border-color*)
 (set-unfocus-color *background-color*)
@@ -40,13 +64,13 @@
 ;; stumpwm already defines emacs
 (define-key *top-map* (kbd "s-e") "emacs")
 
-;; start urxvt with tmux, remaps default keybindingcs 'c' and 'C-c'
-(defcommand urxvt () ()
-  (run-or-raise "urxvtc -e tmux" '(:class "URxvt")))
-(define-key *root-map* (kbd "c") "urxvt")
-(define-key *root-map* (kbd "C-c") "urxvt")
-(define-key *top-map* (kbd "s-RET") "urxvt")
-(define-key *top-map* (kbd "s-c") "urxvt")
+;; start termite with tmux, remaps default keybindingcs 'c' and 'C-c'
+(defcommand termite () ()
+  (run-or-raise "termite -e tmux" '(:class "Termite")))
+(define-key *root-map* (kbd "c") "termite")
+(define-key *root-map* (kbd "C-c") "termite")
+(define-key *top-map* (kbd "s-RET") "termite")
+(define-key *top-map* (kbd "s-c") "termite")
 
 ;; use stumpwm's exec instead of dmenu_run
 (define-key *top-map* (kbd "s-d") "exec")
@@ -64,7 +88,7 @@
 (define-key *top-map* (kbd "s-K") "move-window up")
 (define-key *top-map* (kbd "s-L") "move-window right")
 (define-key *top-map* (kbd "s-n") "pull-hidden-next")
-(define-key *top-map* (kbd "s-SPC") "pull-hidden-next")
+;; (define-key *top-map* (kbd "s-SPC") "pull-hidden-next")
 (define-key *top-map* (kbd "s-p") "pull-hidden-previous")
 (define-key *top-map* (kbd "s-!") "gmove 1")
 (define-key *top-map* (kbd "s-@") "gmove 2")
@@ -91,14 +115,94 @@
 (define-key *top-map* (kbd "s-;") "colon")
 (define-key *top-map* (kbd "s-:") "eval")
 (define-key *top-map* (kbd "s-R") "restart-hard")
+;; gaps
+(define-key *top-map* (kbd "s-t") "toggle-gaps")
+;; modeline
+(define-key *top-map* (kbd "s-y") "mode-line")
+
+;;;;
+;; groups
+(setf (group-name (car (screen-groups (current-screen)))) "dev")
 
 ;;;;
 ;; mode-line
+;; (setf *screen-mode-line-format*
+;;       (list "%g  |  %v  |  "
+;; 	    '(:eval (run-shell-command "date" t))))
+;; (setf *mode-line-pad-y* 5)
+;; (setf *mode-line-pad-x* 10)
+;; (setf *mode-line-timeout* 1)
+;; (setf *mode-line-background-color* *background-color*)
+;; (setf *mode-line-foreground-color* *foreground-color*)
+
+;; from https://github.com/zarkone/stumpwm.d
+
+(setf *bar-med-color* "^B^8")
+(setf *bar-hi-color* "^B^3")
+(setf *bar-crit-color* "^B^1")
+
+(setf *colors*
+      '("black"
+       "red"
+       "green"
+       "yellow"
+       "blue"
+       "magenta"
+       "cyan"
+       "white"
+       "GreenYellow"
+       "#009696"))
+(update-color-map (current-screen))
+
+(setf *group-format* " %t ")
+(setf *window-format* "%m%n%s%20t ")
+(setf *mode-line-timeout* 2)
+
+(setf *time-modeline-string* "^9 • , %a^n^B ^b")
+
+(defun get-date-modeline ()
+  (stumpwm:run-shell-command
+   (format nil "date +\"~A\""
+           *time-modeline-string*) t))
+
+(defun get-layout-modeline ()
+  (if (= 0 (get-current-layout *display*))
+      "^3 en ^n"
+      "^3^R ru ^r^n"))
+
 (setf *screen-mode-line-format*
-      (list "%h | %g | %w |"
-	    '(:eval (run-shell-command "date" t))))
-(setf *mode-line-pad-y* 5)
-(setf *mode-line-pad-x* 10)
-(setf *mode-line-timeout* 1)
-(setf *mode-line-background-color* *background-color*)
-(setf *mode-line-foreground-color* *foreground-color*)
+      (list "^B^3 %g ^n^b %v ^> "
+            '(:eval (get-layout-modeline))
+            "  "
+            "^B^2^n^b "
+            '(:eval (get-date-modeline))))
+
+(setf *mode-line-border-width* 0)
+(setf *mode-line-background-color* "#000809")
+(setf *mode-line-foreground-color* "DeepSkyBlue")
+
+(if (not (head-mode-line (current-head)))
+(toggle-mode-line (current-screen) (current-head)))
+
+;; polybar stuff based off of https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmrc
+;; (defun polybar-groups ()
+;;   "Return string representation for polybar stumpgroups module"
+;;   (apply #'concatenate 'string
+;;          (mapcar
+;;           (lambda (g)
+;;             (let* ((name (group-name g))
+;;                    (n-win (write-to-string (length (group-windows g))))
+;;                    (display-text (concat " " name)))
+;;               (if (eq g (current-group))
+;;                   (concat "%{F#ECEFF4 B#882E3440 u#8A9899 +u}" display-text "[" n-win "] " "%{F- B- u- -u}")
+;;                   (concat "%{F#8A9899}" display-text "[" n-win "] " "%{F-}"))))
+;;           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
+
+
+;; (run-shell-command "polybar screen0 --reload")
+
+;; ;; Update polybar group indicator
+;; (add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
+;; (add-hook *destroy-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
+;; (add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
+;; (add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
