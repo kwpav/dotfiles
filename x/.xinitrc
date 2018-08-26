@@ -1,28 +1,36 @@
-
 #!/bin/sh
+userresources=$HOME/.Xresources
+usermodmap=$HOME/.Xmodmap
+sysresources=/etc/X11/xinit/.Xresources
+sysmodmap=/etc/X11/xinit/.Xmodmap
 
-if [ -d /etc/X11/xinit/xinitrc.d ]; then
-  for f in /etc/X11/xinit/xinitrc.d/*; do
-    [ -x "$f" ] && . "$f"
-  done
-  unset f
+# merge in defaults and keymaps
+
+if [ -f $sysresources ]; then
+    xrdb -merge $sysresources
 fi
 
-[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+if [ -f $sysmodmap ]; then
+    xmodmap $sysmodmap
+fi
 
-export PATH=$PATH:~/bin/:~/omnisharp-server
-export BROWSER=firefox
-export EDITOR=emacs
-export TERM=urxvtc
-#export POWERLINE_CONFIG_COMMAND=/home/kevin/powerline/scripts/powerline-config
+if [ -f "$userresources" ]; then
+    xrdb -merge "$userresources"
+fi
 
-sh ~/.fehbg &
+if [ -f "$usermodmap" ]; then
+    xmodmap "$usermodmap"
+fi
 
-urxvtd &
-
-compton --config ~/.config/compton.conf -b &
-
+# caps to ctrl
 setxkbmap -option 'ctrl:nocaps'
 
-exec xmonad
-#exec stumpwm
+# start some nice programs
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+ for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+  [ -x "$f" ] && . "$f"
+ done
+ unset f
+fi
+
+exec stumpwm

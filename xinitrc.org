@@ -1,86 +1,42 @@
-#+TITLE: ~/.xinitrc
+#+TITLE: ~/dotfiles/xinitrc.org
 
-Start with the hashbang...
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+modified from =/etc/X11/xinit/xinitrc=
+
+#+BEGIN_SRC sh sh :tangle ~/dotfiles/x/.xinitrc
   #!/bin/sh
-#+END_SRC
+  userresources=$HOME/.Xresources
+  usermodmap=$HOME/.Xmodmap
+  sysresources=/etc/X11/xinit/.Xresources
+  sysmodmap=/etc/X11/xinit/.Xmodmap
 
-From the default /etc/X11/xinit/xinitrc
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  if [ -d /etc/X11/xinit/xinitrc.d ]; then
-    for f in /etc/X11/xinit/xinitrc.d/*; do
-      [ -x "$f" ] && . "$f"
-    done
-    unset f
+  # merge in defaults and keymaps
+
+  if [ -f $sysresources ]; then
+      xrdb -merge $sysresources
   fi
 
-  [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
-#+END_SRC
+  if [ -f $sysmodmap ]; then
+      xmodmap $sysmodmap
+  fi
 
-* Defaults
-Set some default applications
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  export PATH=$PATH:~/bin/:~/omnisharp-server
-  export BROWSER=firefox
-  export EDITOR=emacs
-  export TERM=urxvtc
-  #export POWERLINE_CONFIG_COMMAND=/home/kevin/powerline/scripts/powerline-config
-#+END_SRC
+  if [ -f "$userresources" ]; then
+      xrdb -merge "$userresources"
+  fi
 
-* Background
-Set up the background using feh. =~/.fehgb= sets the background to the last background used.
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  sh ~/.fehbg &
-#+END_SRC
+  if [ -f "$usermodmap" ]; then
+      xmodmap "$usermodmap"
+  fi
 
-* Daemons
-Set up the urxvtd daemon. This speeds up urxvt among other things.
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  urxvtd &
-#+END_SRC
-
-* Compton
-Pretty shadows.
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  compton --config ~/.config/compton.conf -b &
-#+END_SRC
-
-* Keyboard
-Set the =Caps Lock= key to =Control=. Makes Emacs key chords easier.
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
+  # caps to ctrl
   setxkbmap -option 'ctrl:nocaps'
-#+END_SRC
 
-* Start the WM
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xinitrc
-  #exec xmonad
-  exec stumpwm
-#+END_SRC
-
-** Some other WM's
-Other WM's I have used in the past
-#+BEGIN_SRC sh
-  exec i3
-
-  exec ratpoison
-
-  exec herbstluftwm --locked
+  # start some nice programs
+  if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+   for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+    [ -x "$f" ] && . "$f"
+   done
+   unset f
+  fi
 
   exec stumpwm
-
-  export PANEL_FIFO=/tmp/panel-fifo
-  sxhkd &
-  exec bspwm
-
-  sxhkd -c ~/.config/swm/sxhkd &
-  exec swm
-
-  exec xmonad
-#+END_SRC
-
-* xserverrc
-#+BEGIN_SRC sh :tangle ~/dotfiles/x/.xserverrc
-  #!/bin/sh
-
-  exec /usr/bin/Xorg -nolisten tcp "$@" vt$XDG_VTNR
 #+END_SRC
