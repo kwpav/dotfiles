@@ -27,7 +27,7 @@ Setup the package repositories and startup use-package.
 
   (require 'use-package)
 #+END_SRC
-* TODO Things to do 
+* TODO Things to do
 An on-going list of things I want to change
 
 - [ ]fix evil escape keys
@@ -42,6 +42,12 @@ An on-going list of things I want to change
   + eslint works fine without the =lsp-javascript-typescript=
 
 * Emacs
+** paradox
+Nicer package management
+#+BEGIN_SRC emacs-lisp
+  (use-package paradox
+    :ensure t)
+#+END_SRC
 ** better defaults
 #+BEGIN_SRC emacs-lisp
   (use-package better-defaults
@@ -52,13 +58,15 @@ Load with a nicer looking dashboard than default
 #+BEGIN_SRC emacs-lisp
   (use-package dashboard
     :ensure t
-    :config
-    (dashboard-setup-startup-hook)
+    :init
     (setq dashboard-startup-banner 'logo)
     (setq dashboard-items '((recents . 5)
                             (bookmarks . 5)
                             (projects . 5)
-                            (agenda . 5))))
+                            (agenda . 5)))
+    (add-hook 'dashboard-mode-hook (lambda () (turn-on-page-break-lines-mode)))
+    :config
+    (dashboard-setup-startup-hook))
 #+END_SRC
 ** keys
 *** evil-leader
@@ -258,7 +266,7 @@ Emacs version of NERDTree, press <f8> to open.
   (use-package neotree
     :ensure t
     :init
-    (setq neo-theme 'ascii)
+    (setq neo-theme (if (display-graphic-p) 'icons 'ascii))
     :config
     (global-set-key [f8] 'neotree-toggle)
     (add-hook 'neotree-mode-hook
@@ -524,6 +532,15 @@ In order for this to work, you need to install https://github.com/palantir/pytho
     (add-hook 'lsp-after-initialize-hook 'lsp-set-cfg))
 #+END_SRC
 
+Use =pipenv= to handle virtual environments
+#+BEGIN_SRC emacs-lisp
+  (use-package pipenv
+    :hook ((python-mode . pipenv-mode)
+           (hy-mode . pipenv-mode))
+    :init
+    (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
+#+END_SRC
+
 **** Elpy - OLD
 trying out LSP instead of elpy, keeping this in case I want to go back.
 
@@ -546,37 +563,37 @@ Let's get hy. A lisp for python
 #+END_SRC
 ** C#
 #+BEGIN_SRC emacs-lisp
-  (use-package csharp-mode
-    :ensure t
-    :init
-    (add-to-list 'company-backends 'company-omnisharp))
+  ;; (use-package csharp-mode
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-to-list 'company-backends 'company-omnisharp))
 
   ;; from omnisharp-emacs README
   ;; (eval-after-load
   ;;   'company
   ;;   '(add-to-list 'company-backends #'company-omnisharp))
 
-  (defun my-csharp-mode-setup ()
-    (omnisharp-mode)
-    (company-mode)
-    (flycheck-mode)
+  ;; (defun my-csharp-mode-setup ()
+  ;;   (omnisharp-mode)
+  ;;   (company-mode)
+  ;;   (flycheck-mode)
 
-    (setq indent-tabs-mode nil)
-    (setq c-syntactic-indentation t)
-    (c-set-style "ellemtel")
-    (setq c-basic-offset 4)
-    (setq truncate-lines t)
-    (setq tab-width 4)
-    (setq evil-shift-width 4)
+  ;;   (setq indent-tabs-mode nil)
+  ;;   (setq c-syntactic-indentation t)
+  ;;   (c-set-style "ellemtel")
+  ;;   (setq c-basic-offset 4)
+  ;;   (setq truncate-lines t)
+  ;;   (setq tab-width 4)
+  ;;   (setq evil-shift-width 4)
 
     ;csharp-mode README.md recommends this too
     ;(electric-pair-mode 1)       ;; Emacs 24
     ;(electric-pair-local-mode 1) ;; Emacs 25
 
-    (local-set-key (kbd "C-c r r") 'omnisharp-run-code-action-refactoring)
-    (local-set-key (kbd "C-c C-c") 'recompile))
+  ;;   (local-set-key (kbd "C-c r r") 'omnisharp-run-code-action-refactoring)
+  ;;   (local-set-key (kbd "C-c C-c") 'recompile))
 
-  (add-hook 'csharp-mode-hook 'my-csharp-mode-setup t)
+  ;; (add-hook 'csharp-mode-hook 'my-csharp-mode-setup t)
 #+END_SRC
 Omnisharp should load after a csharp file is loaded
 #+BEGIN_SRC emacs-lisp
@@ -893,10 +910,13 @@ Some light themes I like
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
+  ;; (add-to-list 'default-frame-alist '(font . "Lemon-14"))
+  ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
 #+END_SRC
 
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
+  ;; (add-to-list 'default-frame-alist '(font . "Cherry-13"))
   ;; (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
   ;; (add-to-list 'default-frame-alist '(font . "Curie-14" ))
   ;;(add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
