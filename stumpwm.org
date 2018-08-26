@@ -4,18 +4,6 @@
 ** What is this?
 This is my configuration for StumpWM, a tiling window manager configured using lisp.
 
-* TODO Things to do
-** TODO Fix ttf-fonts module
-Need to set up the clx-ttf package
-
-Example:
-#+BEGIN_SRC lisp
-  (load-module "ttf-fonts")
-  (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 14))
-#+END_SRC
-** TODO Set up swank
-Set up swank to interact with stumpwm using a repl!
-
 * Set up
 Set the module dir to the install folder because the =contrib/= folder is provided with the aur package
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
@@ -27,7 +15,7 @@ Set the module dir to the install folder because the =contrib/= folder is provid
 * Functionality
 Set up how everything works.
 ** Prefix
-Change the prefix key, I like using the space bar + super.
+Change the prefix key, I like using super + space.
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (set-prefix-key (kbd "s-SPC"))
 #+END_SRC
@@ -86,6 +74,7 @@ Define commands to start up and switch to programs and set up keys.
 #+END_SRC
 
 ** Navigation and Movement
+Set up keys using vim-like keybindings.
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   ;; navigation
   (define-key *top-map* (kbd "s-TAB") "fnext")
@@ -238,3 +227,15 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
   (add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
   (add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
 #+END_SRC
+
+* To Do List
+** TODO Fix ttf-fonts module
+Need to set up the clx-ttf package
+
+Example:
+#+BEGIN_SRC lisp
+  (load-module "ttf-fonts")
+  (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 14))
+#+END_SRC
+** TODO Set up swank
+Set up swank to interact with stumpwm using a repl!
