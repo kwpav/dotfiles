@@ -4,11 +4,6 @@
 ** What is this?
 This is my configuration for StumpWM, a tiling window manager configured using lisp.
 
-** How does it work?
-The code snippets will be copied over (or =tangled=) to =~/dotfiles/stumpwm/.stumpwm.d/init.lisp=
-
-Use the =org-babel-tangle= command in emacs.
-
 * TODO Things to do
 ** TODO Fix ttf-fonts module
 Need to set up the clx-ttf package
