@@ -5,9 +5,12 @@ This is my attempt at literate GNU/Linux configuration files. To achieve this, I
 * Current Setup
 I am currently using:
 
-| wm     | [[file:stumpwm.org][StumpWM]] |
-| shell  | [[file:zshrc.org][ZSH]]     |
-| editor | [[file:emacs.org][Emacs]]   |
+| wm (alt)  | [[file:stumpwm.org][StumpWM]] |
+| wm (main) | [[file:qtile.org][qtile]]   |
+| shell     | [[file:zshrc.org][ZSH]]     |
+| editor    | [[file:emacs.org][Emacs]]   |
+
+Using *qtile* at the moment because *StumpWM* is not working on my desktop.
 
 * How it works
 ** Org and Babel
