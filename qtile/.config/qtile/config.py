@@ -2,11 +2,6 @@ from libqtile import bar, hook, layout, widget
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen
 
-try:
-    from typing import List  # noqa: F401
-except ImportError:
-    pass
-
 wmname = "qtile"
 
 mod = "mod4"
@@ -47,6 +42,8 @@ class Theme(object):
         "fg": "728CA0",
         "blue": "5EC4FF"
     }
+
+    font = "Iosevka"
 
     layout_style = {
         "margin": 10,
@@ -116,8 +113,8 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown()),
     # Key([mod], "r", lazy.spawncmd()),
     Key([mod, "control"], "w", lazy.window.kill()),
-    Key([mod], "w", lazy.spawn("rofi -show window -font 'Iosevka 14'")),
-    Key([mod], "r", lazy.spawn("rofi -show run -font 'Iosevka 14'")),
+    Key([mod], "w", lazy.spawn(f"rofi -show window -font '{theme.font} 14'")),
+    Key([mod], "r", lazy.spawn(f"rofi -show run -font '{theme.font} 14'")),
 ]
 
 # Drag floating layouts.
@@ -130,7 +127,7 @@ mouse = [
 ]
 
 dgroups_key_binder = None
-dgroups_app_rules = []  # type: List
+dgroups_app_rules = []
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
@@ -225,7 +222,7 @@ class Bars(object):
 
 
 widget_defaults = dict(
-    font="Iosevka",
+    font=theme.font,
     fontsize=14,
     padding=1,
 )
