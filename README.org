@@ -5,39 +5,34 @@ This is my attempt at literate GNU/Linux configuration files. To achieve this, I
 * Current Setup
 I am currently using:
 
-| wm       | [[file:xmonad.org][xmonad]]     |
-| panel    | [[file:xmonad.org][xmobar]]     |
-| shell    | [[file:zshrc.org][zsh]] + tmux |
-| terminal | urxvt      |
-| editor   | [[file:emacs/.emacs.d/starting.org][emacs]] [[file:emacs][ ]]    |
+| wm     | [[file:stumpwm.org][StumpWM]] |
+| shell  | [[file:zshrc.org][ZSH]]     |
+| editor | [[file:emacs.org][Emacs]]   |
 
 * How it works
-** Stow
-To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
-
-For example, the =~/dotfiles/xmonad/.xmonad/= directory holds all of the XMonad configuration files. Once all the files are created, use:
-
-#+BEGIN_SRC sh
-  stow xmonad
-#+END_SRC
-
-to create a symlink, =~/.xmonad=, pointing to =~/dotfiles/xmonad/.xmonad/=
-
-You only need run =stow= initially, or if any other new files are added. Once the symlink is created, you can open the file within the home directory and it will use the symlinked file within =~/dotfiles=.
-
 ** Org and Babel
-Babel allows you to put code snippets with an org file and then use =:tangle <directory>= to combine the snippets to a file in the specified directory.
+All configuration is done in org-mode files containing code snippets. These code snippets can be copied to a specified path using babels =tangle=.
 
-For example, if you wanted to create your XMonad configuration file and store it in =~/dotfiles/.xmonad/xmonad.hs=, you would use:
+For example, if you wanted to create your StumpWM configuration file and store it in =~/dotfiles/stumpwm/.stumpwm.d/init.lisp=, you would use:
 #+BEGIN_SRC org -r -k
-  ,#+BEGIN_SRC haskell :tangle ~/dotfiles/xmonad/.xmonad/xmonad.hs
-  <Insert code snippet here...>
+  ,#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+    ;; Insert code snippet here...
   ,#+END_SRC
 #+END_SRC
 
-You can edit the code in the =SRC= block by pressing <C-c '>  This opens the snippet in a new buffer in the languages native mode. Press <C-c '> again to save the changes.
+You can edit the code in the =SRC= block by pressing =<C-c '>=  This opens the snippet in a new buffer in the languages native mode. Press =<C-c '>= again to save the changes.
 
-Once you are happy with the changes, press <C-c C-v t> to =tangle= (combine in this case) all the snippets and create =xmonad.hs= inide of =~/dotfiles/xmonad/.xmonad=.
+Once you are happy with the changes, press =<C-c C-v t>= to =tangle= all the snippets and create =init.lisp= inside of =~/dotfiles/stumpwm/.stumpwm.d/=.
+** Stow
+To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
 
-If you wanted to simplify things a bit, you could avoid using =stow= and only use =org-mode= and =babel= by pointing tangle to the home directory instead, i.e. =~/.xmonad/xmonad.hs=
+For example, the =~/dotfiles/stumpwm/.stumpwm.d/= directory holds all of the StumpWM configuration files. Once all the files are created, use:
+
+#+BEGIN_SRC sh
+  stow stumpwm 
+#+END_SRC
+
+to create a symlink, =~/.stumpwm.d=, pointing to =~/dotfiles/stumpwm/.stumpwm.d/=
+
+You only need run =stow= initially, or if any other new files are added. Once the symlink is created, you can open the file within the home directory and it will use the symlinked file within =~/dotfiles=.
 
