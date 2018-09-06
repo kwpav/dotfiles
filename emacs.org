@@ -78,36 +78,37 @@ press the leader key (I like space) and then the key
     :config
     (global-evil-leader-mode)
     (evil-leader/set-leader "<SPC>")
-    (evil-leader/set-key "c" 'comment-dwim)
-    (evil-leader/set-key "g" 'magit-status)
-    (evil-leader/set-key "l" 'my/what-minor-mode)
-    ;; counsel
-    (evil-leader/set-key "f" 'counsel-find-file)
-    (evil-leader/set-key "x" 'counsel-M-x)
-    (evil-leader/set-key "pf" 'counsel-projectile-find-file)
-    (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
-    (evil-leader/set-key "pb" 'counsel-projectile-switch-to-buffer)
-    (evil-leader/set-key "pp" 'counsel-projectile-switch-project)
-    (evil-leader/set-key "pg" 'counsel-projectile-rg) ;;ripgrep
-    ;; buffers, frames, and windows
-    (evil-leader/set-key "bb" 'switch-to-buffer)
-    (evil-leader/set-key "bk" 'kill-buffer)
-    (evil-leader/set-key "RET" 'make-frame-command)
-    (evil-leader/set-key "wo" 'split-window-horizontally)
-    (evil-leader/set-key "wu" 'split-window-vertically)
-    (evil-leader/set-key "wd" 'delete-window)
-    (evil-leader/set-key "wh" 'windmove-left)
-    (evil-leader/set-key "wj" 'windmove-down)
-    (evil-leader/set-key "wk" 'windmove-up)
-    (evil-leader/set-key "wl" 'windmove-right)
-    ;; multi-term
-    (evil-leader/set-key "tt" 'multi-term)
-    (evil-leader/set-key "tn" 'multi-term-next)
-    (evil-leader/set-key "tp" 'multi-term-prev)
-    ;; bookmarks
-    (evil-leader/set-key "rm" 'bookmark-set)
-    (evil-leader/set-key "rb" 'bookmark-jump)
-    (evil-leader/set-key "rl" 'bookmark-bmenu-list)
+    (evil-leader/set-key
+      "c" 'comment-dwim
+      "g" 'magit-status
+      "l" 'my/what-minor-mode
+      ;; counsel
+      "f" 'counsel-find-file
+      "x" 'counsel-M-x
+      "pf" 'counsel-projectile-find-file
+      "pd" 'counsel-projectile-find-dir
+      "pb" 'counsel-projectile-switch-to-buffer
+      "pp" 'counsel-projectile-switch-project
+      "pg" 'counsel-projectile-rg ;;ripgrep
+      ;; buffers, frames, and windows
+      "bb" 'switch-to-buffer
+      "bk" 'kill-buffer
+      "RET" 'make-frame-command
+      "wo" 'split-window-horizontally
+      "wu" 'split-window-vertically
+      "wd" 'delete-window
+      "wh" 'windmove-left
+      "wj" 'windmove-down
+      "wk" 'windmove-up
+      "wl" 'windmove-right
+      ;; multi-term
+      "tt" 'multi-term
+      "tn" 'multi-term-next
+      "tp" 'multi-term-prev
+      ;; bookmarks
+      "rm" 'bookmark-set
+      "rb" 'bookmark-jump
+      "rl" 'bookmark-bmenu-list)
     ;; mode specific
     (evil-leader/set-key-for-mode 'org-mode "mt" 'org-babel-tangle)
     (evil-leader/set-key-for-mode 'emacs-lisp-mode "eb" 'eval-buffer)
@@ -910,7 +911,7 @@ Some light themes I like
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Lemon-14"))
+  ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
   ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
 #+END_SRC
 
