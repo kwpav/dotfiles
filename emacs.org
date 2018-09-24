@@ -18,9 +18,9 @@ Setup the package repositories and startup use-package.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  ;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (add-to-list 'package-archives
                '("elpy" . "https://jorgenschaefer.github.io/packages/"))
   (package-initialize)
@@ -69,71 +69,101 @@ Load with a nicer looking dashboard than default
     (dashboard-setup-startup-hook))
 #+END_SRC
 ** keys
-*** evil-leader
-=evil-leader= is an easy way to make shortcuts
-press the leader key (I like space) and then the key
+To set up custom keys, I use a combination of:
+- =general= - define leader keys, e.g. press <SPACE> and a key to perform an action (if in evil's normal or visual modes)
+- =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing <SPACE>
+- =hydra= - create a "mode" (similar to how i3 does resize mode) for repeated actions
+*** general
+Generic bindings (for all modes) appear after pressing <SPACE>
+
+Mode specific bindings appear after pressing <SPACE m>
+
 #+BEGIN_SRC emacs-lisp
-  (use-package evil-leader
+  (use-package general
     :ensure t
     :config
-    (global-evil-leader-mode)
-    (evil-leader/set-leader "<SPC>")
-    (evil-leader/set-key "c" 'comment-dwim)
-    (evil-leader/set-key "g" 'magit-status)
-    (evil-leader/set-key "l" 'my/what-minor-mode)
-    ;; counsel
-    (evil-leader/set-key "f" 'counsel-find-file)
-    (evil-leader/set-key "x" 'counsel-M-x)
-    (evil-leader/set-key "pf" 'counsel-projectile-find-file)
-    (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
-    (evil-leader/set-key "pb" 'counsel-projectile-switch-to-buffer)
-    (evil-leader/set-key "pp" 'counsel-projectile-switch-project)
-    (evil-leader/set-key "pg" 'counsel-projectile-rg) ;;ripgrep
-    ;; buffers, frames, and windows
-    (evil-leader/set-key "bb" 'switch-to-buffer)
-    (evil-leader/set-key "bk" 'kill-buffer)
-    (evil-leader/set-key "RET" 'make-frame-command)
-    (evil-leader/set-key "wo" 'split-window-horizontally)
-    (evil-leader/set-key "wu" 'split-window-vertically)
-    (evil-leader/set-key "wd" 'delete-window)
-    (evil-leader/set-key "wh" 'windmove-left)
-    (evil-leader/set-key "wj" 'windmove-down)
-    (evil-leader/set-key "wk" 'windmove-up)
-    (evil-leader/set-key "wl" 'windmove-right)
-    ;; multi-term
-    (evil-leader/set-key "tt" 'multi-term)
-    (evil-leader/set-key "tn" 'multi-term-next)
-    (evil-leader/set-key "tp" 'multi-term-prev)
-    ;; bookmarks
-    (evil-leader/set-key "rm" 'bookmark-set)
-    (evil-leader/set-key "rb" 'bookmark-jump)
-    (evil-leader/set-key "rl" 'bookmark-bmenu-list)
-    ;; mode specific
-    (evil-leader/set-key-for-mode 'org-mode "mt" 'org-babel-tangle)
-    (evil-leader/set-key-for-mode 'emacs-lisp-mode "eb" 'eval-buffer)
-    (evil-leader/set-key-for-mode 'emacs-lisp-mode "el" 'eval-last-sexp)
-    (evil-leader/set-key-for-mode 'emacs-lisp-mode "ed" 'eval-defun)
-    (evil-leader/set-key-for-mode 'emacs-lisp-mode "er" 'eval-region)
-    (evil-leader/set-key-for-mode 'lisp-interaction-mode "eb" 'eval-buffer)
-    (evil-leader/set-key-for-mode 'lisp-interaction-mode "el" 'eval-last-sexp)
-    (evil-leader/set-key-for-mode 'lisp-interaction-mode "ed" 'eval-defun)
-    (evil-leader/set-key-for-mode 'lisp-interaction-mode "er" 'eval-region)
-    (evil-leader/set-key-for-mode 'lisp-mode "er" 'eval-region)
-    (evil-leader/set-key-for-mode 'lisp-mode "ed" 'eval-defun)
-    (evil-leader/set-key-for-mode 'scheme-mode "er" 'geiser-eval-region)
-    (evil-leader/set-key-for-mode 'scheme-mode "eR" 'geiser-eval-region-and-go)
-    (evil-leader/set-key-for-mode 'scheme-mode "eb" 'geiser-eval-buffer)
-    (evil-leader/set-key-for-mode 'scheme-mode "eB" 'geiser-eval-buffer-and-go)
-    (evil-leader/set-key-for-mode 'scheme-mode "ed" 'geiser-eval-definition)
-    (evil-leader/set-key-for-mode 'scheme-mode "eD" 'geiser-eval-definition-and-go)
-    (evil-leader/set-key-for-mode 'scheme-mode "el" 'geiser-eval-eval-sexp)
-    (evil-leader/set-key-for-mode 'python-mode "er" 'elpy-shell-send-region-or-buffer)
-    (evil-leader/set-key-for-mode 'python-mode "er" 'elpy-shell-send-buffer-and-go)
-    (evil-leader/set-key-for-mode 'python-mode "eb" 'elpy-shell-send-buffer)
-    (evil-leader/set-key-for-mode 'python-mode "eB" 'elpy-shell-send-buffer-and-go))
-#+END_SRC
+    (general-create-definer my-leader-def
+      ;; :prefix my-leader
+      :prefix "SPC")
+    (general-create-definer my-local-leader-def
+      ;; :prefix my-local-leader
+      :prefix "SPC m")
+    (my-leader-def
+      :keymaps 'normal
+      "c" 'comment-dwim
+      "g" 'magit-status
+      "RET" 'make-frame-command
+      "l" 'my/what-minor-mode
+      ;; counsel
+      "f" 'counsel-find-file
+      "x" 'counsel-M-x
+      "pf" 'counsel-projectile-find-file
+      "pd" 'counsel-projectile-find-dir
+      "pb" 'counsel-projectile-switch-to-buffer
+      "pp" 'counsel-projectile-switch-project
+      "pg" 'counsel-projectile-rg ;;ripgrep
+      ;; buffers and windows
+      "bb" 'switch-to-buffer
+      "bk" 'kill-buffer
+      "wo" 'split-window-horizontally
+      "wu" 'split-window-vertically
+      "wd" 'delete-window
+      "wh" 'windmove-left
+      "wj" 'windmove-down
+      "wk" 'windmove-up
+      "wl" 'windmove-right
+      ;; multi-term
+      "tt" 'multi-term
+      "tn" 'multi-term-next
+      "tp" 'multi-term-prev
+      ;; bookmarks
+      "rm" 'bookmark-set
+      "rb" 'bookmark-jump
+      "rl" 'bookmark-bmenu-list)
 
-show keyboard shortcuts after pressing a key
+    (my-leader-def
+      :keymaps 'visual
+      "c" 'comment-dwim)
+
+    (my-local-leader-def
+      :states '(normal visual)
+      :keyamps 'org-mode-map
+      "t" 'org-babel-tangle)
+
+    (my-local-leader-def
+      :states '(normal visual)
+      :keymaps 'emacs-lisp-mode-map
+      "eb" 'eval-buffer
+      "el" 'eval-last-sexp
+      "ed" 'eval-defun
+      "er" 'eval-region)
+
+    (my-local-leader-def
+      :states '(normal visual)
+      :keymaps 'lisp-interaction-mode-map
+      "eb" 'eval-buffer
+      "el" 'eval-last-sexp
+      "ed" 'eval-defun
+      "er" 'eval-region)
+
+    (my-local-leader-def
+      :states '(normal visual)
+      :keymaps 'lisp-mode-map
+      "er" 'eval-region
+      "ed" 'eval-defun)
+
+    (my-local-leader-def
+      :states '(visual normal)
+      :keymaps 'scheme-mode-map
+      "er" 'geiser-eval-region
+      "eR" 'geiser-eval-region-and-go
+      "eb" 'geiser-eval-buffer
+      "eB" 'geiser-eval-buffer-and-go
+      "ed" 'geiser-eval-definition
+      "eD" 'geiser-eval-definition-and-go
+      "el" 'geiser-eval-eval-sexp))
+#+END_SRC
+*** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
@@ -142,16 +172,16 @@ show keyboard shortcuts after pressing a key
     (which-key-mode)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0.05)
+    (setq which-key-idle-delay 0.01)
     (which-key-add-key-based-replacements "SPC w" "windows")
     (which-key-add-key-based-replacements "SPC b" "buffers")
     (which-key-add-key-based-replacements "SPC p" "projects")
     (which-key-add-key-based-replacements "SPC b" "buffers")
     (which-key-add-key-based-replacements "SPC r" "bookmarks")
     (which-key-add-key-based-replacements "SPC t" "terminal")
-    (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC e" "eval")
-    (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC e" "eval")
-    (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC e" "eval"))
+    (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
+    (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
+    (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC m e" "eval"))
 #+END_SRC
 *** hydra
 #+BEGIN_SRC emacs-lisp
@@ -189,11 +219,14 @@ Because I like like my modal editing.
 #+END_SRC
 
 ** org mode
+
+*** org agenda
 Trying out org agenda
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-files (list "~/org/agenda/"))
 #+END_SRC
 
+*** looks
 This stuff is mostly for making org-mode prettier:
 - =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
 - =org-bullets= provides prettier bullets for the header
@@ -204,9 +237,10 @@ This stuff is mostly for making org-mode prettier:
   (use-package org
     :ensure org-bullets
     :init
-      (setq org-todo-keywords
-        '((sequence "TODO" "CURRENT" "|" "DONE")))
+    (setq org-todo-keywords
+          '((sequence "TODO" "CURRENT" "|" "DONE")))
     :config
+    (setq org-log-done 'time)
     (setq org-src-fontify-natively t)
     (add-hook 'org-mode-hook 'org-indent-mode)
     (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
@@ -231,13 +265,17 @@ This stuff is mostly for making org-mode prettier:
   ;;                         '(("^ +\\([-*]\\) "
   ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-  ;(setq org-hide-emphasis-markers t)
+                                          ;(setq org-hide-emphasis-markers t)
 #+END_SRC
 
-I wasn't able to get this to work, but it's supposed to use syntax highlighting for =#+SRC= blocks in html exports
+*** htmlize
+Provides syntax highlighting for =#+SRC= blocks in html exports.
+
+Needed by =nikola=
+
 #+BEGIN_SRC emacs-lisp
-  ;(use-package htmlize
-  ;   :ensure t)
+  (use-package htmlize
+    :ensure t)
   ;(setq org-src-fontify-natively t)
 #+END_SRC
 
@@ -423,6 +461,15 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure t)
+#+END_SRC
+
+** hugo
+set up =ox-hugo= to use =org-mode= in hugo!
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-hugo
+    :ensure t            ;Auto-install the package from Melpa (optional)
+    :after ox)
 #+END_SRC
 ** my custom functions
 *** what-minor-mode
@@ -855,6 +902,7 @@ Set up web mode for html and css files
                         (web-mode-language-at-pos))))))
     (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
     (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode))
+    (add-to-list `auto-mode-alist '("\\.php\\'" . web-mode))
     ;;(add-to-list `auto-mode-alist '("\\.js\\'" . web-mode))
     (add-hook 'web-mode-hook
               (lambda ()
@@ -910,7 +958,7 @@ Some light themes I like
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Lemon-14"))
+  ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
   ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
 #+END_SRC
 
