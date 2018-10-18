@@ -1137,3 +1137,11 @@ spacemacs modeline settings
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
 
+* System Specific
+** OSX
+Paths need to be explicitly defined for some reason in OSX.
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+    (setq exec-path (append exec-path '("/usr/local/bin"))))
+#+END_SRC
