@@ -279,16 +279,16 @@ Needed by =nikola=
   ;(setq org-src-fontify-natively t)
 #+END_SRC
 
-** TODO yasnippet
-I should probably use this at some point.
+** yasnippet
+Use snippets in specific modes
 #+BEGIN_SRC emacs-lisp
-  ;(use-package yasnippet
-  ;  :ensure t
-  ;  :init
-  ;  (setq yas-snippet-dirs
-  ;       '("~/.emacs.d/snippets"))
-  ;  :config
-  ;  (yas-global-mode 1))
+  (use-package yasnippet
+   :ensure t
+   :init
+   (setq yas-snippet-dirs
+        '("~/.emacs.d/snippets"))
+   :config
+   (yas-global-mode 1))
 #+END_SRC
 
 ** company
