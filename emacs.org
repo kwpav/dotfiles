@@ -219,7 +219,6 @@ Because I like like my modal editing.
 #+END_SRC
 
 ** org mode
-
 *** org agenda
 Trying out org agenda
 #+BEGIN_SRC emacs-lisp
@@ -233,13 +232,24 @@ This stuff is mostly for making org-mode prettier:
 - =indent-mode= indents each header and text block
 - =turn-on-visual-line-mode= is for visual word wrap
 
+largely taken from http://doc.norang.ca/org-mode.html
+
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure org-bullets
-    :init
-    (setq org-todo-keywords
-          '((sequence "TODO" "CURRENT" "|" "DONE")))
     :config
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "NEXT(n)" "CURRENT(c)" "|" "DONE(d)")
+            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
+    (setq org-todo-keyword-faces
+          (quote (("TODO" :foreground "#D95468" :weight bold)
+                  ("NEXT" :foreground "#5EC4FF" :weight bold)
+                  ("DONE" :foreground "forest green" :weight bold)
+                  ("WAITING" :foreground "orange" :weight bold)
+                  ("HOLD" :foreground "magenta" :weight bold)
+                  ("CANCELLED" :foreground "forest green" :weight bold)
+                  ("MEETING" :foreground "forest green" :weight bold))))
+    (setq org-use-fast-todo-selection t)
     (setq org-log-done 'time)
     (setq org-src-fontify-natively t)
     (add-hook 'org-mode-hook 'org-indent-mode)
@@ -291,6 +301,12 @@ Use snippets in specific modes
    (yas-global-mode 1))
 #+END_SRC
 
+Install the official snippets
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets
+    :ensure t)
+#+END_SRC
+
 ** company
 #+BEGIN_SRC emacs-lisp
   (use-package company
@@ -298,6 +314,31 @@ Use snippets in specific modes
     :config
     (global-company-mode))
 #+END_SRC
+
+** treemacs
+Replacing neotree with treemacs
+#+BEGIN_SRC emacs-lisp
+  (use-package treemacs
+    :ensure t)
+
+  (use-package treemacs-evil
+    :ensure t)
+
+  (use-package treemacs-projectile
+    :ensure t)
+#+END_SRC
+
+** solaire
+make certain buffers lighter/darker, e.g. treemacs
+#+BEGIN_SRC emacs-lisp
+  (use-package solaire-mode
+    :ensure t
+    :hook ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
+    :config
+    (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+    (solaire-mode-swap-bg))
+#+END_SRC
+
 ** neotree
 Emacs version of NERDTree, press <f8> to open.
 #+BEGIN_SRC emacs-lisp
@@ -902,7 +943,7 @@ Set up web mode for html and css files
                         (web-mode-language-at-pos))))))
     (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
     (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode))
-    (add-to-list `auto-mode-alist '("\\.php\\'" . web-mode))
+    ;;(add-to-list `auto-mode-alist '("\\.php\\'" . web-mode))
     ;;(add-to-list `auto-mode-alist '("\\.js\\'" . web-mode))
     (add-hook 'web-mode-hook
               (lambda ()
@@ -912,7 +953,15 @@ Set up web mode for html and css files
                 ; highlight matching elements in html
                 (setq web-mode-enable-current-element-highlight 1))))
 #+END_SRC
-
+** PHP
+#+BEGIN_SRC emacs-lisp
+  (use-package php-mode
+    :ensure t
+    :hook ((php-mode . my-php-hook))
+    :config
+    (defun my-php-hook ()
+      (smartparens-mode t)))
+#+END_SRC
 * Look and Feel
 ** Theme
 Theme I'm currently using
