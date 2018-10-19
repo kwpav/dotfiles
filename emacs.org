@@ -30,7 +30,8 @@ Setup the package repositories and startup use-package.
 * TODO Things to do
 An on-going list of things I want to change
 
-- [ ]fix evil escape keys
+- [X] fix evil escape keys
+  - using the =evil-collection= package
 - [ ] make org prettier?
   + [ ] bullets?
 - yasnippet: [0/2]
@@ -73,6 +74,7 @@ To set up custom keys, I use a combination of:
 - =general= - define leader keys, e.g. press <SPACE> and a key to perform an action (if in evil's normal or visual modes)
 - =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing <SPACE>
 - =hydra= - create a "mode" (similar to how i3 does resize mode) for repeated actions
+- =keyfreq= - use =keyfreq-show= to get a list of most use commands and then make keybindings/hydras out of them
 *** general
 Generic bindings (for all modes) appear after pressing <SPACE>
 
@@ -195,27 +197,29 @@ Mode specific bindings appear after pressing <SPACE m>
       ("r" (text-scale-set 0) "reset")
       ("0" (text-scale-set 0) :bind nil :exit t)))
 #+END_SRC
+*** keyfreq
+#+BEGIN_SRC emacs-lisp
+  (use-package keyfreq
+    :ensure t
+    :config
+    (keyfreq-autosave-mode 1))
+#+END_SRC
 ** evil mode
 Because I like like my modal editing. 
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil
+    :init
+    (setq evil-want-keybinding nil) ;; evil-collection assumes this
     :ensure t
     :config
     (evil-mode 1))
-#+END_SRC
 
-*** TODO fix up the esc keys
-#+BEGIN_SRC emacs-lisp
-  ;;; esc quits
-  ;(define-key evil-normal-state-map [escape] 'keyboard-quit)
-  ;(define-key evil-visual-state-map [escape] 'keyboard-quit)
-  ;(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-  ;(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-  ;(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-  ;(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-  ;(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-  ;;;;;;;;;;;;;;;;;
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
 #+END_SRC
 
 ** org mode
