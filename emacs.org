@@ -121,7 +121,16 @@ Mode specific bindings appear after pressing <SPACE m>
       ;; bookmarks
       "rm" 'bookmark-set
       "rb" 'bookmark-jump
-      "rl" 'bookmark-bmenu-list)
+      "rl" 'bookmark-bmenu-list
+      ;; dumb-jump
+      "jgg" 'dumb-jump-go
+      "jgc" 'dumb-jump-go-current-window
+      "jgo" 'dumb-jump-go-other-window
+      "jgp" 'dumb-jump-go-prefer-external
+      "jgP" 'dumb-jump-go-prefer-external-other-window
+      "jgp" 'dumb-jump-go-prompt
+      "jb" 'dumb-jump-back
+      "jq" 'dumb-jump-quick-look)
 
     (my-leader-def
       :keymaps 'visual
@@ -181,6 +190,8 @@ Mode specific bindings appear after pressing <SPACE m>
     (which-key-add-key-based-replacements "SPC b" "buffers")
     (which-key-add-key-based-replacements "SPC r" "bookmarks")
     (which-key-add-key-based-replacements "SPC t" "terminal")
+    (which-key-add-key-based-replacements "SPC j" "dumb-jump")
+    (which-key-add-key-based-replacements "SPC jg" "go")
     (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
     (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
     (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC m e" "eval"))
@@ -586,6 +597,12 @@ autocomplete for brackets
     (add-hook 'python-mode-hook (function (lambda ()
                                             (smartparens-mode t)))))
 #+END_SRC
+** dumb-jump
+Get some nice go-to-definition functionality
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    :ensure t)
+#+END_SRC
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
@@ -973,7 +990,9 @@ Theme I'm currently using
   (use-package doom-themes
     :ensure t
     :config
-    (load-theme 'doom-city-lights))
+    (load-theme 'doom-city-lights)
+    (doom-themes-treemacs-config)
+    (doom-themes-org-config))
   #+END_SRC
 
 Some dark themes I Like
@@ -1073,7 +1092,11 @@ From https://www.emacswiki.org/emacs/LineNumbers
   (use-package doom-modeline
         :ensure t
         :defer t
-        :hook (after-init . doom-modeline-init))
+        :hook (after-init . my-doom-modeline-hook)
+        :config
+        (defun my-doom-modeline-hook ()
+          (column-number-mode)
+          (doom-modeline-init)))
 #+END_SRC
 *** spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
