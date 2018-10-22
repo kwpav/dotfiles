@@ -42,6 +42,15 @@ An on-going list of things I want to change
 - [ ] fix =eslint= for lsp if possible
   + eslint works fine without the =lsp-javascript-typescript=
 
+* System Specific
+** OSX
+Paths need to be explicitly defined for some reason in OSX.
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+    (setq exec-path (append exec-path '("/usr/local/bin"))))
+#+END_SRC
+
 * Emacs
 ** paradox
 Nicer package management
@@ -1211,13 +1220,4 @@ spacemacs modeline settings
   ;;                      (t default-color))))
   ;;      (set-face-background 'mode-line (car color))
   ;;      (set-face-foreground 'mode-line (cdr color))))))
-#+END_SRC
-
-* System Specific
-** OSX
-Paths need to be explicitly defined for some reason in OSX.
-#+BEGIN_SRC emacs-lisp
-  (when (eq system-type 'darwin)
-    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-    (setq exec-path (append exec-path '("/usr/local/bin"))))
 #+END_SRC
