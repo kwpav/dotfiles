@@ -343,7 +343,8 @@ Install the official snippets
 Replacing neotree with treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
-    :ensure t)
+    :ensure t
+    :bind ([f8] . treemacs))
 
   (use-package treemacs-evil
     :ensure t)
@@ -371,7 +372,7 @@ Emacs version of NERDTree, press <f8> to open.
     :init
     (setq neo-theme (if (display-graphic-p) 'icons 'ascii))
     :config
-    (global-set-key [f8] 'neotree-toggle)
+    ;; (global-set-key [f8] 'neotree-toggle)
     (add-hook 'neotree-mode-hook
               (lambda ()
                 (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
