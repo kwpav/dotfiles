@@ -77,9 +77,10 @@ Update buffers automatically when underlying files are changed externally.
   (global-auto-revert-mode t)
 #+END_SRC
 
-Use =org-mode= for the scratch buffer.
+Use =org-mode= for the scratch buffer and remove the default message.
 #+BEGIN_SRC emacs-lisp
-  (setq initial-major-mode 'org-mode)
+  (setq initial-major-mode 'org-mode
+        initial-scratch-message nil)
 #+END_SRC
 
 Better mouse scrolling - the default scrolling is too quick.
@@ -273,6 +274,41 @@ Mode specific bindings appear after pressing <SPACE m>
     :config
     (keyfreq-autosave-mode 1))
 #+END_SRC
+** Vim Emulation
+Evil mode is vim in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil) ;; evil-collection assumes this
+    :ensure t
+    :config
+    (evil-mode 1))
+#+END_SRC
+
+Use evil bindings in various modes.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+END_SRC
+
+surround.vim emulation.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+Show tildes in the fringe on empty lines.
+#+BEGIN_SRC emacs-lisp
+  (use-package vi-tilde-fringe
+    :ensure t
+    :config
+    (global-vi-tilde-fringe-mode 1))
+#+END_SRC
 ** paradox
 Nicer package management
 #+BEGIN_SRC emacs-lisp
@@ -293,23 +329,6 @@ Load with a nicer looking dashboard than default
     (add-hook 'dashboard-mode-hook (lambda () (turn-on-page-break-lines-mode)))
     :config
     (dashboard-setup-startup-hook))
-#+END_SRC
-** evil mode
-Because I like like my modal editing. 
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :init
-    (setq evil-want-keybinding nil) ;; evil-collection assumes this
-    :ensure t
-    :config
-    (evil-mode 1))
-
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :config
-    (evil-collection-init))
 #+END_SRC
 
 ** org mode
