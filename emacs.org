@@ -42,43 +42,92 @@ An on-going list of things I want to change
 - [ ] fix =eslint= for lsp if possible
   + eslint works fine without the =lsp-javascript-typescript=
 
-* System Specific
-** OSX
+* Emacs
+Things that modify how Emacs works and/or add some functionality to Emacs.
+** System Specific
+*** OSX
 Paths need to be explicitly defined for some reason in OSX.
 #+BEGIN_SRC emacs-lisp
-  (when (eq system-type 'darwin)
-    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-    (setq exec-path (append exec-path '("/usr/local/bin"))))
+  ;; (when (eq system-type 'darwin)
+  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
+
+  (when (memq window-system '(mac))
+    (use-package exec-path-from-shell
+      :ensure t)
+    (exec-path-from-shell-initialize))
+#+END_SRC
+** Saner Defaults
+Modify some of the default settings.
+
+Change "yes or no" to "y or n"
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
-* Emacs
-** paradox
-Nicer package management
+Don't create any extra files.
 #+BEGIN_SRC emacs-lisp
-  (use-package paradox
-    :ensure t)
+  (setq make-backup-files nil ; stop creating backup~ files
+        auto-save-default nil ; stop creating #autosave# files
+        create-lockfiles nil) ; stop creating .# files
 #+END_SRC
-** better defaults
+
+Update buffers automatically when underlying files are changed externally.
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode t)
+#+END_SRC
+
+Use =org-mode= for the scratch buffer.
+#+BEGIN_SRC emacs-lisp
+  (setq initial-major-mode 'org-mode)
+#+END_SRC
+
+Better mouse scrolling - the default scrolling is too quick.
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-margin 10
+        scroll-step 1
+        next-line-add-newlines nil
+        scroll-conservatively 10000
+        scroll-preserve-screen-position 1
+        mouse-wheel-follow-mouse 't
+        mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+#+END_SRC
+
+A package that provides some good defaults, e.g. using the X clipboard for yanking
 #+BEGIN_SRC emacs-lisp
   (use-package better-defaults
     :ensure t)
 #+END_SRC
-** dashboard
-Load with a nicer looking dashboard than default
+** Custom Functions
+*** what-minor-mode
+list minor modes
+- =my-active-minor-modes= is from: https://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
+- =my/active-minor-modes= is =doom/what-minor-mode= from https://github.com/hlissner/doom-emacs
+  + it uses =my-active-minor-modes= for the list of minor modes to display
 #+BEGIN_SRC emacs-lisp
-  (use-package dashboard
-    :ensure t
-    :init
-    (setq dashboard-startup-banner 'logo)
-    (setq dashboard-items '((recents . 5)
-                            (bookmarks . 5)
-                            (projects . 5)
-                            (agenda . 5)))
-    (add-hook 'dashboard-mode-hook (lambda () (turn-on-page-break-lines-mode)))
-    :config
-    (dashboard-setup-startup-hook))
+  (defun my-active-minor-modes ()
+    "Get a list of active minor-mode symbols."
+    (delq nil
+          (mapcar
+           (lambda (x)
+             (let ((car-x (car x)))
+               (when (and (symbolp car-x) (symbol-value car-x))
+                 x)))
+           minor-mode-alist)))
+
+  (defun my/what-minor-mode (mode)
+    "Get information on an active minor mode. Use `describe-minor-mode' for a
+  selection of all minor-modes, active or not."
+    (interactive
+     (list (completing-read "Minor mode: "
+                            (my-active-minor-modes))))
+    (describe-minor-mode-from-symbol
+     (cl-typecase mode
+       (string (intern mode))
+       (symbol mode)
+       (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
 #+END_SRC
-** keys
+** Custom Keys
 To set up custom keys, I use a combination of:
 - =general= - define leader keys, e.g. press <SPACE> and a key to perform an action (if in evil's normal or visual modes)
 - =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing <SPACE>
@@ -224,6 +273,27 @@ Mode specific bindings appear after pressing <SPACE m>
     :config
     (keyfreq-autosave-mode 1))
 #+END_SRC
+** paradox
+Nicer package management
+#+BEGIN_SRC emacs-lisp
+  (use-package paradox
+    :ensure t)
+#+END_SRC
+** dashboard
+Load with a nicer looking dashboard than default
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :init
+    (setq dashboard-startup-banner 'logo)
+    (setq dashboard-items '((recents . 5)
+                            (bookmarks . 5)
+                            (projects . 5)
+                            (agenda . 5)))
+    (add-hook 'dashboard-mode-hook (lambda () (turn-on-page-break-lines-mode)))
+    :config
+    (dashboard-setup-startup-hook))
+#+END_SRC
 ** evil mode
 Because I like like my modal editing. 
 
@@ -312,7 +382,6 @@ Needed by =nikola=
     :ensure t)
   ;(setq org-src-fontify-natively t)
 #+END_SRC
-
 ** yasnippet
 Use snippets in specific modes
 #+BEGIN_SRC emacs-lisp
@@ -470,11 +539,6 @@ Replace emacs search and evil search with swiper
     :config
     (counsel-projectile-mode))
 #+END_SRC
-** random things
-Change "yes or no" to "y or n"
-#+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
 
 ** rainbow delimiters
 Add rainbow delimiters in all programming language modes
@@ -537,36 +601,8 @@ set up =ox-hugo= to use =org-mode= in hugo!
     :ensure t            ;Auto-install the package from Melpa (optional)
     :after ox)
 #+END_SRC
-** my custom functions
-*** what-minor-mode
-list minor modes
-- =my-active-minor-modes= is from: https://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
-- =my/active-minor-modes= is =doom/what-minor-mode= from https://github.com/hlissner/doom-emacs
-  + it uses =my-active-minor-modes= for the list of minor modes to display
-#+BEGIN_SRC emacs-lisp
-  (defun my-active-minor-modes ()
-    "Get a list of active minor-mode symbols."
-    (delq nil
-          (mapcar
-           (lambda (x)
-             (let ((car-x (car x)))
-               (when (and (symbolp car-x) (symbol-value car-x))
-                 x)))
-           minor-mode-alist)))
-
-  (defun my/what-minor-mode (mode)
-    "Get information on an active minor mode. Use `describe-minor-mode' for a
-  selection of all minor-modes, active or not."
-    (interactive
-     (list (completing-read "Minor mode: "
-                            (my-active-minor-modes))))
-    (describe-minor-mode-from-symbol
-     (cl-typecase mode
-       (string (intern mode))
-       (symbol mode)
-       (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
-#+END_SRC
 * Languages
+Configuration for programming languages
 ** language server protocol
 Setup for Microsoft's (GASP!) Language Server Protocol.
 
