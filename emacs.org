@@ -52,7 +52,7 @@ Paths need to be explicitly defined for some reason in OSX.
   ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
   ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
 
-  (when (memq window-system '(mac))
+  (when (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :ensure t)
     (exec-path-from-shell-initialize))
@@ -666,7 +666,10 @@ autocomplete for brackets
 Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
-    :ensure t)
+    :ensure t
+    :config
+    (setq dumb-jump-selector 'ivy)
+    (setq dumb-jump-force-searcher 'rg))
 #+END_SRC
 ** flycheck
 #+BEGIN_SRC emacs-lisp
