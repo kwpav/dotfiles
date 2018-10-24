@@ -667,9 +667,24 @@ Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
     :ensure t
+    :bind (("M-g o" . dumb-jump-go-other-window)
+           ("M-g j" . dumb-jump-go)
+           ("M-g i" . dumb-jump-go-prompt)
+           ("M-g x" . dumb-jump-go-prefer-external)
+           ("M-g z" . dumb-jump-go-prefer-external-other-window)
+           ("<f12>" . dumb-jump-hydra/body))
     :config
     (setq dumb-jump-selector 'ivy)
-    (setq dumb-jump-force-searcher 'rg))
+    (setq dumb-jump-force-searcher 'rg)
+    (defhydra dumb-jump-hydra (:color blue :columns 3)
+      "Dumb Jump"
+      ("j" dumb-jump-go "Go")
+      ("o" dumb-jump-go-other-window "Other window")
+      ("e" dumb-jump-go-prefer-external "Go external")
+      ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+      ("i" dumb-jump-go-prompt "Prompt")
+      ("l" dumb-jump-quick-look "Quick look")
+      ("b" dumb-jump-back "Back")))
 #+END_SRC
 ** flycheck
 #+BEGIN_SRC emacs-lisp
@@ -1058,7 +1073,8 @@ Theme I'm currently using
   (use-package doom-themes
     :ensure t
     :config
-    (load-theme 'doom-city-lights)
+    ;; (load-theme 'doom-city-lights)
+    (load-theme 'doom-one)
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
   #+END_SRC
