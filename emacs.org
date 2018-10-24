@@ -1064,7 +1064,9 @@ Set up web mode for html and css files
     :hook ((php-mode . my-php-hook))
     :config
     (defun my-php-hook ()
-      (smartparens-mode t)))
+      (smartparens-mode t))
+    (custom-set-variables
+     '(flycheck-phpcs-standard "WellspringCodingStandard")))
 #+END_SRC
 * Look and Feel
 ** Theme
@@ -1074,7 +1076,7 @@ Theme I'm currently using
     :ensure t
     :config
     ;; (load-theme 'doom-city-lights)
-    (load-theme 'doom-one)
+    (load-theme 'doom-dracula)
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
   #+END_SRC
