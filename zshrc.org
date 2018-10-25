@@ -1,72 +1,116 @@
 #+TITLE: ~/.zshrc
-* Antigen
-Using [[http://github.com/zsh-users/antigen][Antigen]] to handle plugins.
+* History
 
-** Setup
-First we load antigen
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  source ~/.zsh/antigen/antigen.zsh
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+# save each command's beginning timestamp and the duration to the history file
+setopt extended_history
+
+zstyle :compinstall filename '/home/kevin/.zshrc'
+
+# autocompletion of command line switches for aliases
+setopt COMPLETE_ALIASES
+
+# in order to use #, ~ and ^ for filename generation grep word
+# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
+# don't forget to quote '^', '~' and '#'!
+setopt extended_glob
+
+# display PID when suspending processes as well
+setopt longlistjobs
 #+END_SRC
-Then load some of my custom aliases
+* Prompt
+Custom prompt with snippets of code taken from various places.
+
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  source ~/.config/zsh/alias.zsh
-  source ~/.config/zsh/ssh.zsh
+  # If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
+  setopt prompt_subst
+
+  autoload -Uz compinit promptinit vcs_info
+  compinit
+  promptinit
+
+  # from https://stackoverflow.com/a/12935606
+  # mimics git status -s
+  # first M is staged
+  # second M is unstaged
+  # question marks are untracked
+  zstyle ':vcs_info:*' stagedstr 'M' 
+  zstyle ':vcs_info:*' unstagedstr 'M' 
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
+  zstyle ':vcs_info:*' formats \
+    '%F{5}[%F{4}%b%F{5}] %F{2}%c%F{3}%u%f'
+  zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+  zstyle ':vcs_info:*' enable git 
+  +vi-git-untracked() {
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+    [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
+    hook_com[unstaged]+='%F{1}??%f'
+  fi
+  }
+
+  precmd() {
+      vcs_info
+  }
+
+  # from robbyrussel
+  # show a green error if the exit code is 0, otherwise show a red arrow
+  ret_status="%(?:%F{green}➜%f:%F{red}➜%f)"
+
+  PROMPT='${ret_status} %B%F{cyan}%6~%f%b > '
+  #RPROMPT='[%F{yellow}%?%f]'
+  #RPROMPT="%B%T%b $(curtime) $(vcs_info_wrapper)"
+  RPROMPT='${vcs_info_msg_0_}'
 #+END_SRC
 
-Use the core =oh-my-zsh= library for themes and other plugins
+* Completion
+Autocompletion of privileged environments in privileged commands, e.g. sudo
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  antigen use oh-my-zsh
+zstyle ':completion::complete:*' gain-privileges 1
+zstyle ':completion:*' menu select
 #+END_SRC
 
-** Plugins
-Now we load some plugins
+* Aliases
+Start an =ssh-agent= that is useable by all programs in the X session.
+Without this, Emacs won't be able to access the =ssh-agent= if its started on the terminal.
+(Alternatively, you could fix this by creating a systemctl service, but that wasn't working for me.)
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-
-  antigen bundle git
-  #antigen bundle zsh-users/zsh-syntax-highlighting
-  antigen bundle zsh-users/zsh-completions
-  antigen bundle command-not-found
-
-  antigen bundle python
-
-  # theme
-  #antigen theme agnoster
-  antigen theme bureau
-#+END_SRC
-
-** Apply
-Finally we can apply all the antigen settings
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  antigen apply
+  alias sx='ssh-agent startx'
 #+END_SRC
 
 * Paths
-Set the executable paths
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  export PATH="$HOME/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+  export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
   export npm_config_prefix=~/.node_modules
-
-  # export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-
-  #Setting the GEM_PATH and GEM_HOME variables may not be necessary, check 'gem env' output to verify whether both variables already exist
-
-  # GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
-  # GEM_PATH=$GEM_HOME
-  # export PATH=$PATH:$GEM_HOME/bin
 #+END_SRC
 
-Set default programs
+* Plugins
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  export EDITOR=emc
+  # autosuggestions
+  # installed with pacman
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+  # syntax highlighting
+  # installed with pacman
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+  # history search
+  # installed with pacman
+  source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 #+END_SRC
 
-Setup =python-virtualenvwrapper=
+* Fixes
+** Delete Key
+The delete key by default inserts a ~, this makes it act like it should
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  export WORKON_HOME=~/.virtualenvs
-  source /usr/bin/virtualenvwrapper.sh
+  # fix delete key
+  bindkey "^[[3~" delete-char
 #+END_SRC
 
-* Tmux Workaround
+** Tmux Workaround
 Workaround for handling TERM variable in multiple tmux sessions properly from http://sourceforge.net/p/tmux/mailman/message/32751663/ by Nicholas Marriott
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
@@ -78,10 +122,4 @@ Workaround for handling TERM variable in multiple tmux sessions properly from ht
                           TERM=screen
           esac
   fi
-#+END_SRC
-
-* Extra
-Print a quote whenever I start a new session
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  command fortune
 #+END_SRC
