@@ -29,12 +29,13 @@ promptinit
 # first M is staged
 # second M is unstaged
 # question marks are untracked
+# symbols:  ±  ➦ ✘ ⚡ ⚙
 zstyle ':vcs_info:*' stagedstr 'M' 
 zstyle ':vcs_info:*' unstagedstr 'M' 
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
 zstyle ':vcs_info:*' formats \
-  '%F{5}[%F{4}%b%F{5}] %F{2}%c%F{3}%u%f'
+  '%F{242}[%b] %F{2}%c%F{3}%u'
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 zstyle ':vcs_info:*' enable git 
 +vi-git-untracked() {
@@ -50,17 +51,23 @@ precmd() {
 
 # from robbyrussel
 # show a green error if the exit code is 0, otherwise show a red arrow
-ret_status="%(?:%F{green}➜%f:%F{red}➜%f)"
+# alternate arrows: ➜
+ret_status="%(?:%F{green}❯%f:%F{red}❯%f)"
 
-PROMPT='${ret_status} %B%F{cyan}%6~%f%b > '
-#RPROMPT='[%F{yellow}%?%f]'
-#RPROMPT="%B%T%b $(curtime) $(vcs_info_wrapper)"
+PROMPT=' ${ret_status} %B%F{cyan}%6~%f%b  '
 RPROMPT='${vcs_info_msg_0_}'
 
 zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' menu select
 
 alias sx='ssh-agent startx'
+
+alias pac='sudo pacman'
+alias pacs='pac -S'
+alias pacu='pac -Syu'
+alias pacy='pac -Sy'
+alias pacss='pac -Ss'
+alias pacq='pac -Qs'
 
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
 export npm_config_prefix=~/.node_modules
