@@ -309,6 +309,14 @@ Show tildes in the fringe on empty lines.
     :config
     (global-vi-tilde-fringe-mode 1))
 #+END_SRC
+
+Use the normal emacs state instead of evil's insert state. This allows you to use emacs keybindings while in insert mode.
+
+from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
+#+BEGIN_SRC emacs-lisp
+  (setq evil-insert-state-map (make-sparse-keymap))
+  (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
+#+END_SRC
 ** paradox
 Nicer package management
 #+BEGIN_SRC emacs-lisp
@@ -1074,9 +1082,12 @@ Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   (use-package doom-themes
     :ensure t
+    :init
+    (setq doom-themes-enable-bold t
+          doom-themes-enable-italic t)
     :config
     ;; (load-theme 'doom-city-lights)
-    (load-theme 'doom-dracula)
+    (load-theme 'doom-dracula t)
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
   #+END_SRC
