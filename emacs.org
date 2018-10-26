@@ -181,6 +181,8 @@ Mode specific bindings appear after pressing <SPACE m>
       "rm" 'bookmark-set
       "rb" 'bookmark-jump
       "rl" 'bookmark-bmenu-list
+      ;; agenda
+      "a" 'org-agenda
       ;; dumb-jump
       "jgg" 'dumb-jump-go
       "jgc" 'dumb-jump-go-current-window
