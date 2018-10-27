@@ -29,7 +29,6 @@ promptinit
 # first M is staged
 # second M is unstaged
 # question marks are untracked
-# symbols:  ±  ➦ ✘ ⚡ ⚙
 zstyle ':vcs_info:*' stagedstr 'M' 
 zstyle ':vcs_info:*' unstagedstr 'M' 
 zstyle ':vcs_info:*' check-for-changes true
@@ -51,10 +50,10 @@ precmd() {
 
 # from robbyrussel
 # show a green error if the exit code is 0, otherwise show a red arrow
-# alternate arrows: ➜
-ret_status="%(?:%F{green}❯%f:%F{red}❯%f)"
+ret_status="%(?:%F{green}λ%f:%F{red}λ%f)"
+newline=$'\n'
 
-PROMPT=' ${ret_status} %B%F{cyan}%6~%f%b  '
+PROMPT='${newline}%B%F{cyan}%6~%f ${ret_status}%b '
 RPROMPT='${vcs_info_msg_0_}'
 
 zstyle ':completion::complete:*' gain-privileges 1
