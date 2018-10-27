@@ -6,16 +6,34 @@ setopt extended_history
 
 zstyle :compinstall filename '/home/kevin/.zshrc'
 
-# autocompletion of command line switches for aliases
-setopt COMPLETE_ALIASES
+# display PID when suspending processes as well
+setopt longlistjobs
 
 # in order to use #, ~ and ^ for filename generation grep word
 # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
 # don't forget to quote '^', '~' and '#'!
 setopt extended_glob
 
-# display PID when suspending processes as well
-setopt longlistjobs
+# autocompletion of command line switches for aliases
+setopt COMPLETE_ALIASES
+
+zstyle ':completion::complete:*' gain-privileges 1
+zstyle ':completion:*' menu select
+
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
+export npm_config_prefix=~/.node_modules
+
+# autosuggestions
+# installed with pacman
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# syntax highlighting
+# installed with pacman
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# history search
+# installed with pacman
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
 setopt prompt_subst
@@ -24,11 +42,6 @@ autoload -Uz compinit promptinit vcs_info
 compinit
 promptinit
 
-# from https://stackoverflow.com/a/12935606
-# mimics git status -s
-# first M is staged
-# second M is unstaged
-# question marks are untracked
 zstyle ':vcs_info:*' stagedstr 'M' 
 zstyle ':vcs_info:*' unstagedstr 'M' 
 zstyle ':vcs_info:*' check-for-changes true
@@ -56,32 +69,12 @@ newline=$'\n'
 PROMPT='${newline}%B%F{cyan}%6~%f ${ret_status}%b '
 RPROMPT='${vcs_info_msg_0_}'
 
-zstyle ':completion::complete:*' gain-privileges 1
-zstyle ':completion:*' menu select
-
-alias sx='ssh-agent startx'
-
 alias pac='sudo pacman'
 alias pacs='pac -S'
 alias pacu='pac -Syu'
 alias pacy='pac -Sy'
 alias pacss='pac -Ss'
 alias pacq='pac -Qs'
-
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
-export npm_config_prefix=~/.node_modules
-
-# autosuggestions
-# installed with pacman
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# syntax highlighting
-# installed with pacman
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# history search
-# installed with pacman
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # fix delete key
 bindkey "^[[3~" delete-char

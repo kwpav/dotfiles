@@ -1,6 +1,6 @@
 #+TITLE: ~/.zshrc
 * History
-
+Set up the history file.
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -10,86 +10,25 @@ setopt extended_history
 
 zstyle :compinstall filename '/home/kevin/.zshrc'
 
-# autocompletion of command line switches for aliases
-setopt COMPLETE_ALIASES
-
-# in order to use #, ~ and ^ for filename generation grep word
-# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
-# don't forget to quote '^', '~' and '#'!
-setopt extended_glob
-
 # display PID when suspending processes as well
 setopt longlistjobs
 #+END_SRC
-* Prompt
-Custom prompt with snippets of code taken from various places.
-
-symbols:  ±  ➦ ✘ ⚡ ⚙ λ ➜ ❯
-
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  # If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
-  setopt prompt_subst
-
-  autoload -Uz compinit promptinit vcs_info
-  compinit
-  promptinit
-
-  # from https://stackoverflow.com/a/12935606
-  # mimics git status -s
-  # first M is staged
-  # second M is unstaged
-  # question marks are untracked
-  zstyle ':vcs_info:*' stagedstr 'M' 
-  zstyle ':vcs_info:*' unstagedstr 'M' 
-  zstyle ':vcs_info:*' check-for-changes true
-  zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
-  zstyle ':vcs_info:*' formats \
-    '%F{242}[%b] %F{2}%c%F{3}%u'
-  zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-  zstyle ':vcs_info:*' enable git 
-  +vi-git-untracked() {
-    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-    [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
-    hook_com[unstaged]+='%F{1}??%f'
-  fi
-  }
-
-  precmd() {
-      vcs_info
-  }
-
-  # from robbyrussel
-  # show a green error if the exit code is 0, otherwise show a red arrow
-  ret_status="%(?:%F{green}λ%f:%F{red}λ%f)"
-  newline=$'\n'
-
-  PROMPT='${newline}%B%F{cyan}%6~%f ${ret_status}%b '
-  RPROMPT='${vcs_info_msg_0_}'
-#+END_SRC
 
 * Completion
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  # in order to use #, ~ and ^ for filename generation grep word
+  # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
+  # don't forget to quote '^', '~' and '#'!
+  setopt extended_glob
+
+  # autocompletion of command line switches for aliases
+  setopt COMPLETE_ALIASES
+#+END_SRC
+
 Autocompletion of privileged environments in privileged commands, e.g. sudo
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-zstyle ':completion::complete:*' gain-privileges 1
-zstyle ':completion:*' menu select
-#+END_SRC
-
-* Aliases
-Start an =ssh-agent= that is useable by all programs in the X session.
-Without this, Emacs won't be able to access the =ssh-agent= if its started on the terminal.
-(Alternatively, you could fix this by creating a systemctl service, but that wasn't working for me.)
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  alias sx='ssh-agent startx'
-#+END_SRC
-
-Pacman aliases
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  alias pac='sudo pacman'
-  alias pacs='pac -S'
-  alias pacu='pac -Syu'
-  alias pacy='pac -Sy'
-  alias pacss='pac -Ss'
-  alias pacq='pac -Qs'
+  zstyle ':completion::complete:*' gain-privileges 1
+  zstyle ':completion:*' menu select
 #+END_SRC
 
 * Paths
@@ -111,6 +50,68 @@ Pacman aliases
   # history search
   # installed with pacman
   source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+#+END_SRC
+* Prompt
+Custom prompt with snippets of code taken from various places.
+symbols:  ±  ➦ ✘ ⚡ ⚙ λ ➜ ❯
+
+The initial setup.
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  # If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
+  setopt prompt_subst
+
+  autoload -Uz compinit promptinit vcs_info
+  compinit
+  promptinit
+#+END_SRC
+
+Set up how git is displayed.
+- from https://stackoverflow.com/a/12935606
+  - mimics git status -s
+  - first M is staged
+  - second M is unstaged
+  - question marks are untracked
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  zstyle ':vcs_info:*' stagedstr 'M' 
+  zstyle ':vcs_info:*' unstagedstr 'M' 
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
+  zstyle ':vcs_info:*' formats \
+    '%F{242}[%b] %F{2}%c%F{3}%u'
+  zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+  zstyle ':vcs_info:*' enable git 
+  +vi-git-untracked() {
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+    [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
+    hook_com[unstaged]+='%F{1}??%f'
+  fi
+  }
+
+  precmd() {
+      vcs_info
+  }
+#+END_SRC
+
+Set up the actual prompt.
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  # from robbyrussel
+  # show a green error if the exit code is 0, otherwise show a red arrow
+  ret_status="%(?:%F{green}λ%f:%F{red}λ%f)"
+  newline=$'\n'
+
+  PROMPT='${newline}%B%F{cyan}%6~%f ${ret_status}%b '
+  RPROMPT='${vcs_info_msg_0_}'
+#+END_SRC
+
+* Aliases
+Pacman aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias pac='sudo pacman'
+  alias pacs='pac -S'
+  alias pacu='pac -Syu'
+  alias pacy='pac -Sy'
+  alias pacss='pac -Ss'
+  alias pacq='pac -Qs'
 #+END_SRC
 
 * Fixes
