@@ -34,6 +34,8 @@ Autocompletion of privileged environments in privileged commands, e.g. sudo
   zstyle ':completion:*' menu select
 #+END_SRC
 
+some things from zsh-lovers https://grml.org/zsh/zsh-lovers.html
+
 Fuzzy matching of completions for when you mistype them:
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   zstyle ':completion:*' completer _complete _match _approximate
@@ -85,16 +87,17 @@ you can avoid having to complete at all in many cases, but if you do, you might 
 #+END_SRC
 * Prompt
 Custom prompt with snippets of code taken from various places.
-symbols:  ±  ➦ ✘ ⚡ ⚙ λ ➜ ❯ ●
 
 The initial setup.
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   autoload -Uz promptinit vcs_info
   promptinit
+#+END_SRC
 
-  # If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
+If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   setopt prompt_subst
-  #+END_SRC
+#+END_SRC
 
 Set up how git is displayed.
 - based off https://stackoverflow.com/a/12935606
@@ -102,7 +105,7 @@ Set up how git is displayed.
   - yellow dot is unstaged
   - red dot is untracked
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  zstyle ':vcs_info:*' stagedstr '●'
+  zstyle ':vcs_info:*' stagedstr '✚'
   zstyle ':vcs_info:*' unstagedstr '●'
   zstyle ':vcs_info:*' check-for-changes true
   zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
@@ -144,24 +147,22 @@ Pacman aliases
   alias pacq='pac -Qs'
 #+END_SRC
 
+List aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias ll='ls -l'
+  alias lla='ls -la'
+#+END_SRC
+
+Git aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias g='git'
+  alias gs='git status'
+  alias gss='git status -s'
+#+END_SRC
+
 * Fixes
 ** Delete Key
 The delete key by default inserts a ~, this makes it act like it should
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  # fix delete key
   bindkey "^[[3~" delete-char
-#+END_SRC
-
-** Tmux Workaround
-Workaround for handling TERM variable in multiple tmux sessions properly from http://sourceforge.net/p/tmux/mailman/message/32751663/ by Nicholas Marriott
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
-          case $(tmux showenv TERM 2>/dev/null) in
-                  ,*256color) ;&
-                  TERM=rxvt-unicode-256color)
-                          TERM=screen-256color ;;
-                  ,*)
-                          TERM=screen
-          esac
-  fi
 #+END_SRC

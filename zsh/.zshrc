@@ -55,10 +55,9 @@ source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring
 autoload -Uz promptinit vcs_info
 promptinit
 
-# If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
 setopt prompt_subst
 
-zstyle ':vcs_info:*' stagedstr '●'
+zstyle ':vcs_info:*' stagedstr '✚'
 zstyle ':vcs_info:*' unstagedstr '●'
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
@@ -92,15 +91,11 @@ alias pacy='pac -Sy'
 alias pacss='pac -Ss'
 alias pacq='pac -Qs'
 
-# fix delete key
-bindkey "^[[3~" delete-char
+alias ll='ls -l'
+alias lla='ls -la'
 
-if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
-        case $(tmux showenv TERM 2>/dev/null) in
-                *256color) ;&
-                TERM=rxvt-unicode-256color)
-                        TERM=screen-256color ;;
-                *)
-                        TERM=screen
-        esac
-fi
+alias g='git'
+alias gs='git status'
+alias gss='git status -s'
+
+bindkey "^[[3~" delete-char
