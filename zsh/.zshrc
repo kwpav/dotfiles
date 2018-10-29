@@ -1,49 +1,100 @@
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+# save each command's beginning timestamp and the duration to the history file
+setopt extended_history
 
-source ~/.zsh/antigen/antigen.zsh
+zstyle :compinstall filename '/home/kevin/.zshrc'
 
-source ~/.config/zsh/alias.zsh
-source ~/.config/zsh/ssh.zsh
+# display PID when suspending processes as well
+setopt longlistjobs
 
-antigen use oh-my-zsh
+autoload -Uz compinit
+compinit
 
-antigen bundle git
-#antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-completions
-antigen bundle command-not-found
+# in order to use #, ~ and ^ for filename generation grep word
+# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
+# don't forget to quote '^', '~' and '#'!
+setopt extended_glob
 
-antigen bundle python
+# autocompletion of command line switches for aliases
+setopt COMPLETE_ALIASES
 
-# theme
-#antigen theme agnoster
-antigen theme bureau
+zstyle ':completion::complete:*' gain-privileges 1
+zstyle ':completion:*' menu select
 
-antigen apply
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
 
-export PATH="$HOME/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+zstyle -e ':completion:*:approximate:*' \
+max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
+
+zstyle ':completion:*:functions' ignored-patterns '_*'
+
+xdvi() { command xdvi ${*:-*.dvi(om[1])} }
+
+zstyle ':completion:*:*:xdvi:*' menu yes select
+zstyle ':completion:*:*:xdvi:*' file-sort time
+
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
 export npm_config_prefix=~/.node_modules
 
-# export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-
-#Setting the GEM_PATH and GEM_HOME variables may not be necessary, check 'gem env' output to verify whether both variables already exist
-
-# GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
-# GEM_PATH=$GEM_HOME
-# export PATH=$PATH:$GEM_HOME/bin
-
-export EDITOR=emc
-
-export WORKON_HOME=~/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
-
-if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
-        case $(tmux showenv TERM 2>/dev/null) in
-                *256color) ;&
-                TERM=rxvt-unicode-256color)
-                        TERM=screen-256color ;;
-                *)
-                        TERM=screen
-        esac
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 fi
 
-command fortune
-export GPG_TTY=$(tty)
+autoload -Uz promptinit vcs_info
+promptinit
+
+setopt prompt_subst
+
+zstyle ':vcs_info:*' stagedstr '✚'
+zstyle ':vcs_info:*' unstagedstr '●'
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats \
+  '%F{8}[%F{7}±%B%b%%b %F{2}%c%F{3}%u%F{8}]%f' # %%b is bold off
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+zstyle ':vcs_info:*' enable git 
++vi-git-untracked() {
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+  [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
+  hook_com[unstaged]+='%F{1}●%f'
+fi
+}
+
+precmd() {
+    vcs_info
+}
+
+# from robbyrussel
+# show a green error if the exit code is 0, otherwise show a red arrow
+ret_status="%(?:%F{green}λ%f:%F{red}λ%f)"
+newline=$'\n'
+
+PROMPT='${newline}%B%F{cyan}%6~%f ${ret_status}%b '
+RPROMPT='${vcs_info_msg_0_}'
+
+alias pac='sudo pacman'
+alias pacs='pac -S'
+alias pacu='pac -Syu'
+alias pacy='pac -Sy'
+alias pacss='pac -Ss'
+alias pacq='pac -Qs'
+
+alias ll='ls -l'
+alias lla='ls -la'
+
+alias g='git'
+alias gs='git status'
+alias gss='git status -s'
+
+bindkey "^[[3~" delete-char

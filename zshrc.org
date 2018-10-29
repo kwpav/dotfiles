@@ -1,87 +1,168 @@
 #+TITLE: ~/.zshrc
-* Antigen
-Using [[http://github.com/zsh-users/antigen][Antigen]] to handle plugins.
+* History
+Set up the history file.
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  HISTFILE=~/.histfile
+  HISTSIZE=1000
+  SAVEHIST=1000
+  # save each command's beginning timestamp and the duration to the history file
+  setopt extended_history
 
-** Setup
-First we load antigen
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  source ~/.zsh/antigen/antigen.zsh
-#+END_SRC
-Then load some of my custom aliases
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  source ~/.config/zsh/alias.zsh
-  source ~/.config/zsh/ssh.zsh
-#+END_SRC
+  zstyle :compinstall filename '/home/kevin/.zshrc'
 
-Use the core =oh-my-zsh= library for themes and other plugins
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  antigen use oh-my-zsh
+  # display PID when suspending processes as well
+  setopt longlistjobs
 #+END_SRC
 
-** Plugins
-Now we load some plugins
+* Completion
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  autoload -Uz compinit
+  compinit
 
-  antigen bundle git
-  #antigen bundle zsh-users/zsh-syntax-highlighting
-  antigen bundle zsh-users/zsh-completions
-  antigen bundle command-not-found
+  # in order to use #, ~ and ^ for filename generation grep word
+  # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
+  # don't forget to quote '^', '~' and '#'!
+  setopt extended_glob
 
-  antigen bundle python
-
-  # theme
-  #antigen theme agnoster
-  antigen theme bureau
+  # autocompletion of command line switches for aliases
+  setopt COMPLETE_ALIASES
 #+END_SRC
 
-** Apply
-Finally we can apply all the antigen settings
+Autocompletion of privileged environments in privileged commands, e.g. sudo
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  antigen apply
+  zstyle ':completion::complete:*' gain-privileges 1
+  zstyle ':completion:*' menu select
+#+END_SRC
+
+some things from zsh-lovers https://grml.org/zsh/zsh-lovers.html
+
+Fuzzy matching of completions for when you mistype them:
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  zstyle ':completion:*' completer _complete _match _approximate
+  zstyle ':completion:*:match:*' original only
+  zstyle ':completion:*:approximate:*' max-errors 1 numeric
+#+END_SRC
+
+And if you want the number of errors allowed by _approximate to increase with the length of what you have typed so far:
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  zstyle -e ':completion:*:approximate:*' \
+  max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
+#+END_SRC
+
+Ignore completion functions for commands you don’t have:
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  zstyle ':completion:*:functions' ignored-patterns '_*'
+#+END_SRC
+
+With helper functions like:
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  xdvi() { command xdvi ${*:-*.dvi(om[1])} }
+#+END_SRC
+
+you can avoid having to complete at all in many cases, but if you do, you might want to fall into menu selection immediately and to have the words sorted by time:
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  zstyle ':completion:*:*:xdvi:*' menu yes select
+  zstyle ':completion:*:*:xdvi:*' file-sort time
 #+END_SRC
 
 * Paths
-Set the executable paths
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  export PATH="$HOME/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+  export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
   export npm_config_prefix=~/.node_modules
-
-  # export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-
-  #Setting the GEM_PATH and GEM_HOME variables may not be necessary, check 'gem env' output to verify whether both variables already exist
-
-  # GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
-  # GEM_PATH=$GEM_HOME
-  # export PATH=$PATH:$GEM_HOME/bin
 #+END_SRC
 
-Set default programs
+* Plugins
+Plugins installed from =pacman= and =brew= in different locations.
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  export EDITOR=emc
-#+END_SRC
-
-Setup =python-virtualenvwrapper=
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  export WORKON_HOME=~/.virtualenvs
-  source /usr/bin/virtualenvwrapper.sh
-#+END_SRC
-
-* Tmux Workaround
-Workaround for handling TERM variable in multiple tmux sessions properly from http://sourceforge.net/p/tmux/mailman/message/32751663/ by Nicholas Marriott
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  if [[ -n ${TMUX} && -n ${commands[tmux]} ]];then
-          case $(tmux showenv TERM 2>/dev/null) in
-                  ,*256color) ;&
-                  TERM=rxvt-unicode-256color)
-                          TERM=screen-256color ;;
-                  ,*)
-                          TERM=screen
-          esac
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+      source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+      source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+      # Mac OSX
+      source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+      source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
   fi
 #+END_SRC
+* Prompt
+Custom prompt with snippets of code taken from various places.
 
-* Extra
-Print a quote whenever I start a new session
+The initial setup.
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  command fortune
+  autoload -Uz promptinit vcs_info
+  promptinit
+#+END_SRC
+
+If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  setopt prompt_subst
+#+END_SRC
+
+Set up how git is displayed.
+- based off https://stackoverflow.com/a/12935606
+  - green dot is staged
+  - yellow dot is unstaged
+  - red dot is untracked
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  zstyle ':vcs_info:*' stagedstr '✚'
+  zstyle ':vcs_info:*' unstagedstr '●'
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' actionformats '%F{5}[%F{4}%b%F{3}|%F{1}%a%F{5}]%f '
+  zstyle ':vcs_info:*' formats \
+    '%F{8}[%F{7}±%B%b%%b %F{2}%c%F{3}%u%F{8}]%f' # %%b is bold off
+  zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+  zstyle ':vcs_info:*' enable git 
+  +vi-git-untracked() {
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+    [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
+    hook_com[unstaged]+='%F{1}●%f'
+  fi
+  }
+
+  precmd() {
+      vcs_info
+  }
+#+END_SRC
+
+Set up the actual prompt.
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  # from robbyrussel
+  # show a green error if the exit code is 0, otherwise show a red arrow
+  ret_status="%(?:%F{green}λ%f:%F{red}λ%f)"
+  newline=$'\n'
+
+  PROMPT='${newline}%B%F{cyan}%6~%f ${ret_status}%b '
+  RPROMPT='${vcs_info_msg_0_}'
+#+END_SRC
+
+* Aliases
+Pacman aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias pac='sudo pacman'
+  alias pacs='pac -S'
+  alias pacu='pac -Syu'
+  alias pacy='pac -Sy'
+  alias pacss='pac -Ss'
+  alias pacq='pac -Qs'
+#+END_SRC
+
+List aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias ll='ls -l'
+  alias lla='ls -la'
+#+END_SRC
+
+Git aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias g='git'
+  alias gs='git status'
+  alias gss='git status -s'
+#+END_SRC
+
+* Fixes
+** Delete Key
+The delete key by default inserts a ~, this makes it act like it should
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  bindkey "^[[3~" delete-char
 #+END_SRC
