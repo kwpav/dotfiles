@@ -319,6 +319,22 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
   (setq evil-insert-state-map (make-sparse-keymap))
   (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
 #+END_SRC
+** Window and Buffer Management
+*** eyebrowse
+Eyebrowse provides a way to manage workspaces like tiling window managers.
+#+BEGIN_SRC emacs-lisp
+  (use-package eyebrowse
+    :ensure t
+    :config
+    (eyebrowse-mode t))
+#+END_SRC
+*** windmove
+Windmove provides a way to move around emacs windows.
+
+Default keybindings are: S-arrowkey (e.g. S-Left) to move around
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
+#+END_SRC
 ** paradox
 Nicer package management
 #+BEGIN_SRC emacs-lisp
@@ -328,17 +344,21 @@ Nicer package management
 ** dashboard
 Load with a nicer looking dashboard than default
 #+BEGIN_SRC emacs-lisp
-  (use-package dashboard
-    :ensure t
-    :init
-    (setq dashboard-startup-banner 'logo)
-    (setq dashboard-items '((recents . 5)
-                            (bookmarks . 5)
-                            (projects . 5)
-                            (agenda . 5)))
-    (add-hook 'dashboard-mode-hook (lambda () (turn-on-page-break-lines-mode)))
-    :config
-    (dashboard-setup-startup-hook))
+  ;; (use-package dashboard
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq dashboard-startup-banner 'logo)
+  ;;   (setq dashboard-items '((recents . 5)
+  ;;                           (bookmarks . 5)
+  ;;                           (projects . 5)
+  ;;                           (agenda . 5)))
+  ;;   (add-hook 'dashboard-mode-hook (lambda () (turn-on-page-break-lines-mode)))
+  ;;   :config
+  ;;   (dashboard-setup-startup-hook))
+#+END_SRC
+start off with the scratch buffer instead
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen 't)
 #+END_SRC
 
 ** org mode
@@ -576,11 +596,6 @@ Add rainbow delimiters in all programming language modes
     :ensure t
     :init
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-#+END_SRC
-
-** windmove
-#+BEGIN_SRC emacs-lisp
-  (windmove-default-keybindings)
 #+END_SRC
 
 ** editorconfig
@@ -1072,6 +1087,8 @@ Set up web mode for html and css files
   (use-package php-mode
     :ensure t
     :hook ((php-mode . my-php-hook))
+    :init
+    (add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
     :config
     (defun my-php-hook ()
       (smartparens-mode t))
