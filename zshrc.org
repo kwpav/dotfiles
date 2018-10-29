@@ -72,18 +72,18 @@ you can avoid having to complete at all in many cases, but if you do, you might 
 #+END_SRC
 
 * Plugins
+Plugins installed from =pacman= and =brew= in different locations.
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  # autosuggestions
-  # installed with pacman
-  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-  # syntax highlighting
-  # installed with pacman
-  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-  # history search
-  # installed with pacman
-  source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+      source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+      source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+      # Mac OSX
+      source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+      source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+  fi
 #+END_SRC
 * Prompt
 Custom prompt with snippets of code taken from various places.

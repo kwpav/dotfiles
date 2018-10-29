@@ -40,17 +40,16 @@ zstyle ':completion:*:*:xdvi:*' file-sort time
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
 export npm_config_prefix=~/.node_modules
 
-# autosuggestions
-# installed with pacman
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# syntax highlighting
-# installed with pacman
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# history search
-# installed with pacman
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+fi
 
 autoload -Uz promptinit vcs_info
 promptinit
