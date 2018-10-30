@@ -153,7 +153,6 @@ Mode specific bindings appear after pressing <SPACE m>
     (my-leader-def
       :keymaps 'normal
       "c" 'comment-dwim
-      "g" 'magit-status
       "RET" 'make-frame-command
       "l" 'my/what-minor-mode
       ;; counsel
@@ -174,6 +173,13 @@ Mode specific bindings appear after pressing <SPACE m>
       "wj" 'windmove-down
       "wk" 'windmove-up
       "wl" 'windmove-right
+      ;; magit
+      "gs" 'magit-status
+      "gc" 'magit-checkout
+      "gC" 'magit-commit
+      "gb" 'magit-blame
+      "gS" 'magit-stage-file
+      "gU" 'magit-unstage-file
       ;; multi-term
       "tt" 'multi-term
       "tn" 'multi-term-next
@@ -731,8 +737,8 @@ use git in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
-    :bind
-    ("C-x g" . magit-status))
+    :general
+    ("C-x g" 'magit-status))
 #+END_SRC
 
 Get evil-mode to play nicely
