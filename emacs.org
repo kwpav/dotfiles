@@ -173,6 +173,20 @@ Mode specific bindings appear after pressing <SPACE m>
       "wj" 'windmove-down
       "wk" 'windmove-up
       "wl" 'windmove-right
+      ;; workspaces
+      "w." 'eyebrowse-switch-to-window-config
+      "w," 'eyebrowse-rename-window-config
+      "w1" 'eyebrowse-switch-to-config-1
+      "w2" 'eyebrowse-switch-to-config-2
+      "w3" 'eyebrowse-switch-to-config-3
+      "w4" 'eyebrowse-switch-to-config-4
+      "w4" 'eyebrowse-switch-to-config-4
+      "w5" 'eyebrowse-switch-to-config-5
+      "w6" 'eyebrowse-switch-to-config-6
+      "w7" 'eyebrowse-switch-to-config-7
+      "w8" 'eyebrowse-switch-to-config-8
+      "w9" 'eyebrowse-switch-to-config-9
+      "w0" 'eyebrowse-switch-to-config-0
       ;; magit
       "gs" 'magit-status
       "gc" 'magit-checkout
@@ -251,13 +265,14 @@ Mode specific bindings appear after pressing <SPACE m>
     (which-key-mode)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0.01)
+    (setq which-key-idle-delay 0)
     (which-key-add-key-based-replacements "SPC w" "windows")
     (which-key-add-key-based-replacements "SPC b" "buffers")
     (which-key-add-key-based-replacements "SPC p" "projects")
     (which-key-add-key-based-replacements "SPC b" "buffers")
     (which-key-add-key-based-replacements "SPC r" "bookmarks")
     (which-key-add-key-based-replacements "SPC t" "terminal")
+    (which-key-add-key-based-replacements "SPC g" "magit")
     (which-key-add-key-based-replacements "SPC j" "dumb-jump")
     (which-key-add-key-based-replacements "SPC jg" "go")
     (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
@@ -901,7 +916,7 @@ Get some nice go-to-definition functionality
            ("M-g i" . dumb-jump-go-prompt)
            ("M-g x" . dumb-jump-go-prefer-external)
            ("M-g z" . dumb-jump-go-prefer-external-other-window)
-           ("<f12>" . dumb-jump-hydra/body))
+           ("<f9>" . dumb-jump-hydra/body))
     :config
     (setq dumb-jump-selector 'ivy)
     (setq dumb-jump-force-searcher 'rg)
