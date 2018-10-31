@@ -90,7 +90,7 @@ keys = [
     Key([mod, "shift"], "Return", lazy.layout.toggle_split()),
 
     # Launch applications
-    Key([mod], "Return", lazy.spawn("alacritty")),
+    Key([mod], "Return", lazy.spawn("urxvt")),
     Key([mod], "e", lazy.spawn("emacs")),
 
     # Toggle between different layouts
