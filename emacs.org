@@ -349,6 +349,22 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
   (setq evil-insert-state-map (make-sparse-keymap))
   (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
 #+END_SRC
+
+display a visual hint when editing with evil
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-goggles
+    :ensure t
+    :config
+    (evil-goggles-mode)
+    (setq evil-goggles-duration 0.150) ;; default is 0.200
+
+    ;; optionally use diff-mode's faces; as a result, deleted text
+    ;; will be highlighed with `diff-removed` face which is typically
+    ;; some red color (as defined by the color theme)
+    ;; other faces such as `diff-added` will be used for other actions
+    ;;(evil-goggles-use-diff-faces)
+    )
+#+END_SRC
 ** Window and Buffer Management
 *** eyebrowse
 Eyebrowse provides a way to manage workspaces like tiling window managers.
