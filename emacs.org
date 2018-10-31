@@ -13,20 +13,6 @@ To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away
 | C-c ' | Edit code within org-mode code blocks in their native mode |
 | C-x u | Open undo-tree                                             |
 
-** Package Setup
-Setup the package repositories and startup use-package.
-#+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-  ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  (add-to-list 'package-archives
-               '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-  (package-initialize)
-
-  (require 'use-package)
-#+END_SRC
 * TODO Things to do
 An on-going list of things I want to change
 
@@ -41,9 +27,31 @@ An on-going list of things I want to change
   + use the C# lsp??
 - [ ] fix =eslint= for lsp if possible
   + eslint works fine without the =lsp-javascript-typescript=
-
 * Emacs
 Things that modify how Emacs works and/or add some functionality to Emacs.
+** Package Setup
+Setup the package repositories and startup use-package.
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  ;; (add-to-list 'package-archives
+  ;;              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+  (package-initialize)
+
+  (require 'use-package)
+#+END_SRC
+
+<s
+=paradox= gives nicer package management than the default.
+
+I mostly use it for =paradox-list-packages= and =paradox-upgrade-packages=
+#+BEGIN_SRC emacs-lisp
+  (use-package paradox
+    :ensure t)
+#+END_SRC
 ** System Specific
 *** OSX
 Paths need to be explicitly defined for some reason in OSX.
@@ -367,7 +375,7 @@ Theme I'm currently using
     (setq doom-themes-enable-bold t
           doom-themes-enable-italic t)
     :config
-    (load-theme 'doom-dracula t)
+    (load-theme 'doom-Iosvkem t)
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
   #+END_SRC
@@ -607,12 +615,6 @@ Add rainbow delimiters in all programming language modes
     :init
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
-** paradox
-Nicer package management
-#+BEGIN_SRC emacs-lisp
-  (use-package paradox
-    :ensure t)
-#+END_SRC
 ** org mode
 Set up everything for =org-mode=
 
@@ -628,6 +630,9 @@ Stuff for making org-mode prettier:
 - =org-bullets= provides prettier bullets for the header
 - =indent-mode= indents each header and text block
 - =turn-on-visual-line-mode= is for visual word wrap
+
+Existing templates for reference:
+- https://orgmode.org/manual/Easy-templates.html
 
 The todo states are largely based taken from from http://doc.norang.ca/org-mode.html
 
@@ -665,7 +670,10 @@ The todo states are largely based taken from from http://doc.norang.ca/org-mode.
      '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
      '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
      '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
-     '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
+     '(org-level-5 ((t (:inherit outline-1 :height 1.0)))))
+    ;; add structure templates, e.g. type <el <TAB> for emacs-lisp
+    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
+    (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n\n#+END_SRC")))
 #+END_SRC
 **** old stuff
 old snippets of things
