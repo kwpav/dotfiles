@@ -391,7 +391,7 @@ Theme I'm currently using
     (setq doom-themes-enable-bold t
           doom-themes-enable-italic t)
     :config
-    (load-theme 'doom-Iosvkem t)
+    (load-theme 'doom-one t)
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
   #+END_SRC
@@ -1340,4 +1340,14 @@ Set up web mode for html and css files
     (setq php-lineup-cascaded-calls t)
     (custom-set-variables
      '(flycheck-phpcs-standard "WellspringCodingStandard")))
+#+END_SRC
+
+Use =PHP_CodeSniffer=
+#+BEGIN_SRC emacs-lisp
+  (use-package phpcbf
+    :ensure t
+    :hook ((php-mode . phpcbf-enable-on-save))
+    :config
+    (setq phpcbf-executable "/usr/local/bin/phpcbf")
+    (setq phpcbf-standard "WellspringCodingStandard"))
 #+END_SRC
