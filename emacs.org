@@ -1333,7 +1333,11 @@ Set up web mode for html and css files
     :mode "\\.php\\'"
     :config
     (defun my-php-hook ()
+      ;; indent -> calls next line like symfony2
+      (php-enable-symfony2-coding-style)
       (smartparens-mode t))
+    ;; align -> on successive lines
+    (setq php-lineup-cascaded-calls t)
     (custom-set-variables
      '(flycheck-phpcs-standard "WellspringCodingStandard")))
 #+END_SRC
