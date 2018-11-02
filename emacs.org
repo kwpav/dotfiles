@@ -1342,7 +1342,25 @@ Set up web mode for html and css files
      '(flycheck-phpcs-standard "WellspringCodingStandard")))
 #+END_SRC
 
-Use =PHP_CodeSniffer=
+Documentation in the minibuffer and with =company=. This is needed by =company-php=.
+#+BEGIN_SRC emacs-lisp
+  (use-package php-eldoc
+    :ensure t)
+#+END_SRC
+
+Setup code completion and documentation.
+#+BEGIN_SRC emacs-lisp
+  (use-package company-php
+    :ensure t
+    :hook ((php-mode . my-company-php-hook))
+    :config
+    (defun my-company-php-hook ()
+      (ac-php-core-eldoc-setup)
+      (make-local-variable 'company-backends)
+      (add-to-list 'company-backends 'company-ac-php-backend)))
+#+END_SRC
+
+Use =PHP_CodeSniffer= to format files on save.
 #+BEGIN_SRC emacs-lisp
   (use-package phpcbf
     :ensure t
