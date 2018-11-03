@@ -180,9 +180,11 @@ Mode specific bindings appear after pressing <SPACE m>
     (general-create-definer my-leader-def
       ;; :prefix my-leader
       :prefix "SPC")
+
     (general-create-definer my-local-leader-def
       ;; :prefix my-local-leader
       :prefix "SPC m")
+
     (my-leader-def
       :keymaps 'normal
       "c" 'comment-dwim
@@ -794,7 +796,7 @@ Replacing neotree with treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
     :ensure t
-    :bind ([f8] . treemacs))
+    :general ([f8] 'treemacs))
 
   (use-package treemacs-evil
     :ensure t)
@@ -844,20 +846,19 @@ Replace emacs commands with counsel ones.
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
     :ensure t
-    :bind
-    ("M-x" . counsel-M-x)
-    ("C-x C-f" . counsel-find-file)
-    ("<f1> f" . counsel-describe-function)
-    ("<f1> v" . counsel-describe-variable)
-    ("<f1> l" . counsel-find-library)
-    ("<f2> i" . counsel-info-lookup-symbol)
-    ("<f2> u" . counsel-unicode-char)
-    ("C-c g" . counsel-git)
-    ("C-c j" . counsel-git-grep)
-    ("C-c k" . counsel-rg)
-    ("C-x l" . counsel-locate)
-    ("C-S-o" . counsel-rhythmbox)
-    ("C-S-r" . counsel-expression-history)
+    :general
+    ("M-x" 'counsel-M-x)
+    ("C-x C-f" 'counsel-find-file)
+    ("<f1> f" 'counsel-describe-function)
+    ("<f1> v" 'counsel-describe-variable)
+    ("<f1> l" 'counsel-find-library)
+    ("<f2> i" 'counsel-info-lookup-symbol)
+    ("<f2> u" 'counsel-unicode-char)
+    ("C-c g" 'counsel-git)
+    ("C-c j" 'counsel-git-grep)
+    ("C-c k" 'counsel-rg)
+    ("C-x l" 'counsel-locate)
+    ("C-S-r" 'counsel-expression-history)
     :config
     ;; use ripgrep for counsel-git-grep
     (setq counsel-git-cmd "rg --files")
@@ -869,8 +870,8 @@ Replace emacs search and evil search with swiper
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
     :ensure t
-    :bind
-    ("C-s" . swiper)
+    :general
+    ("C-s" 'swiper)
     :config
     (define-key evil-normal-state-map (kbd "/") 'swiper))
 #+END_SRC
@@ -885,8 +886,8 @@ Replace emacs search and evil search with swiper
     (setq enable-recursive-minibuffers t)
     (setq ivy-count-format "(%d/%d) ")
     (setq ivy-height 20)
-    :bind
-    ("<f6>" . ivy-resume))
+    :general
+    ("<f6>" 'ivy-resume))
 
   (use-package counsel-projectile
     :ensure t
@@ -990,12 +991,13 @@ Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
     :ensure t
-    :bind (("M-g o" . dumb-jump-go-other-window)
-           ("M-g j" . dumb-jump-go)
-           ("M-g i" . dumb-jump-go-prompt)
-           ("M-g x" . dumb-jump-go-prefer-external)
-           ("M-g z" . dumb-jump-go-prefer-external-other-window)
-           ("<f9>" . dumb-jump-hydra/body))
+    :general
+    ("M-g o" 'dumb-jump-go-other-window)
+    ("M-g j" 'dumb-jump-go)
+    ("M-g i" 'dumb-jump-go-prompt)
+    ("M-g x" 'dumb-jump-go-prefer-external)
+    ("M-g z" 'dumb-jump-go-prefer-external-other-window)
+    ("<f9>"  'dumb-jump-hydra/body)
     :config
     (setq dumb-jump-selector 'ivy)
     (setq dumb-jump-force-searcher 'rg)
