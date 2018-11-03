@@ -53,8 +53,9 @@ An on-going list of things I want to change
   - powerline-esque modeline
 
 * Emacs
-Things that modify how Emacs works and/or add some functionality to Emacs.
-** Package Setup
+** Core
+Things that replace or modify the core functionality of Emacs.
+*** Package Setup
 Setup the package repositories and startup use-package.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -69,28 +70,13 @@ Setup the package repositories and startup use-package.
   (require 'use-package)
 #+END_SRC
 
-<s
-=paradox= gives nicer package management than the default.
-
+=paradox= gives some nicer package management options than the default.
 I mostly use it for =paradox-list-packages= and =paradox-upgrade-packages=
 #+BEGIN_SRC emacs-lisp
   (use-package paradox
     :ensure t)
 #+END_SRC
-** System Specific
-*** OSX
-Paths need to be explicitly defined for some reason in OSX.
-#+BEGIN_SRC emacs-lisp
-  ;; (when (eq system-type 'darwin)
-  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
-
-  (when (eq system-type 'darwin)
-    (use-package exec-path-from-shell
-      :ensure t)
-    (exec-path-from-shell-initialize))
-#+END_SRC
-** Saner Defaults
+*** Saner Defaults
 Modify some of the default settings.
 
 Change "yes or no" to "y or n"
@@ -133,45 +119,80 @@ A package that provides some good defaults, e.g. using the X clipboard for yanki
   (use-package better-defaults
     :ensure t)
 #+END_SRC
-** Custom Functions
-*** what-minor-mode
-list minor modes
-- =my-active-minor-modes= is from: https://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
-- =my/active-minor-modes= is =doom/what-minor-mode= from https://github.com/hlissner/doom-emacs
-  + it uses =my-active-minor-modes= for the list of minor modes to display
+*** Vim Emulation
+This allows you to use emacs keybindings while in evil's insert mode.
+from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
 #+BEGIN_SRC emacs-lisp
-  (defun my-active-minor-modes ()
-    "Get a list of active minor-mode symbols."
-    (delq nil
-          (mapcar
-           (lambda (x)
-             (let ((car-x (car x)))
-               (when (and (symbolp car-x) (symbol-value car-x))
-                 x)))
-           minor-mode-alist)))
-
-  (defun my/what-minor-mode (mode)
-    "Get information on an active minor mode. Use `describe-minor-mode' for a
-  selection of all minor-modes, active or not."
-    (interactive
-     (list (completing-read "Minor mode: "
-                            (my-active-minor-modes))))
-    (describe-minor-mode-from-symbol
-     (cl-typecase mode
-       (string (intern mode))
-       (symbol mode)
-       (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
+  (defun my-emacs-in-normal-mode ()
+    (setq evil-insert-state-map (make-sparse-keymap))
+    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
 #+END_SRC
-** Custom Keys
+
+Evil mode is vim in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-keybinding nil) ;; evil-collection assumes this
+    :config
+    (evil-mode 1)
+    (my-emacs-in-normal-mode))
+#+END_SRC
+
+Use evil bindings in various modes.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+END_SRC
+
+surround.vim emulation.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+Show tildes in the fringe on empty lines.
+#+BEGIN_SRC emacs-lisp
+  (use-package vi-tilde-fringe
+    :ensure t
+    :config
+    (global-vi-tilde-fringe-mode 1))
+#+END_SRC
+
+display a visual hint when editing with evil
+*NOTE* commented out because doom-themes dont show nice colors
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package evil-goggles
+  ;;   :after evil
+  ;;   :ensure t
+  ;;   :config
+  ;;   (evil-goggles-mode)
+  ;;   (setq evil-goggles-duration 0.100) ;; default is 0.200
+
+  ;;   ;; optionally use diff-mode's faces; as a result, deleted text
+  ;;   ;; will be highlighed with `diff-removed` face which is typically
+  ;;   ;; some red color (as defined by the color theme)
+  ;;   ;; other faces such as `diff-added` will be used for other actions
+  ;;   (evil-goggles-use-diff-faces))
+#+END_SRC
+*** Keys
 To set up custom keys, I use a combination of:
 - =general= - define leader keys, e.g. press <SPACE> and a key to perform an action (if in evil's normal or visual modes)
 - =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing <SPACE>
 - =hydra= - create a "mode" (similar to how i3 does resize mode) for repeated actions
 - =keyfreq= - use =keyfreq-show= to get a list of most use commands and then make keybindings/hydras out of them
-*** general
+**** general
 Generic bindings (for all modes) appear after pressing <SPACE>
 
 Mode specific bindings appear after pressing <SPACE m>
+
+Also provides a =:general= use-package keyword, so this needs to be setup before that is used anywhere.
 
 #+BEGIN_SRC emacs-lisp
   (use-package general
@@ -291,7 +312,7 @@ Mode specific bindings appear after pressing <SPACE m>
       "eD" 'geiser-eval-definition-and-go
       "el" 'geiser-eval-eval-sexp))
 #+END_SRC
-*** which-key
+**** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
@@ -314,7 +335,7 @@ Mode specific bindings appear after pressing <SPACE m>
     (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
     (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC m e" "eval"))
 #+END_SRC
-*** hydra
+**** hydra
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
     :ensure t
@@ -326,90 +347,109 @@ Mode specific bindings appear after pressing <SPACE m>
       ("r" (text-scale-set 0) "reset")
       ("0" (text-scale-set 0) :bind nil :exit t)))
 #+END_SRC
-*** keyfreq
+**** keyfreq
 #+BEGIN_SRC emacs-lisp
   (use-package keyfreq
     :ensure t
     :config
     (keyfreq-autosave-mode 1))
 #+END_SRC
-** Vim Emulation
-This allows you to use emacs keybindings while in evil's insert mode.
-from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
+*** ivy/counsel/swiper
+Some nice tools that use the minibuffer.
+
+Replace emacs commands with counsel ones.
 #+BEGIN_SRC emacs-lisp
-  (defun my-emacs-in-normal-mode ()
-    (setq evil-insert-state-map (make-sparse-keymap))
-    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
+  (use-package counsel
+    :ensure t
+    :general
+    ("M-x" 'counsel-M-x)
+    ("C-x C-f" 'counsel-find-file)
+    ("<f1> f" 'counsel-describe-function)
+    ("<f1> v" 'counsel-describe-variable)
+    ("<f1> l" 'counsel-find-library)
+    ("<f2> i" 'counsel-info-lookup-symbol)
+    ("<f2> u" 'counsel-unicode-char)
+    ("C-c g" 'counsel-git)
+    ("C-c j" 'counsel-git-grep)
+    ("C-c k" 'counsel-rg)
+    ("C-x l" 'counsel-locate)
+    ("C-S-r" 'counsel-expression-history)
+    :config
+    ;; use ripgrep for counsel-git-grep
+    (setq counsel-git-cmd "rg --files")
+    (setq counsel-rg-base-command
+          "rg -i -M 120 --no-heading --line-number --color never %s ."))
 #+END_SRC
 
-Evil mode is vim in emacs!
+Replace emacs search and evil search with swiper
 #+BEGIN_SRC emacs-lisp
-  (use-package evil
+  (use-package swiper
     :ensure t
+    :general
+    ("C-s" 'swiper)
+    :config
+    (define-key evil-normal-state-map (kbd "/") 'swiper))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish ivy-mode
     :init
-    (setq evil-want-keybinding nil) ;; evil-collection assumes this
-    :config
-    (evil-mode 1)
-    (my-emacs-in-normal-mode))
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-height 20)
+    :general
+    ("<f6>" 'ivy-resume))
 #+END_SRC
-
-Use evil bindings in various modes.
+*** System Specific
+**** OSX
+Paths need to be explicitly defined for some reason in OSX.
 #+BEGIN_SRC emacs-lisp
-  (use-package evil-collection
-    :after evil
+  ;; (when (eq system-type 'darwin)
+  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
+
+  (when (eq system-type 'darwin)
+    (use-package exec-path-from-shell
+      :ensure t)
+    (exec-path-from-shell-initialize))
+#+END_SRC
+*** undo-tree
+press <C-x u> to use and <q> to quit.
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :diminish undo-tree-mode
+    :defer t
     :ensure t
     :config
-    (evil-collection-init))
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t))
 #+END_SRC
-
-surround.vim emulation.
+*** anzu
+Add search and replace info to the modeline
 #+BEGIN_SRC emacs-lisp
-  (use-package evil-surround
-    :after evil
+  (use-package anzu
     :ensure t
     :config
-    (global-evil-surround-mode 1))
+    (global-anzu-mode)
+    (global-set-key [remap query-replace] 'anzu-query-replace)
+    (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp))
 #+END_SRC
-
-Show tildes in the fringe on empty lines.
+*** projectile
+Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
 #+BEGIN_SRC emacs-lisp
-  (use-package vi-tilde-fringe
+  (use-package projectile
+    :ensure t)
+
+  (use-package counsel-projectile
     :ensure t
+    :after projectile
     :config
-    (global-vi-tilde-fringe-mode 1))
-#+END_SRC
-
-display a visual hint when editing with evil
-*NOTE* commented out because doom-themes dont show nice colors
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package evil-goggles
-  ;;   :after evil
-  ;;   :ensure t
-  ;;   :config
-  ;;   (evil-goggles-mode)
-  ;;   (setq evil-goggles-duration 0.100) ;; default is 0.200
-
-  ;;   ;; optionally use diff-mode's faces; as a result, deleted text
-  ;;   ;; will be highlighed with `diff-removed` face which is typically
-  ;;   ;; some red color (as defined by the color theme)
-  ;;   ;; other faces such as `diff-added` will be used for other actions
-  ;;   (evil-goggles-use-diff-faces))
-#+END_SRC
-** Window and Buffer Management
-*** eyebrowse
-Eyebrowse provides a way to manage workspaces like tiling window managers.
-#+BEGIN_SRC emacs-lisp
-  (use-package eyebrowse
-    :ensure t
-    :config
-    (eyebrowse-mode t))
-#+END_SRC
-*** windmove
-Windmove provides a way to move around emacs windows.
-
-Default keybindings are: S-arrowkey (e.g. S-Left) to move around
-#+BEGIN_SRC emacs-lisp
-  (windmove-default-keybindings)
+    (counsel-projectile-mode))
 #+END_SRC
 ** Look and Feel
 *** Theme
@@ -661,12 +701,54 @@ Add rainbow delimiters in all programming language modes
     :init
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
-** org mode
+** Custom Functions
+*** what-minor-mode
+list minor modes
+- =my-active-minor-modes= is from: https://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
+- =my/active-minor-modes= is =doom/what-minor-mode= from https://github.com/hlissner/doom-emacs
+  + it uses =my-active-minor-modes= for the list of minor modes to display
+#+BEGIN_SRC emacs-lisp
+  (defun my-active-minor-modes ()
+    "Get a list of active minor-mode symbols."
+    (delq nil
+          (mapcar
+           (lambda (x)
+             (let ((car-x (car x)))
+               (when (and (symbolp car-x) (symbol-value car-x))
+                 x)))
+           minor-mode-alist)))
+
+  (defun my/what-minor-mode (mode)
+    "Get information on an active minor mode. Use `describe-minor-mode' for a
+  selection of all minor-modes, active or not."
+    (interactive
+     (list (completing-read "Minor mode: "
+                            (my-active-minor-modes))))
+    (describe-minor-mode-from-symbol
+     (cl-typecase mode
+       (string (intern mode))
+       (symbol mode)
+       (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
+#+END_SRC
+** Window and Buffer Management
+*** eyebrowse
+Eyebrowse provides a way to manage workspaces like tiling window managers.
+#+BEGIN_SRC emacs-lisp
+  (use-package eyebrowse
+    :ensure t
+    :config
+    (eyebrowse-mode t))
+#+END_SRC
+*** windmove
+Windmove provides a way to move around emacs windows.
+
+Default keybindings are: S-arrowkey (e.g. S-Left) to move around
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
+#+END_SRC
+** Org Mode
 Set up everything for =org-mode=
-
-Open the agenda with =SPC a=.
-
-Startup hook
+*** Startup hook
 - =indent-mode= indents each header and text block
 - =org-bullets= provides prettier bullets for the header
 - =turn-on-visual-line-mode= is for visual word wrap
@@ -676,7 +758,7 @@ Startup hook
     (turn-on-visual-line-mode)
     (org-bullets-mode 1))
 #+END_SRC
-
+*** Prettify
 Stuff for making org-mode prettier:
 - =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
 #+BEGIN_SRC emacs-lisp
@@ -689,7 +771,15 @@ Stuff for making org-mode prettier:
      '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
      '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
 #+END_SRC
+**** htmlize
+Provides syntax highlighting for =#+SRC= blocks in html exports.
 
+Needed by =pelican= and =nikola=
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :ensure t)
+#+END_SRC
+*** Setup for TODOs
 Setup for TODO items.
 Change the status of the todo state by pressing =C-c C-c t <KEY>=
 - the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
@@ -712,7 +802,7 @@ The todo states are largely based taken from from http://doc.norang.ca/org-mode.
     ;; insert time/date when moved to DONE
     (setq org-log-done 'time))
 #+END_SRC
-
+*** Structure Templates
 Add structure templates, e.g. type <el <TAB> for =#+BEGIN_SRC emacs-lisp #+END_SRC=
 Existing templates for reference:
 - https://orgmode.org/manual/Easy-templates.html
@@ -721,7 +811,7 @@ Existing templates for reference:
     (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
     (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n\n#+END_SRC")))
 #+END_SRC
-
+*** Use Package Setup
 Put it all together. The =:general= block maps :x and :q to confirm and :q to abort when editing =SRC= blocks.
 #+BEGIN_SRC emacs-lisp
   (use-package org
@@ -754,36 +844,10 @@ old snippets of things
 
                                           ;(setq org-hide-emphasis-markers t)
 #+END_SRC
-
-*** htmlize
-Provides syntax highlighting for =#+SRC= blocks in html exports.
-
-Needed by =nikola=
-
-#+BEGIN_SRC emacs-lisp
-  (use-package htmlize
-    :ensure t)
-  ;(setq org-src-fontify-natively t)
-#+END_SRC
-** yasnippet
-Use snippets in specific modes
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-   :ensure t
-   :init
-   (setq yas-snippet-dirs
-        '("~/.emacs.d/snippets"))
-   :config
-   (yas-global-mode 1))
-#+END_SRC
-
-Install the official snippets
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet-snippets
-    :ensure t)
-#+END_SRC
-
-** company
+** Code
+Things that are used when coding.
+*** company
+Company provides code completion.
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
@@ -791,162 +855,7 @@ Install the official snippets
     (global-company-mode))
 #+END_SRC
 
-** treemacs
-Replacing neotree with treemacs
-#+BEGIN_SRC emacs-lisp
-  (use-package treemacs
-    :ensure t
-    :general ([f8] 'treemacs))
-
-  (use-package treemacs-evil
-    :ensure t)
-
-  (use-package treemacs-projectile
-    :ensure t)
-#+END_SRC
-
-** undo-tree
-press <C-x u> to use and <q> to quit.
-#+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    :diminish undo-tree-mode
-    :defer t
-    :ensure t
-    :config
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t))
-#+END_SRC
-
-** magit
-use git in emacs!
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure t
-    :general
-    ("C-x g" 'magit-status))
-#+END_SRC
-
-Get evil-mode to play nicely
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-magit
-    :ensure t)
-#+END_SRC
-** projectile
-Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t)
-#+END_SRC
-
-** ivy/counsel/swiper
-Some nice tools that use the minibuffer.
-
-Replace emacs commands with counsel ones.
-#+BEGIN_SRC emacs-lisp
-  (use-package counsel
-    :ensure t
-    :general
-    ("M-x" 'counsel-M-x)
-    ("C-x C-f" 'counsel-find-file)
-    ("<f1> f" 'counsel-describe-function)
-    ("<f1> v" 'counsel-describe-variable)
-    ("<f1> l" 'counsel-find-library)
-    ("<f2> i" 'counsel-info-lookup-symbol)
-    ("<f2> u" 'counsel-unicode-char)
-    ("C-c g" 'counsel-git)
-    ("C-c j" 'counsel-git-grep)
-    ("C-c k" 'counsel-rg)
-    ("C-x l" 'counsel-locate)
-    ("C-S-r" 'counsel-expression-history)
-    :config
-    ;; use ripgrep for counsel-git-grep
-    (setq counsel-git-cmd "rg --files")
-    (setq counsel-rg-base-command
-          "rg -i -M 120 --no-heading --line-number --color never %s ."))
-#+END_SRC
-
-Replace emacs search and evil search with swiper
-#+BEGIN_SRC emacs-lisp
-  (use-package swiper
-    :ensure t
-    :general
-    ("C-s" 'swiper)
-    :config
-    (define-key evil-normal-state-map (kbd "/") 'swiper))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :ensure t
-    :diminish ivy-mode
-    :init
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq enable-recursive-minibuffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq ivy-height 20)
-    :general
-    ("<f6>" 'ivy-resume))
-
-  (use-package counsel-projectile
-    :ensure t
-    :config
-    (counsel-projectile-mode))
-#+END_SRC
-
-** editorconfig
-Use editorconfig for projects that have them
-
-#+BEGIN_SRC emacs-lisp
-  (use-package editorconfig
-    :delight
-    :ensure t
-    :config
-    (editorconfig-mode 1))
-#+END_SRC
-
-** restart
-Yo dawg, use =restart-emacs= to restart emacs within emacs.
-Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
-#+BEGIN_SRC emacs-lisp
-  (use-package restart-emacs
-    :ensure t)
-#+END_SRC
-
-** restclient
-Test RESTful APIs in emacs!
-#+BEGIN_SRC emacs-lisp
-  (use-package restclient
-    :ensure t)
-
-  (use-package company-restclient
-    :ensure t)
-
-  (use-package ob-restclient
-    :ensure t)
-#+END_SRC
-
-** multi-term
-run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
-#+BEGIN_SRC emacs-lisp
-  (use-package multi-term
-    :ensure t)
-#+END_SRC
-
-** anzu
-Add search and replace info to the modeline
-#+BEGIN_SRC emacs-lisp
-  (use-package anzu
-    :ensure t
-    :config
-    (global-anzu-mode)
-    (global-set-key [remap query-replace] 'anzu-query-replace)
-    (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp))
-#+END_SRC
-* Languages
-Configuration for programming languages
-** language server protocol
+*** language server protocol
 Setup for Microsoft's (GASP!) Language Server Protocol.
 
 #+BEGIN_QUOTE
@@ -977,7 +886,7 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     :config
     (push 'company-lsp company-backends))
 #+END_SRC
-** smartparens
+*** smartparens
 autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
@@ -986,7 +895,16 @@ autocomplete for brackets
     (add-hook 'python-mode-hook (function (lambda ()
                                             (smartparens-mode t)))))
 #+END_SRC
-** dumb-jump
+*** flycheck
+Error checking.
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :diminish flycheck-mode
+    :ensure t
+    :config
+    (global-flycheck-mode))
+#+END_SRC
+*** dumb-jump
 Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
@@ -1011,16 +929,90 @@ Get some nice go-to-definition functionality
       ("l" dumb-jump-quick-look "Quick look")
       ("b" dumb-jump-back "Back")))
 #+END_SRC
-** flycheck
+*** yasnippet
+Use snippets in specific modes
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :diminish flycheck-mode
-    :ensure t
-    :config
-    (global-flycheck-mode))
+  (use-package yasnippet
+   :ensure t
+   :init
+   (setq yas-snippet-dirs
+        '("~/.emacs.d/snippets"))
+   :config
+   (yas-global-mode 1))
 #+END_SRC
 
-** Python
+Install the official snippets
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets
+    :ensure t)
+#+END_SRC
+*** editorconfig
+Use editorconfig for projects that have them
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :delight
+    :ensure t
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+** Version Control
+*** magit
+use git in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :general
+    ("C-x g" 'magit-status))
+#+END_SRC
+
+Get evil-mode to play nicely
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-magit
+    :ensure t)
+#+END_SRC
+** Other
+*** treemacs
+A file tree.
+#+BEGIN_SRC emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :general ([f8] 'treemacs))
+
+  (use-package treemacs-evil
+    :ensure t)
+
+  (use-package treemacs-projectile
+    :ensure t)
+#+END_SRC
+*** restart
+Yo dawg, use =restart-emacs= to restart emacs within emacs.
+Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
+#+BEGIN_SRC emacs-lisp
+  (use-package restart-emacs
+    :ensure t)
+#+END_SRC
+*** multi-term
+run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
+#+BEGIN_SRC emacs-lisp
+  (use-package multi-term
+    :ensure t)
+#+END_SRC
+*** restclient
+Test RESTful APIs in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package restclient
+    :ensure t)
+
+  (use-package company-restclient
+    :ensure t)
+
+  (use-package ob-restclient
+    :ensure t)
+#+END_SRC
+* Languages
+Configuration for programming languages
+*** Python
 from https://vxlabs.com/2018/06/08/python-language-server-with-emacs-and-lsp-mode/
 
 In order for this to work, you need to install https://github.com/palantir/python-language-server
@@ -1058,7 +1050,7 @@ Use =pipenv= to handle virtual environments
     (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
 #+END_SRC
 
-**** Elpy - OLD
+***** Elpy - OLD
 trying out LSP instead of elpy, keeping this in case I want to go back.
 
 [[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
@@ -1069,7 +1061,7 @@ trying out LSP instead of elpy, keeping this in case I want to go back.
   ;;   (elpy-enable))
 #+END_SRC
 
-*** Hy
+**** Hy
 Let's get hy. A lisp for python
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
@@ -1078,7 +1070,7 @@ Let's get hy. A lisp for python
     ;(add-to-list `auto-mode-alist '("\\.hy?\\'" . hy-mode))
     )
 #+END_SRC
-** C#
+*** C#
 #+BEGIN_SRC emacs-lisp
   ;; (use-package csharp-mode
   ;;   :ensure t
@@ -1162,14 +1154,14 @@ taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-con
   (setq omnisharp-auto-complete-want-documentation nil)
 #+END_SRC
 
-** C
-**** TODO set this up using use-package
+*** C
+***** TODO set this up using use-package
 Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Indenting C]]
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "linux"
         c-basic-offset 4)
 #+END_SRC
-** Lisp
+*** Lisp
 - =show-paren-mode= highlights matching parentheses 
 - =paredit= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
@@ -1207,7 +1199,7 @@ Using this to mess with stumpwm right now.
   ;;   (setq inferior-list-program "sbcl"))
 #+END_SRC
 
-** Haskell
+*** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
@@ -1215,8 +1207,8 @@ For xmonad and beyond
     :init
     (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
 #+END_SRC
-** Javascript
-*** Vanilla
+*** Javascript
+**** Vanilla
 Setup for JavaScript using =js2-mode=.
 
 - autocomplete with =tern=
@@ -1321,14 +1313,14 @@ Set up =prettier-js-mode=
            (rjsx-mode . prettier-js-mode)))
 #+END_SRC
 
-*** JSON
+**** JSON
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure t
     :init
     (add-to-list `auto-mode-alist '("\\.json\\'" . json-mode)))
 #+END_SRC
-*** TODO TypeScript
+**** TODO TypeScript
 #+BEGIN_SRC emacs-lisp
   ;; (use-package tide
   ;;   :ensure t
@@ -1349,7 +1341,7 @@ Set up =prettier-js-mode=
   ;;             (lambda ()
   ;;               (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition))))
 #+END_SRC
-*** React
+**** React
 =rjsx-mode= is for editing =.jsx= files
 
 Dont need too much here because it uses =js2-mode= where most of the config is done
@@ -1357,7 +1349,7 @@ Dont need too much here because it uses =js2-mode= where most of the config is d
   (use-package rjsx-mode
     :ensure t)
 #+END_SRC
-** Web Mode
+*** Web Mode
 Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode 
@@ -1382,7 +1374,7 @@ Set up web mode for html and css files
       ;; highlight matching elements in html
       (setq web-mode-enable-current-element-highlight 1)))
 #+END_SRC
-** PHP
+*** PHP
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :ensure t
