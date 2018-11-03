@@ -37,7 +37,7 @@ xdvi() { command xdvi ${*:-*.dvi(om[1])} }
 zstyle ':completion:*:*:xdvi:*' menu yes select
 zstyle ':completion:*:*:xdvi:*' file-sort time
 
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$home/composer/vendor/bin:$PATH"
+#export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$HOME/.composer/vendor/bin:$PATH"
 export npm_config_prefix=~/.node_modules
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
