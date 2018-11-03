@@ -329,6 +329,7 @@ Use evil bindings in various modes.
 surround.vim emulation.
 #+BEGIN_SRC emacs-lisp
   (use-package evil-surround
+    :after evil
     :ensure t
     :config
     (global-evil-surround-mode 1))
@@ -353,6 +354,7 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
 display a visual hint when editing with evil
 #+BEGIN_SRC emacs-lisp
   (use-package evil-goggles
+    :after evil
     :ensure t
     :config
     (evil-goggles-mode)
