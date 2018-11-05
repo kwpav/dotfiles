@@ -978,6 +978,7 @@ Press <H> in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
   (use-package magithub
     :after magit
+    :ensure t
     :config
     (magithub-feature-autoinject t)
     (setq magithub-clone-default-directory "~/repos"))
@@ -1435,10 +1436,11 @@ Setup code completion and documentation.
 #+END_SRC
 
 Use =PHP_CodeSniffer= to format files on save.
+*NOTE* removing format on save (for now) as it messes with undo history.
 #+BEGIN_SRC emacs-lisp
   (use-package phpcbf
     :ensure t
-    :hook ((php-mode . phpcbf-enable-on-save))
+    ;;:hook ((php-mode . phpcbf-enable-on-save))
     :config
     (setq phpcbf-executable "/usr/local/bin/phpcbf")
     (setq phpcbf-standard "WellspringCodingStandard"))
