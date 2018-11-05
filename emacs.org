@@ -313,7 +313,12 @@ Also provides a =:general= use-package keyword, so this needs to be setup before
       "eB" 'geiser-eval-buffer-and-go
       "ed" 'geiser-eval-definition
       "eD" 'geiser-eval-definition-and-go
-      "el" 'geiser-eval-eval-sexp))
+      "el" 'geiser-eval-eval-sexp)
+
+    (my-local-leader-def
+      :states '(visual)
+      :keymaps 'php-mode-map
+      "a" 'my/align-php-dbl-arrow))
 #+END_SRC
 **** which-key
 #+BEGIN_SRC emacs-lisp
@@ -406,19 +411,6 @@ Replace emacs search and evil search with swiper
     (setq ivy-height 20)
     :general
     ("<f6>" 'ivy-resume))
-#+END_SRC
-*** System Specific
-**** OSX
-Paths need to be explicitly defined for some reason in OSX.
-#+BEGIN_SRC emacs-lisp
-  ;; (when (eq system-type 'darwin)
-  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
-
-  (when (eq system-type 'darwin)
-    (use-package exec-path-from-shell
-      :ensure t)
-    (exec-path-from-shell-initialize))
 #+END_SRC
 *** undo-tree
 press <C-x u> to use and <q> to quit.
@@ -990,6 +982,19 @@ Press <H> in the magit status window to get the popup for magithub.
     (magithub-feature-autoinject t)
     (setq magithub-clone-default-directory "~/repos"))
 #+END_SRC
+** System Specific
+*** OSX
+Paths need to be explicitly defined for some reason in OSX.
+#+BEGIN_SRC emacs-lisp
+  ;; (when (eq system-type 'darwin)
+  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
+
+  (when (eq system-type 'darwin)
+    (use-package exec-path-from-shell
+      :ensure t)
+    (exec-path-from-shell-initialize))
+#+END_SRC
 ** Other
 *** treemacs
 A file tree.
@@ -1408,6 +1413,7 @@ Set up web mode for html and css files
     (setq php-lineup-cascaded-calls t)
     (custom-set-variables
      '(flycheck-phpcs-standard "WellspringCodingStandard")))
+
 #+END_SRC
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
