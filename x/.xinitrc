@@ -42,5 +42,5 @@ fi
 
 compton &
 
-#exec stumpwm
-exec qtile
+exec stumpwm
+#exec qtile

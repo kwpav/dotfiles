@@ -47,6 +47,6 @@ modified from =/etc/X11/xinit/xinitrc=
 
   compton &
 
-  #exec stumpwm
-  exec qtile
+  exec stumpwm
+  #exec qtile
 #+END_SRC

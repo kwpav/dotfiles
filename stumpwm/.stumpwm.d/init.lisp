@@ -17,10 +17,12 @@
 
 (defcommand termite () ()
   (run-or-raise "termite -e tmux" '(:class "Termite")))
-(define-key *root-map* (kbd "c") "termite")
-(define-key *root-map* (kbd "C-c") "termite")
-(define-key *top-map* (kbd "s-RET") "termite")
-(define-key *top-map* (kbd "s-c") "termite")
+(defcommand urxvt () ()
+  (run-or-raise "urxvt -e tmux" '(:class "URxvt")))
+(define-key *root-map* (kbd "c") "urxvt")
+(define-key *root-map* (kbd "C-c") "urxvt")
+(define-key *top-map* (kbd "s-RET") "urxvt")
+(define-key *top-map* (kbd "s-c") "urxvt")
 
 ;; use stumpwm's exec instead of dmenu_run
 (define-key *top-map* (kbd "s-d") "exec")

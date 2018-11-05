@@ -40,10 +40,12 @@ Define commands to start up and switch to programs and set up keys.
 
   (defcommand termite () ()
     (run-or-raise "termite -e tmux" '(:class "Termite")))
-  (define-key *root-map* (kbd "c") "termite")
-  (define-key *root-map* (kbd "C-c") "termite")
-  (define-key *top-map* (kbd "s-RET") "termite")
-  (define-key *top-map* (kbd "s-c") "termite")
+  (defcommand urxvt () ()
+    (run-or-raise "urxvt -e tmux" '(:class "URxvt")))
+  (define-key *root-map* (kbd "c") "urxvt")
+  (define-key *root-map* (kbd "C-c") "urxvt")
+  (define-key *top-map* (kbd "s-RET") "urxvt")
+  (define-key *top-map* (kbd "s-c") "urxvt")
 #+END_SRC
 
 ** Keys
