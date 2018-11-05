@@ -28,6 +28,7 @@ An on-going list of things I want to change
 - [ ] fix =eslint= for lsp if possible
   + eslint works fine without the =lsp-javascript-typescript=
 - [ ] setup =magithub=
+- [ ] window management hydra?
 
 ** Cool looking packages to check out
 - =straight.el= - https://github.com/raxod502/straight.el
@@ -51,6 +52,8 @@ An on-going list of things I want to change
   - minor modes in the modeline?
 - =moody=
   - powerline-esque modeline
+- =github-notifier= - https://github.com/xuchunyang/github-notifier.el
+  - github notification count in the modeline
 
 * Emacs
 ** Core
@@ -963,13 +966,29 @@ use git in emacs!
   (use-package magit
     :ensure t
     :general
-    ("C-x g" 'magit-status))
+    ("C-x g" 'magit-status)
+    :config
+    (setq magit-completing-read-function 'ivy-completing-read))
 #+END_SRC
 
 Get evil-mode to play nicely
 #+BEGIN_SRC emacs-lisp
   (use-package evil-magit
     :ensure t)
+#+END_SRC
+*** git-timemachine
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :ensure t)
+#+END_SRC
+*** magithub
+Press <H> in the magit status window to get the popup for magithub.
+#+BEGIN_SRC emacs-lisp
+  (use-package magithub
+    :after magit
+    :config
+    (magithub-feature-autoinject t)
+    (setq magithub-clone-default-directory "~/repos"))
 #+END_SRC
 ** Other
 *** treemacs
@@ -1421,12 +1440,12 @@ Use =PHP_CodeSniffer= to format files on save.
 
 Align double arrows (=>) in arrays.
 #+BEGIN_SRC emacs-lisp
-  (defun my-align-php-dbl-arrow ()
+  (defun my/align-php-dbl-arrow ()
     "Align the => in arrays."
     (interactive)
     (align-regexp
      (region-beginning) (region-end)
      "\\(\\s-*\\) => " 1 0 nil))
 
-  (global-set-key (kbd "C-c a") 'my-align-php-dbl-arrow)
+  (global-set-key (kbd "C-c a") 'my/align-php-dbl-arrow)
 #+END_SRC
