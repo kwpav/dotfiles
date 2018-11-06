@@ -62,6 +62,7 @@ Things that replace or modify the core functionality of Emacs.
 Setup the package repositories and startup use-package.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
+  (setq package-enable-at-startup nil)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
   ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
@@ -69,15 +70,30 @@ Setup the package repositories and startup use-package.
   ;; (add-to-list 'package-archives
   ;;              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
   (package-initialize)
+#+END_SRC
 
-  (require 'use-package)
+Automatically install and then setup =use-package= and =diminish=
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  (unless (package-installed-p 'diminish)
+    (package-install 'diminish))
+
+  (eval-when-compile
+    (require 'use-package))
+  (require 'diminish) ;; for :diminish
+  (require 'bind-key) ;; for :bind
 #+END_SRC
 
 =paradox= gives some nicer package management options than the default.
-I mostly use it for =paradox-list-packages= and =paradox-upgrade-packages=
+=(paradox-enable)= replaces the =list-packages= command.
 #+BEGIN_SRC emacs-lisp
-  (use-package paradox
-    :ensure t)
+    (use-package paradox
+      :ensure t
+      :config
+      (paradox-enable))
 #+END_SRC
 *** Saner Defaults
 Modify some of the default settings.
