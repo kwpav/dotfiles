@@ -138,6 +138,12 @@ A package that provides some good defaults, e.g. using the X clipboard for yanki
   (use-package better-defaults
     :ensure t)
 #+END_SRC
+
+Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
+#+BEGIN_SRC emacs-lisp
+  (use-package no-littering
+    :ensure t)
+#+END_SRC
 *** Vim Emulation
 This allows you to use emacs keybindings while in evil's insert mode.
 from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
