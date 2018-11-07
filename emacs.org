@@ -27,7 +27,7 @@ An on-going list of things I want to change
   + use the C# lsp??
 - [ ] fix =eslint= for lsp if possible
   + eslint works fine without the =lsp-javascript-typescript=
-- [ ] setup =magithub=
+- [X] setup =magithub=
 - [ ] window management hydra?
 
 ** Cool looking packages to check out
@@ -573,7 +573,6 @@ From https://www.emacswiki.org/emacs/LineNumbers
 
   (use-package doom-modeline
         :ensure t
-        :defer t
         :hook (after-init . my-doom-modeline-hook)
         :config
         (defun my-doom-modeline-hook ()
@@ -709,7 +708,6 @@ Add rainbow delimiters in all programming language modes
 #+BEGIN_SRC emacs-lisp 
   (use-package rainbow-delimiters
     :ensure t
-    :defer t
     :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 ** Custom Functions
@@ -875,8 +873,8 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
-    :defer t
     :ensure t
+    :defer t
     :config
     ;; make sure we have lsp-imenu everywhere we have LSP
     (require 'lsp-imenu)
@@ -1090,7 +1088,6 @@ Use =pipenv= to handle virtual environments
 #+BEGIN_SRC emacs-lisp
   (use-package pipenv
     :ensure t
-    :defer t
     :hook ((python-mode . pipenv-mode)
            (hy-mode . pipenv-mode))
     :init
@@ -1356,7 +1353,6 @@ Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package prettier-js 
     :ensure t
-    :defer t
     :hook ((js2-mode . prettier-js-mode)
            (rjsx-mode . prettier-js-mode)))
 #+END_SRC
@@ -1365,7 +1361,6 @@ Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure t
-    :defer t
     :mode "\\.json\\'")
 #+END_SRC
 **** TODO TypeScript
@@ -1396,7 +1391,6 @@ Dont need too much here because it uses =js2-mode= where most of the config is d
 #+BEGIN_SRC emacs-lisp
   (use-package rjsx-mode
     :ensure t
-    :defer t
     :mode "\\.jsx\\'")
 #+END_SRC
 *** Web Mode
@@ -1437,8 +1431,7 @@ Set up web mode for html and css files
       (smartparens-mode t))
     ;; align -> on successive lines
     (setq php-lineup-cascaded-calls t)
-    (custom-set-variables
-     '(flycheck-phpcs-standard "WellspringCodingStandard")))
+    (setq flycheck-phpcs-standard "WellspringCodingStandard"))
 #+END_SRC
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
