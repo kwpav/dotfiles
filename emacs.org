@@ -1014,6 +1014,12 @@ Press <H> in the magit status window to get the popup for magithub.
     (magithub-feature-autoinject t)
     (setq magithub-clone-default-directory "~/repos"))
 #+END_SRC
+*** git-messenger
+Show commit info
+#+BEGIN_SRC emacs-lisp
+  (use-package git-messenger
+    :ensure t)
+#+END_SRC
 ** System Specific
 *** OSX
 Paths need to be explicitly defined for some reason in OSX.
