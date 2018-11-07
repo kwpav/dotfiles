@@ -56,9 +56,13 @@ An on-going list of things I want to change
   - github notification count in the modeline
 
 * Emacs
-** Core
-Things that replace or modify the core functionality of Emacs.
-*** Package Setup
+** Personal Information
+Who am I?
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Kevin Pavao"
+        user-mail-address "kpavao84@gmail.com")
+#+END_SRC
+** Package Setup
 Setup the package repositories and startup use-package.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -88,26 +92,21 @@ Automatically install and then setup =use-package= and =diminish=
 #+END_SRC
 
 =paradox= gives some nicer package management options than the default.
-=(paradox-enable)= replaces the =list-packages= command.
+=(paradox-enable)= replaces the =list-packages= command with =paradox-list-packages=.
 #+BEGIN_SRC emacs-lisp
     (use-package paradox
       :ensure t
       :config
       (paradox-enable))
 #+END_SRC
+** Core
+Things that replace or modify the core functionality of Emacs.
 *** Saner Defaults
 Modify some of the default settings.
 
 Change "yes or no" to "y or n"
 #+BEGIN_SRC emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-
-Don't create any extra files.
-#+BEGIN_SRC emacs-lisp
-  (setq make-backup-files nil ; stop creating backup~ files
-        auto-save-default nil ; stop creating #autosave# files
-        create-lockfiles nil) ; stop creating .# files
 #+END_SRC
 
 Update buffers automatically when underlying files are changed externally.
@@ -139,10 +138,22 @@ A package that provides some good defaults, e.g. using the X clipboard for yanki
     :ensure t)
 #+END_SRC
 
+Don't create any extra files.
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil ; stop creating backup~ files
+        auto-save-default nil ; stop creating #autosave# files
+        create-lockfiles nil) ; stop creating .# files
+#+END_SRC
+
 Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
 #+BEGIN_SRC emacs-lisp
   (use-package no-littering
-    :ensure t)
+    :ensure t
+    :init
+    (setq no-littering-etc-directory
+          (expand-file-name "etc/" user-emacs-directory))
+    (setq no-littering-var-directory
+          (expand-file-name "var/" user-emacs-directory)))
 #+END_SRC
 *** Vim Emulation
 This allows you to use emacs keybindings while in evil's insert mode.
