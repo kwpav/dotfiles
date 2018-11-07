@@ -419,14 +419,14 @@ Replace emacs search and evil search with swiper
   (use-package ivy
     :ensure t
     :diminish ivy-mode
-    :init
-    (ivy-mode 1)
+    :general
+    ("<f6>" 'ivy-resume)
+    :config
     (setq ivy-use-virtual-buffers t)
     (setq enable-recursive-minibuffers t)
     (setq ivy-count-format "(%d/%d) ")
     (setq ivy-height 20)
-    :general
-    ("<f6>" 'ivy-resume))
+    (ivy-mode 1))
 #+END_SRC
 *** undo-tree
 press <C-x u> to use and <q> to quit.
@@ -436,9 +436,9 @@ press <C-x u> to use and <q> to quit.
     :defer t
     :ensure t
     :config
-    (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t))
+    (setq undo-tree-visualizer-diff t)
+    (global-undo-tree-mode))
 #+END_SRC
 *** anzu
 Add search and replace info to the modeline
@@ -709,8 +709,8 @@ Add rainbow delimiters in all programming language modes
 #+BEGIN_SRC emacs-lisp 
   (use-package rainbow-delimiters
     :ensure t
-    :init
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    :defer t
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 ** Custom Functions
 *** what-minor-mode
@@ -832,7 +832,7 @@ Put it all together. The =:general= block maps :x and :q to confirm and :q to ab
      [remap evil-save-and-close]          'org-edit-src-exit
      [remap evil-save-modified-and-close] 'org-edit-src-exit
      [remap evil-quit]                    'org-edit-src-abort)
-    :hook ((org-mode . my-org-mode-hook))
+    :hook (org-mode . my-org-mode-hook)
     :config
     (my-org-todo-setup)
     (my-org-prettify)
@@ -1054,6 +1054,10 @@ Test RESTful APIs in emacs!
 * Languages
 Configuration for programming languages
 *** Python
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package python
+  ;;   :mode "\\.py\\'")
+#+END_SRC
 from https://vxlabs.com/2018/06/08/python-language-server-with-emacs-and-lsp-mode/
 
 In order for this to work, you need to install https://github.com/palantir/python-language-server
@@ -1085,6 +1089,8 @@ In order for this to work, you need to install https://github.com/palantir/pytho
 Use =pipenv= to handle virtual environments
 #+BEGIN_SRC emacs-lisp
   (use-package pipenv
+    :ensure t
+    :defer t
     :hook ((python-mode . pipenv-mode)
            (hy-mode . pipenv-mode))
     :init
@@ -1245,8 +1251,8 @@ For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
     :ensure t
-    :init
-    (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
+    :mode "\\.hs\\'"
+    :hook (haskell-mode . turn-on-haskell-indent))
 #+END_SRC
 *** Javascript
 **** Vanilla
@@ -1265,7 +1271,7 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
   (use-package js2-mode
     :ensure t
     :mode (("\\.js$" . js2-mode))
-    :hook ((js2-mode . my-js-hook))
+    :hook (js2-mode . my-js-hook)
     :ensure-system-package ((prettier . "npm i -g prettier")
                             (eslint . "npm i -g eslint")
                             (eslint_d . "npm i -g eslint_d"))
@@ -1350,6 +1356,7 @@ Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package prettier-js 
     :ensure t
+    :defer t
     :hook ((js2-mode . prettier-js-mode)
            (rjsx-mode . prettier-js-mode)))
 #+END_SRC
@@ -1358,8 +1365,8 @@ Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure t
-    :init
-    (add-to-list `auto-mode-alist '("\\.json\\'" . json-mode)))
+    :defer t
+    :mode "\\.json\\'")
 #+END_SRC
 **** TODO TypeScript
 #+BEGIN_SRC emacs-lisp
@@ -1388,14 +1395,16 @@ Set up =prettier-js-mode=
 Dont need too much here because it uses =js2-mode= where most of the config is done
 #+BEGIN_SRC emacs-lisp
   (use-package rjsx-mode
-    :ensure t)
+    :ensure t
+    :defer t
+    :mode "\\.jsx\\'")
 #+END_SRC
 *** Web Mode
 Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode 
     :ensure t
-    :hook ((web-mode . my-web-mode-hook))
+    :hook (web-mode . my-web-mode-hook)
     :init
     ;; (setq web-mode-ac-sources-alist
     ;;       '(("css" . (ac-source-css-property))
@@ -1419,7 +1428,7 @@ Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :ensure t
-    :hook ((php-mode . my-php-hook))
+    :hook (php-mode . my-php-hook)
     :mode "\\.php\\'"
     :config
     (defun my-php-hook ()
@@ -1430,20 +1439,21 @@ Set up web mode for html and css files
     (setq php-lineup-cascaded-calls t)
     (custom-set-variables
      '(flycheck-phpcs-standard "WellspringCodingStandard")))
-
 #+END_SRC
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
 #+BEGIN_SRC emacs-lisp
   (use-package php-eldoc
-    :ensure t)
+    :ensure t
+    :after php-mode)
 #+END_SRC
 
 Setup code completion and documentation.
 #+BEGIN_SRC emacs-lisp
   (use-package company-php
     :ensure t
-    :hook ((php-mode . my-company-php-hook))
+    :after php-eldoc
+    :hook (php-mode . my-company-php-hook)
     :config
     (defun my-company-php-hook ()
       (ac-php-core-eldoc-setup)
@@ -1456,6 +1466,7 @@ Use =PHP_CodeSniffer= to format files on save.
 #+BEGIN_SRC emacs-lisp
   (use-package phpcbf
     :ensure t
+    :after php-mode
     ;;:hook ((php-mode . phpcbf-enable-on-save))
     :config
     (setq phpcbf-executable "/usr/local/bin/phpcbf")
