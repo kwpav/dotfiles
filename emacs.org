@@ -108,10 +108,13 @@ Evil mode is vim in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
-    :hook ((after-init . evil-mode)
-           (evil-mode . my-emacs-in-normal-mode))
+    :demand t
+    ;; :hook ((after-init . evil-mode)
+    ;;        (evil-mode . my-emacs-in-normal-mode))
     :init
-    (setq evil-want-keybinding nil)) ;; evil-collection assumes this
+    (setq evil-want-keybinding nil)  ;; evil-collection assumes this
+    :config
+    (evil-mode 1))
 #+END_SRC
 
 Use evil bindings in various modes.
@@ -337,10 +340,11 @@ Ivy, a generic completion mechanism for Emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
-    :hook (after-init . ivy-mode)
+    :demand t
     :general
     ("<f6>" 'ivy-resume)
     :config
+    (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
     (setq enable-recursive-minibuffers t)
     (setq ivy-count-format "(%d/%d) ")
@@ -353,7 +357,8 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
     :ensure t
-    :hook (ivy-mode . counsel-mode)
+    :after ivy
+    :demand t
     :general
     ("M-x" 'counsel-M-x)
     ("C-x C-f" 'counsel-find-file)
@@ -379,11 +384,10 @@ Replace keybindings for emacs search and evil search with swiper.
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
     :ensure t
-    :after (counsel)
+    :after ivy
     :general
     ("C-s" 'swiper)
-    :config
-    (define-key evil-normal-state-map (kbd "/") 'swiper))
+    (evil-normal-state-map "/" 'swiper))
 #+END_SRC
 **** anzu
 Add find and replace info to the modeline.
@@ -513,13 +517,14 @@ From https://www.emacswiki.org/emacs/LineNumbers
   (use-package all-the-icons
     :ensure t)
 
+  (defun my-doom-modeline-hook ()
+    (column-number-mode)
+    (doom-modeline-init))
+
   (use-package doom-modeline
-        :ensure t
-        :hook (after-init . my-doom-modeline-hook)
-        :config
-        (defun my-doom-modeline-hook ()
-          (column-number-mode)
-          (doom-modeline-init)))
+    :ensure t
+    :defer t
+    :hook (after-init . my-doom-modeline-hook))
 #+END_SRC
 **** spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
@@ -702,7 +707,10 @@ Default keybindings are: S-arrowkey (e.g. S-Left) to move around
 Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
-    :ensure t)
+    :ensure t
+    :defer 5
+    :config
+    (projectile-global-mode))
 
   (use-package counsel-projectile
     :ensure t
@@ -715,13 +723,16 @@ A file tree.
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
     :ensure t
+    :after doom-themes
     :general ([f8] 'treemacs))
 
   (use-package treemacs-evil
-    :ensure t)
+    :ensure t
+    :after (evil treemacs))
 
   (use-package treemacs-projectile
-    :ensure t)
+    :ensure t
+    :after (projectile treemacs))
 #+END_SRC
 **** restart
 Yo dawg, use =restart-emacs= to restart emacs within emacs.
