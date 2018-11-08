@@ -8,14 +8,7 @@ vim/.vim/
 /xmonad/.xmonad/xmonad_test.hs
 
 # emacs ignores
-emacs.el
-/emacs/.emacs.d/elpa
-/emacs/.emacs.d/recentf
-/emacs/.emacs.d/.*
-/emacs/.emacs.d/ac*
-/emacs/.emacs.d/projectile-bookmarks*
-
-# ignore emacs temp files
-[#]*[#]
-*~
-.\#*
+emacs.el             # created from emacs.org
+/emacs/.emacs.d/elpa # package directory
+/emacs/.emacs.d/var  # no-littering directory
+/emacs/.emacs.d/etc  # no-littering directory
