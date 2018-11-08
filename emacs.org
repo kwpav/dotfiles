@@ -6,13 +6,6 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 ** How to Add/Modify 
 To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
-** Some good keys to remember
-| Key   | Action                                                     |
-|-------+------------------------------------------------------------|
-| F8    | Open/close neo-tree.                                       |
-| C-c ' | Edit code within org-mode code blocks in their native mode |
-| C-x u | Open undo-tree                                             |
-
 * TODO Things to do
 An on-going list of things I want to change
 
@@ -63,7 +56,7 @@ Who am I?
         user-mail-address "kpavao84@gmail.com")
 #+END_SRC
 ** Package Setup
-Setup the package repositories and startup use-package.
+Setup the package repositories.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
   (setq package-enable-at-startup nil)
@@ -94,13 +87,20 @@ Automatically install and then setup =use-package= and =diminish=
 =paradox= gives some nicer package management options than the default.
 =(paradox-enable)= replaces the =list-packages= command with =paradox-list-packages=.
 #+BEGIN_SRC emacs-lisp
-    (use-package paradox
-      :ensure t
-      :config
-      (paradox-enable))
+  (use-package paradox
+    :ensure t
+    :config
+    (paradox-enable))
+#+END_SRC
+** Startup
+Display the scratch buffer when starting up, use =org-mode= for the scratch buffer, and remove the default message.
+#+BEGIN_SRC emacs-lisp
+  (setq  inhibit-startup-screen t
+         initial-major-mode 'org-mode
+         initial-scratch-message nil)
 #+END_SRC
 ** Core
-Things that replace or modify the core functionality of Emacs.
+Things that modify or replace the core functionality of Emacs, or are needed by the rest of the config.
 *** Saner Defaults
 Modify some of the default settings.
 
@@ -112,24 +112,6 @@ Change "yes or no" to "y or n"
 Update buffers automatically when underlying files are changed externally.
 #+BEGIN_SRC emacs-lisp
   (global-auto-revert-mode t)
-#+END_SRC
-
-Display the scratch buffer when starting up, use =org-mode= for the scratch buffer, and remove the default message.
-#+BEGIN_SRC emacs-lisp
-  (setq  inhibit-startup-screen t
-         initial-major-mode 'org-mode
-         initial-scratch-message nil)
-#+END_SRC
-
-Better mouse scrolling - the default scrolling is too quick.
-#+BEGIN_SRC emacs-lisp
-  (setq scroll-margin 10
-        scroll-step 1
-        next-line-add-newlines nil
-        scroll-conservatively 10000
-        scroll-preserve-screen-position 1
-        mouse-wheel-follow-mouse 't
-        mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 #+END_SRC
 
 A package that provides some good defaults, e.g. using the X clipboard for yanking
@@ -168,17 +150,16 @@ Evil mode is vim in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
+    :hook ((after-init . evil-mode)
+           (evil-mode . my-emacs-in-normal-mode))
     :init
-    (setq evil-want-keybinding nil) ;; evil-collection assumes this
-    :config
-    (evil-mode 1)
-    (my-emacs-in-normal-mode))
+    (setq evil-want-keybinding nil)) ;; evil-collection assumes this
 #+END_SRC
 
 Use evil bindings in various modes.
 #+BEGIN_SRC emacs-lisp
   (use-package evil-collection
-    :after evil
+    :after (evil)
     :ensure t
     :config
     (evil-collection-init))
@@ -187,7 +168,7 @@ Use evil bindings in various modes.
 surround.vim emulation.
 #+BEGIN_SRC emacs-lisp
   (use-package evil-surround
-    :after evil
+    :after (evil)
     :ensure t
     :config
     (global-evil-surround-mode 1))
@@ -199,23 +180,6 @@ Show tildes in the fringe on empty lines.
     :ensure t
     :config
     (global-vi-tilde-fringe-mode 1))
-#+END_SRC
-
-display a visual hint when editing with evil
-*NOTE* commented out because doom-themes dont show nice colors
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package evil-goggles
-  ;;   :after evil
-  ;;   :ensure t
-  ;;   :config
-  ;;   (evil-goggles-mode)
-  ;;   (setq evil-goggles-duration 0.100) ;; default is 0.200
-
-  ;;   ;; optionally use diff-mode's faces; as a result, deleted text
-  ;;   ;; will be highlighed with `diff-removed` face which is typically
-  ;;   ;; some red color (as defined by the color theme)
-  ;;   ;; other faces such as `diff-added` will be used for other actions
-  ;;   (evil-goggles-use-diff-faces))
 #+END_SRC
 *** Keys
 To set up custom keys, I use a combination of:
@@ -395,13 +359,43 @@ Also provides a =:general= use-package keyword, so this needs to be setup before
     :config
     (keyfreq-autosave-mode 1))
 #+END_SRC
-*** ivy/counsel/swiper
+*** Mouse
+Better mouse scrolling - the default scrolling is too quick.
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-margin 10
+        scroll-step 1
+        next-line-add-newlines nil
+        scroll-conservatively 10000
+        scroll-preserve-screen-position 1
+        mouse-wheel-follow-mouse 't
+        mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+#+END_SRC
+*** Ivy / Counsel
 Some nice tools that use the minibuffer.
 
-Replace emacs commands with counsel ones.
+#+BEGIN_QUOTE
+Ivy, a generic completion mechanism for Emacs.
+#+END_QUOTE
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :hook (after-init . ivy-mode)
+    :general
+    ("<f6>" 'ivy-resume)
+    :config
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-height 20))
+#+END_SRC
+
+#+BEGIN_QUOTE
+Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
+#+END_QUOTE
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
     :ensure t
+    :hook (ivy-mode . counsel-mode)
     :general
     ("M-x" 'counsel-M-x)
     ("C-x C-f" 'counsel-find-file)
@@ -421,32 +415,32 @@ Replace emacs commands with counsel ones.
     (setq counsel-rg-base-command
           "rg -i -M 120 --no-heading --line-number --color never %s ."))
 #+END_SRC
-
-Replace emacs search and evil search with swiper
+*** Search / Replace
+**** swiper
+Replace keybindings for emacs search and evil search with swiper.
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
     :ensure t
+    :after (counsel)
     :general
     ("C-s" 'swiper)
     :config
     (define-key evil-normal-state-map (kbd "/") 'swiper))
 #+END_SRC
-
+**** anzu
+Add find and replace info to the modeline.
 #+BEGIN_SRC emacs-lisp
-  (use-package ivy
+  (use-package anzu
     :ensure t
-    :diminish ivy-mode
-    :general
-    ("<f6>" 'ivy-resume)
     :config
-    (setq ivy-use-virtual-buffers t)
-    (setq enable-recursive-minibuffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq ivy-height 20)
-    (ivy-mode 1))
+    (global-anzu-mode)
+    (global-set-key [remap query-replace] 'anzu-query-replace)
+    (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp))
 #+END_SRC
-*** undo-tree
-press <C-x u> to use and <q> to quit.
+*** Undo
+Replace standard Emacs undo with =undo-tree=. Press <C-x u> to use =undo-tree=. and <q> to quit.
+
+This way I can use evil's undo (<u> in Normal mode) and =undo-tree= at the same time.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :diminish undo-tree-mode
@@ -457,29 +451,18 @@ press <C-x u> to use and <q> to quit.
     (setq undo-tree-visualizer-diff t)
     (global-undo-tree-mode))
 #+END_SRC
-*** anzu
-Add search and replace info to the modeline
-#+BEGIN_SRC emacs-lisp
-  (use-package anzu
-    :ensure t
-    :config
-    (global-anzu-mode)
-    (global-set-key [remap query-replace] 'anzu-query-replace)
-    (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp))
-#+END_SRC
-*** projectile
-Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t)
-
-  (use-package counsel-projectile
-    :ensure t
-    :after projectile
-    :config
-    (counsel-projectile-mode))
-#+END_SRC
 ** Look and Feel
+*** Change defaults
+Hide the gui and use a non-blinking cursor for a more zen-like experience.
+Use C-mouse3 to open the menu-bar as a popup menu
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -99)
+  (tool-bar-mode -1) ;; hide the toolbar
+  (scroll-bar-mode -1) ;; hide the scrollbar 
+  (blink-cursor-mode 0) ;; dont blink the cursor
+  (set-fringe-mode '(10 . 0)) ;; remove the extra border around frames
+  (global-hl-line-mode 1) ;; highlight the current line
+#+END_SRC
 *** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
@@ -548,22 +531,6 @@ Other fonts I like
   ;;(add-to-list 'default-frame-alist '(font . "envypn-11" ))
 #+END_SRC
 *** Other stuff
-Hide the gui and use a non-blinking cursor for a more zen-like experience.
-Use C-mouse3 to open the menu-bar as a popup menu
-#+BEGIN_SRC emacs-lisp
-  (menu-bar-mode -99)
-  (tool-bar-mode -1) ;; hide the toolbar
-  (scroll-bar-mode -1) ;; hide the scrollbar 
-  (blink-cursor-mode 0) ;; dont blink the cursor
-  (set-fringe-mode '(10 . 0)) ;;remove the extra border around frames
-  (global-hl-line-mode 1) ;; highlight the current line
-#+END_SRC
-
-Add line numbers whenever the major mode is a programming language
-#+BEGIN_SRC emacs-lisp 
-  (add-hook 'prog-mode-hook 'linum-mode)
-#+END_SRC
-
 Add a space between the line numbers and the text
 From https://www.emacswiki.org/emacs/LineNumbers
 #+BEGIN_SRC emacs-lisp
@@ -772,6 +739,57 @@ Default keybindings are: S-arrowkey (e.g. S-Left) to move around
 #+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings)
 #+END_SRC
+** Project and File Management
+*** projectile
+Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t)
+
+  (use-package counsel-projectile
+    :ensure t
+    :after (counsel projectile)
+    :config
+    (counsel-projectile-mode))
+#+END_SRC
+*** treemacs
+A file tree.
+#+BEGIN_SRC emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :general ([f8] 'treemacs))
+
+  (use-package treemacs-evil
+    :ensure t)
+
+  (use-package treemacs-projectile
+    :ensure t)
+#+END_SRC
+**** restart
+Yo dawg, use =restart-emacs= to restart emacs within emacs.
+Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
+#+BEGIN_SRC emacs-lisp
+  (use-package restart-emacs
+    :ensure t)
+#+END_SRC
+**** multi-term
+run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
+#+BEGIN_SRC emacs-lisp
+  (use-package multi-term
+    :ensure t)
+#+END_SRC
+**** restclient
+Test RESTful APIs in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package restclient
+    :ensure t)
+
+  (use-package company-restclient
+    :ensure t)
+
+  (use-package ob-restclient
+    :ensure t)
+#+END_SRC
 ** Org Mode
 Set up everything for =org-mode=
 *** Startup hook
@@ -872,6 +890,11 @@ old snippets of things
 #+END_SRC
 ** Code
 Things that are used when coding.
+*** line numbers
+Add line numbers whenever the major mode is a programming language
+#+BEGIN_SRC emacs-lisp 
+  (add-hook 'prog-mode-hook 'linum-mode)
+#+END_SRC
 *** company
 Company provides code completion.
 #+BEGIN_SRC emacs-lisp
@@ -900,7 +923,7 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
   ;; lsp extras
   (use-package lsp-ui
     :ensure t
-    :after lsp-mode
+    :after (lsp-mode)
     :hook (lsp-mode . lsp-ui-mode)
     :config
     (setq lsp-ui-sideline-ignore-duplicate t
@@ -997,22 +1020,23 @@ use git in emacs!
 Get evil-mode to play nicely
 #+BEGIN_SRC emacs-lisp
   (use-package evil-magit
-    :ensure t)
-#+END_SRC
-*** git-timemachine
-#+BEGIN_SRC emacs-lisp
-  (use-package git-timemachine
-    :ensure t)
+    :ensure t
+    :after (magit))
 #+END_SRC
 *** magithub
 Press <H> in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
   (use-package magithub
-    :after magit
+    :after (magit)
     :ensure t
     :config
     (magithub-feature-autoinject t)
     (setq magithub-clone-default-directory "~/repos"))
+#+END_SRC
+*** git-timemachine
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :ensure t)
 #+END_SRC
 *** git-messenger
 Show commit info
@@ -1034,44 +1058,6 @@ Paths need to be explicitly defined for some reason in OSX.
     (exec-path-from-shell-initialize))
 #+END_SRC
 ** Other
-*** treemacs
-A file tree.
-#+BEGIN_SRC emacs-lisp
-  (use-package treemacs
-    :ensure t
-    :general ([f8] 'treemacs))
-
-  (use-package treemacs-evil
-    :ensure t)
-
-  (use-package treemacs-projectile
-    :ensure t)
-#+END_SRC
-*** restart
-Yo dawg, use =restart-emacs= to restart emacs within emacs.
-Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
-#+BEGIN_SRC emacs-lisp
-  (use-package restart-emacs
-    :ensure t)
-#+END_SRC
-*** multi-term
-run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
-#+BEGIN_SRC emacs-lisp
-  (use-package multi-term
-    :ensure t)
-#+END_SRC
-*** restclient
-Test RESTful APIs in emacs!
-#+BEGIN_SRC emacs-lisp
-  (use-package restclient
-    :ensure t)
-
-  (use-package company-restclient
-    :ensure t)
-
-  (use-package ob-restclient
-    :ensure t)
-#+END_SRC
 * Languages
 Configuration for programming languages
 *** Python
@@ -1461,14 +1447,14 @@ Documentation in the minibuffer and with =company=. This is needed by =company-p
 #+BEGIN_SRC emacs-lisp
   (use-package php-eldoc
     :ensure t
-    :after php-mode)
+    :after (php-mode))
 #+END_SRC
 
 Setup code completion and documentation.
 #+BEGIN_SRC emacs-lisp
   (use-package company-php
     :ensure t
-    :after php-eldoc
+    :after (php-eldoc)
     :hook (php-mode . my-company-php-hook)
     :config
     (defun my-company-php-hook ()
@@ -1482,7 +1468,7 @@ Use =PHP_CodeSniffer= to format files on save.
 #+BEGIN_SRC emacs-lisp
   (use-package phpcbf
     :ensure t
-    :after php-mode
+    :after (php-mode)
     ;;:hook ((php-mode . phpcbf-enable-on-save))
     :config
     (setq phpcbf-executable "/usr/local/bin/phpcbf")
