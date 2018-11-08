@@ -12,3 +12,6 @@ emacs.el
 /emacs/.emacs.d/elpa
 /emacs/.emacs.d/var
 /emacs/.emacs.d/etc
+
+# qtile ignores
+/qtile/.config/qtile/__pycache__
