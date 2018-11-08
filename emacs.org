@@ -6,48 +6,6 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 ** How to Add/Modify 
 To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
-* TODO Things to do
-An on-going list of things I want to change
-
-- [X] fix evil escape keys
-  - using the =evil-collection= package
-- [ ] make org prettier?
-  + [ ] bullets?
-- yasnippet: [2/2]
-  + [X] learn to use
-  + [X] configure
-- [ ] Configure C#
-  + use the C# lsp??
-- [ ] fix =eslint= for lsp if possible
-  + eslint works fine without the =lsp-javascript-typescript=
-- [X] setup =magithub=
-- [ ] window management hydra?
-
-** Cool looking packages to check out
-- =straight.el= - https://github.com/raxod502/straight.el
-  - package management
-- =purpose= - https://github.com/bmag/emacs-purpose
-  - window/buffer management
-- =multiple-cursors= - https://github.com/magnars/multiple-cursors.el
-- =iedit= - https://github.com/victorhge/iedit
-  - like multiple cursors
-- =eglot= - https://github.com/joaotavora/eglot
-  - lightweight LSP
-- =targets= - https://github.com/noctuid/targets.el
-  - operate on text objects
-- =git-gitter=
-- =diff-hl= - like =git-gutter=
-- =shackle= - https://github.com/wasamasa/shackle
-  - control popup windows
-- =smart-mode-line=
-- =telephone-line=
-- =minions=
-  - minor modes in the modeline?
-- =moody=
-  - powerline-esque modeline
-- =github-notifier= - https://github.com/xuchunyang/github-notifier.el
-  - github notification count in the modeline
-
 * Emacs
 ** Personal Information
 Who am I?
@@ -1486,3 +1444,44 @@ Align double arrows (=>) in arrays.
 
   (global-set-key (kbd "C-c a") 'my/align-php-dbl-arrow)
 #+END_SRC
+* TODO Things to do
+An on-going list of things I want to change
+
+- [X] fix evil escape keys
+  - using the =evil-collection= package
+- [ ] make org prettier?
+  + [ ] bullets?
+- yasnippet: [2/2]
+  + [X] learn to use
+  + [X] configure
+- [ ] Configure C#
+  + use the C# lsp??
+- [ ] fix =eslint= for lsp if possible
+  + eslint works fine without the =lsp-javascript-typescript=
+- [X] setup =magithub=
+- [ ] window management hydra?
+
+** Cool looking packages to check out
+- =straight.el= - https://github.com/raxod502/straight.el
+  - package management
+- =purpose= - https://github.com/bmag/emacs-purpose
+  - window/buffer management
+- =multiple-cursors= - https://github.com/magnars/multiple-cursors.el
+- =iedit= - https://github.com/victorhge/iedit
+  - like multiple cursors
+- =eglot= - https://github.com/joaotavora/eglot
+  - lightweight LSP
+- =targets= - https://github.com/noctuid/targets.el
+  - operate on text objects
+- =git-gitter=
+- =diff-hl= - like =git-gutter=
+- =shackle= - https://github.com/wasamasa/shackle
+  - control popup windows
+- =smart-mode-line=
+- =telephone-line=
+- =minions=
+  - minor modes in the modeline?
+- =moody=
+  - powerline-esque modeline
+- =github-notifier= - https://github.com/xuchunyang/github-notifier.el
+  - github notification count in the modeline
