@@ -1019,6 +1019,35 @@ Show commit info
   (use-package git-messenger
     :ensure t)
 #+END_SRC
+*** git-gutter-fringe
+Show whether something has been added, modified, or deleted on the side of the screen.
+
+Taken from the doom-emacs config.
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure t
+    :config
+    (global-git-gutter-mode 1)
+    (setq-default fringes-outside-margins t)
+    (define-fringe-bitmap 'git-gutter-fr:added
+      [240 240 240 240 240 240 240 240 240 240 240 240 240 240]
+      nil nil 'center)
+    (define-fringe-bitmap 'git-gutter-fr:modified
+      [240 240 240 240 240 240 240 240 240 240 240 240 240 240]
+      nil nil 'center)
+    (define-fringe-bitmap 'git-gutter-fr:deleted
+      [0 0 0 128 192 224 240 248]
+      nil nil 'center)
+    (fringe-helper-define 'git-gutter-fr:added '(center repeated)
+      "XXX.....")
+    (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
+      "XXX.....")
+    (fringe-helper-define 'git-gutter-fr:deleted 'bottom
+      "X......."
+      "XX......"
+      "XXX....."
+      "XXXX...."))
+#+END_SRC
 ** System Specific
 *** OSX
 Paths need to be explicitly defined for some reason in OSX.
