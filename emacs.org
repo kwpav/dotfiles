@@ -1053,19 +1053,20 @@ Taken from the doom-emacs config.
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-my-git-menu (global-map "<f7>")
     "
-  ^Navigate^        ^Stage^            ^Status^
-  ^^^^^^^^^^^^--------------------------------------------------------------
-  _j_: next-hunk    _s_: stage-hunk    _g_: magit-status
-  _k_: prev-hunk    _S_: stage-file    _c_: show commit
-  ^ ^               _u_: unstage-file
+  ^Navigate^        ^Action^           ^Info^             
+  ^^^^^^^^^^^^---------------------------------------------------
+  _j_: next hunk    _s_: stage hunk    _d_: diff
+  _k_: prev hunk    _S_: stage file    _c_: show commit
+  ^ ^               _U_: unstage file  _g_: magit status
   "
     ("j" git-gutter:next-hunk)
     ("k" git-gutter:previous-hunk)
     ("s" git-gutter:stage-hunk)
     ("S" magit-stage-file)
-    ("u" magit-unstage-file)
+    ("U" magit-unstage-file)
     ("c" git-messenger:popup-show)
-    ("g" magit-status)
+    ("g" magit-status :exit t)
+    ("d" magit-diff-buffer-file)
     ("q" quit-window "quit-window")
     ("<ESC>" git-gutter:update-all-windows "quit" :exit t))
 #+END_SRC
