@@ -2,7 +2,13 @@
 
 * emacs.org
 ** What is this?
-This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/dotfiles/emacs.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as [[http://pages.sachachua.com/.emacs.d/Sacha.html][this one]]. 
+This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/dotfiles/emacs.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as:
+- [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's config]]
+- [[https://github.com/TheBB/dotemacs][TheBB's config]]
+- [[https://github.com/jwiegley/dot-emacs][jwiegly's config]]
+- [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
+- [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
+
 ** How to Add/Modify 
 To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
@@ -110,6 +116,7 @@ Evil mode is vim in emacs!
     :ensure t
     :init
     (setq evil-want-keybinding nil)  ;; evil-collection assumes this
+    (setq evil-want-C-u-scroll t)
     :config
     (evil-mode 1)
     (my-emacs-in-normal-mode))
@@ -1495,3 +1502,6 @@ An on-going list of things I want to change
   - powerline-esque modeline
 - =github-notifier= - https://github.com/xuchunyang/github-notifier.el
   - github notification count in the modeline
+- =evil-escape=
+- =evil-indent=
+- =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
