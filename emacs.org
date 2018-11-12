@@ -164,6 +164,7 @@ Also provides a =:general= use-package keyword, so this needs to be setup before
   (use-package general
     :ensure t
     :config
+    (general-evil-setup)
     (general-create-definer my-leader-def
       ;; :prefix my-leader
       :prefix "SPC")
