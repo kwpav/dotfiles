@@ -217,6 +217,7 @@ Also provides a =:general= use-package keyword, so this needs to be setup before
       "gS" 'magit-stage-file
       "gU" 'magit-unstage-file
       "gg" 'hydra-my-git-menu/body
+      "gy" 'magit-yank-branch-name
       ;; multi-term
       "tt" 'multi-term
       "tn" 'multi-term-next
@@ -984,20 +985,30 @@ Use editorconfig for projects that have them
 ** Version Control
 *** magit
 use git in emacs!
+
+=magit-yank-branch-name= is from https://emacs.stackexchange.com/questions/30487/add-copy-to-kill-ring-current-branch-name-with-magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
     :general
     ("C-x g" 'magit-status)
     :config
-    (setq magit-completing-read-function 'ivy-completing-read))
+    (setq magit-completing-read-function 'ivy-completing-read)
+    (defun magit-yank-branch-name ()
+      "Show the current branch in the echo-area and add it to the `kill-ring'."
+      (interactive)
+      (let ((branch (magit-get-current-branch)))
+        (if branch
+            (progn (kill-new branch)
+                   (message "%s" branch))
+          (user-error "There is not current branch")))))
 #+END_SRC
 
 Get evil-mode to play nicely
 #+BEGIN_SRC emacs-lisp
   (use-package evil-magit
     :ensure t
-    :after (magit))
+    :after (magit evil))
 #+END_SRC
 *** magithub
 Press <H> in the magit status window to get the popup for magithub.
@@ -1053,11 +1064,12 @@ Taken from the doom-emacs config.
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-my-git-menu (global-map "<f7>")
     "
-  ^Navigate^        ^Action^           ^Info^             
+  ^Navigate^        ^Action^               ^Info^
   ^^^^^^^^^^^^---------------------------------------------------
-  _j_: next hunk    _s_: stage hunk    _d_: diff
-  _k_: prev hunk    _S_: stage file    _c_: show commit
-  ^ ^               _U_: unstage file  _g_: magit status
+  _j_: next hunk    _s_: stage hunk        _d_: diff
+  _k_: prev hunk    _S_: stage file        _c_: show commit
+  ^ ^               _U_: unstage file      _g_: magit status
+  ^ ^               ^ ^                    ^ ^
   "
     ("j" git-gutter:next-hunk)
     ("k" git-gutter:previous-hunk)
