@@ -209,13 +209,14 @@ Also provides a =:general= use-package keyword, so this needs to be setup before
       "w8" 'eyebrowse-switch-to-window-config-8
       "w9" 'eyebrowse-switch-to-window-config-9
       "w0" 'eyebrowse-switch-to-window-config-0
-      ;; magit
+      ;; git
       "gs" 'magit-status
       "gc" 'magit-checkout
       "gC" 'magit-commit
       "gb" 'magit-blame
       "gS" 'magit-stage-file
       "gU" 'magit-unstage-file
+      "gg" 'hydra-my-git-menu/body
       ;; multi-term
       "tt" 'multi-term
       "tn" 'multi-term-next
@@ -1047,6 +1048,26 @@ Taken from the doom-emacs config.
       "XX......"
       "XXX....."
       "XXXX...."))
+#+END_SRC
+*** My Git Hydra
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-my-git-menu (global-map "<f7>")
+    "
+  ^Navigate^        ^Stage^            ^Status^
+  ^^^^^^^^^^^^--------------------------------------------------------------
+  _j_: next-hunk    _s_: stage-hunk    _g_: magit-status
+  _k_: prev-hunk    _S_: stage-file    _c_: show commit
+  ^ ^               _u_: unstage-file
+  "
+    ("j" git-gutter:next-hunk)
+    ("k" git-gutter:previous-hunk)
+    ("s" git-gutter:stage-hunk)
+    ("S" magit-stage-file)
+    ("u" magit-unstage-file)
+    ("c" git-messenger:popup-show)
+    ("g" magit-status)
+    ("q" quit-window "quit-window")
+    ("<ESC>" git-gutter:update-all-windows "quit" :exit t))
 #+END_SRC
 ** System Specific
 *** OSX
