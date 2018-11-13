@@ -9,7 +9,7 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 - [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 
-** How to Add/Modify 
+** How to Add/Modify
 To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
 * Emacs
@@ -149,142 +149,56 @@ Show tildes in the fringe on empty lines.
 #+END_SRC
 *** Keys
 To set up custom keys, I use a combination of:
-- =general= - define leader keys, e.g. press <SPACE> and a key to perform an action (if in evil's normal or visual modes)
-- =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing <SPACE>
+- =general= - an easier way to define custom keys than the built in one
+- =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing ~SPC~
 - =hydra= - create a "mode" (similar to how i3 does resize mode) for repeated actions
 - =keyfreq= - use =keyfreq-show= to get a list of most use commands and then make keybindings/hydras out of them
 **** general
-Generic bindings (for all modes) appear after pressing <SPACE>
+#+BEGIN_QUOTE
+=general.el= provides a more convenient method for binding keys in emacs ... Like =use-package= ...
+#+END_QUOTE
 
-Mode specific bindings appear after pressing <SPACE m>
+This creates a =leader=, which allows you to set up custom keys after pressing a certain key
+- Keys for all modes appear after pressing ~SPC~ in normal and visual mode, or ~M-SPC~ in everything else.
+- Mode specific keys appear after pressing ~SPC m~ in normal and visual mode, or ~M-,~ in everything else.
 
-Also provides a =:general= use-package keyword, so this needs to be setup before that is used anywhere.
+It also a =:general= use-package keyword, so this needs to be setup before that is used anywhere.
 
 #+BEGIN_SRC emacs-lisp
   (use-package general
     :ensure t
     :config
+    (setq general-override-states '(insert emacs hybrid normal visual motion operator replace))
+    (general-override-mode)
     (general-evil-setup)
     (general-create-definer my-leader-def
-      ;; :prefix my-leader
-      :prefix "SPC")
+      :states '(normal visual insert emacs)
+      :prefix "SPC"
+      :non-normal-prefix "M-SPC")
 
     (general-create-definer my-local-leader-def
-      ;; :prefix my-local-leader
-      :prefix "SPC m")
+      :states '(normal visual insert emacs)
+      :prefix "SPC m"
+      :non-normal-prefix "M-,")
+
+    ;; define which-key prefixes
+    (my-leader-def
+      "p" '(:ignore t :wk "projects")
+      "b" '(:ignore t :wk "buffers")
+      "w" '(:ignore t :wk "windows")
+      "r" '(:ignore t :wk "bookmarks")
+      "t" '(:ignore t :wk "terminal")
+      "g" '(:ignore t :wk "git")
+      "j" '(:ignore t :wk "jump"))
 
     (my-leader-def
-      :keymaps 'normal
       "c" 'comment-dwim
       "RET" 'make-frame-command
       "l" 'my/what-minor-mode
-      ;; counsel
-      "f" 'counsel-find-file
-      "x" 'counsel-M-x
-      "pf" 'counsel-projectile-find-file
-      "pd" 'counsel-projectile-find-dir
-      "pb" 'counsel-projectile-switch-to-buffer
-      "pp" 'counsel-projectile-switch-project
-      "pg" 'counsel-projectile-rg ;;ripgrep
-      ;; buffers and windows
-      "bb" 'switch-to-buffer
-      "bk" 'kill-buffer
-      "wo" 'split-window-horizontally
-      "wu" 'split-window-vertically
-      "wd" 'delete-window
-      "wh" 'windmove-left
-      "wj" 'windmove-down
-      "wk" 'windmove-up
-      "wl" 'windmove-right
-      ;; workspaces
-      "w." 'eyebrowse-switch-to-window-config
-      "w," 'eyebrowse-rename-window-config
-      "w1" 'eyebrowse-switch-to-window-config-1
-      "w2" 'eyebrowse-switch-to-window-config-2
-      "w3" 'eyebrowse-switch-to-window-config-3
-      "w4" 'eyebrowse-switch-to-window-config-4
-      "w4" 'eyebrowse-switch-to-window-config-4
-      "w5" 'eyebrowse-switch-to-window-config-5
-      "w6" 'eyebrowse-switch-to-window-config-6
-      "w7" 'eyebrowse-switch-to-window-config-7
-      "w8" 'eyebrowse-switch-to-window-config-8
-      "w9" 'eyebrowse-switch-to-window-config-9
-      "w0" 'eyebrowse-switch-to-window-config-0
-      ;; git
-      "gs" 'magit-status
-      "gc" 'magit-checkout
-      "gC" 'magit-commit
-      "gb" 'magit-blame
-      "gS" 'magit-stage-file
-      "gU" 'magit-unstage-file
-      "gg" 'hydra-my-git-menu/body
-      "gy" 'magit-yank-branch-name
-      ;; multi-term
-      "tt" 'multi-term
-      "tn" 'multi-term-next
-      "tp" 'multi-term-prev
       ;; bookmarks
       "rm" 'bookmark-set
       "rb" 'bookmark-jump
-      "rl" 'bookmark-bmenu-list
-      ;; agenda
-      "a" 'org-agenda
-      ;; dumb-jump
-      "jgg" 'dumb-jump-go
-      "jgc" 'dumb-jump-go-current-window
-      "jgo" 'dumb-jump-go-other-window
-      "jgp" 'dumb-jump-go-prefer-external
-      "jgP" 'dumb-jump-go-prefer-external-other-window
-      "jgp" 'dumb-jump-go-prompt
-      "jb" 'dumb-jump-back
-      "jq" 'dumb-jump-quick-look)
-
-    (my-leader-def
-      :keymaps 'visual
-      "c" 'comment-dwim)
-
-    (my-local-leader-def
-      :states '(normal visual)
-      :keyamps 'org-mode-map
-      "t" 'org-babel-tangle)
-
-    (my-local-leader-def
-      :states '(normal visual)
-      :keymaps 'emacs-lisp-mode-map
-      "eb" 'eval-buffer
-      "el" 'eval-last-sexp
-      "ed" 'eval-defun
-      "er" 'eval-region)
-
-    (my-local-leader-def
-      :states '(normal visual)
-      :keymaps 'lisp-interaction-mode-map
-      "eb" 'eval-buffer
-      "el" 'eval-last-sexp
-      "ed" 'eval-defun
-      "er" 'eval-region)
-
-    (my-local-leader-def
-      :states '(normal visual)
-      :keymaps 'lisp-mode-map
-      "er" 'eval-region
-      "ed" 'eval-defun)
-
-    (my-local-leader-def
-      :states '(visual normal)
-      :keymaps 'scheme-mode-map
-      "er" 'geiser-eval-region
-      "eR" 'geiser-eval-region-and-go
-      "eb" 'geiser-eval-buffer
-      "eB" 'geiser-eval-buffer-and-go
-      "ed" 'geiser-eval-definition
-      "eD" 'geiser-eval-definition-and-go
-      "el" 'geiser-eval-eval-sexp)
-
-    (my-local-leader-def
-      :states '(visual)
-      :keymaps 'php-mode-map
-      "a" 'my/align-php-dbl-arrow))
+      "rl" 'bookmark-bmenu-list))
 #+END_SRC
 **** which-key
 #+BEGIN_SRC emacs-lisp
@@ -296,15 +210,15 @@ Also provides a =:general= use-package keyword, so this needs to be setup before
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
     (setq which-key-idle-delay 0)
-    (which-key-add-key-based-replacements "SPC w" "windows")
-    (which-key-add-key-based-replacements "SPC b" "buffers")
-    (which-key-add-key-based-replacements "SPC p" "projects")
-    (which-key-add-key-based-replacements "SPC b" "buffers")
-    (which-key-add-key-based-replacements "SPC r" "bookmarks")
-    (which-key-add-key-based-replacements "SPC t" "terminal")
-    (which-key-add-key-based-replacements "SPC g" "magit")
-    (which-key-add-key-based-replacements "SPC j" "dumb-jump")
-    (which-key-add-key-based-replacements "SPC jg" "go")
+    ;; (which-key-add-key-based-replacements "SPC w" "windows")
+    ;; (which-key-add-key-based-replacements "SPC b" "buffers")
+    ;; (which-key-add-key-based-replacements "SPC p" "projects")
+    ;; (which-key-add-key-based-replacements "SPC b" "buffers")
+    ;; (which-key-add-key-based-replacements "SPC r" "bookmarks")
+    ;; (which-key-add-key-based-replacements "SPC t" "terminal")
+    ;; (which-key-add-key-based-replacements "SPC g" "magit")
+    ;; (which-key-add-key-based-replacements "SPC j" "dumb-jump")
+    ;; (which-key-add-key-based-replacements "SPC jg" "go")
     (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
     (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
     (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC m e" "eval"))
@@ -380,6 +294,9 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
     ("C-c k" 'counsel-rg)
     ("C-x l" 'counsel-locate)
     ("C-S-r" 'counsel-expression-history)
+    (my-leader-def
+      "f" 'counsel-find-file
+      "x" 'counsel-M-x)
     :config
     ;; use ripgrep for counsel-git-grep
     (setq counsel-git-cmd "rg --files")
@@ -408,9 +325,9 @@ Add find and replace info to the modeline.
     (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp))
 #+END_SRC
 *** Undo
-Replace standard Emacs undo with =undo-tree=. Press <C-x u> to use =undo-tree=. and <q> to quit.
+Replace standard Emacs undo with =undo-tree=. Press ~C-x u~ to use =undo-tree=. and ~q~ to quit.
 
-This way I can use evil's undo (<u> in Normal mode) and =undo-tree= at the same time.
+This way I can use evil's undo (~u~ in Normal mode) and =undo-tree= at the same time.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :diminish undo-tree-mode
@@ -428,7 +345,7 @@ Use C-mouse3 to open the menu-bar as a popup menu
 #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -99)
   (tool-bar-mode -1) ;; hide the toolbar
-  (scroll-bar-mode -1) ;; hide the scrollbar 
+  (scroll-bar-mode -1) ;; hide the scrollbar
   (blink-cursor-mode 0) ;; dont blink the cursor
   (set-fringe-mode '(10 . 0)) ;; remove the extra border around frames
   (global-hl-line-mode 1) ;; highlight the current line
@@ -581,7 +498,7 @@ spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
   ;; (setq-default mode-line-format
   ;;               (list
-  ;;      "-- " 
+  ;;      "-- "
   ;;      ;; the buffer name; the file name as a tool tip
   ;;      '(:eval (propertize "%b " 'face 'font-lock-keyword-face
   ;;                         'help-echo (buffer-file-name)))
@@ -601,7 +518,7 @@ spacemacs modeline settings
   ;;             'help-echo (concat "Buffer is in "
   ;;                             (if overwrite-mode "overwrite" "insert") " mode")))
 
-  ;;      ;; was this buffer modified since the last save? 
+  ;;      ;; was this buffer modified since the last save?
   ;;      '(:eval (when (buffer-modified-p)
   ;;             (concat ","  (propertize "Mod"
   ;;             'face 'font-lock-warning-face
@@ -611,13 +528,13 @@ spacemacs modeline settings
   ;;      '(:eval (when buffer-read-only
   ;;                (concat ","  (propertize "RO"
   ;;                               'face 'font-lock-type-face
-  ;;                               'help-echo "Buffer is read-only"))))  
+  ;;                               'help-echo "Buffer is read-only"))))
   ;;      "] "
 
   ;;      ;; line and column
   ;;      "(" ;; '%02' to set to 2 chars at least; prevents flickering
   ;;        (propertize "%02l" 'face 'font-lock-type-face) ","
-  ;;        (propertize "%02c" 'face 'font-lock-type-face) 
+  ;;        (propertize "%02c" 'face 'font-lock-type-face)
   ;;      ") "
 
   ;;      ;; '(:eval (list (nyan-create)))
@@ -660,7 +577,7 @@ make certain buffers lighter/darker, e.g. treemacs
 #+END_SRC
 *** rainbow delimiters
 Add rainbow delimiters in all programming language modes
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure t
     :hook (prog-mode . rainbow-delimiters-mode))
@@ -695,6 +612,36 @@ list minor modes
        (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
 #+END_SRC
 ** Window and Buffer Management
+*** Keys
+#+BEGIN_SRC emacs-lisp
+  (my-leader-def
+    "c" 'comment-dwim
+    "RET" 'make-frame-command
+    "l" 'my/what-minor-mode
+    ;; buffers and windows
+    "bb" 'switch-to-buffer
+    "bk" 'kill-buffer
+    "wo" 'split-window-horizontally
+    "wu" 'split-window-vertically
+    "wd" 'delete-window
+    "wh" 'windmove-left
+    "wj" 'windmove-down
+    "wk" 'windmove-up
+    "wl" 'windmove-right
+    "w." 'eyebrowse-switch-to-window-config
+    "w," 'eyebrowse-rename-window-config
+    "w1" 'eyebrowse-switch-to-window-config-1
+    "w2" 'eyebrowse-switch-to-window-config-2
+    "w3" 'eyebrowse-switch-to-window-config-3
+    "w4" 'eyebrowse-switch-to-window-config-4
+    "w4" 'eyebrowse-switch-to-window-config-4
+    "w5" 'eyebrowse-switch-to-window-config-5
+    "w6" 'eyebrowse-switch-to-window-config-6
+    "w7" 'eyebrowse-switch-to-window-config-7
+    "w8" 'eyebrowse-switch-to-window-config-8
+    "w9" 'eyebrowse-switch-to-window-config-9
+    "w0" 'eyebrowse-switch-to-window-config-0)
+#+END_SRC
 *** eyebrowse
 Eyebrowse provides a way to manage workspaces like tiling window managers.
 #+BEGIN_SRC emacs-lisp
@@ -723,6 +670,13 @@ Projectile allows some nice things for projects, such as searching for files, ma
   (use-package counsel-projectile
     :ensure t
     :after (counsel projectile)
+    :general
+    (my-leader-def
+      "pf" 'counsel-projectile-find-file
+      "pd" 'counsel-projectile-find-dir
+      "pb" 'counsel-projectile-switch-to-buffer
+      "pp" 'counsel-projectile-switch-project
+      "pg" 'counsel-projectile-rg) ;;ripgrep
     :config
     (counsel-projectile-mode))
 #+END_SRC
@@ -753,6 +707,11 @@ Using this because I'm constantly making changes to this file and sometimes I ne
 run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
+    :general
+    (my-leader-def
+      "tt" 'multi-term
+      "tn" 'multi-term-next
+      "tp" 'multi-term-prev)
     :ensure t)
 #+END_SRC
 **** restclient
@@ -824,7 +783,7 @@ The todo states are largely based taken from from http://doc.norang.ca/org-mode.
     (setq org-log-done 'time))
 #+END_SRC
 *** Structure Templates
-Add structure templates, e.g. type <el <TAB> for =#+BEGIN_SRC emacs-lisp #+END_SRC=
+Add structure templates, e.g. type <el ~TAB~ for =#+BEGIN_SRC emacs-lisp #+END_SRC=
 Existing templates for reference:
 - https://orgmode.org/manual/Easy-templates.html
 #+BEGIN_SRC emacs-lisp
@@ -842,6 +801,10 @@ Put it all together. The =:general= block maps :x and :q to confirm and :q to ab
      [remap evil-save-and-close]          'org-edit-src-exit
      [remap evil-save-modified-and-close] 'org-edit-src-exit
      [remap evil-quit]                    'org-edit-src-abort)
+    (my-leader-def
+      "a" 'org-agenda)
+    (my-local-leader-def 'org-mode-map
+      "t" 'org-babel-tangle)
     :hook (org-mode . my-org-mode-hook)
     :config
     (my-org-todo-setup)
@@ -869,7 +832,7 @@ old snippets of things
 Things that are used when coding.
 *** Line Numbers
 Add line numbers everywhere
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
   ;;(global-display-line-numbers-mode)
 #+END_SRC
@@ -886,7 +849,7 @@ Company provides code completion.
 Setup for Microsoft's (GASP!) Language Server Protocol.
 
 #+BEGIN_QUOTE
-The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc. 
+The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
@@ -943,6 +906,16 @@ Get some nice go-to-definition functionality
     ("M-g x" 'dumb-jump-go-prefer-external)
     ("M-g z" 'dumb-jump-go-prefer-external-other-window)
     ("<f9>"  'dumb-jump-hydra/body)
+    (my-leader-def
+      "jg" '(:ignore t :wk "go")
+      "jgg" 'dumb-jump-go
+      "jgc" 'dumb-jump-go-current-window
+      "jgo" 'dumb-jump-go-other-window
+      "jgp" 'dumb-jump-go-prefer-external
+      "jgP" 'dumb-jump-go-prefer-external-other-window
+      "jgp" 'dumb-jump-go-prompt
+      "jb" 'dumb-jump-back
+      "jq" 'dumb-jump-quick-look)
     :config
     (setq dumb-jump-selector 'ivy)
     (setq dumb-jump-force-searcher 'rg)
@@ -993,6 +966,15 @@ use git in emacs!
     :ensure t
     :general
     ("C-x g" 'magit-status)
+    (my-leader-def
+      "gs" 'magit-status
+      "gc" 'magit-checkout
+      "gC" 'magit-commit
+      "gb" 'magit-blame
+      "gS" 'magit-stage-file
+      "gU" 'magit-unstage-file
+      "gg" 'hydra-my-git-menu/body
+      "gy" 'magit-yank-branch-name)
     :config
     (setq magit-completing-read-function 'ivy-completing-read)
     (defun magit-yank-branch-name ()
@@ -1012,7 +994,7 @@ Get evil-mode to play nicely
     :after (magit evil))
 #+END_SRC
 *** magithub
-Press <H> in the magit status window to get the popup for magithub.
+Press ~H~ in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
   (use-package magithub
     :after (magit)
@@ -1254,7 +1236,40 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
         c-basic-offset 4)
 #+END_SRC
 *** Lisp
-- =show-paren-mode= highlights matching parentheses 
+**** Keys
+Keys
+#+BEGIN_SRC emacs-lisp
+  (my-local-leader-def
+    :keymaps 'emacs-lisp-mode-map
+    "eb" 'eval-buffer
+    "el" 'eval-last-sexp
+    "ed" 'eval-defun
+    "er" 'eval-region)
+
+  (my-local-leader-def
+    :keymaps 'lisp-interaction-mode-map
+    "eb" 'eval-buffer
+    "el" 'eval-last-sexp
+    "ed" 'eval-defun
+    "er" 'eval-region)
+
+  (my-local-leader-def
+    :keymaps 'lisp-mode-map
+    "er" 'eval-region
+    "ed" 'eval-defun)
+
+  (my-local-leader-def
+    :keymaps 'scheme-mode-map
+    "er" 'geiser-eval-region
+    "eR" 'geiser-eval-region-and-go
+    "eb" 'geiser-eval-buffer
+    "eB" 'geiser-eval-buffer-and-go
+    "ed" 'geiser-eval-definition
+    "eD" 'geiser-eval-definition-and-go
+    "el" 'geiser-eval-eval-sexp)
+#+END_SRC
+**** Shared
+- =show-paren-mode= highlights matching parentheses
 - =paredit= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
   (setq show-paren-delay 0)
@@ -1274,7 +1289,7 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
-
+**** Scheme
 =geiser= provides a nice repl for *scheme* and other things
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
@@ -1282,7 +1297,7 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
     :config
     (setq geiser-active-implementations '(guile mit racket)))
 #+END_SRC
-
+**** Common Lisp
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package slime
@@ -1290,7 +1305,6 @@ Using this to mess with stumpwm right now.
   ;;   :init
   ;;   (setq inferior-list-program "sbcl"))
 #+END_SRC
-
 *** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
@@ -1399,7 +1413,7 @@ Set up =tide-mode=
 
 Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
-  (use-package prettier-js 
+  (use-package prettier-js
     :ensure t
     :hook ((js2-mode . prettier-js-mode)
            (rjsx-mode . prettier-js-mode)))
@@ -1444,7 +1458,7 @@ Dont need too much here because it uses =js2-mode= where most of the config is d
 *** Web Mode
 Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
-  (use-package web-mode 
+  (use-package web-mode
     :ensure t
     :hook (web-mode . my-web-mode-hook)
     :init
@@ -1467,6 +1481,23 @@ Set up web mode for html and css files
       (setq web-mode-enable-current-element-highlight 1)))
 #+END_SRC
 *** PHP
+Align double arrows (=>) in arrays.
+#+BEGIN_SRC emacs-lisp
+  (defun my/align-php-dbl-arrow ()
+    "Align the => in arrays."
+    (interactive)
+    (align-regexp
+     (region-beginning) (region-end)
+     "\\(\\s-*\\) => " 1 0 nil))
+  ;; (global-set-key (kbd "C-c a") 'my/align-php-dbl-arrow)
+  (general-define-key
+   :keymaps 'php-mode-map
+   "C-c a" 'my/align-php-dbl-arrow)
+
+  (my-local-leader-def 'php-mode-map
+    "a" 'my/align-php-dbl-arrow)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :ensure t
@@ -1512,18 +1543,6 @@ Use =PHP_CodeSniffer= to format files on save.
     :config
     (setq phpcbf-executable "/usr/local/bin/phpcbf")
     (setq phpcbf-standard "WellspringCodingStandard"))
-#+END_SRC
-
-Align double arrows (=>) in arrays.
-#+BEGIN_SRC emacs-lisp
-  (defun my/align-php-dbl-arrow ()
-    "Align the => in arrays."
-    (interactive)
-    (align-regexp
-     (region-beginning) (region-end)
-     "\\(\\s-*\\) => " 1 0 nil))
-
-  (global-set-key (kbd "C-c a") 'my/align-php-dbl-arrow)
 #+END_SRC
 * TODO Things to do
 An on-going list of things I want to change
