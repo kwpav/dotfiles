@@ -436,20 +436,52 @@ From https://www.emacswiki.org/emacs/LineNumbers
   ;; (setq linum-format 'linum-format-func)
 #+END_SRC
 *** Modeline
+**** telephone-line
+#+BEGIN_SRC emacs-lisp
+  (use-package telephone-line
+    :ensure t
+    :hook (after-init . telephone-line-mode)
+    :preface
+    (telephone-line-defsegment my-evil-segment ()
+      "Display evil state as text symbol."
+      (let ((tag (cond
+                  ((string= evil-state "normal")    "<N>")
+                  ((string= evil-state "insert")    "<I>")
+                  ((string= evil-state "replace")   "<R>")
+                  ((string= evil-state "visual")    "<V>")
+                  ((string= evil-state "operator")  "<O>")
+                  ((string= evil-state "motion")    "<M>")
+                  ((string= evil-state "emacs")     "<E>")
+                  ((string= evil-state "multiedit") "<ME>")
+                  (t "-"))))
+        (format " %s" tag)))
+
+    (setq telephone-line-lhs
+          '((evil   . (my-evil-segment))
+            (accent . (telephone-line-vc-segment
+                       telephone-line-erc-modified-channels-segment
+                       telephone-line-process-segment))
+            (nil    . (telephone-line-projectile-buffer-segment))))
+    (setq telephone-line-rhs
+          '((nil    . (telephone-line-misc-info-segment))
+            (accent . (telephone-line-flycheck-segment))
+            (accent . (telephone-line-major-mode-segment))
+            (evil   . (telephone-line-airline-position-segment)))))
+#+END_SRC
 **** doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
 #+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons
-    :ensure t)
+  ;; (use-package all-the-icons
+  ;;   :ensure t)
 
-  (defun my-doom-modeline-hook ()
-    (column-number-mode)
-    (doom-modeline-init))
+  ;; (defun my-doom-modeline-hook ()
+  ;;   (column-number-mode)
+  ;;   (doom-modeline-init))
 
-  (use-package doom-modeline
-    :ensure t
-    :defer t
-    :hook (after-init . my-doom-modeline-hook))
+  ;; (use-package doom-modeline
+  ;;   :ensure t
+  ;;   :defer t
+  ;;   :hook (after-init . my-doom-modeline-hook))
 #+END_SRC
 **** spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
@@ -663,7 +695,6 @@ Projectile allows some nice things for projects, such as searching for files, ma
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
-    :defer 5
     :config
     (projectile-global-mode))
 
