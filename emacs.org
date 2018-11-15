@@ -429,7 +429,6 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 #+BEGIN_SRC emacs-lisp
   (use-package telephone-line
     :ensure t
-    :after all-the-icons
     :hook (after-init . telephone-line-mode)
     :config
     (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
