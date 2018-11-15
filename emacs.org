@@ -399,131 +399,154 @@ Some light themes I like
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
 #+END_SRC
 
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
+  ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
+  ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
   ;; (add-to-list 'default-frame-alist '(font . "Cherry-13"))
   ;; (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
   ;; (add-to-list 'default-frame-alist '(font . "Curie-14" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Hack-12" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Hermit-10" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Monaco-10" ))
-  ;;(add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
-  ;;(add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
-  ;;(add-to-list 'default-frame-alist '(font . "envypn-11" ))
-#+END_SRC
-*** Other stuff
-Add a space between the line numbers and the text
-From https://www.emacswiki.org/emacs/LineNumbers
-#+BEGIN_SRC emacs-lisp
-  ;; (add-hook 'linum-before-numbering-hook
-  ;;           (lambda ()
-  ;;             (setq-local linum-format-fmt
-  ;;                         (let ((w (length (number-to-string
-  ;;                                           (count-lines (point-min) (point-max))))))
-  ;;                           (concat "%" (number-to-string w) "d")))))
-
-  ;; (defun linum-format-func (line)
-  ;;   (concat
-  ;;    (propertize (format linum-format-fmt line) 'face 'linum)
-  ;;    (propertize " " 'face 'mode-line)))
-
-  ;; (setq linum-format 'linum-format-func)
+  ;; (add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
+  ;; (add-to-list 'default-frame-alist '(font . "Hack-12" ))
+  ;; (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
+  ;; (add-to-list 'default-frame-alist '(font . "Hermit-10" ))
+  ;; (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
+  ;; (add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
+  ;; (add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
+  ;; (add-to-list 'default-frame-alist '(font . "envypn-11" ))
 #+END_SRC
 *** Modeline
 **** telephone-line
+Set up all the icons
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons
+    :ensure t)
+#+END_SRC
+
 this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-emacs]]
 #+BEGIN_SRC emacs-lisp
   (use-package telephone-line
     :ensure t
-    :hook (after-init . my-telephone-line-mode-hook)
-    :preface
-    (defun my-telephone-line-mode-hook ()
-      (column-number-mode)
-      (telephone-line-mode))
-
+    :after all-the-icons
+    :hook (after-init . telephone-line-mode)
+    :config
     (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
           telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
           telephone-line-primary-right-separator 'telephone-line-cubed-right
           telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
+    ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
+    ;;       telephone-line-secondary-left-separator 'telephone-line-flat
+    ;;       telephone-line-primary-right-separator 'telephone-line-flat
+    ;;       telephone-line-secondary-right-separator 'telephone-line-flat)
+
     (setq modeline-ignored-modes '("Warnings"
-                                   "Compilation"
-                                   "EShell"
-                                   "Debugger"
-                                   "REPL"
-                                   "IELM"
-                                   "Messages"))
+                                    "Compilation"
+                                    "EShell"
+                                    "Debugger"
+                                    "REPL"
+                                    "IELM"
+                                    "Messages"))
 
-    (telephone-line-defsegment my-evil-segment ()
-      "Display evil state as text symbol."
-      (let ((tag (cond
-                  ((string= evil-state "normal")    "<N>")
-                  ((string= evil-state "insert")    "<I>")
-                  ((string= evil-state "replace")   "<R>")
-                  ((string= evil-state "visual")    "<V>")
-                  ((string= evil-state "operator")  "<O>")
-                  ((string= evil-state "motion")    "<M>")
-                  ((string= evil-state "emacs")     "<E>")
-                  ((string= evil-state "multiedit") "<ME>")
-                  (t "-"))))
-        (format "%s" tag)))
+     (setq telephone-line-height 20)
 
+     (telephone-line-defsegment my-evil-segment ()
+       "Display evil state as text symbol."
+       (let ((tag (cond
+                   ((string= evil-state "normal")    "<N>")
+                   ((string= evil-state "insert")    "<I>")
+                   ((string= evil-state "replace")   "<R>")
+                   ((string= evil-state "visual")    "<V>")
+                   ((string= evil-state "operator")  "<O>")
+                   ((string= evil-state "motion")    "<M>")
+                   ((string= evil-state "emacs")     "<E>")
+                   ((string= evil-state "multiedit") "<ME>")
+                   (t "-"))))
+         (format "%s" tag)))
 
-    (telephone-line-defsegment* my-major-mode-segment ()
-      (let ((mode (cond
-                   ((string= mode-name "Fundamental") "text")
-                   ((string= mode-name "Emacs-Lisp") "elisp")
-                   ((string= mode-name "Javascript-IDE") "js")
-                   ((string= mode-name "Javascript-IDE") "js")
-                   ((string= mode-name "undo-tree-visualizer") "undotree")
-                   (t (downcase mode-name)))))
-        (propertize mode 'face `font-lock-string-face)))
+     ;; TODO figure out why the 'org' mode icon only appears correctly after opening another file
+     ;; (telephone-line-defsegment* my-major-mode-segment-icon ()
+     ;;   "Display the name of the major mode along with an icon representing the major mode."
+     ;;   (let ((mode (cond
+     ;;                ((string= mode-name "Fundamental") "text")
+     ;;                ((string= mode-name "Emacs-Lisp") "elisp")
+     ;;                ((string= mode-name "Javascript-IDE") "js")
+     ;;                ((string= mode-name "Javascript-IDE") "js")
+     ;;                ((string= mode-name "undo-tree-visualizer") "undotree")
+     ;;                (t (downcase mode-name))))
+     ;;         (icon (all-the-icons-icon-for-mode major-mode :v-adjust 0.0 :height 0.8 :face font-lock-string-face)))
+     ;;     (concat
+     ;;      (when
+     ;;          (and (not (eq major-mode (all-the-icons-icon-for-mode major-mode)))
+     ;;               (telephone-line-selected-window-active))
+     ;;        (format "%s " icon))
+     ;;      (propertize mode 'face `font-lock-string-face))))
 
-    (telephone-line-defsegment my-modified-status-segment ()
-      "Display if the buffer has been saved or not"
-      (when (and (buffer-modified-p) (not (member mode-name modeline-ignored-modes)) (not buffer-read-only))
-        (propertize "+" 'face `(:foreground "yellow"))))
+     (telephone-line-defsegment* my-major-mode-segment ()
+       (let ((mode (cond
+                    ((string= mode-name "Fundamental") "text")
+                    ((string= mode-name "Emacs-Lisp") "elisp")
+                    ((string= mode-name "Javascript-IDE") "js")
+                    ((string= mode-name "Javascript-IDE") "js")
+                    ((string= mode-name "undo-tree-visualizer") "undotree")
+                    (t (downcase mode-name)))))
+         (propertize mode 'face `font-lock-string-face)))
 
-    (telephone-line-defsegment my-selection-info-segment ()
-      "Information about the size of the current selection, when applicable.
+     (telephone-line-defsegment my-modified-status-segment ()
+       "Display if the buffer has been saved or not"
+       (when (and (buffer-modified-p) (not (member mode-name modeline-ignored-modes)) (not buffer-read-only))
+         (propertize (all-the-icons-faicon "pencil")
+                     'face `(:height 1.0 :foreground "yellow")
+                     'display '(raise 0.0))))
+
+     (telephone-line-defsegment my-selection-info-segment ()
+       "Information about the size of the current selection, when applicable.
     Supports both Emacs and Evil cursor conventions."
-      (when (or mark-active
-                (and (bound-and-true-p evil-local-mode)
-                     (eq 'visual evil-state)))
-        (let* ((lines (count-lines (region-beginning) (region-end)))
-               (chars (- (1+ (region-end)) (region-beginning)))
-               (evil (and (bound-and-true-p evil-state) (eq 'visual evil-state)))
-               (rect (or (bound-and-true-p rectangle-mark-mode)
-                         (and evil (eq 'block evil-visual-selection))))
-               (multi-line (or (> lines 1) (and evil (eq 'line evil-visual-selection)))))
-          (cond (multi-line
-                 (propertize 
-                  (format "%dc:%dL" (if evil chars (1- chars)) lines)
-                  'face `(:foreground "dim grey")))
-                (t
-                 (propertize
-                  (format "%dc" (if evil chars (1- chars)))
-                  'face `(:foreground "dim grey")))))))
+       (when (or mark-active
+                 (and (bound-and-true-p evil-local-mode)
+                      (eq 'visual evil-state)))
+         (let* ((lines (count-lines (region-beginning) (region-end)))
+                (chars (- (1+ (region-end)) (region-beginning)))
+                (evil (and (bound-and-true-p evil-state) (eq 'visual evil-state)))
+                (rect (or (bound-and-true-p rectangle-mark-mode)
+                          (and evil (eq 'block evil-visual-selection))))
+                (multi-line (or (> lines 1) (and evil (eq 'line evil-visual-selection)))))
+           (cond (multi-line
+                  (propertize
+                   (format "%dc:%dL" (if evil chars (1- chars)) lines)
+                   'face `(:foreground "dim grey")))
+                 (t
+                  (propertize
+                   (format "%dc" (if evil chars (1- chars)))
+                   'face `(:foreground "dim grey")))))))
 
-    (setq telephone-line-lhs
-          '((evil   . (my-evil-segment))
-            (accent . (my-major-mode-segment
-                       telephone-line-erc-modified-channels-segment
-                       telephone-line-process-segment))
-            (nil    . (my-modified-status-segment
-                       telephone-line-projectile-buffer-segment
-                       my-selection-info-segment))))
-    (setq telephone-line-rhs
-          '((nil    . (telephone-line-misc-info-segment))
-            (accent . (telephone-line-vc-segment))
-            (nil    . (telephone-line-flycheck-segment))
-            (accent . (telephone-line-airline-position-segment)))))
+     (telephone-line-defsegment my-vc-segment ()
+       (when (and vc-mode (telephone-line-selected-window-active))
+         ;; double format to prevent warnings in '*Messages*' buffer
+         (format "%s %s"
+                 (propertize (all-the-icons-octicon "git-branch")
+                             'face `(:family ,(all-the-icons-octicon-family) :height 1.0 :foreground ,(face-foreground 'font-lock-variable-name-face))
+                             'display '(raise 0.0))
+                 (propertize
+                  (format "%s"
+                          (telephone-line-raw vc-mode t))
+                  'face `(:foreground ,(face-foreground 'font-lock-variable-name-face))))))
+
+     (setq telephone-line-lhs
+           '((evil   . (my-evil-segment))
+             (accent . (my-major-mode-segment
+                        telephone-line-erc-modified-channels-segment
+                        telephone-line-process-segment))
+             (nil    . (my-modified-status-segment
+                        telephone-line-projectile-buffer-segment
+                        my-selection-info-segment))))
+     (setq telephone-line-rhs
+           '((nil    . (telephone-line-misc-info-segment))
+             (accent . (my-vc-segment))
+             (nil    . (telephone-line-flycheck-segment))
+             (accent . (telephone-line-airline-position-segment)))))
 #+END_SRC
 **** doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
@@ -670,6 +693,24 @@ Add rainbow delimiters in all programming language modes
   (use-package rainbow-delimiters
     :ensure t
     :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+*** Other stuff
+Add a space between the line numbers and the text
+From https://www.emacswiki.org/emacs/LineNumbers
+#+BEGIN_SRC emacs-lisp
+  ;; (add-hook 'linum-before-numbering-hook
+  ;;           (lambda ()
+  ;;             (setq-local linum-format-fmt
+  ;;                         (let ((w (length (number-to-string
+  ;;                                           (count-lines (point-min) (point-max))))))
+  ;;                           (concat "%" (number-to-string w) "d")))))
+
+  ;; (defun linum-format-func (line)
+  ;;   (concat
+  ;;    (propertize (format linum-format-fmt line) 'face 'linum)
+  ;;    (propertize " " 'face 'mode-line)))
+
+  ;; (setq linum-format 'linum-format-func)
 #+END_SRC
 ** Custom Functions
 *** what-minor-mode
