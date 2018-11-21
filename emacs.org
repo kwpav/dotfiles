@@ -525,40 +525,44 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                      (t "-"))))
            (format "%s" tag)))
 
-       ;; TODO figure out why the 'org' mode icon only appears correctly after opening another file
-       ;; (telephone-line-defsegment* my-major-mode-segment-icon ()
-       ;;   "Display the name of the major mode along with an icon representing the major mode."
-       ;;   (let ((mode (cond
-       ;;                ((string= mode-name "Fundamental") "text")
-       ;;                ((string= mode-name "Emacs-Lisp") "elisp")
-       ;;                ((string= mode-name "Javascript-IDE") "js")
-       ;;                ((string= mode-name "Javascript-IDE") "js")
-       ;;                ((string= mode-name "undo-tree-visualizer") "undotree")
-       ;;                (t (downcase mode-name))))
-       ;;         (icon (all-the-icons-icon-for-mode major-mode :v-adjust 0.0 :height 0.8 :face font-lock-string-face)))
-       ;;     (concat
-       ;;      (when
-       ;;          (and (not (eq major-mode (all-the-icons-icon-for-mode major-mode)))
-       ;;               (telephone-line-selected-window-active))
-       ;;        (format "%s " icon))
-       ;;      (propertize mode 'face `font-lock-string-face))))
+       (telephone-line-defsegment* my-major-mode-segment-icon ()
+         "Display the name of the major mode along with an icon representing the major mode."
+         (let ((icon (all-the-icons-icon-for-mode major-mode :v-adjust 0.0 :height 0.8 :face font-lock-string-face)))
+           (concat
+            (when
+                (and (not (eq major-mode (all-the-icons-icon-for-mode major-mode)))
+                     (telephone-line-selected-window-active))
+              (format "%s " icon))
+            (propertize mode-name 'face `font-lock-string-face))))
 
        (telephone-line-defsegment* my-major-mode-segment ()
-         (let ((mode (cond
-                      ((string= mode-name "Fundamental") "text")
-                      ((string= mode-name "Emacs-Lisp") "elisp")
-                      ((string= mode-name "Javascript-IDE") "js")
-                      ((string= mode-name "Javascript-IDE") "js")
-                      ((string= mode-name "undo-tree-visualizer") "undotree")
-                      (t (downcase mode-name)))))
-           (propertize mode 'face `font-lock-string-face)))
+         "Display the name of the major mode."
+         (propertize mode-name 'face `font-lock-string-face))
 
        (telephone-line-defsegment my-modified-status-segment ()
-         "Display if the buffer has been saved or not"
+         "Display if the buffer has been saved or not."
          (when (and (buffer-modified-p) (not (member mode-name modeline-ignored-modes)) (not buffer-read-only))
            (propertize (all-the-icons-faicon "pencil")
                        'face `(:height 1.0 :foreground "yellow")
                        'display '(raise 0.0))))
+
+       (telephone-line-defsegment my-buffer-segment ()
+         "Display the path to the current file if in a project"
+         (if (and (fboundp 'projectile-project-name)
+                  (fboundp 'projectile-project-p)
+                  (projectile-project-p))
+             (format "%s" (propertize
+                           (concat
+                            (telephone-line--truncate-path
+                             (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1) ;; the path to the project
+                            (projectile-project-name)
+                            "/"
+                            (replace-regexp-in-string
+                             (buffer-file-name)
+                             ""
+                             (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root))))))
+           (propertize
+            (format "%s" (telephone-line-raw mode-line-buffer-identification t)))))
 
        (telephone-line-defsegment my-selection-info-segment ()
          "Information about the size of the current selection, when applicable.
@@ -599,7 +603,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                           telephone-line-erc-modified-channels-segment
                           telephone-line-process-segment))
                (nil    . (my-modified-status-segment
-                          telephone-line-projectile-buffer-segment
+                          my-buffer-segment
                           my-selection-info-segment))))
        (setq telephone-line-rhs
              '((nil    . (telephone-line-misc-info-segment))
@@ -1746,6 +1750,13 @@ An on-going list of things I want to change
   + eslint works fine without the =lsp-javascript-typescript=
 - [X] setup =magithub=
 - [ ] window management hydra?
+- telephone-line segments [0/6]
+  + [ ] current file - display folder name(s)
+  + [ ] fix colors
+  + [ ] git
+  + [ ] eyebrowse
+  + [ ] anzu
+  + [ ] flycheck
 
 ** Cool looking packages to check out
 - =straight.el= - https://github.com/raxod502/straight.el
