@@ -547,22 +547,28 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        'display '(raise 0.0))))
 
        (telephone-line-defsegment my-buffer-segment ()
-         "Display the path to the current file if in a project"
-         (if (and (fboundp 'projectile-project-name)
-                  (fboundp 'projectile-project-p)
-                  (projectile-project-p))
-             (list ""
-                   (propertize
-                    (telephone-line--truncate-path ;; the path to the project
-                     (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
-                    'face `(:foreground "dim grey")
-                    'help-echo (buffer-file-name))
-                   (funcall (telephone-line-projectile-segment) face)
-                   (propertize
-                    (concat "/" (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root)))
-                    'help-echo (buffer-file-name)))
-           (propertize
-            (format "%s" (telephone-line-raw mode-line-buffer-identification t)))))
+         "Display the path to the current file.
+  If in a project, concatenate the paths up to the project and highlight the project name.
+  e.g. ~/p/projectname/file.scm"
+         (cond ((and (fboundp 'projectile-project-name)
+                     (fboundp 'projectile-project-p)
+                     (projectile-project-p))
+                (list ""
+                      (propertize
+                       (telephone-line--truncate-path ;; the path to the project
+                        (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
+                       'face `(:foreground "dim grey")
+                       'help-echo (buffer-file-name))
+                      (funcall (telephone-line-projectile-segment) face)
+                      (propertize
+                       (concat "/" (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root)))
+                       'help-echo (buffer-file-name))))
+               ((buffer-file-name)
+                (propertize (file-truename (buffer-file-name))
+                            'help-echo (buffer-file-name)))
+               (t
+                (propertize
+                 (format "%s" (telephone-line-raw mode-line-buffer-identification t))))))
 
        (telephone-line-defsegment my-selection-info-segment ()
          "Information about the size of the current selection, when applicable.
