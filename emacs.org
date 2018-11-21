@@ -554,10 +554,13 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
              (list ""
                    (propertize
                     (telephone-line--truncate-path ;; the path to the project
-                     (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1))
+                     (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
+                    'face `(:foreground "dim grey")
+                    'help-echo (buffer-file-name))
                    (funcall (telephone-line-projectile-segment) face)
                    (propertize
-                    (concat "/" (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root)))))
+                    (concat "/" (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root)))
+                    'help-echo (buffer-file-name)))
            (propertize
             (format "%s" (telephone-line-raw mode-line-buffer-identification t)))))
 
@@ -1747,10 +1750,10 @@ An on-going list of things I want to change
   + eslint works fine without the =lsp-javascript-typescript=
 - [X] setup =magithub=
 - [ ] window management hydra?
-- [ ] telephone-line [0/6]
-  + [ ] my-buffer-segment [0/3]
-    + [ ] display truncated path up to project name, full path up to file name
-    + [ ] color project name
+- [-] telephone-line [0/6]
+  + [-] my-buffer-segment [2/3]
+    + [X] display truncated path up to project name, full path up to file name
+    + [X] color project name
     + [ ] different colors for path / file name?
   + [ ] fix colors
   + [ ] git
