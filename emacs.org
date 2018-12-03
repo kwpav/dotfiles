@@ -430,7 +430,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
   (use-package telephone-line
     :ensure t
     :hook (after-init . telephone-line-mode)
-    :preface
+    :config
     (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
           telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
           telephone-line-primary-right-separator 'telephone-line-cubed-right
@@ -457,7 +457,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
       :group 'my-line-evil)
 
     (defface my-line-evil-normal
-      '((t (:background "red3" :inherit my-line-evil)))
+      '((t (:background "#2257A0" :inherit my-line-evil)))
       "Face used in evil color-coded segments when in Normal state."
       :group 'my-line-evil)
 
@@ -477,7 +477,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
       :group 'my-line-evil)
 
     (defface my-line-evil-operator
-      '((t (:background "violet" :inherit my-line-evil)))
+      '((t (:background "#a9a1e1" :inherit my-line-evil)))
       "Face used in evil color-coded segments when in Operator state."
       :group 'my-line-evil)
 
@@ -605,7 +605,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 
        (setq telephone-line-lhs
              '((evil   . (my-evil-segment))
-               (accent . (my-major-mode-segment
+               (accent . (telephone-line-major-mode-segment
                           telephone-line-erc-modified-channels-segment
                           telephone-line-process-segment))
                (nil    . (my-modified-status-segment
@@ -613,7 +613,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                           my-selection-info-segment))))
        (setq telephone-line-rhs
              '((nil    . (telephone-line-misc-info-segment))
-               (accent . (my-vc-segment))
+               (accent . (telephone-line-vc-segment))
                (nil    . (telephone-line-flycheck-segment))
                (accent . (telephone-line-airline-position-segment)))))
 #+END_SRC
@@ -1467,6 +1467,13 @@ Keys
     "el" 'geiser-eval-eval-sexp)
 #+END_SRC
 **** Shared
+#+BEGIN_SRC emacs-lisp
+  (defconst my-lisp-mode-hooks
+    '(lisp-mode-hook
+      emacs-lisp-mode-hook
+      scheme-mode-hook
+      hy-mode-hook))
+#+END_SRC
 - =show-paren-mode= highlights matching parentheses
 - =paredit= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
