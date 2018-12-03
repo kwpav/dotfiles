@@ -1472,23 +1472,30 @@ Keys
     '(lisp-mode-hook
       emacs-lisp-mode-hook
       scheme-mode-hook
-      hy-mode-hook))
+      geiser-repl-mode-hook
+      hy-mode-hook
+      inferior-hy-mode-hook))
 #+END_SRC
+
 - =show-paren-mode= highlights matching parentheses
 - =paredit= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
   (setq show-paren-delay 0)
   (show-paren-mode 1)
 
-  (use-package paredit
+  ;; (use-package paredit
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  ;;   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  ;;   (add-hook 'hy-mode-hook #'enable-paredit-mode)
+  ;;   (add-hook 'inferior-hy-mode-hook #'enable-paredit-mode)
+  ;;   (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  ;;   (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
+
+  (use-package lispy
     :ensure t
-    :init
-    (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-    (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-    (add-hook 'hy-mode-hook #'enable-paredit-mode)
-    (add-hook 'inferior-hy-mode-hook #'enable-paredit-mode)
-    (add-hook 'scheme-mode-hook #'enable-paredit-mode)
-    (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
+    :ghook my-lisp-mode-hooks)
 
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
