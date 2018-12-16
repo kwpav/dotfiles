@@ -78,6 +78,11 @@ Update buffers automatically when underlying files are changed externally.
   (global-auto-revert-mode t)
 #+END_SRC
 
+Use UTF-8, this should fix flycheck errors with python-flake8
+#+BEGIN_SRC emacs-lisp
+  (set-default-coding-systems 'utf-8)
+#+END_SRC
+
 A package that provides some good defaults, e.g. using the X clipboard for yanking
 #+BEGIN_SRC emacs-lisp
   (use-package better-defaults
@@ -1034,6 +1039,15 @@ Add line numbers everywhere
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
   ;;(global-display-line-numbers-mode)
 #+END_SRC
+*** flycheck
+Error checking.
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :diminish flycheck-mode
+    :ensure t
+    :config
+    (global-flycheck-mode))
+#+END_SRC
 *** company
 Company provides code completion.
 #+BEGIN_SRC emacs-lisp
@@ -1053,44 +1067,41 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
     :ensure t
-    :defer t
     :config
-    ;; make sure we have lsp-imenu everywhere we have LSP
-    (require 'lsp-imenu)
-    (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
-
-  ;; lsp extras
-  (use-package lsp-ui
-    :ensure t
-    :after (lsp-mode)
-    :hook (lsp-mode . lsp-ui-mode)
-    :config
-    (setq lsp-ui-sideline-ignore-duplicate t
-          lsp-ui-flycheck-enable t))
+    (require 'lsp-clients))
 
   (use-package company-lsp
-    :ensure t
-    :after (lsp-mode company-mode)
-    :config
-    (push 'company-lsp company-backends))
+    ;; :after (lsp-mode company-mode)
+    :ensure t)
+
+  (use-package lsp-ui
+    :after (flycheck-mode)
+    :ensure t)
+
+  ;; lsp extras
+  ;; (use-package lsp-ui
+  ;;   :ensure t
+  ;;   :after (lsp-mode)
+  ;;   :hook (lsp-mode . lsp-ui-mode)
+  ;;   :config
+  ;;   (setq lsp-ui-sideline-ignore-duplicate t
+  ;;         lsp-ui-flycheck-enable t))
+
+  ;; (use-package company-lsp
+  ;;   :ensure t
+  ;;   :after (lsp-mode company-mode)
+  ;;   :config
+  ;;   (push 'company-lsp company-backends))
 #+END_SRC
 *** smartparens
 autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure t
-    :config
-    (add-hook 'python-mode-hook (function (lambda ()
-                                            (smartparens-mode t)))))
-#+END_SRC
-*** flycheck
-Error checking.
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :diminish flycheck-mode
-    :ensure t
-    :config
-    (global-flycheck-mode))
+    ;; :config
+    ;; (add-hook 'python-mode-hook (function (lambda ()
+    ;;                                         (smartparens-mode t))))
+    )
 #+END_SRC
 *** dumb-jump
 Get some nice go-to-definition functionality
@@ -1280,38 +1291,6 @@ Paths need to be explicitly defined for some reason in OSX.
 * Languages
 Configuration for programming languages
 *** Python
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package python
-  ;;   :mode "\\.py\\'")
-#+END_SRC
-from https://vxlabs.com/2018/06/08/python-language-server-with-emacs-and-lsp-mode/
-
-In order for this to work, you need to install https://github.com/palantir/python-language-server
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-python
-    :ensure t
-    :config
-    ;; redefine lsp-python-enable to use projectile-project-root
-    (lsp-define-stdio-client lsp-python "python"
-                             #'projectile-project-root
-                             '("pyls"))
-    (add-hook 'python-mode-hook #'lsp-python-enable)
-
-    ;; NB: only required if you prefer flake8 instead of the default
-    ;; send pyls config via lsp-after-initialize-hook -- harmless for
-    ;; other servers due to pyls key, but would prefer only sending this
-    ;; when pyls gets initialised (:initialize function in
-    ;; lsp-define-stdio-client is invoked too early (before server
-    ;; start)) -- cpbotha
-    (defun lsp-set-cfg ()
-      (let ((lsp-cfg `(:pyls (:configurationSources ("flake8")))))
-        ;; TODO: check lsp--cur-workspace here to decide per server / project
-        (lsp--set-configuration lsp-cfg)))
-
-    (add-hook 'lsp-after-initialize-hook 'lsp-set-cfg))
-#+END_SRC
-
 Use =pipenv= to handle virtual environments
 #+BEGIN_SRC emacs-lisp
   (use-package pipenv
@@ -1320,6 +1299,16 @@ Use =pipenv= to handle virtual environments
            (hy-mode . pipenv-mode))
     :init
     (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
+#+END_SRC
+
+For =flycheck= to work, install =flake8=.
+
+LSP uses the [[https://github.com/palantir/python-language-server][palantir python language server]] (pyls).
+#+BEGIN_SRC emacs-lisp
+  (use-package python
+    :ghook
+    ('python-mode-hook #'lsp)
+    ('python-mode-hook #'smartparens-mode))
 #+END_SRC
 
 ***** Elpy - OLD
@@ -1458,6 +1447,7 @@ Keys
 
   (my-local-leader-def
     :keymaps 'scheme-mode-map
+    "r" 'run-geiser
     "er" 'geiser-eval-region
     "eR" 'geiser-eval-region-and-go
     "eb" 'geiser-eval-buffer
@@ -1808,3 +1798,5 @@ An on-going list of things I want to change
 - =evil-escape=
 - =evil-indent=
 - =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
+- =lispyville= - safe paren editing for evil, uses lispy?
+
