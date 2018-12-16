@@ -1308,7 +1308,13 @@ LSP uses the [[https://github.com/palantir/python-language-server][palantir pyth
   (use-package python
     :ghook
     ('python-mode-hook #'lsp)
-    ('python-mode-hook #'smartparens-mode))
+    ('python-mode-hook #'smartparens-mode)
+    :general
+    (my-local-leader-def 'python-mode-map
+      "er" 'python-shell-send-region
+      "eb" 'python-shell-send-buffer
+      "ef" 'python-shell-send-file
+      "es" 'python-shell-send-string))
 #+END_SRC
 
 ***** Elpy - OLD
