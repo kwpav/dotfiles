@@ -605,7 +605,6 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                   (format " %dc" (if evil chars (1- chars)))
                   'face `(:foreground "#494F52")))))))
 
-
     (defadvice vc-mode-line (after strip-backend () activate)
       "Hide 'Git:' from the vc segment"
       (when (stringp vc-mode)
@@ -904,7 +903,6 @@ A file tree.
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
     :ensure t
-    :after doom-themes
     :general ([f8] 'treemacs))
 
   (use-package treemacs-evil
