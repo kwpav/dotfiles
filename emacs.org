@@ -363,8 +363,7 @@ Theme I'm currently using
     :init
     ;; (setq doom-themes-enable-bold t
     ;;       doom-themes-enable-italic t)
-    (setq kaolin-themes-distinct-fringe t
-          kaolin-themes-hl-line-colored t
+    (setq kaolin-themes-hl-line-colored t
           kaolin-themes-italic-comments t)
     :config
     ;; (load-theme 'doom-one t)
@@ -913,36 +912,6 @@ A file tree.
     :ensure t
     :after (projectile treemacs))
 #+END_SRC
-**** restart
-Yo dawg, use =restart-emacs= to restart emacs within emacs.
-Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
-#+BEGIN_SRC emacs-lisp
-  (use-package restart-emacs
-    :ensure t)
-#+END_SRC
-**** multi-term
-run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
-#+BEGIN_SRC emacs-lisp
-  (use-package multi-term
-    :general
-    (my-leader-def
-      "tt" 'multi-term
-      "tn" 'multi-term-next
-      "tp" 'multi-term-prev)
-    :ensure t)
-#+END_SRC
-**** restclient
-Test RESTful APIs in emacs!
-#+BEGIN_SRC emacs-lisp
-  (use-package restclient
-    :ensure t)
-
-  (use-package company-restclient
-    :ensure t)
-
-  (use-package ob-restclient
-    :ensure t)
-#+END_SRC
 ** Org Mode
 Set up everything for =org-mode=
 *** Startup hook
@@ -1320,6 +1289,36 @@ Paths need to be explicitly defined for some reason in OSX.
 #+END_SRC
 
 ** Other
+*** restart
+Yo dawg, use =restart-emacs= to restart emacs within emacs.
+Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
+#+BEGIN_SRC emacs-lisp
+  (use-package restart-emacs
+    :ensure t)
+#+END_SRC
+*** multi-term
+run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
+#+BEGIN_SRC emacs-lisp
+  (use-package multi-term
+    :general
+    (my-leader-def
+      "tt" 'multi-term
+      "tn" 'multi-term-next
+      "tp" 'multi-term-prev)
+    :ensure t)
+#+END_SRC
+*** restclient
+Test RESTful APIs in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package restclient
+    :ensure t)
+
+  (use-package company-restclient
+    :ensure t)
+
+  (use-package ob-restclient
+    :ensure t)
+#+END_SRC
 * Languages
 Configuration for programming languages
 *** Python
