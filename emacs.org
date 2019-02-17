@@ -598,12 +598,19 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                (multi-line (or (> lines 1) (and evil (eq 'line evil-visual-selection)))))
           (cond (multi-line
                  (propertize
-                  (format "%dc:%dL" (if evil chars (1- chars)) lines)
-                  'face `(:foreground "dim grey")))
+                  (format " %dc:%dL" (if evil chars (1- chars)) lines)
+                  'face `(:foreground "#494F52")))
                 (t
                  (propertize
-                  (format "%dc" (if evil chars (1- chars)))
-                  'face `(:foreground "dim grey")))))))
+                  (format " %dc" (if evil chars (1- chars)))
+                  'face `(:foreground "#494F52")))))))
+
+
+    (defadvice vc-mode-line (after strip-backend () activate)
+      "Hide 'Git:' from the vc segment"
+      (when (stringp vc-mode)
+        (let ((my-vc (replace-regexp-in-string "^ Git." "" vc-mode)))
+          (setq vc-mode my-vc))))
 
     (telephone-line-defsegment my-vc-segment ()
       (when (and vc-mode (telephone-line-selected-window-active))
@@ -627,7 +634,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        my-selection-info-segment))))
     (setq telephone-line-rhs
           '((nil    . (telephone-line-misc-info-segment))
-            (accent . (telephone-line-vc-segment))
+            (accent . (my-vc-segment))
             (nil    . (telephone-line-flycheck-segment))
             (accent . (telephone-line-airline-position-segment)))))
 #+END_SRC
