@@ -360,13 +360,15 @@ Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   (use-package doom-themes
     :ensure t
-    :init
-    (setq doom-themes-enable-bold t
-          doom-themes-enable-italic t)
+    ;; :init
+    ;; (setq doom-themes-enable-bold t
+    ;;       doom-themes-enable-italic t)
     :config
     (load-theme 'doom-one t)
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
+
+  ;; (load-theme 'sanityinc-tomorrow-night)
   #+END_SRC
 
 Some dark themes I Like
@@ -498,7 +500,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 
       (setq telephone-line-faces
             '((evil . my-evil-face)
-              (accent my-accent-active . my-accent-inactive)
+              (accent telephone-line-accent-active . telephone-line-accent-inactive)
               (nil mode-line . mode-line-inactive)))
 
       ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
@@ -618,7 +620,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                           my-selection-info-segment))))
        (setq telephone-line-rhs
              '((nil    . (telephone-line-misc-info-segment))
-               (accent . (telephone-line-vc-segment))
+               (accent . (my-vc-segment))
                (nil    . (telephone-line-flycheck-segment))
                (accent . (telephone-line-airline-position-segment)))))
 #+END_SRC
@@ -1294,6 +1296,17 @@ Paths need to be explicitly defined for some reason in OSX.
       :ensure t)
     (exec-path-from-shell-initialize))
 #+END_SRC
+** Mail
+#+BEGIN_SRC emacs-lisp
+  (use-package mu4e
+    :ensure nil
+    :config
+    (setq mu4e-maildir "~/mail")
+    (setq mu4e-sent-folder "/[Gmail].Sent Mail")
+    (setq mu4e-drafts-folder "/[Gmail].Drafts")
+    (setq mu4e-trash-folder "/[Gmail].Trash"))
+#+END_SRC
+
 ** Other
 * Languages
 Configuration for programming languages
