@@ -443,10 +443,15 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     :ensure t
     :hook (after-init . telephone-line-mode)
     :config
-    (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-          telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-          telephone-line-primary-right-separator 'telephone-line-cubed-right
-          telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+    (setq telephone-line-primary-left-separator 'telephone-line-flat
+          telephone-line-secondary-left-separator 'telephone-line-flat
+          telephone-line-primary-right-separator 'telephone-line-flat
+          telephone-line-secondary-right-separator 'telephone-line-flat)
+
+    ;; (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+    ;;       telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+    ;;       telephone-line-primary-right-separator 'telephone-line-cubed-right
+    ;;       telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
     ;; kaolin themes has its own colors
     ;; (defface my-accent-active
@@ -509,11 +514,6 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
             (accent telephone-line-accent-active . telephone-line-accent-inactive)
             (nil mode-line . mode-line-inactive)))
 
-    ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
-    ;;       telephone-line-secondary-left-separator 'telephone-line-flat
-    ;;       telephone-line-primary-right-separator 'telephone-line-flat
-    ;;       telephone-line-secondary-right-separator 'telephone-line-flat)
-
     (setq modeline-ignored-modes '("Warnings"
                                    "Compilation"
                                    "EShell"
@@ -555,9 +555,10 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     (telephone-line-defsegment my-modified-status-segment ()
       "Display if the buffer has been saved or not."
       (when (and (buffer-modified-p) (not (member mode-name modeline-ignored-modes)) (not buffer-read-only))
-        (propertize (all-the-icons-faicon "pencil")
-                    'face `(:height 1.0 :foreground "yellow")
-                    'display '(raise 0.0))))
+        (format "%s "
+                (propertize (all-the-icons-faicon "pencil")
+                            'face `(:height 1.0 :foreground "#DDC085")
+                            'display '(raise 0.0)))))
 
     (telephone-line-defsegment my-buffer-segment ()
       "Display the path to the current file.
@@ -618,7 +619,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 
     (setq telephone-line-lhs
           '((evil   . (my-evil-segment))
-            (accent . (telephone-line-major-mode-segment
+            (accent . (my-major-mode-segment-icon
                        telephone-line-erc-modified-channels-segment
                        telephone-line-process-segment))
             (nil    . (my-modified-status-segment
