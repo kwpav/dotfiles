@@ -78,21 +78,23 @@
 (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 
 (setf *colors*
-      '("#1D252C" ; black
-       "#D95468"  ; red
-       "#8BD49C"  ; green
-       "#EBBF83"  ; yellow
-       "#5EC4FF"  ; blue
-       "#E27EBD"  ; magenta
-       "#70E1E8"  ; cyan
-       "#A0B3C5"  ; white
-       "GreenYellow"
-       "#10151C"))
+      '("#161618"                       ; black
+        "#FF0000"                       ; red
+        "#00FF00"                       ; green
+        "#FFFF00"                       ; yellow
+        "#007FFF"                       ; blue
+        "#FF00FF"                       ; magenta
+        "#0BC9CF"                       ; cyan
+        "#F2F2F2"                       ; white
+        "#80FF7F"                       ; spring-green
+        "#919A9C"                       ; gray9
+        ))
+
 (update-color-map (current-screen))
 
-(defparameter *foreground-color* "#A0B3C5")
-(defparameter *background-color* "#10151C")
-(defparameter *border-color* "#28323B")
+(defparameter *foreground-color* "#E6E6E8")
+(defparameter *background-color* "#18181B")
+(defparameter *border-color* "#353b3c")
 
 (setf *message-window-gravity* :center
       *input-window-gravity* :center
@@ -137,10 +139,10 @@
       "^4^R ru ^r^n"))
 
 (setf *screen-mode-line-format*
-      (list "^B^4 %g ^n^b %v ^> "
+      (list "^B^8 %g ^n^b %v ^> "
             '(:eval (get-layout-modeline))
             "  "
-            "^B^2^n^b "
+            "^B^2^n^b ^9"
             '(:eval (get-date-modeline))))
 
 (setf *hidden-window-color* "^7")
