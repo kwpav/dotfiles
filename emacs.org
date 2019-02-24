@@ -194,7 +194,8 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
       "r" '(:ignore t :wk "bookmarks")
       "t" '(:ignore t :wk "terminal")
       "g" '(:ignore t :wk "git")
-      "j" '(:ignore t :wk "jump"))
+      "j" '(:ignore t :wk "jump")
+      "q" '(:ignore t :wk "quit / restart"))
 
     (my-leader-def
       "c" 'comment-dwim
@@ -203,7 +204,10 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
       ;; bookmarks
       "rm" 'bookmark-set
       "rb" 'bookmark-jump
-      "rl" 'bookmark-bmenu-list))
+      "rl" 'bookmark-bmenu-list
+      ;; quit / restart
+      "qq" 'save-buffers-kill-terminal
+      "qr" 'restart-emacs))
 #+END_SRC
 **** which-key
 #+BEGIN_SRC emacs-lisp
