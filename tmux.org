@@ -1,12 +1,16 @@
 
-* Windows
+* Setup
+Turn on mouse
+#+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
+  set -g mouse on
+#+END_SRC
+
 Start windows and panes at 1, not 0
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
 set -g base-index 1
 setw -g pane-base-index 1
 #+END_SRC
 
-* 256 Colors
 Set up proper colors, using either =screen= or =tmux-256-color= depending on the terminal
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
 ## set the default TERM
