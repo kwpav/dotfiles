@@ -375,33 +375,45 @@ Theme I'm currently using
     ;; (doom-themes-org-config)
     (load-theme 'kaolin-dark t)
     (kaolin-treemacs-theme))
-
-  ;; (load-theme 'sanityinc-tomorrow-night)
-  #+END_SRC
+   #+END_SRC
 
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
-  ;;(load-theme 'base16-tomorrow-night)
-  ;;(load-theme 'kaolin-dark)
-  ;;(load-theme 'doom-one)
-  ;;(load-theme 'doom-tomorrow-night)
-  ;;(load-theme 'doom-city-lights)
-  ;;(load-theme 'kaolin-ocean)
-  ;; (load-theme 'base16-spacemacs)
-  ;;(load-theme 'gruvbox-dark-hard)
-  ;;(load-theme 'sourcerer)
-  ;;(load-theme 'spacemacs-dark)
-  ;;(load-theme 'base16-tomorrow-dark)
-  ;;(load-theme 'base16-twilight-dark)
-  ;;(load-theme 'base16-default-dark)
-  ;;(load-theme 'solarized-dark)
-  ;;(setq solarized-distinct-fringe-background t)
-  ;;(load-theme 'base16-ocean-dark)
-  ;;(load-theme 'material)
-  ;;(load-theme 'spacegray)
-  ;;(load-theme 'dracula)
-  ;;(load-theme 'reykjavik)
-  ;;(set-cursor-color "gainsboro")
+  ;; (use-package poet-theme
+  ;;    :ensure t
+  ;;    :config
+  ;;    (load-theme 'poet-dark))
+
+  ;;  ;; setup different fonts
+  ;;  (add-hook 'text-mode-hook
+  ;;            (lambda ()
+  ;;              (variable-pitch-mode 1)))
+
+  ;;  (set-face-attribute 'default nil :family "Iosevka" :height 130)
+  ;;  (set-face-attribute 'fixed-pitch nil :family "Iosevka")
+  ;;  (set-face-attribute 'variable-pitch nil :family "ETBookOT")
+
+   ;;(load-theme 'base16-tomorrow-night)
+   ;;(load-theme 'kaolin-dark)
+   ;;(load-theme 'doom-one)
+   ;;(load-theme 'doom-tomorrow-night)
+   ;;(load-theme 'doom-city-lights)
+   ;;(load-theme 'kaolin-ocean)
+   ;; (load-theme 'base16-spacemacs)
+   ;;(load-theme 'gruvbox-dark-hard)
+   ;;(load-theme 'sourcerer)
+   ;;(load-theme 'spacemacs-dark)
+   ;;(load-theme 'base16-tomorrow-dark)
+   ;;(load-theme 'base16-twilight-dark)
+   ;;(load-theme 'base16-default-dark)
+   ;;(load-theme 'solarized-dark)
+   ;;(setq solarized-distinct-fringe-background t)
+   ;;(load-theme 'base16-ocean-dark)
+   ;;(load-theme 'material)
+   ;;(load-theme 'spacegray)
+   ;;(load-theme 'dracula)
+   ;;(load-theme 'reykjavik)
+   ;;(set-cursor-color "gainsboro")
 #+END_SRC
 
 Some light themes I like
@@ -926,6 +938,8 @@ Set up everything for =org-mode=
   (defun my-org-mode-hook ()
     (org-indent-mode)
     (turn-on-visual-line-mode)
+    (setq org-bullets-bullet-list
+          '("◉" "○"))
     (org-bullets-mode 1))
 #+END_SRC
 *** Prettify
@@ -934,12 +948,13 @@ Stuff for making org-mode prettier:
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify ()
     (setq org-src-fontify-natively t)
-    (custom-set-faces
-     '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
-     '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
-     '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
-     '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
-     '(org-level-5 ((t (:inherit outline-1 :height 1.0))))))
+    ;; (custom-set-faces
+    ;;  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+    ;;  '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
+    ;;  '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
+    ;;  '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
+    ;;  '(org-level-5 ((t (:inherit outline-1 :height 1.0)))))
+    )
 #+END_SRC
 **** htmlize
 Provides syntax highlighting for =#+SRC= blocks in html exports.
@@ -1199,12 +1214,12 @@ Get evil-mode to play nicely
 *** magithub
 Press ~H~ in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
-  (use-package magithub
-    :after (magit)
-    :ensure t
-    :config
-    (magithub-feature-autoinject t)
-    (setq magithub-clone-default-directory "~/repos"))
+  ;; (use-package magithub
+  ;;   :after (magit)
+  ;;   :ensure t
+  ;;   :config
+  ;;   (magithub-feature-autoinject t)
+  ;;   (setq magithub-clone-default-directory "~/repos"))
 #+END_SRC
 *** git-timemachine
 #+BEGIN_SRC emacs-lisp
@@ -1799,15 +1814,15 @@ An on-going list of things I want to change
   + use the C# lsp??
 - [ ] fix =eslint= for lsp if possible
   + eslint works fine without the =lsp-javascript-typescript=
-- [X] setup =magithub=
+- [ ] setup =forge= to replace =magithub=
 - [ ] window management hydra?
-- [-] telephone-line [0/6]
+- [-] telephone-line [1/6]
   + [-] my-buffer-segment [2/3]
     + [X] display truncated path up to project name, full path up to file name
     + [X] color project name
     + [ ] different colors for path / file name?
   + [ ] fix colors
-  + [ ] git
+  + [X] git
   + [ ] eyebrowse
   + [ ] anzu
   + [ ] flycheck
@@ -1829,7 +1844,6 @@ An on-going list of things I want to change
 - =shackle= - https://github.com/wasamasa/shackle
   - control popup windows
 - =smart-mode-line=
-- =telephone-line=
 - =minions=
   - minor modes in the modeline?
 - =moody=

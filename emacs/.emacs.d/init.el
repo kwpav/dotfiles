@@ -11,7 +11,7 @@
    ["#1B2229" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#DFDFDF"])
  '(custom-safe-themes
    (quote
-    ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "add84a254d0176ffc2534cd05a17d57eea4a0b764146139656b4b7d446394a54" "8aca557e9a17174d8f847fb02870cb2bb67f3b6e808e46c0e54a44e3e18e1020" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "6b2636879127bf6124ce541b1b2824800afc49c6ccd65439d6eb987dbf200c36" default)))
+    ("9129c2759b8ba8e8396fe92535449de3e7ba61fd34569a488dd64e80f5041c9f" "f8067b7d0dbffb29a79e0843797efabdf5e1cf326639874d8b407e9b034136a4" "97965ccdac20cae22c5658c282544892959dc541af3e9ef8857dbf22eb70e82b" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "add84a254d0176ffc2534cd05a17d57eea4a0b764146139656b4b7d446394a54" "8aca557e9a17174d8f847fb02870cb2bb67f3b6e808e46c0e54a44e3e18e1020" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "6b2636879127bf6124ce541b1b2824800afc49c6ccd65439d6eb987dbf200c36" default)))
  '(fci-rule-color "#5B6268")
  '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#51afef"))
  '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#98be65"))
@@ -21,7 +21,7 @@
     (lsp-php-root-projectile lsp-php-root-composer-json "index.php" "robots.txt")))
  '(package-selected-packages
    (quote
-    (forge objed ivy-explorer color-theme-sanityinc-tomorrow psysh spacemacs-theme eglot gruvbox-theme telephone-line git-gutter-fringe git-messenger ac-core-php all-the-icons anzu better-defaults company company-lsp company-php company-restclient company-tern counsel counsel-projectile diminish doom-modeline doom-themes dumb-jump editorconfig evil evil-collection evil-magit evil-surround exec-path-from-shell eyebrowse flycheck geiser general git-timemachine haskell-mode htmlize hy-mode hydra ivy js2-mode json-mode keyfreq lsp-mode lsp-ui magit multi-term no-littering ob-restclient olivetti omnisharp org-bullets ox-pandoc paradox paredit php-eldoc php-mode phpcbf pipenv prettier-js projectile racket-mode rainbow-delimiters rainbow-mode restart-emacs restclient rjsx-mode slime smartparens solaire-mode stumpwm-mode swiper tern tide typescript-mode use-package use-package-ensure-system-package vi-tilde-fringe web-mode which-key yasnippet-classic-snippets yasnippet-snippets)))
+    (forge yaml-mode poet-theme objed ivy-explorer color-theme-sanityinc-tomorrow psysh spacemacs-theme eglot gruvbox-theme telephone-line git-gutter-fringe git-messenger ac-core-php all-the-icons anzu better-defaults company company-lsp company-php company-restclient company-tern counsel counsel-projectile diminish doom-modeline doom-themes dumb-jump editorconfig evil evil-collection evil-magit evil-surround exec-path-from-shell eyebrowse flycheck geiser general git-timemachine haskell-mode htmlize hy-mode hydra ivy js2-mode json-mode keyfreq lsp-mode lsp-ui magit multi-term no-littering ob-restclient olivetti omnisharp org-bullets ox-pandoc paradox paredit php-eldoc php-mode phpcbf pipenv prettier-js projectile racket-mode rainbow-delimiters rainbow-mode restart-emacs restclient rjsx-mode slime smartparens solaire-mode stumpwm-mode swiper tern tide typescript-mode use-package use-package-ensure-system-package vi-tilde-fringe web-mode which-key yasnippet-classic-snippets yasnippet-snippets)))
  '(paradox-github-token t)
  '(vc-annotate-background "#282c34")
  '(vc-annotate-color-map
