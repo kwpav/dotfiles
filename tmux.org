@@ -7,18 +7,18 @@ Turn on mouse
 
 Start windows and panes at 1, not 0
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-set -g base-index 1
-setw -g pane-base-index 1
+  set -g base-index 1
+  setw -g pane-base-index 1
 #+END_SRC
 
 Set up proper colors, using either =screen= or =tmux-256-color= depending on the terminal
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-## set the default TERM
-set -g default-terminal screen
-## update the TERM variable of terminal emulator when creating a new session or attaching a existing session
-set -g update-environment 'DISPLAY SSH_ASKPASS SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY TERM'
-## determine if we should enable 256-colour support
-if "[[ ${TERM} =~ 256color ]]" 'set -g default-terminal tmux-256color'
+  ## set the default TERM
+  set -g default-terminal screen
+  ## update the TERM variable of terminal emulator when creating a new session or attaching a existing session
+  set -g update-environment 'DISPLAY SSH_ASKPASS SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY TERM'
+  ## determine if we should enable 256-colour support
+  if "[[ ${TERM} =~ 256color ]]" 'set -g default-terminal screen-256color'
 #+END_SRC
 
 * Keys
@@ -31,37 +31,48 @@ Set the prefix key to be ~C-a~ instead of the default, ~C-b~
 
 Split windows using ~o~ and ~u~
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-# More friendly split pane
-bind-key o split-window -h
-bind-key u split-window -v
-
+  # More friendly split pane
+  bind-key o split-window -h
+  bind-key u split-window -v
 #+END_SRC
 
 vim window movement
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-bind-key h select-pane -L
-bind-key j select-pane -D
-bind-key k select-pane -U
-bind-key l select-pane -R
+  bind-key h select-pane -L
+  bind-key j select-pane -D
+  bind-key k select-pane -U
+  bind-key l select-pane -R
 #+END_SRC
 
 reload this file
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-bind r source-file ~/.tmux.conf
+  bind r source-file ~/.tmux.conf
 #+END_SRC
 
 * Status Bar
 modified from https://github.com/sei40kr/tmux-airline-dracula/blob/master/airline-dracula.tmux
 
+get colours using:
+#+BEGIN_SRC sh
+  for i in {0..255}; do printf "\x1b[38;5;${i}mcolour%-5i\x1b[0m" $i ; if ! (( ($i + 1 ) % 8 )); then echo ; fi ; done
+#+END_SRC
+
 Set up the colors
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-  black='colour16'
+  # black='colour16'
+  # white='colour255'
+  # gray='colour236'
+  # dark_gray='colour236'
+  # yellow='colour215'
+  # light_purple='colour141'
+  # dark_purple='colour61'
+  black='colour233'
   white='colour255'
-  gray='colour236'
-  dark_gray='colour236'
-  yellow='colour215'
-  light_purple='colour141'
-  dark_purple='colour61'
+  gray='colour246'
+  dark_gray='colour234'
+  cyan='colour159'
+  light_blue='colour75'
+  dark_blue='colour31'
 #+END_SRC
 
 Example of powerline separators (not using these at the moment)
@@ -77,20 +88,20 @@ Set up what is displayed on the status bar
   set-option -g status-left-length 100
   set-option -g status-right-length 100
   set-option -g status-bg "${dark_gray}"
-  set-option -g pane-active-border-fg "${dark_purple}"
+  set-option -g pane-active-border-fg "${dark_blue}"
   set-option -g pane-border-fg "${gray}"
   set-option -g message-bg "${gray}"
   set-option -g message-fg "${white}"
   set-option -g message-command-bg "${gray}"
   set-option -g message-command-fg "${white}"
   set-option -g status-left " #I #[fg=${dark_gray},reverse] "
-  set-option -g status-left-style "fg=${white},bg=${dark_purple},bold"
+  set-option -g status-left-style "fg=${white},bg=${dark_blue},bold"
   set-option -g status-right "#[bg=${black},reverse] %Y-%m-%d %H:%M "
-  set-option -g status-right-style "fg=${light_purple},bg=${dark_gray}"
+  set-option -g status-right-style "fg=${light_blue},bg=${dark_gray}"
   set-window-option -g window-status-activity-style "fg=${white},bg=${gray}"
   set-window-option -g window-status-separator ''
   set-window-option -g window-status-format ' #I:#W '
-  set-window-option -g window-status-style "fg=${yellow},bg=${dark_gray}"
+  set-window-option -g window-status-style "fg=${cyan},bg=${dark_gray}"
   set-window-option -g window-status-current-format "#[fg=${black}] #I:#W #[fg=${dark_gray},reverse]"
-  set-window-option -g window-status-current-style "fg=${dark_gray},bg=${light_purple}"
+  set-window-option -g window-status-current-style "fg=${dark_gray},bg=${light_blue}"
 #+END_SRC
