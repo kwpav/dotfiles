@@ -42,10 +42,12 @@ Define commands to start up and switch to programs and set up keys.
     (run-or-raise "termite -e tmux" '(:class "Termite")))
   (defcommand urxvt () ()
     (run-or-raise "urxvt -e tmux" '(:class "URxvt")))
-  (define-key *root-map* (kbd "c") "urxvt")
-  (define-key *root-map* (kbd "C-c") "urxvt")
-  (define-key *top-map* (kbd "s-RET") "urxvt")
-  (define-key *top-map* (kbd "s-c") "urxvt")
+  (defcommand alacritty () ()
+    (run-or-raise "alacritty -e tmux" '(:class "Alacritty")))
+  (define-key *root-map* (kbd "c") "alacritty")
+  (define-key *root-map* (kbd "C-c") "alacritty")
+  (define-key *top-map* (kbd "s-RET") "alacritty") 
+  (define-key *top-map* (kbd "s-c") "alacritty")
 #+END_SRC
 
 ** Keys
@@ -115,6 +117,10 @@ Set up how everything looks.
 ** Font and Color
 Using colors based off the =kaolin-dark= theme
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  ;; (ql:quickload "clx-truetype")
+  ;; (load-module "ttf-fonts")
+  ;; (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 11))
+
   (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 
   (setf *colors*

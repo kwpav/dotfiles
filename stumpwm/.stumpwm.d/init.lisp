@@ -19,10 +19,12 @@
   (run-or-raise "termite -e tmux" '(:class "Termite")))
 (defcommand urxvt () ()
   (run-or-raise "urxvt -e tmux" '(:class "URxvt")))
-(define-key *root-map* (kbd "c") "urxvt")
-(define-key *root-map* (kbd "C-c") "urxvt")
-(define-key *top-map* (kbd "s-RET") "urxvt")
-(define-key *top-map* (kbd "s-c") "urxvt")
+(defcommand alacritty () ()
+  (run-or-raise "alacritty -e tmux" '(:class "Alacritty")))
+(define-key *root-map* (kbd "c") "alacritty")
+(define-key *root-map* (kbd "C-c") "alacritty")
+(define-key *top-map* (kbd "s-RET") "alacritty") 
+(define-key *top-map* (kbd "s-c") "alacritty")
 
 ;; use stumpwm's exec instead of dmenu_run
 (define-key *top-map* (kbd "s-d") "exec")
@@ -74,6 +76,10 @@
 
 ;;(setf (group-name (car (screen-groups (current-screen)))) "dev")
 (run-commands "grename dev")
+
+;; (ql:quickload "clx-truetype")
+;; (load-module "ttf-fonts")
+;; (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 11))
 
 (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 
