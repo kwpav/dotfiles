@@ -5,12 +5,10 @@ This is my attempt at literate GNU/Linux configuration files. To achieve this, I
 * Current Setup
 I am currently using:
 
-| wm (alt)  | [[file:stumpwm.org][StumpWM]] |
-| wm (main) | [[file:qtile.org][qtile]]   |
+| wm (main) | [[file:stumpwm.org][StumpWM]] |
+| wm (alt)  | [[file:qtile.org][qtile]]   |
 | shell     | [[file:zshrc.org][ZSH]]     |
 | editor    | [[file:emacs.org][Emacs]]   |
-
-Using *qtile* at the moment because *StumpWM* is not working on my desktop.
 
 * How it works
 ** Org and Babel
@@ -23,9 +21,9 @@ For example, if you wanted to create your StumpWM configuration file and store i
   ,#+END_SRC
 #+END_SRC
 
-You can edit the code in the =SRC= block by pressing =<C-c '>=  This opens the snippet in a new buffer in the languages native mode. Press =<C-c '>= again to save the changes.
+You can edit the code in the =SRC= block by pressing ~C-c '~  This opens the snippet in a new buffer in the languages native mode. Press ~C-c '~ again to save the changes or ~C-c k~ to cancel the changes. I also have it configured to use evil's =:x= to save the changes or =:q= to cancel the changes.
 
-Once you are happy with the changes, press =<C-c C-v t>= to =tangle= all the snippets and create =init.lisp= inside of =~/dotfiles/stumpwm/.stumpwm.d/=.
+Once you are happy with the changes, press ~C-c C-v t~ to =tangle= all the snippets and create =init.lisp= inside of =~/dotfiles/stumpwm/.stumpwm.d/=.
 ** Stow
 To organize my dotfiles, I am using [[http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html][this]] approach. The =~/dotfiles= directory contains a subdirectory for each applications' configuration files.
 
