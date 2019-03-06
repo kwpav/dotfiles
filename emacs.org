@@ -1383,8 +1383,14 @@ Let's get hy. A lisp for python
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
     :ensure t
-    ;:config
-    ;(add-to-list `auto-mode-alist '("\\.hy?\\'" . hy-mode))
+    :general
+    (my-local-leader-def 'hy-mode-map
+      "er" 'hy-shell-eval-region
+      "eb" 'hy-shell-eval-buffer
+      "el" 'hy-shell-eval-last-sexp
+      "ed" 'hy-shell-eval-current-form)
+    ;; :config
+    ;; (add-to-list `auto-mode-alist '("\\.hy?\\'" . hy-mode))
     )
 #+END_SRC
 *** C#
