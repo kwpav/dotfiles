@@ -13,13 +13,16 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
 * Emacs
+#+BEGIN_SRC emacs-lisp
+;;; -*- lexical-binding: t; -*-
+#+END_SRC
 ** Personal Information
 Who am I?
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Kevin Pavao"
         user-mail-address "kpavao84@gmail.com")
 #+END_SRC
-** Garbe Collection
+** Garbage Collection
 Modify garbage collection. This is supposed to speed things up a bit.
 #+BEGIN_SRC emacs-lisp
   (setq gc-cons-threshold 100000000)
@@ -328,6 +331,12 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
     (setq counsel-git-cmd "rg --files")
     (setq counsel-rg-base-command
           "rg -i -M 120 --no-heading --line-number --color never %s ."))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-etags
+    :after counsel
+    :ensure t)
 #+END_SRC
 *** Search / Replace
 **** swiper
