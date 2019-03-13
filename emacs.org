@@ -19,6 +19,22 @@ Who am I?
   (setq user-full-name "Kevin Pavao"
         user-mail-address "kpavao84@gmail.com")
 #+END_SRC
+** Garbe Collection
+Modify garbage collection. This is supposed to speed things up a bit.
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold 100000000)
+  (defvar gc-timer nil)
+  (defun maybe-gc ()
+    (let ((original gc-cons-threshold))
+      (setq gc-cons-threshold 800000)
+      (setq gc-cons-threshold original
+            gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
+
+  (defun schedule-maybe-gc ()
+    (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
+
+  (schedule-maybe-gc)
+#+END_SRC
 ** Package Setup
 Setup the package repositories.
 #+BEGIN_SRC emacs-lisp
@@ -106,6 +122,7 @@ Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by
     (setq no-littering-var-directory
           (expand-file-name "var/" user-emacs-directory)))
 #+END_SRC
+
 *** Vim Emulation
 This allows you to use emacs keybindings while in evil's insert mode.
 from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
