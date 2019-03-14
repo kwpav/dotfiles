@@ -1771,6 +1771,7 @@ Set up web mode for html and css files
   (use-package php-mode
     :ensure t
     :mode "\\.php\\'"
+    :hook (php-mode . my-php-hook)
     :preface
     (defun my-php-hook ()
       ;; indent -> calls next line like symfony2
@@ -1782,7 +1783,6 @@ Set up web mode for html and css files
       (align-regexp
        (region-beginning) (region-end)
        "\\(\\s-*\\) => " 1 0 nil))
-    :hook (php-mode . my-php-hook)
     :general
     (general-define-key
      :keymaps 'php-mode-map
@@ -1807,12 +1807,12 @@ Setup code completion and documentation.
   (use-package company-php
     :ensure t
     :after (php-eldoc)
-    :hook (php-mode . my-company-php-hook)
-    :config
+    :preface
     (defun my-company-php-hook ()
       (ac-php-core-eldoc-setup)
       (make-local-variable 'company-backends)
-      (add-to-list 'company-backends 'company-ac-php-backend)))
+      (add-to-list 'company-backends 'company-ac-php-backend))
+    :hook (php-mode . my-company-php-hook))
 #+END_SRC
 
 Use =PHP_CodeSniffer= to format files on save.
