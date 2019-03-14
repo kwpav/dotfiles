@@ -1621,24 +1621,7 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
     :ensure-system-package ((prettier . "npm i -g prettier")
                             (eslint . "npm i -g eslint")
                             (eslint_d . "npm i -g eslint_d"))
-    :init
-     ;; set the indent level to 2
-    (setq js2-basic-offset 2)
-    (setq js-chain-indent t)
-    (setq js-indent-level 2)
-
-    ;; use eslint_d instead of eslint for faster linting
-    (setq flycheck-javascript-eslint-executable "eslint_d")
-
-    ;; highlight most ECMA built-ins
-    (setq js2-highlight-level 3)
-
-    ;; turn off all warnings in js2-mode
-    (setq js2-mode-show-parse-errors t)
-    (setq js2-mode-show-strict-warnings nil)
-    (setq js2-strict-missing-semi-warning nil)
-
-    :config
+    :preface
     (defun my-tide-setup-hook ()
       "Configure tide"
       (tide-setup)
@@ -1667,7 +1650,23 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (my-tide-setup-hook)
       ;; (my-lsp-js-setup-hook)
       (tern-mode t)
-      (smartparens-mode t)))
+      (smartparens-mode t))
+    :init
+    ;; set the indent level to 2
+    (setq js2-basic-offset 2)
+    (setq js-chain-indent t)
+    (setq js-indent-level 2)
+
+    ;; use eslint_d instead of eslint for faster linting
+    (setq flycheck-javascript-eslint-executable "eslint_d")
+
+    ;; highlight most ECMA built-ins
+    (setq js2-highlight-level 3)
+
+    ;; turn off all warnings in js2-mode
+    (setq js2-mode-show-parse-errors t)
+    (setq js2-mode-show-strict-warnings nil)
+    (setq js2-strict-missing-semi-warning nil))
 #+END_SRC
 
 =tern= and =tern-company= are for auto completion
@@ -1807,12 +1806,12 @@ Setup code completion and documentation.
   (use-package company-php
     :ensure t
     :after (php-eldoc)
+    :hook (php-mode . my-company-php-hook)
     :preface
     (defun my-company-php-hook ()
       (ac-php-core-eldoc-setup)
       (make-local-variable 'company-backends)
-      (add-to-list 'company-backends 'company-ac-php-backend))
-    :hook (php-mode . my-company-php-hook))
+      (add-to-list 'company-backends 'company-ac-php-backend)))
 #+END_SRC
 
 Use =PHP_CodeSniffer= to format files on save.
