@@ -1747,6 +1747,13 @@ Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure t
+    :preface
+    (defun my-web-mode-hook ()
+      ;; set the html indent to 2
+      (setq web-mode-markup-indent-offset 2)
+      (setq evil-shift-width 2)
+      ;; highlight matching elements in html
+      (setq web-mode-enable-current-element-highlight 1))
     :hook (web-mode . my-web-mode-hook)
     :init
     ;; (setq web-mode-ac-sources-alist
@@ -1757,15 +1764,7 @@ Set up web mode for html and css files
                  (let ((web-mode-cur-language
                         (web-mode-language-at-pos))))))
     (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
-    (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode))
-    ;;(add-to-list `auto-mode-alist '("\\.php\\'" . web-mode))
-    ;;(add-to-list `auto-mode-alist '("\\.js\\'" . web-mode))
-    (defun my-web-mode-hook ()
-      ;; set the html indent to 2
-      (setq web-mode-markup-indent-offset 2)
-      (setq evil-shift-width 2)
-      ;; highlight matching elements in html
-      (setq web-mode-enable-current-element-highlight 1)))
+    (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode)))
 #+END_SRC
 *** PHP
 #+BEGIN_SRC emacs-lisp
