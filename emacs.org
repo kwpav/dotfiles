@@ -1771,28 +1771,26 @@ Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :ensure t
-    :hook (php-mode . my-php-hook)
     :mode "\\.php\\'"
-    :general
-    (general-define-key
-     :keymaps 'php-mode-map
-     "C-c a" 'my/align-php-dbl-arrow)
-    (my-local-leader-def 'php-mode-map
-      "a" 'my/align-php-dbl-arrow)
-
     :preface
+    (defun my-php-hook ()
+      ;; indent -> calls next line like symfony2
+      (php-enable-symfony2-coding-style)
+      (smartparens-mode t))
     (defun my/align-php-dbl-arrow ()
       "Align the => in arrays."
       (interactive)
       (align-regexp
        (region-beginning) (region-end)
        "\\(\\s-*\\) => " 1 0 nil))
-
+    :hook (php-mode . my-php-hook)
+    :general
+    (general-define-key
+     :keymaps 'php-mode-map
+     "C-c a" 'my/align-php-dbl-arrow)
+    (my-local-leader-def 'php-mode-map
+      "a" 'my/align-php-dbl-arrow)
     :config
-    (defun my-php-hook ()
-      ;; indent -> calls next line like symfony2
-      (php-enable-symfony2-coding-style)
-      (smartparens-mode t))
     ;; align -> on successive lines
     (setq php-lineup-cascaded-calls t)
     (setq flycheck-phpcs-standard "WellspringCodingStandard"))
