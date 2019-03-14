@@ -956,18 +956,6 @@ A file tree.
 #+END_SRC
 ** Org Mode
 Set up everything for =org-mode=
-*** Startup hook
-- =indent-mode= indents each header and text block
-- =org-bullets= provides prettier bullets for the header
-- =turn-on-visual-line-mode= is for visual word wrap
-#+BEGIN_SRC emacs-lisp
-  (defun my-org-mode-hook ()
-    (org-indent-mode)
-    (turn-on-visual-line-mode)
-    (setq org-bullets-bullet-list
-          '("◉" "○"))
-    (org-bullets-mode 1))
-#+END_SRC
 *** Prettify
 Stuff for making org-mode prettier:
 - =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
@@ -1023,10 +1011,22 @@ Existing templates for reference:
     (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n\n#+END_SRC")))
 #+END_SRC
 *** Use Package Setup
-Put it all together. The =:general= block maps :x and :q to confirm and :q to abort when editing =SRC= blocks.
+=my-org-mode-hook= enables:
+- =indent-mode= indents each header and text block
+- =org-bullets= provides prettier bullets for the header
+- =turn-on-visual-line-mode= is for visual word wrap
+
+Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure org-bullets
+    :preface
+    (defun my-org-mode-hook ()
+      (org-indent-mode)
+      (turn-on-visual-line-mode)
+      (setq org-bullets-bullet-list
+            '("◉" "○"))
+      (org-bullets-mode 1))
     :general
     (org-src-mode-map
      [remap evil-save-and-close]          'org-edit-src-exit
@@ -1060,8 +1060,8 @@ old snippets of things
                                           ;(setq org-hide-emphasis-markers t)
 #+END_SRC
 *** Org Babel Languages
+Enable python for in-buffer evaluation
 #+BEGIN_SRC emacs-lisp
-  ;; enable python for in-buffer evaluation
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)))
