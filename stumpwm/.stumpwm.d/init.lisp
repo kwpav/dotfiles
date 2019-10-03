@@ -9,7 +9,7 @@
 (run-shell-command "xsetroot -cursor_name left_ptr")
 
 (defcommand firefox () ()
-  (run-or-raise "firefox" '(:class "Firefox")))
+  (run-or-raise "firefox" '(:class "firefox")))
 (define-key *top-map* (kbd "s-f") "firefox")
 
 ;; stumpwm already defines emacs
