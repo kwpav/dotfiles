@@ -156,94 +156,131 @@ persistent_logging: false
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
-# Colors (Tomorrow Night Bright)
+# # Colors (Tomorrow Night Bright)
+# colors:
+#   # Default colors
+#   primary:
+#     # background: '0x000000'
+#     # foreground: '0xeaeaea'
+#     background: '0x161618'
+#     foreground: '0xf2f2f2'
+
+
+#     # Bright and dim foreground colors
+#     #
+#     # The dimmed foreground color is calculated automatically if it is not present.
+#     # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
+#     # is `false`, the normal foreground color will be used.
+#     #dim_foreground: '0x9a9a9a'
+#     #bright_foreground: '0xffffff'
+
+#   # Cursor colors
+#   #
+#   # Colors which should be used to draw the terminal cursor. If these are unset,
+#   # the cursor color will be the inverse of the cell color.
+#   #cursor:
+#   #  text: '0x000000'
+#   #  cursor: '0xffffff'
+
+#   # Normal colors
+#   normal:
+#     # black:   '0x000000'
+#     # red:     '0xd54e53'
+#     # green:   '0xb9ca4a'
+#     # yellow:  '0xe6c547'
+#     # blue:    '0x7aa6da'
+#     # magenta: '0xc397d8'
+#     # cyan:    '0x70c0ba'
+#     # white:   '0xeaeaea'
+#     black:   '0x020203'
+#     red:     '0xd54e53'
+#     green:   '0x21e121'
+#     yellow:  '0xeeeb28'
+#     blue:    '0x3237ca'
+#     magenta: '0xc932c9'
+#     cyan:    '0x0bc9cf'
+#     white:   '0xf2f2f2'
+
+#   # Bright colors
+#   bright:
+#     # black:   '0x666666'
+#     # red:     '0xff3334'
+#     # green:   '0x9ec400'
+#     # yellow:  '0xe7c547'
+#     # blue:    '0x7aa6da'
+#     # magenta: '0xb77ee0'
+#     # cyan:    '0x54ced6'
+#     # white:   '0xffffff'
+#     black:   '0x303035'
+#     red:     '0xc86d6d'
+#     green:   '0x73c66c'
+#     yellow:  '0xc8c493'
+#     blue:    '0x807f96'
+#     magenta: '0x845a84'
+#     cyan:    '0x85a0a1'
+#     white:   '0xbebec4'
+
+
+#   # Dim colors
+#   #
+#   # If the dim colors are not set, they will be calculated automatically based
+#   # on the `normal` colors.
+#   #dim:
+#   #  black:   '0x000000'
+#   #  red:     '0x8c3336'
+#   #  green:   '0x7a8530'
+#   #  yellow:  '0x97822e'
+#   #  blue:    '0x506d8f'
+#   #  magenta: '0x80638e'
+#   #  cyan:    '0x497e7a'
+#   #  white:   '0x9a9a9a'
+
+#   # Indexed Colors
+#   #
+#   # The indexed colors include all colors from 16 to 256.
+#   # When these are not set, they're filled with sensible defaults.
+#   #
+#   # Example:
+#   #   `- { index: 16, color: '0xff00ff' }`
+#   #
+#   indexed_colors: []
+
+
+# Copyright (c) 2017-present Arctic Ice Studio <development@arcticicestudio.com>
+# Copyright (c) 2017-present Sven Greb <code@svengreb.de>
+
+# Project:    Nord Alacritty
+# Version:    0.1.0
+# Repository: https://github.com/arcticicestudio/nord-alacritty
+# License:    MIT
+# References:
+#   https://github.com/jwilm/alacritty
+
 colors:
-  # Default colors
   primary:
-    # background: '0x000000'
-    # foreground: '0xeaeaea'
-    background: '0x161618'
-    foreground: '0xf2f2f2'
-
-
-    # Bright and dim foreground colors
-    #
-    # The dimmed foreground color is calculated automatically if it is not present.
-    # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
-    # is `false`, the normal foreground color will be used.
-    #dim_foreground: '0x9a9a9a'
-    #bright_foreground: '0xffffff'
-
-  # Cursor colors
-  #
-  # Colors which should be used to draw the terminal cursor. If these are unset,
-  # the cursor color will be the inverse of the cell color.
-  #cursor:
-  #  text: '0x000000'
-  #  cursor: '0xffffff'
-
-  # Normal colors
+    background: '0x2E3440'
+    foreground: '0xD8DEE9'
+  cursor:
+    text: '0x2E3440'
+    cursor: '0xD8DEE9'
   normal:
-    # black:   '0x000000'
-    # red:     '0xd54e53'
-    # green:   '0xb9ca4a'
-    # yellow:  '0xe6c547'
-    # blue:    '0x7aa6da'
-    # magenta: '0xc397d8'
-    # cyan:    '0x70c0ba'
-    # white:   '0xeaeaea'
-    black:   '0x020203'
-    red:     '0xd54e53'
-    green:   '0x21e121'
-    yellow:  '0xeeeb28'
-    blue:    '0x3237ca'
-    magenta: '0xc932c9'
-    cyan:    '0x0bc9cf'
-    white:   '0xf2f2f2'
-
-  # Bright colors
+    black: '0x3B4252'
+    red: '0xBF616A'
+    green: '0xA3BE8C'
+    yellow: '0xEBCB8B'
+    blue: '0x81A1C1'
+    magenta: '0xB48EAD'
+    cyan: '0x88C0D0'
+    white: '0xE5E9F0'
   bright:
-    # black:   '0x666666'
-    # red:     '0xff3334'
-    # green:   '0x9ec400'
-    # yellow:  '0xe7c547'
-    # blue:    '0x7aa6da'
-    # magenta: '0xb77ee0'
-    # cyan:    '0x54ced6'
-    # white:   '0xffffff'
-    black:   '0x303035'
-    red:     '0xc86d6d'
-    green:   '0x73c66c'
-    yellow:  '0xc8c493'
-    blue:    '0x807f96'
-    magenta: '0x845a84'
-    cyan:    '0x85a0a1'
-    white:   '0xbebec4'
-
-
-  # Dim colors
-  #
-  # If the dim colors are not set, they will be calculated automatically based
-  # on the `normal` colors.
-  #dim:
-  #  black:   '0x000000'
-  #  red:     '0x8c3336'
-  #  green:   '0x7a8530'
-  #  yellow:  '0x97822e'
-  #  blue:    '0x506d8f'
-  #  magenta: '0x80638e'
-  #  cyan:    '0x497e7a'
-  #  white:   '0x9a9a9a'
-
-  # Indexed Colors
-  #
-  # The indexed colors include all colors from 16 to 256.
-  # When these are not set, they're filled with sensible defaults.
-  #
-  # Example:
-  #   `- { index: 16, color: '0xff00ff' }`
-  #
-  indexed_colors: []
+    black: '0x4C566A'
+    red: '0xBF616A'
+    green: '0xA3BE8C'
+    yellow: '0xEBCB8B'
+    blue: '0x81A1C1'
+    magenta: '0xB48EAD'
+    cyan: '0x8FBCBB'
+    white: '0xECEFF4'
 
 # Visual Bell
 #

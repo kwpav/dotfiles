@@ -388,19 +388,32 @@ Use C-mouse3 to open the menu-bar as a popup menu
 *** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (use-package kaolin-themes
+  ;; (use-package kaolin-themes
+  ;;   :ensure t
+  ;;   :init
+  ;;   ;; (setq doom-themes-enable-bold t
+  ;;   ;;       doom-themes-enable-italic t)
+  ;;   (setq kaolin-themes-hl-line-colored t
+  ;;         kaolin-themes-italic-comments t)
+  ;;   :config
+  ;;   ;; (load-theme 'doom-one t)
+  ;;   ;; (doom-themes-treemacs-config)
+  ;;   ;; (doom-themes-org-config)
+  ;;   (load-theme 'kaolin-ocean t)
+  ;;   (kaolin-treemacs-theme))
+
+  (use-package nord-theme
     :ensure t
-    :init
-    ;; (setq doom-themes-enable-bold t
-    ;;       doom-themes-enable-italic t)
-    (setq kaolin-themes-hl-line-colored t
-          kaolin-themes-italic-comments t)
     :config
-    ;; (load-theme 'doom-one t)
-    ;; (doom-themes-treemacs-config)
-    ;; (doom-themes-org-config)
-    (load-theme 'kaolin-dark t)
-    (kaolin-treemacs-theme))
+    (load-theme 'nord))
+
+  ;; (use-package doom-themes
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq doom-themes-enable-bold t
+  ;;         doom-themes-enable-italic t)
+  ;;   :config
+  ;;   (load-theme 'doom-nord))
    #+END_SRC
 
 Some dark themes I Like
@@ -452,6 +465,12 @@ Some light themes I like
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
+  ;; (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
+  ;; (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "Monoid-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "Hermit-12"))
+
+
 #+END_SRC
 
 Other fonts I like
@@ -516,7 +535,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     ;;   :group 'my-line-evil)
 
     ;; (defface my-line-evil-normal
-    ;;   '((t (:background "#2257A0" :inherit my-line-evil)))
+    ;;   '((t (:background "black" :inherit my-line-evil)))
     ;;   "Face used in evil color-coded segments when in Normal state."
     ;;   :group 'my-line-evil)
 
@@ -544,6 +563,9 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     ;;   '((t (:background "dark violet" :inherit my-line-evil)))
     ;;   "Face used in evil color-coded segments when in Emacs state."
     ;;   :group 'my-line-evil)
+    ;; (telephone-line-evil (:inherit 'mode-line))
+
+    ;; (telephone-line-evil-normal (:inherit 'telephone-line-evil :background "black" :foreground "white"))
 
     (defun my-evil-face (active)
       "Return an appropriate face for the current mode, given whether the frame is ACTIVE."
@@ -1312,6 +1334,7 @@ Taken from the doom-emacs config.
 ** System Specific
 *** OSX
 Paths need to be explicitly defined for some reason in OSX.
+Enable ligatures for fira code
 #+BEGIN_SRC emacs-lisp
   ;; (when (eq system-type 'darwin)
   ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
@@ -1320,7 +1343,8 @@ Paths need to be explicitly defined for some reason in OSX.
   (when (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :ensure t)
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)
+    (mac-auto-operator-composition-mode))
 #+END_SRC
 ** Mail
 #+BEGIN_SRC emacs-lisp
@@ -1364,6 +1388,21 @@ Test RESTful APIs in emacs!
   (use-package ob-restclient
     :ensure t)
 #+END_SRC
+*** revealjs
+make reveal.js presentations in org mode
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-reveal
+    :ensure t
+    :config
+    (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
+#+END_SRC
+
+Use python 3 by default
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq python-shell-interpreter "/usr/local/bin/python3"))
+#+END_SRC
+
 * Languages
 Configuration for programming languages
 *** Python
@@ -1536,7 +1575,8 @@ Keys
       scheme-mode-hook
       geiser-repl-mode-hook
       hy-mode-hook
-      inferior-hy-mode-hook))
+      inferior-hy-mode-hook
+      clojure-mode-hook))
 #+END_SRC
 
 - =show-paren-mode= highlights matching parentheses
@@ -1592,6 +1632,11 @@ Let's get hy. A lisp for Python.
       "el" 'hy-shell-eval-last-sexp
       "ed" 'hy-shell-eval-current-form))
 #+END_SRC
+**** Clojure
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :ensure t)
+#+END_SRC
 *** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
@@ -1631,7 +1676,8 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (flycheck-mode t)
       ;; configure javascript-tide checker to run after your default javascript checker
       (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-      (prettier-js-mode))
+      ;; (prettier-js-mode)
+      )
 
     ;; TODO make this work with eslint
     ;; (defun my-lsp-js-setup-hook ()
@@ -1653,9 +1699,9 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (smartparens-mode t))
     :init
     ;; set the indent level to 2
-    (setq js2-basic-offset 2)
+    (setq js2-basic-offset 4)
     (setq js-chain-indent t)
-    (setq js-indent-level 2)
+    (setq js-indent-level 4)
 
     ;; use eslint_d instead of eslint for faster linting
     (setq flycheck-javascript-eslint-executable "eslint_d")
@@ -1699,10 +1745,10 @@ Set up =tide-mode=
 
 Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
-  (use-package prettier-js
-    :ensure t
-    :hook ((js2-mode . prettier-js-mode)
-           (rjsx-mode . prettier-js-mode)))
+  ;; (use-package prettier-js
+  ;;   :ensure t
+  ;;   :hook ((js2-mode . prettier-js-mode)
+  ;;          (rjsx-mode . prettier-js-mode)))
 #+END_SRC
 
 **** JSON
