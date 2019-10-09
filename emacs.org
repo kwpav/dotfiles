@@ -504,72 +504,71 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
   (use-package telephone-line
     :ensure t
     :hook (after-init . telephone-line-mode)
-    :config
-    (setq telephone-line-primary-left-separator 'telephone-line-flat
-          telephone-line-secondary-left-separator 'telephone-line-flat
-          telephone-line-primary-right-separator 'telephone-line-flat
-          telephone-line-secondary-right-separator 'telephone-line-flat)
+    :init
+    ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
+    ;;       telephone-line-secondary-left-separator 'telephone-line-flat
+    ;;       telephone-line-primary-right-separator 'telephone-line-flat
+    ;;       telephone-line-secondary-right-separator 'telephone-line-flat)
 
-    ;; (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-    ;;       telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-    ;;       telephone-line-primary-right-separator 'telephone-line-cubed-right
-    ;;       telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+    (setq telephone-line-primary-left-separator 'telephone-line-abs-left
+          telephone-line-secondary-left-separator 'telephone-line-abs-hollow-left
+          telephone-line-primary-right-separator 'telephone-line-abs-right
+          telephone-line-secondary-right-separator 'telephone-line-abs-hollow-right)
 
     (defface my-line-active
       '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
       "Accent face for mode-line."
       :group 'telephone-line)
 
-
     (defface my-accent-active
       '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
       "Accent face for mode-line."
       :group 'telephone-line)
 
-    (defface my-accent-inactive
-      '((t (:foreground "#D8DEE9" :background "#2E3440" :inherit mode-line-inactive)))
-      "Accent face for inactive mode-line."
-      :group 'telephone-line)
+    ;; (defface my-accent-inactive
+    ;;   '((t (:foreground "#D8DEE9" :background "#2E3440" :inherit mode-line-inactive)))
+    ;;   "Accent face for inactive mode-line."
+    ;;   :group 'telephone-line)
 
-    (defface my-line-evil
-      '((t (:foreground "#ECEFF4" :weight bold :inherit mode-line)))
-      "Meta-face used for property inheritance on all my-line-evil faces."
-      :group 'my-line-evil)
+    ;; (defface my-line-evil
+    ;;   '((t (:foreground "#ECEFF4" :weight bold :inherit telephone-line-evil)))
+    ;;   "Meta-face used for property inheritance on all my-line-evil faces."
+    ;;   :group 'telephone-line-evil)
 
     (defface my-line-evil-insert
-      '((t (:background "#5E81AC" :inherit my-line-evil)))
+      '((t (:background "#5E81AC" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Insert state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     (defface my-line-evil-normal
-      '((t (:background "#3B4252" :inherit my-line-evil)))
+      '((t (:background "#434C5E" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Normal state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     (defface my-line-evil-visual
-      '((t (:background "#D08770" :inherit my-line-evil)))
+      '((t (:background "#D08770" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Visual{,-Block,-Line} state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     (defface my-line-evil-replace
-      '((t (:background "black" :inherit my-line-evil)))
+      '((t (:background "black" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Replace state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     (defface my-line-evil-motion
-      '((t (:background "dark blue" :inherit my-line-evil)))
+      '((t (:background "dark blue" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Motion state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     (defface my-line-evil-operator
-      '((t (:background "#a9a1e1" :inherit my-line-evil)))
+      '((t (:background "#B48EAD" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Operator state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     (defface my-line-evil-emacs
-      '((t (:background "dark violet" :inherit my-line-evil)))
+      '((t (:background "dark violet" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Emacs state."
-      :group 'my-line-evil)
+      :group 'telephone-line-evil)
 
     ;; (telephone-line-evil (:inherit 'mode-line))
 
@@ -582,8 +581,8 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 
     (setq telephone-line-faces
           '((evil . my-evil-face)
-            (accent my-accent-active . my-accent-inactive)
-            (nil my-line-active . mode-line-inactive)))
+            (accent my-accent-active . mode-line-inactive)
+            (nil mode-line . mode-line-inactive)))
 
     (setq modeline-ignored-modes '("Warnings"
                                    "Compilation"
@@ -628,7 +627,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
       (when (and (buffer-modified-p) (not (member mode-name modeline-ignored-modes)) (not buffer-read-only))
         (format "%s "
                 (propertize (all-the-icons-faicon "pencil")
-                            'face `(:height 1.0 :foreground "#DDC085")
+                            'face `(:height 1.0 :foreground "#EBCB8B")
                             'display '(raise 0.0)))))
 
     (telephone-line-defsegment my-buffer-segment ()
@@ -642,7 +641,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                    (propertize
                     (telephone-line--truncate-path ;; the path to the project
                      (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
-                    'face `(:foreground "#D8DEE9")
+                    'face `(:foreground "#E5E9F0")
                     'help-echo (buffer-file-name))
                    (funcall (telephone-line-projectile-segment) face)
                    (propertize
@@ -670,11 +669,11 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
           (cond (multi-line
                  (propertize
                   (format " %dc:%dL" (if evil chars (1- chars)) lines)
-                  'face `(:foreground "#494F52")))
+                  'face `(:foreground "#D8DEE9")))
                 (t
                  (propertize
                   (format " %dc" (if evil chars (1- chars)))
-                  'face `(:foreground "#494F52")))))))
+                  'face `(:foreground "#D8DEE9")))))))
 
     (defadvice vc-mode-line (after strip-backend () activate)
       "Hide 'Git:' from the vc segment"
@@ -704,7 +703,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        my-selection-info-segment))))
     (setq telephone-line-rhs
           '((nil    . (telephone-line-misc-info-segment))
-            (accent . (my-vc-segment))
+            (accent . (telephone-line-vc-segment))
             (nil    . (telephone-line-flycheck-segment))
             (accent . (telephone-line-airline-position-segment)))))
 #+END_SRC
