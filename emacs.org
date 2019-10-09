@@ -405,6 +405,8 @@ Theme I'm currently using
   (use-package nord-theme
     :ensure t
     :config
+    (add-to-list 'custom-theme-load-path "/home/kevin/projects/nord-emacs/")
+  
     (load-theme 'nord))
 
   ;; (use-package doom-themes
@@ -513,56 +515,62 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     ;;       telephone-line-primary-right-separator 'telephone-line-cubed-right
     ;;       telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
-    ;; kaolin themes has its own colors
-    ;; (defface my-accent-active
-    ;;   '((t (:foreground "#51afef" :background "#282c23" :inherit mode-line)))
-    ;;   "Accent face for mode-line."
-    ;;   :group 'telephone-line)
+    (defface my-line-active
+      '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
+      "Accent face for mode-line."
+      :group 'telephone-line)
 
-    ;; (defface my-accent-inactive
-    ;;   '((t (:foreground "#5B6268" :background "#21242b" :inherit mode-line-inactive)))
-    ;;   "Accent face for inactive mode-line."
-    ;;   :group 'telephone-line)
 
-    ;; (defface my-line-evil
-    ;;   '((t (:foreground "white" :weight bold :inherit mode-line)))
-    ;;   "Meta-face used for property inheritance on all my-line-evil faces."
-    ;;   :group 'my-line-evil)
+    (defface my-accent-active
+      '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
+      "Accent face for mode-line."
+      :group 'telephone-line)
 
-    ;; (defface my-line-evil-insert
-    ;;   '((t (:background "forest green" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Insert state."
-    ;;   :group 'my-line-evil)
+    (defface my-accent-inactive
+      '((t (:foreground "#D8DEE9" :background "#2E3440" :inherit mode-line-inactive)))
+      "Accent face for inactive mode-line."
+      :group 'telephone-line)
 
-    ;; (defface my-line-evil-normal
-    ;;   '((t (:background "black" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Normal state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil
+      '((t (:foreground "#ECEFF4" :weight bold :inherit mode-line)))
+      "Meta-face used for property inheritance on all my-line-evil faces."
+      :group 'my-line-evil)
 
-    ;; (defface my-line-evil-visual
-    ;;   '((t (:background "dark orange" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Visual{,-Block,-Line} state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-insert
+      '((t (:background "#5E81AC" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Insert state."
+      :group 'my-line-evil)
 
-    ;; (defface my-line-evil-replace
-    ;;   '((t (:background "black" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Replace state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-normal
+      '((t (:background "#3B4252" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Normal state."
+      :group 'my-line-evil)
 
-    ;; (defface my-line-evil-motion
-    ;;   '((t (:background "dark blue" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Motion state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-visual
+      '((t (:background "#D08770" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Visual{,-Block,-Line} state."
+      :group 'my-line-evil)
 
-    ;; (defface my-line-evil-operator
-    ;;   '((t (:background "#a9a1e1" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Operator state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-replace
+      '((t (:background "black" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Replace state."
+      :group 'my-line-evil)
 
-    ;; (defface my-line-evil-emacs
-    ;;   '((t (:background "dark violet" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Emacs state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-motion
+      '((t (:background "dark blue" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Motion state."
+      :group 'my-line-evil)
+
+    (defface my-line-evil-operator
+      '((t (:background "#a9a1e1" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Operator state."
+      :group 'my-line-evil)
+
+    (defface my-line-evil-emacs
+      '((t (:background "dark violet" :inherit my-line-evil)))
+      "Face used in evil color-coded segments when in Emacs state."
+      :group 'my-line-evil)
+
     ;; (telephone-line-evil (:inherit 'mode-line))
 
     ;; (telephone-line-evil-normal (:inherit 'telephone-line-evil :background "black" :foreground "white"))
@@ -570,12 +578,12 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     (defun my-evil-face (active)
       "Return an appropriate face for the current mode, given whether the frame is ACTIVE."
       (cond ((not active) 'mode-line-inactive)
-            (t (intern (concat "telephone-line-evil-" (symbol-name evil-state))))))
+            (t (intern (concat "my-line-evil-" (symbol-name evil-state))))))
 
     (setq telephone-line-faces
           '((evil . my-evil-face)
-            (accent telephone-line-accent-active . telephone-line-accent-inactive)
-            (nil mode-line . mode-line-inactive)))
+            (accent my-accent-active . my-accent-inactive)
+            (nil my-line-active . mode-line-inactive)))
 
     (setq modeline-ignored-modes '("Warnings"
                                    "Compilation"
@@ -634,7 +642,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                    (propertize
                     (telephone-line--truncate-path ;; the path to the project
                      (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
-                    'face `(:foreground "dim grey")
+                    'face `(:foreground "#D8DEE9")
                     'help-echo (buffer-file-name))
                    (funcall (telephone-line-projectile-segment) face)
                    (propertize
