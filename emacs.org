@@ -871,6 +871,11 @@ From https://www.emacswiki.org/emacs/LineNumbers
 
   ;; (setq linum-format 'linum-format-func)
 #+END_SRC
+
+Remove black stuff around the edges
+#+BEGIN_SRC emacs-lisp
+  (setq frame-resize-pixelwise t)
+#+END_SRC
 ** Custom Functions
 *** what-minor-mode
 list minor modes
