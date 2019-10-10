@@ -525,23 +525,18 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
       "Accent face for mode-line."
       :group 'telephone-line)
 
-    ;; (defface my-accent-inactive
-    ;;   '((t (:foreground "#D8DEE9" :background "#2E3440" :inherit mode-line-inactive)))
-    ;;   "Accent face for inactive mode-line."
-    ;;   :group 'telephone-line)
-
-    ;; (defface my-line-evil
-    ;;   '((t (:foreground "#ECEFF4" :weight bold :inherit telephone-line-evil)))
-    ;;   "Meta-face used for property inheritance on all my-line-evil faces."
-    ;;   :group 'telephone-line-evil)
+    (defface my-blue-accent
+      '((t (:foreground "#ECEFF4" :background "#5E81AC" :inherit mode-line)))
+      "Accent face for mode-line."
+      :group 'telephone-line)
 
     (defface my-line-evil-insert
-      '((t (:background "#5E81AC" :inherit telephone-line-evil)))
+      '((t (:background "#A3BE8C" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Insert state."
       :group 'telephone-line-evil)
 
     (defface my-line-evil-normal
-      '((t (:background "#434C5E" :inherit telephone-line-evil)))
+      '((t (:background "#5E81AC" :inherit telephone-line-evil)))
       "Face used in evil color-coded segments when in Normal state."
       :group 'telephone-line-evil)
 
@@ -570,10 +565,6 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
       "Face used in evil color-coded segments when in Emacs state."
       :group 'telephone-line-evil)
 
-    ;; (telephone-line-evil (:inherit 'mode-line))
-
-    ;; (telephone-line-evil-normal (:inherit 'telephone-line-evil :background "black" :foreground "white"))
-
     (defun my-evil-face (active)
       "Return an appropriate face for the current mode, given whether the frame is ACTIVE."
       (cond ((not active) 'mode-line-inactive)
@@ -582,6 +573,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     (setq telephone-line-faces
           '((evil . my-evil-face)
             (accent my-accent-active . mode-line-inactive)
+            (blue-accent my-blue-accent . mode-line-inactive)
             (nil mode-line . mode-line-inactive)))
 
     (setq modeline-ignored-modes '("Warnings"
@@ -641,7 +633,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                    (propertize
                     (telephone-line--truncate-path ;; the path to the project
                      (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
-                    'face `(:foreground "#E5E9F0")
+                    'face `(:foreground "#81A1C1")
                     'help-echo (buffer-file-name))
                    (funcall (telephone-line-projectile-segment) face)
                    (propertize
@@ -669,11 +661,11 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
           (cond (multi-line
                  (propertize
                   (format " %dc:%dL" (if evil chars (1- chars)) lines)
-                  'face `(:foreground "#D8DEE9")))
+                  'face `(:foreground "#81A1C1")))
                 (t
                  (propertize
                   (format " %dc" (if evil chars (1- chars)))
-                  'face `(:foreground "#D8DEE9")))))))
+                  'face `(:foreground "#81A1C1")))))))
 
     (defadvice vc-mode-line (after strip-backend () activate)
       "Hide 'Git:' from the vc segment"
@@ -702,10 +694,12 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        my-buffer-segment
                        my-selection-info-segment))))
     (setq telephone-line-rhs
-          '((nil    . (telephone-line-misc-info-segment))
-            (accent . (telephone-line-vc-segment))
-            (nil    . (telephone-line-flycheck-segment))
-            (accent . (telephone-line-airline-position-segment)))))
+          '((nil         . (telephone-line-misc-info-segment))
+            (accent      . (telephone-line-vc-segment))
+            (nil         . (telephone-line-flycheck-segment))
+            (accent      . (telephone-line-airline-position-segment
+                            telephone-line-hud-segment))
+            (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
 **** doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
