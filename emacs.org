@@ -515,11 +515,6 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
           telephone-line-primary-right-separator 'telephone-line-abs-right
           telephone-line-secondary-right-separator 'telephone-line-abs-hollow-right)
 
-    (defface my-line-active
-      '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
-      "Accent face for mode-line."
-      :group 'telephone-line)
-
     (defface my-accent-active
       '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
       "Accent face for mode-line."
@@ -674,10 +669,11 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
           (setq vc-mode my-vc))))
 
     (telephone-line-defsegment my-vc-segment ()
-      (when (and vc-mode (telephone-line-selected-window-active))
+      (when (and vc-mode
+                 (telephone-line-selected-window-active))
         ;; double format to prevent warnings in '*Messages*' buffer
         (format "%s %s"
-                (propertize (all-the-icons-octicon "git-branch")
+                (propertize (format "%s" (all-the-icons-octicon "git-branch"))
                             'face `(:family ,(all-the-icons-octicon-family) :height 1.0 :foreground ,(face-foreground 'font-lock-variable-name-face))
                             'display '(raise 0.0))
                 (propertize
@@ -695,7 +691,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        my-selection-info-segment))))
     (setq telephone-line-rhs
           '((nil         . (telephone-line-misc-info-segment))
-            (accent      . (telephone-line-vc-segment))
+            (accent      . (my-vc-segment))
             (nil         . (telephone-line-flycheck-segment))
             (accent      . (telephone-line-airline-position-segment
                             telephone-line-hud-segment))
