@@ -388,6 +388,22 @@ Use C-mouse3 to open the menu-bar as a popup menu
 *** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
+  (use-package nord-theme
+    :ensure t
+    :config
+    (load-theme 'nord))
+   #+END_SRC
+
+Some dark themes I Like
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package doom-themes
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq doom-themes-enable-bold t
+  ;;         doom-themes-enable-italic t)
+  ;;   :config
+  ;;   (load-theme 'doom-nord))
+
   ;; (use-package kaolin-themes
   ;;   :ensure t
   ;;   :init
@@ -402,24 +418,7 @@ Theme I'm currently using
   ;;   (load-theme 'kaolin-ocean t)
   ;;   (kaolin-treemacs-theme))
 
-  (use-package nord-theme
-    :ensure t
-    :config
-    (add-to-list 'custom-theme-load-path "/home/kevin/projects/nord-emacs/")
-  
-    (load-theme 'nord))
 
-  ;; (use-package doom-themes
-  ;;   :ensure t
-  ;;   :init
-  ;;   (setq doom-themes-enable-bold t
-  ;;         doom-themes-enable-italic t)
-  ;;   :config
-  ;;   (load-theme 'doom-nord))
-   #+END_SRC
-
-Some dark themes I Like
-#+BEGIN_SRC emacs-lisp
   ;; (use-package poet-theme
   ;;    :ensure t
   ;;    :config
@@ -467,16 +466,14 @@ Some light themes I like
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
-  ;; (add-to-list 'default-frame-alist '(font . "Monoid-10"))
-  ;; (add-to-list 'default-frame-alist '(font . "Hermit-12"))
-
-
 #+END_SRC
 
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
+  ;; (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
+  ;; (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "Monoid-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "Hermit-12"))
   ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
   ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
   ;; (add-to-list 'default-frame-alist '(font . "Cherry-13"))
@@ -504,7 +501,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
   (use-package telephone-line
     :ensure t
     :hook (after-init . telephone-line-mode)
-    :init
+    :config
     ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
     ;;       telephone-line-secondary-left-separator 'telephone-line-flat
     ;;       telephone-line-primary-right-separator 'telephone-line-flat
@@ -1336,16 +1333,18 @@ Taken from the doom-emacs config.
 ** System Specific
 *** OSX
 Paths need to be explicitly defined for some reason in OSX.
+=exec-path-from-shell= fixes it.
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :if (memq window-system '(mac ns))
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize))
+#+END_SRC
+
 Enable ligatures for fira code
 #+BEGIN_SRC emacs-lisp
-  ;; (when (eq system-type 'darwin)
-  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
-
   (when (eq system-type 'darwin)
-    (use-package exec-path-from-shell
-      :ensure t)
-    (exec-path-from-shell-initialize)
     (mac-auto-operator-composition-mode))
 #+END_SRC
 ** Mail
@@ -1926,4 +1925,5 @@ An on-going list of things I want to change
 - =evil-indent=
 - =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
 - =lispyville= - safe paren editing for evil, uses lispy?
+- =prescient= - sorts candiates in ivy, company, etc
 
