@@ -388,23 +388,37 @@ Use C-mouse3 to open the menu-bar as a popup menu
 *** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (use-package kaolin-themes
+  (use-package nord-theme
     :ensure t
-    :init
-    ;; (setq doom-themes-enable-bold t
-    ;;       doom-themes-enable-italic t)
-    (setq kaolin-themes-hl-line-colored t
-          kaolin-themes-italic-comments t)
     :config
-    ;; (load-theme 'doom-one t)
-    ;; (doom-themes-treemacs-config)
-    ;; (doom-themes-org-config)
-    (load-theme 'kaolin-dark t)
-    (kaolin-treemacs-theme))
+    (load-theme 'nord))
    #+END_SRC
 
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
+  ;; (use-package doom-themes
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq doom-themes-enable-bold t
+  ;;         doom-themes-enable-italic t)
+  ;;   :config
+  ;;   (load-theme 'doom-nord))
+
+  ;; (use-package kaolin-themes
+  ;;   :ensure t
+  ;;   :init
+  ;;   ;; (setq doom-themes-enable-bold t
+  ;;   ;;       doom-themes-enable-italic t)
+  ;;   (setq kaolin-themes-hl-line-colored t
+  ;;         kaolin-themes-italic-comments t)
+  ;;   :config
+  ;;   ;; (load-theme 'doom-one t)
+  ;;   ;; (doom-themes-treemacs-config)
+  ;;   ;; (doom-themes-org-config)
+  ;;   (load-theme 'kaolin-ocean t)
+  ;;   (kaolin-treemacs-theme))
+
+
   ;; (use-package poet-theme
   ;;    :ensure t
   ;;    :config
@@ -456,6 +470,10 @@ Font I'm currently using
 
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
+  ;; (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
+  ;; (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "Monoid-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "Hermit-12"))
   ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
   ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
   ;; (add-to-list 'default-frame-alist '(font . "Cherry-13"))
@@ -484,75 +502,70 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
     :ensure t
     :hook (after-init . telephone-line-mode)
     :config
-    (setq telephone-line-primary-left-separator 'telephone-line-flat
-          telephone-line-secondary-left-separator 'telephone-line-flat
-          telephone-line-primary-right-separator 'telephone-line-flat
-          telephone-line-secondary-right-separator 'telephone-line-flat)
+    ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
+    ;;       telephone-line-secondary-left-separator 'telephone-line-flat
+    ;;       telephone-line-primary-right-separator 'telephone-line-flat
+    ;;       telephone-line-secondary-right-separator 'telephone-line-flat)
 
-    ;; (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-    ;;       telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-    ;;       telephone-line-primary-right-separator 'telephone-line-cubed-right
-    ;;       telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+    (setq telephone-line-primary-left-separator 'telephone-line-abs-left
+          telephone-line-secondary-left-separator 'telephone-line-abs-hollow-left
+          telephone-line-primary-right-separator 'telephone-line-abs-right
+          telephone-line-secondary-right-separator 'telephone-line-abs-hollow-right)
 
-    ;; kaolin themes has its own colors
-    ;; (defface my-accent-active
-    ;;   '((t (:foreground "#51afef" :background "#282c23" :inherit mode-line)))
-    ;;   "Accent face for mode-line."
-    ;;   :group 'telephone-line)
+    (defface my-accent-active
+      '((t (:foreground "#ECEFF4" :background "#3B4252" :inherit mode-line)))
+      "Accent face for mode-line."
+      :group 'telephone-line)
 
-    ;; (defface my-accent-inactive
-    ;;   '((t (:foreground "#5B6268" :background "#21242b" :inherit mode-line-inactive)))
-    ;;   "Accent face for inactive mode-line."
-    ;;   :group 'telephone-line)
+    (defface my-blue-accent
+      '((t (:foreground "#ECEFF4" :background "#5E81AC" :inherit mode-line)))
+      "Accent face for mode-line."
+      :group 'telephone-line)
 
-    ;; (defface my-line-evil
-    ;;   '((t (:foreground "white" :weight bold :inherit mode-line)))
-    ;;   "Meta-face used for property inheritance on all my-line-evil faces."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-insert
+      '((t (:background "#A3BE8C" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Insert state."
+      :group 'telephone-line-evil)
 
-    ;; (defface my-line-evil-insert
-    ;;   '((t (:background "forest green" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Insert state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-normal
+      '((t (:background "#5E81AC" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Normal state."
+      :group 'telephone-line-evil)
 
-    ;; (defface my-line-evil-normal
-    ;;   '((t (:background "#2257A0" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Normal state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-visual
+      '((t (:background "#D08770" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Visual{,-Block,-Line} state."
+      :group 'telephone-line-evil)
 
-    ;; (defface my-line-evil-visual
-    ;;   '((t (:background "dark orange" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Visual{,-Block,-Line} state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-replace
+      '((t (:background "black" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Replace state."
+      :group 'telephone-line-evil)
 
-    ;; (defface my-line-evil-replace
-    ;;   '((t (:background "black" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Replace state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-motion
+      '((t (:background "dark blue" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Motion state."
+      :group 'telephone-line-evil)
 
-    ;; (defface my-line-evil-motion
-    ;;   '((t (:background "dark blue" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Motion state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-operator
+      '((t (:background "#B48EAD" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Operator state."
+      :group 'telephone-line-evil)
 
-    ;; (defface my-line-evil-operator
-    ;;   '((t (:background "#a9a1e1" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Operator state."
-    ;;   :group 'my-line-evil)
-
-    ;; (defface my-line-evil-emacs
-    ;;   '((t (:background "dark violet" :inherit my-line-evil)))
-    ;;   "Face used in evil color-coded segments when in Emacs state."
-    ;;   :group 'my-line-evil)
+    (defface my-line-evil-emacs
+      '((t (:background "dark violet" :inherit telephone-line-evil)))
+      "Face used in evil color-coded segments when in Emacs state."
+      :group 'telephone-line-evil)
 
     (defun my-evil-face (active)
       "Return an appropriate face for the current mode, given whether the frame is ACTIVE."
       (cond ((not active) 'mode-line-inactive)
-            (t (intern (concat "telephone-line-evil-" (symbol-name evil-state))))))
+            (t (intern (concat "my-line-evil-" (symbol-name evil-state))))))
 
     (setq telephone-line-faces
           '((evil . my-evil-face)
-            (accent telephone-line-accent-active . telephone-line-accent-inactive)
+            (accent my-accent-active . mode-line-inactive)
+            (blue-accent my-blue-accent . mode-line-inactive)
             (nil mode-line . mode-line-inactive)))
 
     (setq modeline-ignored-modes '("Warnings"
@@ -598,7 +611,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
       (when (and (buffer-modified-p) (not (member mode-name modeline-ignored-modes)) (not buffer-read-only))
         (format "%s "
                 (propertize (all-the-icons-faicon "pencil")
-                            'face `(:height 1.0 :foreground "#DDC085")
+                            'face `(:height 1.0 :foreground "#EBCB8B")
                             'display '(raise 0.0)))))
 
     (telephone-line-defsegment my-buffer-segment ()
@@ -612,7 +625,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                    (propertize
                     (telephone-line--truncate-path ;; the path to the project
                      (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
-                    'face `(:foreground "dim grey")
+                    'face `(:foreground "#81A1C1")
                     'help-echo (buffer-file-name))
                    (funcall (telephone-line-projectile-segment) face)
                    (propertize
@@ -640,11 +653,11 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
           (cond (multi-line
                  (propertize
                   (format " %dc:%dL" (if evil chars (1- chars)) lines)
-                  'face `(:foreground "#494F52")))
+                  'face `(:foreground "#81A1C1")))
                 (t
                  (propertize
                   (format " %dc" (if evil chars (1- chars)))
-                  'face `(:foreground "#494F52")))))))
+                  'face `(:foreground "#81A1C1")))))))
 
     (defadvice vc-mode-line (after strip-backend () activate)
       "Hide 'Git:' from the vc segment"
@@ -653,10 +666,11 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
           (setq vc-mode my-vc))))
 
     (telephone-line-defsegment my-vc-segment ()
-      (when (and vc-mode (telephone-line-selected-window-active))
+      (when (and vc-mode
+                 (telephone-line-selected-window-active))
         ;; double format to prevent warnings in '*Messages*' buffer
         (format "%s %s"
-                (propertize (all-the-icons-octicon "git-branch")
+                (propertize (format "%s" (all-the-icons-octicon "git-branch"))
                             'face `(:family ,(all-the-icons-octicon-family) :height 1.0 :foreground ,(face-foreground 'font-lock-variable-name-face))
                             'display '(raise 0.0))
                 (propertize
@@ -673,10 +687,12 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        my-buffer-segment
                        my-selection-info-segment))))
     (setq telephone-line-rhs
-          '((nil    . (telephone-line-misc-info-segment))
-            (accent . (my-vc-segment))
-            (nil    . (telephone-line-flycheck-segment))
-            (accent . (telephone-line-airline-position-segment)))))
+          '((nil         . (telephone-line-misc-info-segment))
+            (accent      . (my-vc-segment))
+            (nil         . (telephone-line-flycheck-segment))
+            (accent      . (telephone-line-airline-position-segment
+                            telephone-line-hud-segment))
+            (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
 **** doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
@@ -841,6 +857,11 @@ From https://www.emacswiki.org/emacs/LineNumbers
   ;;    (propertize " " 'face 'mode-line)))
 
   ;; (setq linum-format 'linum-format-func)
+#+END_SRC
+
+Remove black stuff around the edges
+#+BEGIN_SRC emacs-lisp
+  (setq frame-resize-pixelwise t)
 #+END_SRC
 ** Custom Functions
 *** what-minor-mode
@@ -1312,15 +1333,19 @@ Taken from the doom-emacs config.
 ** System Specific
 *** OSX
 Paths need to be explicitly defined for some reason in OSX.
+=exec-path-from-shell= fixes it.
 #+BEGIN_SRC emacs-lisp
-  ;; (when (eq system-type 'darwin)
-  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  ;;   (setq exec-path (append exec-path '("/usr/local/bin"))))
-
-  (when (eq system-type 'darwin)
-    (use-package exec-path-from-shell
-      :ensure t)
+  (use-package exec-path-from-shell
+    :if (memq window-system '(mac ns))
+    :ensure t
+    :config
     (exec-path-from-shell-initialize))
+#+END_SRC
+
+Enable ligatures for fira code
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (mac-auto-operator-composition-mode))
 #+END_SRC
 ** Mail
 #+BEGIN_SRC emacs-lisp
@@ -1364,6 +1389,21 @@ Test RESTful APIs in emacs!
   (use-package ob-restclient
     :ensure t)
 #+END_SRC
+*** revealjs
+make reveal.js presentations in org mode
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-reveal
+    :ensure t
+    :config
+    (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
+#+END_SRC
+
+Use python 3 by default
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq python-shell-interpreter "/usr/local/bin/python3"))
+#+END_SRC
+
 * Languages
 Configuration for programming languages
 *** Python
@@ -1536,7 +1576,8 @@ Keys
       scheme-mode-hook
       geiser-repl-mode-hook
       hy-mode-hook
-      inferior-hy-mode-hook))
+      inferior-hy-mode-hook
+      clojure-mode-hook))
 #+END_SRC
 
 - =show-paren-mode= highlights matching parentheses
@@ -1592,6 +1633,11 @@ Let's get hy. A lisp for Python.
       "el" 'hy-shell-eval-last-sexp
       "ed" 'hy-shell-eval-current-form))
 #+END_SRC
+**** Clojure
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :ensure t)
+#+END_SRC
 *** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
@@ -1631,7 +1677,8 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (flycheck-mode t)
       ;; configure javascript-tide checker to run after your default javascript checker
       (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-      (prettier-js-mode))
+      ;; (prettier-js-mode)
+      )
 
     ;; TODO make this work with eslint
     ;; (defun my-lsp-js-setup-hook ()
@@ -1653,9 +1700,9 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (smartparens-mode t))
     :init
     ;; set the indent level to 2
-    (setq js2-basic-offset 2)
+    (setq js2-basic-offset 4)
     (setq js-chain-indent t)
-    (setq js-indent-level 2)
+    (setq js-indent-level 4)
 
     ;; use eslint_d instead of eslint for faster linting
     (setq flycheck-javascript-eslint-executable "eslint_d")
@@ -1699,10 +1746,10 @@ Set up =tide-mode=
 
 Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
-  (use-package prettier-js
-    :ensure t
-    :hook ((js2-mode . prettier-js-mode)
-           (rjsx-mode . prettier-js-mode)))
+  ;; (use-package prettier-js
+  ;;   :ensure t
+  ;;   :hook ((js2-mode . prettier-js-mode)
+  ;;          (rjsx-mode . prettier-js-mode)))
 #+END_SRC
 
 **** JSON
@@ -1878,4 +1925,5 @@ An on-going list of things I want to change
 - =evil-indent=
 - =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
 - =lispyville= - safe paren editing for evil, uses lispy?
+- =prescient= - sorts candiates in ivy, company, etc
 

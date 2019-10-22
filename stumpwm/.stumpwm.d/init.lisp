@@ -84,23 +84,23 @@
 (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 
 (setf *colors*
-      '("#161618"                       ; black
-        "#FF0000"                       ; red
-        "#00FF00"                       ; green
-        "#FFFF00"                       ; yellow
-        "#007FFF"                       ; blue
-        "#FF00FF"                       ; magenta
-        "#0BC9CF"                       ; cyan
-        "#F2F2F2"                       ; white
-        "#80FF7F"                       ; spring-green
-        "#919A9C"                       ; gray9
+      '("#2E3440"                       ; black
+        "#BF616A"                       ; red
+        "#A3BE8C"                       ; green
+        "#EBCB8B"                       ; yellow
+        "#5E81AC"                       ; blue
+        "#B48EAD"                       ; magenta
+        "#88C0D0"                       ; cyan
+        "#ECEFF4"                       ; white
+        "#A3BE8C"                       ; spring-green
+        "#D8DEE9"                       ; gray9
         ))
 
 (update-color-map (current-screen))
 
-(defparameter *foreground-color* "#E6E6E8")
-(defparameter *background-color* "#18181B")
-(defparameter *border-color* "#353b3c")
+(defparameter *foreground-color* "#ECEFF4")
+(defparameter *background-color* "#2E3440")
+(defparameter *border-color* "#5E81AC")
 
 (setf *message-window-gravity* :center
       *input-window-gravity* :center
