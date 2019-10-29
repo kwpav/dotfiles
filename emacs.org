@@ -684,14 +684,14 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                        telephone-line-erc-modified-channels-segment
                        telephone-line-process-segment))
             (nil    . (my-modified-status-segment
+                       telephone-line-filesize-segment
                        my-buffer-segment
                        my-selection-info-segment))))
     (setq telephone-line-rhs
           '((nil         . (telephone-line-misc-info-segment))
-            (accent      . (my-vc-segment))
-            (nil         . (telephone-line-flycheck-segment))
-            (accent      . (telephone-line-airline-position-segment
-                            telephone-line-hud-segment))
+            (accent      . (my-vc-segment
+                            telephone-line-flycheck-segment
+                            telephone-line-airline-position-segment))
             (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
 **** doom modeline
@@ -1833,7 +1833,8 @@ Set up web mode for html and css files
      :keymaps 'php-mode-map
      "C-c a" 'my/align-php-dbl-arrow)
     (my-local-leader-def 'php-mode-map
-      "a" 'my/align-php-dbl-arrow)
+      "a" 'my/align-php-dbl-arrow
+      "j" 'ac-php-find-symbol-at-point)
     :config
     ;; align -> on successive lines
     (setq php-lineup-cascaded-calls t)
@@ -1897,6 +1898,9 @@ An on-going list of things I want to change
   + [ ] eyebrowse
   + [ ] anzu
   + [ ] flycheck
+- [ ] make jumping better
+  - [ ] use 'ac' package jumps along with smart and dumb jump?
+  - [ ] make keybindings consistent
 
 ** Cool looking packages to check out
 - =straight.el= - https://github.com/raxod502/straight.el
