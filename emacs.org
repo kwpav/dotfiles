@@ -627,7 +627,9 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                      (abbreviate-file-name (file-name-directory (directory-file-name (projectile-project-root)))) 1)
                     'face `(:foreground "#81A1C1")
                     'help-echo (buffer-file-name))
-                   (funcall (telephone-line-projectile-segment) face)
+                   (propertize
+                    (funcall (telephone-line-projectile-segment) face)
+                    'face `(:foreground "#A3BE8C"))
                    (propertize
                     (concat "/" (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root)))
                     'help-echo (buffer-file-name))))
