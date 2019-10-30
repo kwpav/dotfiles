@@ -630,7 +630,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                     'help-echo (buffer-file-name))
                    (propertize
                     (funcall (telephone-line-projectile-segment) face)
-                    'face `(:foreground "#A3BE8C"))
+                    'face `(:foreground "#A3BE8C" :weight bold))
                    (propertize
                     (concat "/" (file-relative-name (file-truename (buffer-file-name)) (projectile-project-root)))
                     'help-echo (buffer-file-name))))
