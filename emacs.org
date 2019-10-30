@@ -294,12 +294,13 @@ Ivy, a generic completion mechanism for Emacs.
     :demand t
     :general
     ("<f6>" 'ivy-resume)
+    :custom
+    (ivy-use-virtual-buffers t)
+    (enable-recursive-minibuffers t)
+    (ivy-count-format "(%d/%d) ")
+    (ivy-height 20)
     :config
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq enable-recursive-minibuffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq ivy-height 20))
+    (ivy-mode 1))
 #+END_SRC
 
 #+BEGIN_QUOTE
@@ -1079,11 +1080,12 @@ Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~
     (my-local-leader-def 'org-mode-map
       "t" 'org-babel-tangle)
     :hook (org-mode . my-org-mode-hook)
+    :custom
+    (org-agenda-files (list "~/org/agenda/"))
     :config
     (my-org-todo-setup)
     (my-org-prettify)
-    (my-structure-templates)
-    (setq org-agenda-files (list "~/org/agenda/")))
+    (my-structure-templates))
 #+END_SRC
 **** old stuff
 old snippets of things
@@ -1202,9 +1204,10 @@ Get some nice go-to-definition functionality
       "jgp" 'dumb-jump-go-prompt
       "jb" 'dumb-jump-back
       "jq" 'dumb-jump-quick-look)
+    :custom
+    (dumb-jump-selector 'ivy)
+    (dumb-jump-force-searcher 'rg)
     :config
-    (setq dumb-jump-selector 'ivy)
-    (setq dumb-jump-force-searcher 'rg)
     (defhydra dumb-jump-hydra (:color blue :columns 3)
       "Dumb Jump"
       ("j" dumb-jump-go "Go")
@@ -1261,8 +1264,9 @@ use git in emacs!
       "gU" 'magit-unstage-file
       "gg" 'hydra-my-git-menu/body
       "gy" 'magit-yank-branch-name)
+    :custom
+    (magit-completing-read-function 'ivy-completing-read)
     :config
-    (setq magit-completing-read-function 'ivy-completing-read)
     (defun magit-yank-branch-name ()
       "Show the current branch in the echo-area and add it to the `kill-ring'."
       (interactive)
@@ -1630,8 +1634,8 @@ Keys
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
     :ensure t
-    :config
-    (setq geiser-active-implementations '(guile mit racket)))
+    :custom
+    (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
 **** Common Lisp
 Using this to mess with stumpwm right now.
