@@ -939,6 +939,25 @@ Default keybindings are: S-arrowkey (e.g. S-Left) to move around
   (windmove-default-keybindings)
 #+END_SRC
 ** Project and File Management
+*** dired
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :hook (dired-mode . dired-hide-details-mode)
+    :config
+    ;; Colourful columns.
+    (use-package diredfl
+      :ensure t
+      :config
+      (diredfl-global-mode 1)))
+#+END_SRC
+
+Press ~C-(~ to get git info
+#+BEGIN_SRC emacs-lisp
+  (use-package dired-git-info
+      :ensure t
+      :bind (:map dired-mode-map
+                  ("C-(" . dired-git-info-mode)))
+#+END_SRC
 *** projectile
 Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
 #+BEGIN_SRC emacs-lisp
