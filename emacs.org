@@ -10,8 +10,8 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 
 ** How to Add/Modify
-To add a code block, type =<s= and press =tab=, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
-To modify a code block, press =C-c '= to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press =C-c '= again to add the changes to the org file.
+To add a code block, type =<s= and press ~tab~, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
+To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press ~C-c '~ again to add the changes to the org file.
 * Emacs
 #+BEGIN_SRC emacs-lisp
 ;;; -*- lexical-binding: t; -*-
@@ -1023,7 +1023,7 @@ Needed by =pelican= and =nikola=
 #+END_SRC
 *** Setup for TODOs
 Setup for TODO items.
-Change the status of the todo state by pressing =C-c C-c t <KEY>=
+Change the status of the todo state by pressing ~C-c C-c t <KEY>~
 - the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
 
 The todo states are largely based taken from from http://doc.norang.ca/org-mode.html
@@ -1367,10 +1367,17 @@ Paths need to be explicitly defined for some reason in OSX.
     (exec-path-from-shell-initialize))
 #+END_SRC
 
-Enable ligatures for fira code
+Enable ligatures for fonts that have them
 #+BEGIN_SRC emacs-lisp
   (when (eq system-type 'darwin)
     (mac-auto-operator-composition-mode))
+#+END_SRC
+
+
+Use python 3 by default
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq python-shell-interpreter "/usr/local/bin/python3"))
 #+END_SRC
 ** Mail
 #+BEGIN_SRC emacs-lisp
@@ -1422,13 +1429,6 @@ make reveal.js presentations in org mode
     :config
     (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
 #+END_SRC
-
-Use python 3 by default
-#+BEGIN_SRC emacs-lisp
-  (when (eq system-type 'darwin)
-    (setq python-shell-interpreter "/usr/local/bin/python3"))
-#+END_SRC
-
 * Languages
 Configuration for programming languages
 *** Python
