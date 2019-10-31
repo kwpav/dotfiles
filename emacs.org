@@ -1373,11 +1373,16 @@ Enable ligatures for fonts that have them
     (mac-auto-operator-composition-mode))
 #+END_SRC
 
-
 Use python 3 by default
 #+BEGIN_SRC emacs-lisp
   (when (eq system-type 'darwin)
     (setq python-shell-interpreter "/usr/local/bin/python3"))
+#+END_SRC
+
+** Local file 
+The local file contains machine specific stuff, eg for my home and my work configs.
+#+BEGIN_SRC emacs-lisp
+  (org-babel-load-file "~/dotfiles/emacs-local.org")
 #+END_SRC
 ** Mail
 #+BEGIN_SRC emacs-lisp
@@ -1955,4 +1960,3 @@ An on-going list of things I want to change
 - =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
 - =lispyville= - safe paren editing for evil, uses lispy?
 - =prescient= - sorts candiates in ivy, company, etc
-
