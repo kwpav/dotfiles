@@ -1,6 +1,8 @@
 zsh/.config/zsh/ssh.zsh
 vim/.vim/
 
+*-local.org
+
 # xmonad ignores
 /xmonad/.xmonad/xmonad-x86_64-linux
 /xmonad/.xmonad/xmonad.o
@@ -9,6 +11,7 @@ vim/.vim/
 
 # emacs ignores
 emacs.el
+emacs-local.el
 /emacs/.emacs.d/elpa
 /emacs/.emacs.d/var
 /emacs/.emacs.d/etc
