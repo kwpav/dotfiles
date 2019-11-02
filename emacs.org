@@ -1297,13 +1297,15 @@ Press ~H~ in the magit status window to get the popup for magithub.
 *** git-timemachine
 #+BEGIN_SRC emacs-lisp
   (use-package git-timemachine
-    :ensure t)
+    :ensure t
+    :defer t)
 #+END_SRC
 *** git-messenger
 Show commit info
 #+BEGIN_SRC emacs-lisp
   (use-package git-messenger
-    :ensure t)
+    :ensure t
+    :defer t)
 #+END_SRC
 *** git-gutter-fringe
 Show whether something has been added, modified, or deleted on the side of the screen.
@@ -1336,13 +1338,15 @@ Taken from the doom-emacs config.
 #+END_SRC
 *** My Git Hydra
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-my-git-menu (global-map "<f7>")
+  (defhydra hydra-my-git-menu (global-map "<f7>"
+                                          :color blue)
     "
   ^Navigate^        ^Action^               ^Info^
   ^^^^^^^^^^^^---------------------------------------------------
   _j_: next hunk    _s_: stage hunk        _d_: diff
   _k_: prev hunk    _S_: stage file        _c_: show commit
   ^ ^               _U_: unstage file      _g_: magit status
+  ^ ^               ^ ^                    _t_: git timemachine
   ^ ^               ^ ^                    ^ ^
   "
     ("j" git-gutter:next-hunk)
@@ -1353,19 +1357,19 @@ Taken from the doom-emacs config.
     ("c" git-messenger:popup-show)
     ("g" magit-status :exit t)
     ("d" magit-diff-buffer-file)
-    ("t" hydra-my-git-timemachine-menu/body "git timemachine" :exit t)
+    ("t" git-timemachine :exit t)
     ("q" quit-window "quit-window")
     ("<ESC>" git-gutter:update-all-windows "quit" :exit t))
 #+END_SRC
 
 Git timemachine
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-my-git-timemachine-menu ()
-    ("s" git-timemachine "start the timemachine")
-    ("n" git-timemachine-show-next-revision "next revision")
-    ("p" git-timemachine-show-previous-revision "previous revision")
-    ("c" git-timemachine-show-current-revision "current revision")
-    ("q" git-timemachine-quit "quit" :exit t))
+  (defhydra hydra-my-git-timemachine-menu (:color blue)
+    ("s" git-timemachine "start")
+    ("j" git-timemachine-show-next-revision "next revision")
+    ("k" git-timemachine-show-previous-revision "prev revision")
+    ("c" git-timemachine-show-current-revision "curr revision")
+    ("<ESC>" git-timemachine-show-current-revision "quit" :exit t))
 #+END_SRC
 ** System Specific
 *** OSX
@@ -1424,19 +1428,23 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
       "tt" 'multi-term
       "tn" 'multi-term-next
       "tp" 'multi-term-prev)
-    :ensure t)
+    :ensure t
+    :defer t)
 #+END_SRC
 *** restclient
 Test RESTful APIs in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package restclient
-    :ensure t)
+    :ensure t
+    :defer t)
 
   (use-package company-restclient
-    :ensure t)
+    :ensure t
+    :defer t)
 
   (use-package ob-restclient
-    :ensure t)
+    :ensure t
+    :defer t)
 #+END_SRC
 *** revealjs
 make reveal.js presentations in org mode
