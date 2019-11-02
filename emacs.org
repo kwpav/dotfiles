@@ -192,8 +192,9 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
 #+BEGIN_SRC emacs-lisp
   (use-package general
     :ensure t
+    :custom
+    (general-override-states '(insert emacs hybrid normal visual motion operator replace))
     :config
-    (setq general-override-states '(insert emacs hybrid normal visual motion operator replace))
     (general-override-mode)
     (general-evil-setup)
     (general-create-definer my-leader-def
@@ -1352,8 +1353,19 @@ Taken from the doom-emacs config.
     ("c" git-messenger:popup-show)
     ("g" magit-status :exit t)
     ("d" magit-diff-buffer-file)
+    ("t" hydra-my-git-timemachine-menu/body "git timemachine" :exit t)
     ("q" quit-window "quit-window")
     ("<ESC>" git-gutter:update-all-windows "quit" :exit t))
+#+END_SRC
+
+Git timemachine
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-my-git-timemachine-menu ()
+    ("s" git-timemachine "start the timemachine")
+    ("n" git-timemachine-show-next-revision "next revision")
+    ("p" git-timemachine-show-previous-revision "previous revision")
+    ("c" git-timemachine-show-current-revision "current revision")
+    ("q" git-timemachine-quit "quit" :exit t))
 #+END_SRC
 ** System Specific
 *** OSX
