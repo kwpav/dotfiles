@@ -40,38 +40,61 @@ Modify garbage collection. This is supposed to speed things up a bit.
 #+END_SRC
 ** Package Setup
 Setup the package repositories.
+
+Using this so I can =M-x package-list-packages= to list browse packages on MELPA, otherwise =straight= doesnt need it.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
-  (setq package-enable-at-startup nil)
+  ;; (setq package-enable-at-startup nil)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
   ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
   ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   ;; (add-to-list 'package-archives
   ;;              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-  (package-initialize)
+  ;; (package-initialize)
+#+END_SRC
+
+Set up straight.el
+#+BEGIN_SRC emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 #+END_SRC
 
 Automatically install and then setup =use-package= and =diminish=
 #+BEGIN_SRC emacs-lisp
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
+  ;; (unless (package-installed-p 'use-package)
+  ;;   (package-refresh-contents)
+  ;;   (package-install 'use-package))
 
-  (unless (package-installed-p 'diminish)
-    (package-install 'diminish))
+  ;; (unless (package-installed-p 'diminish)
+  ;;   (package-install 'diminish))
 
-  (eval-when-compile
-    (require 'use-package))
-  (require 'diminish) ;; for :diminish
-  (require 'bind-key) ;; for :bind
+  ;; (eval-when-compile
+  ;;   (require 'use-package))
+  ;; (require 'diminish) ;; for :diminish
+  ;; (require 'bind-key) ;; for :bind
+
+  (straight-use-package 'use-package)
+  ;; (setq straight-use-package-by-default t)
+  (straight-use-package 'diminish)
+  (straight-use-package 'bind-key)
 #+END_SRC
 
 =paradox= gives some nicer package management options than the default.
 =(paradox-enable)= replaces the =list-packages= command with =paradox-list-packages=.
 #+BEGIN_SRC emacs-lisp
   (use-package paradox
-    :ensure t
+    :straight t
     :config
     (paradox-enable))
 #+END_SRC
@@ -105,7 +128,7 @@ Use UTF-8, this should fix flycheck errors with python-flake8
 A package that provides some good defaults, e.g. using the X clipboard for yanking
 #+BEGIN_SRC emacs-lisp
   (use-package better-defaults
-    :ensure t)
+    :straight t)
 #+END_SRC
 
 Don't create any extra files.
@@ -118,7 +141,7 @@ Don't create any extra files.
 Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
 #+BEGIN_SRC emacs-lisp
   (use-package no-littering
-    :ensure t
+    :straight t
     :init
     (setq no-littering-etc-directory
           (expand-file-name "etc/" user-emacs-directory))
@@ -138,7 +161,7 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
 Evil mode is vim in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package evil
-    :ensure t
+    :straight t
     :init
     (setq evil-want-keybinding nil)  ;; evil-collection assumes this
     (setq evil-want-C-u-scroll t)
@@ -151,7 +174,7 @@ Use evil bindings in various modes.
 #+BEGIN_SRC emacs-lisp
   (use-package evil-collection
     :after evil
-    :ensure t
+    :straight t
     :config
     (evil-collection-init))
 #+END_SRC
@@ -160,7 +183,7 @@ surround.vim emulation.
 #+BEGIN_SRC emacs-lisp
   (use-package evil-surround
     :after evil
-    :ensure t
+    :straight t
     :config
     (global-evil-surround-mode 1))
 #+END_SRC
@@ -168,7 +191,7 @@ surround.vim emulation.
 Show tildes in the fringe on empty lines.
 #+BEGIN_SRC emacs-lisp
   (use-package vi-tilde-fringe
-    :ensure t
+    :straight t
     :config
     (global-vi-tilde-fringe-mode 1))
 #+END_SRC
@@ -191,7 +214,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
 
 #+BEGIN_SRC emacs-lisp
   (use-package general
-    :ensure t
+    :straight t
     :custom
     (general-override-states '(insert emacs hybrid normal visual motion operator replace))
     :config
@@ -233,7 +256,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
 **** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
-    :ensure t
+    :straight t
     :diminish which-key-mode
     :config
     (which-key-mode)
@@ -256,7 +279,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
 **** hydra
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
-    :ensure t
+    :straight t
     :config
     (defhydra hydra-zoom (global-map "<f5>")
       "zoom"
@@ -268,7 +291,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
 **** keyfreq
 #+BEGIN_SRC emacs-lisp
   (use-package keyfreq
-    :ensure t
+    :straight t
     :config
     (keyfreq-autosave-mode 1))
 #+END_SRC
@@ -291,7 +314,7 @@ Ivy, a generic completion mechanism for Emacs.
 #+END_QUOTE
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
-    :ensure t
+    :straight t
     :demand t
     :general
     ("<f6>" 'ivy-resume)
@@ -309,7 +332,7 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 #+END_QUOTE
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
-    :ensure t
+    :straight t
     :after ivy
     :demand t
     :general
@@ -338,14 +361,14 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 #+BEGIN_SRC emacs-lisp
   (use-package counsel-etags
     :after counsel
-    :ensure t)
+    :straight t)
 #+END_SRC
 *** Search / Replace
 **** swiper
 Replace keybindings for emacs search and evil search with swiper.
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
-    :ensure t
+    :straight t
     :after ivy
     :general
     ("C-s" 'swiper)
@@ -355,7 +378,7 @@ Replace keybindings for emacs search and evil search with swiper.
 Add find and replace info to the modeline.
 #+BEGIN_SRC emacs-lisp
   (use-package anzu
-    :ensure t
+    :straight t
     :config
     (global-anzu-mode)
     (global-set-key [remap query-replace] 'anzu-query-replace)
@@ -369,7 +392,7 @@ This way I can use evil's undo (~u~ in Normal mode) and =undo-tree= at the same 
   (use-package undo-tree
     :diminish undo-tree-mode
     :defer t
-    :ensure t
+    :straight t
     :config
     (setq undo-tree-visualizer-timestamps t)
     (setq undo-tree-visualizer-diff t)
@@ -391,7 +414,7 @@ Use C-mouse3 to open the menu-bar as a popup menu
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   (use-package nord-theme
-    :ensure t
+    :straight t
     :config
     (load-theme 'nord))
    #+END_SRC
@@ -399,7 +422,7 @@ Theme I'm currently using
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
   ;; (use-package doom-themes
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   (setq doom-themes-enable-bold t
   ;;         doom-themes-enable-italic t)
@@ -407,7 +430,7 @@ Some dark themes I Like
   ;;   (load-theme 'doom-nord))
 
   ;; (use-package kaolin-themes
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   ;; (setq doom-themes-enable-bold t
   ;;   ;;       doom-themes-enable-italic t)
@@ -422,7 +445,7 @@ Some dark themes I Like
 
 
   ;; (use-package poet-theme
-  ;;    :ensure t
+  ;;    :straight t
   ;;    :config
   ;;    (load-theme 'poet-dark))
 
@@ -495,13 +518,13 @@ Other fonts I like
 Set up all the icons
 #+BEGIN_SRC emacs-lisp
   (use-package all-the-icons
-    :ensure t)
+    :straight t)
 #+END_SRC
 
 this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-emacs]]
 #+BEGIN_SRC emacs-lisp
   (use-package telephone-line
-    :ensure t
+    :straight t
     :hook (after-init . telephone-line-mode)
     :config
     ;; (setq telephone-line-primary-left-separator 'telephone-line-flat
@@ -702,14 +725,14 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
 #+BEGIN_SRC emacs-lisp
   ;; (use-package all-the-icons
-  ;;   :ensure t)
+  ;;   :straight t)
 
   ;; (defun my-doom-modeline-hook ()
   ;;   (column-number-mode)
   ;;   (doom-modeline-init))
 
   ;; (use-package doom-modeline
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :defer t
   ;;   :hook (after-init . my-doom-modeline-hook))
 #+END_SRC
@@ -717,7 +740,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nyan-mode
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   (setq nyan-wavy-trail t)
   ;;   :config
@@ -728,10 +751,10 @@ Add an animated nyan-cat to indicate the buffer position, because why not?
 spacemacs modeline settings
 #+BEGIN_SRC emacs-lisp
   ;; (use-package spaceline
-  ;;   :ensure t)
+  ;;   :straight t)
 
   ;; (use-package spaceline-config
-  ;;   :ensure spaceline
+  ;;   :straight spaceline
   ;;   :config
   ;;   ;; (setq powerline-default-separator 'wave)
   ;;   ;; (setq powerline-default-separator 'alternate)
@@ -831,7 +854,7 @@ spacemacs modeline settings
 make certain buffers lighter/darker, e.g. treemacs
 #+BEGIN_SRC emacs-lisp
   ;; (use-package solaire-mode
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :hook ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
   ;;   :config
   ;;   (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
@@ -841,7 +864,7 @@ make certain buffers lighter/darker, e.g. treemacs
 Add rainbow delimiters in all programming language modes
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-    :ensure t
+    :straight t
     :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 *** Other stuff
@@ -931,7 +954,7 @@ list minor modes
 Eyebrowse provides a way to manage workspaces like tiling window managers.
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
-    :ensure t
+    :straight t
     :config
     (eyebrowse-mode t))
 #+END_SRC
@@ -950,7 +973,7 @@ Default keybindings are: S-arrowkey (e.g. S-Left) to move around
     :config
     ;; Colourful columns.
     (use-package diredfl
-      :ensure t
+      :straight t
       :config
       (diredfl-global-mode 1)))
 #+END_SRC
@@ -958,7 +981,7 @@ Default keybindings are: S-arrowkey (e.g. S-Left) to move around
 Press ~C-(~ to get git info
 #+BEGIN_SRC emacs-lisp
   (use-package dired-git-info
-      :ensure t
+      :straight t
       :bind (:map dired-mode-map
                   ("C-(" . dired-git-info-mode)))
 #+END_SRC
@@ -966,12 +989,12 @@ Press ~C-(~ to get git info
 Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
-    :ensure t
+    :straight t
     :config
     (projectile-global-mode))
 
   (use-package counsel-projectile
-    :ensure t
+    :straight t
     :after (counsel projectile)
     :general
     (my-leader-def
@@ -987,15 +1010,15 @@ Projectile allows some nice things for projects, such as searching for files, ma
 A file tree.
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
-    :ensure t
+    :straight t
     :general ([f8] 'treemacs))
 
   (use-package treemacs-evil
-    :ensure t
+    :straight t
     :after (evil treemacs))
 
   (use-package treemacs-projectile
-    :ensure t
+    :straight t
     :after (projectile treemacs))
 #+END_SRC
 ** Org Mode
@@ -1020,7 +1043,7 @@ Provides syntax highlighting for =#+SRC= blocks in html exports.
 Needed by =pelican= and =nikola=
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize
-    :ensure t)
+    :straight t)
 #+END_SRC
 *** Setup for TODOs
 Setup for TODO items.
@@ -1063,10 +1086,10 @@ Existing templates for reference:
 Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :ensure org-bullets
+    ;; :straight org-bullets
     :preface
     (defun my-org-mode-hook ()
-      (org-indent-mode)
+      ;; (org-indent-mode)
       (turn-on-visual-line-mode)
       (setq org-bullets-bullet-list
             '("◉" "○"))
@@ -1083,10 +1106,13 @@ Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~
     :hook (org-mode . my-org-mode-hook)
     :custom
     (org-agenda-files (list "~/org/agenda/"))
+    ;; (straight-fix-org nil)
     :config
     (my-org-todo-setup)
     (my-org-prettify)
     (my-structure-templates))
+  (use-package org-bullets
+    :straight t)
 #+END_SRC
 **** old stuff
 old snippets of things
@@ -1124,7 +1150,7 @@ Error checking.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :diminish flycheck-mode
-    :ensure t
+    :straight t
     :config
     (global-flycheck-mode))
 #+END_SRC
@@ -1132,7 +1158,7 @@ Error checking.
 Company provides code completion.
 #+BEGIN_SRC emacs-lisp
   (use-package company
-    :ensure t
+    :straight t
     :config
     (global-company-mode))
 #+END_SRC
@@ -1147,20 +1173,20 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 #+BEGIN_SRC emacs-lisp
   (use-package company-lsp
     ;; :after (company-mode)
-    :ensure t)
+    :straight t)
 
   (use-package lsp-ui
     :after (flycheck-mode)
-    :ensure t)
+    :straight t)
 
   (use-package lsp-mode
-    :ensure t
+    :straight t
     :config
     (require 'lsp-clients))
 
   ;; lsp extras
   ;; (use-package lsp-ui
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :after (lsp-mode)
   ;;   :hook (lsp-mode . lsp-ui-mode)
   ;;   :config
@@ -1168,7 +1194,7 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
   ;;         lsp-ui-flycheck-enable t))
 
   ;; (use-package company-lsp
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :after (lsp-mode company-mode)
   ;;   :config
   ;;   (push 'company-lsp company-backends))
@@ -1177,7 +1203,7 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
-    :ensure t
+    :straight t
     ;; :config
     ;; (add-hook 'python-mode-hook (function (lambda ()
     ;;                                         (smartparens-mode t))))
@@ -1188,7 +1214,7 @@ autocomplete for brackets
 Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
-    :ensure t
+    :straight t
     :general
     ("M-g o" 'dumb-jump-go-other-window)
     ("M-g j" 'dumb-jump-go)
@@ -1224,7 +1250,7 @@ Get some nice go-to-definition functionality
 Use snippets in specific modes
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-   :ensure t
+   :straight t
    :init
    (setq yas-snippet-dirs
         '("~/.emacs.d/snippets"))
@@ -1235,7 +1261,7 @@ Use snippets in specific modes
 Install the official snippets
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet-snippets
-    :ensure t)
+    :straight t)
 #+END_SRC
 *** editorconfig
 Use editorconfig for projects that have them
@@ -1243,7 +1269,7 @@ Use editorconfig for projects that have them
 #+BEGIN_SRC emacs-lisp
   (use-package editorconfig
     :delight
-    :ensure t
+    :straight t
     :config
     (editorconfig-mode 1))
 #+END_SRC
@@ -1254,7 +1280,7 @@ use git in emacs!
 =magit-yank-branch-name= is from https://emacs.stackexchange.com/questions/30487/add-copy-to-kill-ring-current-branch-name-with-magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :ensure t
+    :straight t
     :general
     ("C-x g" 'magit-status)
     (my-leader-def
@@ -1282,7 +1308,7 @@ use git in emacs!
 Get evil-mode to play nicely
 #+BEGIN_SRC emacs-lisp
   (use-package evil-magit
-    :ensure t
+    :straight t
     :after (magit evil))
 #+END_SRC
 *** magithub
@@ -1290,7 +1316,7 @@ Press ~H~ in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package magithub
   ;;   :after (magit)
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :config
   ;;   (magithub-feature-autoinject t)
   ;;   (setq magithub-clone-default-directory "~/repos"))
@@ -1298,14 +1324,14 @@ Press ~H~ in the magit status window to get the popup for magithub.
 *** git-timemachine
 #+BEGIN_SRC emacs-lisp
   (use-package git-timemachine
-    :ensure t
+    :straight t
     :defer t)
 #+END_SRC
 *** git-messenger
 Show commit info
 #+BEGIN_SRC emacs-lisp
   (use-package git-messenger
-    :ensure t
+    :straight t
     :defer t)
 #+END_SRC
 *** git-gutter-fringe
@@ -1314,7 +1340,7 @@ Show whether something has been added, modified, or deleted on the side of the s
 Taken from the doom-emacs config.
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
-    :ensure t
+    :straight t
     :config
     (global-git-gutter-mode 1)
     (setq-default fringes-outside-margins t)
@@ -1379,7 +1405,7 @@ Paths need to be explicitly defined for some reason in OSX.
 #+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
     :if (memq window-system '(mac ns))
-    :ensure t
+    :straight t
     :config
     (exec-path-from-shell-initialize))
 #+END_SRC
@@ -1404,7 +1430,7 @@ The local file contains machine specific stuff, eg for my home and my work confi
 ** Mail
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e
-    :ensure nil
+    :straight nil
     :config
     (setq mu4e-maildir "~/mail")
     (setq mu4e-sent-folder "/[Gmail].Sent Mail")
@@ -1418,7 +1444,7 @@ Yo dawg, use =restart-emacs= to restart emacs within emacs.
 Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
 #+BEGIN_SRC emacs-lisp
   (use-package restart-emacs
-    :ensure t)
+    :straight t)
 #+END_SRC
 *** multi-term
 run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
@@ -1429,29 +1455,29 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
       "tt" 'multi-term
       "tn" 'multi-term-next
       "tp" 'multi-term-prev)
-    :ensure t
+    :straight t
     :defer t)
 #+END_SRC
 *** restclient
 Test RESTful APIs in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package restclient
-    :ensure t
+    :straight t
     :defer t)
 
   (use-package company-restclient
-    :ensure t
+    :straight t
     :defer t)
 
   (use-package ob-restclient
-    :ensure t
+    :straight t
     :defer t)
 #+END_SRC
 *** revealjs
 make reveal.js presentations in org mode
 #+BEGIN_SRC emacs-lisp
   (use-package ox-reveal
-    :ensure t
+    :straight t
     :config
     (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
 #+END_SRC
@@ -1478,7 +1504,7 @@ LSP uses the [[https://github.com/palantir/python-language-server][palantir pyth
 Use =pipenv= to handle virtual environments
 #+BEGIN_SRC emacs-lisp
   (use-package pipenv
-    :ensure t
+    :straight t
     :hook ((python-mode . pipenv-mode)
            (hy-mode . pipenv-mode))
     :init
@@ -1490,14 +1516,14 @@ trying out LSP instead of elpy, keeping this in case I want to go back.
 [[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
 #+BEGIN_SRC emacs-lisp
   ;; (use-package elpy
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :config
   ;;   (elpy-enable))
 #+END_SRC
 *** C#
 #+BEGIN_SRC emacs-lisp
   ;; (use-package csharp-mode
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   (add-to-list 'company-backends 'company-omnisharp))
 
@@ -1531,7 +1557,7 @@ trying out LSP instead of elpy, keeping this in case I want to go back.
 Omnisharp should load after a csharp file is loaded
 #+BEGIN_SRC emacs-lisp
   ;; (use-package omnisharp
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   (setq omnisharp-server-executable-path "~/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe")
   ;;   :config
@@ -1638,7 +1664,7 @@ Keys
   (show-paren-mode 1)
 
   ;; (use-package paredit
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
   ;;   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
@@ -1648,7 +1674,7 @@ Keys
   ;;   (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
 
   (use-package lispy
-    :ensure t
+    :straight t
     :ghook my-lisp-mode-hooks)
 
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
@@ -1659,7 +1685,7 @@ Keys
 =geiser= provides a nice repl for *scheme* and other things
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
-    :ensure t
+    :straight t
     :custom
     (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
@@ -1667,7 +1693,7 @@ Keys
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package slime
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :init
   ;;   (setq inferior-list-program "sbcl"))
 #+END_SRC
@@ -1675,7 +1701,7 @@ Using this to mess with stumpwm right now.
 Let's get hy. A lisp for Python.
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
-    :ensure t
+    :straight t
     :mode "\\.hy\\'"
     :general
     (my-local-leader-def 'hy-mode-map
@@ -1687,13 +1713,13 @@ Let's get hy. A lisp for Python.
 **** Clojure
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
-    :ensure t)
+    :straight t)
 #+END_SRC
 *** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
-    :ensure t
+    :straight t
     :mode "\\.hs\\'"
     :hook (haskell-mode . turn-on-haskell-indent))
 #+END_SRC
@@ -1712,12 +1738,13 @@ Setup for JavaScript using =js2-mode=.
 Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-files/setup-js.el
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
-    :ensure t
+    :straight t
     :mode (("\\.js$" . js2-mode))
     :hook (js2-mode . my-js-hook)
-    :ensure-system-package ((prettier . "npm i -g prettier")
-                            (eslint . "npm i -g eslint")
-                            (eslint_d . "npm i -g eslint_d"))
+    ;; :ensure-system-package ((prettier . "npm i -g prettier")
+    ;;                         (eslint . "npm i -g eslint")
+    ;;                         (eslint_d . "npm i -g eslint_d"))
+  
     :preface
     (defun my-tide-setup-hook ()
       "Configure tide"
@@ -1770,13 +1797,13 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
 =tern= and =tern-company= are for auto completion
 #+BEGIN_SRC emacs-lisp
   (use-package tern
-    :ensure t
-    :ensure-system-package ((tern . "npm i -g tern"))
+    :straight t
+    ;; :ensure-system-package ((tern . "npm i -g tern"))
     :init
     (setq tern-command '("/home/kevin/.node_modules/bin/tern")))
 
   (use-package company-tern
-    :ensure t
+    :straight t
     :config
     (add-to-list 'company-backends 'company-tern))
 #+END_SRC
@@ -1784,21 +1811,21 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
 Set up javascript with LSP
 #+BEGIN_SRC emacs-lisp
   ;; (use-package lsp-javascript-typescript
-  ;;   :ensure t
-  ;;   :ensure-system-package ((javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")))
+  ;;   :straight t
+  ;;   ;; :ensure-system-package ((javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")))
 #+END_SRC
 
 Set up =tide-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package tide
-    :ensure t
+    :straight t
     :after (js2-mode company flycheck))
 #+END_SRC
 
 Set up =prettier-js-mode=
 #+BEGIN_SRC emacs-lisp
   ;; (use-package prettier-js
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :hook ((js2-mode . prettier-js-mode)
   ;;          (rjsx-mode . prettier-js-mode)))
 #+END_SRC
@@ -1806,13 +1833,13 @@ Set up =prettier-js-mode=
 **** JSON
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
-    :ensure t
+    :straight t
     :mode "\\.json\\'")
 #+END_SRC
 **** TODO TypeScript
 #+BEGIN_SRC emacs-lisp
   ;; (use-package tide
-  ;;   :ensure t
+  ;;   :straight t
   ;;   :config
   ;;   ;; aligns annotation to the right hand side
   ;;   (setq company-tooltip-align-annotations t)
@@ -1836,14 +1863,14 @@ Set up =prettier-js-mode=
 Dont need too much here because it uses =js2-mode= where most of the config is done
 #+BEGIN_SRC emacs-lisp
   (use-package rjsx-mode
-    :ensure t
+    :straight t
     :mode "\\.jsx\\'")
 #+END_SRC
 *** Web Mode
 Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
-    :ensure t
+    :straight t
     :preface
     (defun my-web-mode-hook ()
       ;; set the html indent to 2
@@ -1866,7 +1893,7 @@ Set up web mode for html and css files
 *** PHP
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
-    :ensure t
+    :straight t
     :mode "\\.php\\'"
     :hook (php-mode . my-php-hook)
     :preface
@@ -1895,14 +1922,14 @@ Set up web mode for html and css files
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
 #+BEGIN_SRC emacs-lisp
   (use-package php-eldoc
-    :ensure t
+    :straight t
     :after (php-mode))
 #+END_SRC
 
 Setup code completion and documentation.
 #+BEGIN_SRC emacs-lisp
   (use-package company-php
-    :ensure t
+    :straight t
     :after (php-eldoc)
     :hook (php-mode . my-company-php-hook)
     :preface
@@ -1916,7 +1943,7 @@ Use =PHP_CodeSniffer= to format files on save.
 *NOTE* removing format on save (for now) as it messes with undo history.
 #+BEGIN_SRC emacs-lisp
   (use-package phpcbf
-    :ensure t
+    :straight t
     :after (php-mode)
     ;;:hook ((php-mode . phpcbf-enable-on-save))
     :config
