@@ -85,7 +85,7 @@ Automatically install and then setup =use-package= and =diminish=
   ;; (require 'bind-key) ;; for :bind
 
   (straight-use-package 'use-package)
-  ;; (setq straight-use-package-by-default t)
+  (setq straight-use-package-by-default t)
   (straight-use-package 'diminish)
   (straight-use-package 'bind-key)
 #+END_SRC
@@ -969,6 +969,7 @@ Default keybindings are: S-arrowkey (e.g. S-Left) to move around
 *** dired
 #+BEGIN_SRC emacs-lisp
   (use-package dired
+    :straight nil
     :hook (dired-mode . dired-hide-details-mode)
     :config
     ;; Colourful columns.
@@ -1084,12 +1085,17 @@ Existing templates for reference:
 - =turn-on-visual-line-mode= is for visual word wrap
 
 Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
+
+NOTE that =org-indent-mode= doesnt work with the latest version of org-mode. Using version 9.2 for now
 #+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :requires (org))
+
   (use-package org
-    ;; :straight org-bullets
+    ;; :straight nil
     :preface
     (defun my-org-mode-hook ()
-      ;; (org-indent-mode)
+      (org-indent-mode)
       (turn-on-visual-line-mode)
       (setq org-bullets-bullet-list
             '("◉" "○"))
@@ -1106,13 +1112,10 @@ Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~
     :hook (org-mode . my-org-mode-hook)
     :custom
     (org-agenda-files (list "~/org/agenda/"))
-    ;; (straight-fix-org nil)
     :config
     (my-org-todo-setup)
     (my-org-prettify)
     (my-structure-templates))
-  (use-package org-bullets
-    :straight t)
 #+END_SRC
 **** old stuff
 old snippets of things
