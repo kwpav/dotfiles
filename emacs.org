@@ -1181,7 +1181,8 @@ autocomplete for brackets
     ;; :config
     ;; (add-hook 'python-mode-hook (function (lambda ()
     ;;                                         (smartparens-mode t))))
-    )
+    :config
+    (smartparens-global-mode))
 #+END_SRC
 *** dumb-jump
 Get some nice go-to-definition functionality
@@ -1938,12 +1939,12 @@ An on-going list of things I want to change
   + eslint works fine without the =lsp-javascript-typescript=
 - [ ] setup =forge= to replace =magithub=
 - [ ] window management hydra?
-- [-] telephone-line [1/6]
-  + [-] my-buffer-segment [2/3]
+- [-] telephone-line [3/6]
+  + [X] my-buffer-segment [3/3]
     + [X] display truncated path up to project name, full path up to file name
     + [X] color project name
-    + [ ] different colors for path / file name?
-  + [ ] fix colors
+    + [X] different colors for path / file name?
+  + [X] fix colors
   + [X] git
   + [ ] eyebrowse
   + [ ] anzu
