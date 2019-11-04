@@ -31,10 +31,6 @@
     (lsp-php-root-projectile lsp-php-root-composer-json "index.php" "robots.txt")))
  '(magit-completing-read-function (quote ivy-completing-read) t)
  '(org-agenda-files (quote ("~/org/agenda/")))
- '(package-selected-packages
-   (quote
-    (dired-git-info diredfl doom-modeline doom-themes nord-theme clojure-mode challenger-deep-theme smart-jump ox-reveal counsel-etags kaolin-themes lispy treemacs-projectile treemacs-evil treemacs forge yaml-mode poet-theme objed ivy-explorer color-theme-sanityinc-tomorrow psysh spacemacs-theme eglot gruvbox-theme telephone-line git-gutter-fringe git-messenger ac-core-php all-the-icons anzu better-defaults company company-lsp company-php company-restclient company-tern counsel counsel-projectile diminish dumb-jump editorconfig evil evil-collection evil-magit evil-surround exec-path-from-shell eyebrowse flycheck geiser general git-timemachine haskell-mode htmlize hy-mode hydra ivy js2-mode json-mode keyfreq lsp-mode lsp-ui magit multi-term no-littering ob-restclient olivetti omnisharp org-bullets ox-pandoc paradox paredit php-eldoc php-mode phpcbf pipenv prettier-js projectile racket-mode rainbow-delimiters rainbow-mode restart-emacs restclient rjsx-mode slime smartparens solaire-mode stumpwm-mode swiper tern tide typescript-mode use-package use-package-ensure-system-package vi-tilde-fringe web-mode which-key yasnippet-classic-snippets yasnippet-snippets)))
- '(paradox-github-token t)
  '(vc-annotate-background "#282c34")
  '(vc-annotate-color-map
    (list
