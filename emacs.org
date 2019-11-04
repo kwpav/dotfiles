@@ -1041,13 +1041,12 @@ Existing templates for reference:
 
 Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 
-Using the built in version of org because =org-indent-mode= isnt working with the latest version
+Using org version 9.2.5 because =org-indent-mode= isnt working with the latest version
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :requires (org))
 
   (use-package org
-    :straight (org :type built-in)
     :preface
     (defun my-org-mode-hook ()
       (org-indent-mode)
