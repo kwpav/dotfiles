@@ -1046,7 +1046,7 @@ Using org version 9.2.5 because =org-indent-mode= isnt working with the latest v
   (use-package org-bullets
     :requires (org))
 
-  (use-package org
+  (use-package org-plus-contrib
     :preface
     (defun my-org-mode-hook ()
       (org-indent-mode)
