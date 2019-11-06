@@ -70,6 +70,14 @@ Set up straight.el
     (load bootstrap-file nil 'nomessage))
 #+END_SRC
 
+From the straight docs:
+#+BEGIN_QUOTE
+By setting the variable straight-cache-autoloads to a non-nil value, you can cause straight.el to cache the autoloads of all used packages in a single file on disk, and load them from there instead of from the individual package files if they are still up to date. This reduces the number of disk IO operations during startup from O(number of packages) to O(1), so it should improve performance. No other configuration should be necessary to make this work; however, you may wish to call straight-prune-build occasionally, since otherwise this cache file may grow quite large over time.
+#+END_QUOTE
+#+BEGIN_SRC emacs-lisp
+  (setq straight-use-package-prepare-functions t)
+#+END_SRC
+
 Automatically install and then setup =use-package= and =diminish=
 #+BEGIN_SRC emacs-lisp
   ;; (unless (package-installed-p 'use-package)
