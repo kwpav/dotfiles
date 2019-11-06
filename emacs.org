@@ -43,9 +43,9 @@ Setup the package repositories.
 
 Using this so I can =M-x package-list-packages= to list browse packages on MELPA, otherwise =straight= doesnt need it.
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
+  ;; (require 'package)
   ;; (setq package-enable-at-startup nil)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  ;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
   ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
   ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
