@@ -39,22 +39,9 @@ Modify garbage collection. This is supposed to speed things up a bit.
   (schedule-maybe-gc)
 #+END_SRC
 ** Package Setup
-Setup the package repositories.
+Set up straight.el.
 
-Using this so I can =M-x package-list-packages= to list browse packages on MELPA, otherwise =straight= doesnt need it.
-#+BEGIN_SRC emacs-lisp
-  ;; (require 'package)
-  ;; (setq package-enable-at-startup nil)
-  ;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-  ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  ;; (add-to-list 'package-archives
-  ;;              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-  ;; (package-initialize)
-#+END_SRC
-
-Set up straight.el
+Bootstrap code From the straight.el README
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -78,6 +65,33 @@ By setting the variable straight-cache-autoloads to a non-nil value, you can cau
   (setq straight-cache-autoloads t)
 #+END_SRC
 
+Automatically enable =:straight t=, which is basically the same as =:ensure t= but for straight
+#+BEGIN_SRC emacs-lisp
+  (setq straight-use-package-by-default t)
+#+END_SRC
+
+install  =use-package= and related packages
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'use-package)
+  (straight-use-package 'diminish) ;; for :diminish
+  (straight-use-package 'bind-key) ;; for :bind
+#+END_SRC
+*** OLD package.el config
+Keeping this for historical purposes
+
+Setup the package repositories.
+#+BEGIN_SRC emacs-lisp
+  ;; (require 'package)
+  ;; (setq package-enable-at-startup nil)
+  ;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  ;; (add-to-list 'package-archives
+  ;;              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+  ;; (package-initialize)
+#+END_SRC
+
 Automatically install and then setup =use-package= and =diminish=
 #+BEGIN_SRC emacs-lisp
   ;; (unless (package-installed-p 'use-package)
@@ -91,11 +105,6 @@ Automatically install and then setup =use-package= and =diminish=
   ;;   (require 'use-package))
   ;; (require 'diminish) ;; for :diminish
   ;; (require 'bind-key) ;; for :bind
-
-  (straight-use-package 'use-package)
-  (setq straight-use-package-by-default t)
-  (straight-use-package 'diminish)
-  (straight-use-package 'bind-key)
 #+END_SRC
 
 ** Startup
@@ -1054,7 +1063,7 @@ Using org version 9.2.5 because =org-indent-mode= isnt working with the latest v
   (use-package org-bullets
     :requires (org))
 
-  (use-package org-plus-contrib
+  (use-package org
     :preface
     (defun my-org-mode-hook ()
       (org-indent-mode)
@@ -1868,13 +1877,8 @@ Use =PHP_CodeSniffer= to format files on save.
 * TODO Things to do
 An on-going list of things I want to change
 
-- [X] fix evil escape keys
-  - using the =evil-collection= package
 - [ ] make org prettier?
   + [ ] bullets?
-- yasnippet: [2/2]
-  + [X] learn to use
-  + [X] configure
 - [ ] Configure C#
   + use the C# lsp??
 - [ ] fix =eslint= for lsp if possible
@@ -1894,10 +1898,12 @@ An on-going list of things I want to change
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent
+- [ ] new org fixes [0/2]
+  - [ ] =org-indent-mode= doesnt work in 9.2.6, it works in 9.2.5 and the built in version
+  - [ ] custom structure templates arent loading
+    - use yasnippet?
 
 ** Cool looking packages to check out
-- =straight.el= - https://github.com/raxod502/straight.el
-  - package management
 - =purpose= - https://github.com/bmag/emacs-purpose
   - window/buffer management
 - =multiple-cursors= - https://github.com/magnars/multiple-cursors.el
