@@ -110,7 +110,7 @@ Automatically install and then setup =use-package= and =diminish=
 ** Startup
 Display the scratch buffer when starting up, use =org-mode= for the scratch buffer, and remove the default message.
 #+BEGIN_SRC emacs-lisp
-  (setq  inhibit-startup-screen t
+  (setq inhibit-startup-screen t
          initial-major-mode 'org-mode
          initial-scratch-message nil)
 #+END_SRC
@@ -1248,9 +1248,9 @@ Get some nice go-to-definition functionality
 Use snippets in specific modes
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-   :init
-   (setq yas-snippet-dirs
-        '("~/.emacs.d/snippets"))
+   :custom
+   (yas-snippet-dirs
+    '("~/.emacs.d/snippets"))
    :config
    (yas-global-mode 1))
 #+END_SRC
@@ -1931,11 +1931,13 @@ An on-going list of things I want to change
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent
-- [-] new org fixes [1/2]
+- [X] new org fixes [2/2]
   - [X] =org-indent-mode= doesnt work in 9.2.6, it works in 9.2.5 and the built in version
     - used the commit hash for 9.2.5 in =straight/version/default.el= =
-  - [ ] custom structure templates arent loading
-    - use yasnippet?
+  - [X] custom structure templates arent loading
+    - this is working in version 9.2.5
+      - will probably need to use =org-tempo= and fix this again whenever i update org
+  - use yasnippet?
 
 ** Cool looking packages to check out
 - =purpose= - https://github.com/bmag/emacs-purpose
@@ -1963,3 +1965,5 @@ An on-going list of things I want to change
 - =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
 - =lispyville= - safe paren editing for evil, uses lispy?
 - =prescient= - sorts candiates in ivy, company, etc
+- =ivy-posframe= - load ivy in a popup frame type thing
+- =company-box= show cool icons in company results
