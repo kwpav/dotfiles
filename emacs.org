@@ -39,9 +39,21 @@ Modify garbage collection. This is supposed to speed things up a bit.
   (schedule-maybe-gc)
 #+END_SRC
 ** Package Setup
-Set up straight.el.
+Set up =straight.el= instead of the built-in =package.el= to manage my packages.
 
-Bootstrap code From the straight.el README
+Using straight because:
+- it allows me to exactly reproduce my config on other machines, it creates a =default.el= file that acts as a lockfile for package versions
+- it gets the latest package versions from git
+- it's intregated well with =use-package=
+- I can edit package code if I want to, and straight will rebuilt the package
+- lots of other stuff, the README is quite good.
+
+Use the develop branch, this needs to be set before the bootstrap code below.
+#+BEGIN_SRC emacs-lisp
+  (setq straight-repository-branch "develop")
+#+END_SRC
+
+Bootstrap code from the =straight.el= README
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
