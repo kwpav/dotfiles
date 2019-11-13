@@ -180,9 +180,8 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
 Evil mode is vim in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package evil
-    :init
-    (setq evil-want-keybinding nil)  ;; evil-collection assumes this
-    (setq evil-want-C-u-scroll t)
+    :custom
+    (evil-want-keybinding nil)  ;; evil-collection assumes this
     :config
     (evil-mode 1)
     (my-emacs-in-normal-mode))
@@ -1103,18 +1102,16 @@ Existing templates for reference:
 
 Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 
-Using org version 9.2.5 because =org-indent-mode= isnt working with the latest version
+Using the built in org version because =org-indent-mode= and my agenda are not working with the latest version
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :requires (org))
 
   (use-package org
+    :straight (org :type built-in)
     :preface
     (defun my-org-mode-hook ()
-      (org-indent-mode)
       (turn-on-visual-line-mode)
-      (setq org-bullets-bullet-list
-            '("◉" "○"))
       (org-bullets-mode 1))
     :general
     (org-src-mode-map
@@ -1128,6 +1125,7 @@ Using org version 9.2.5 because =org-indent-mode= isnt working with the latest v
     :hook (org-mode . my-org-mode-hook)
     :custom
     (org-agenda-files (list "~/org/agenda/"))
+    (org-startup-indented t) ;; start with org-indent-mode
     :config
     (my-org-todo-setup)
     (my-org-prettify)
@@ -1943,13 +1941,15 @@ An on-going list of things I want to change
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent
-- [X] new org fixes [2/2]
+- [-] new org fixes [2/3]
   - [X] =org-indent-mode= doesnt work in 9.2.6, it works in 9.2.5 and the built in version
     - used the commit hash for 9.2.5 in =straight/version/default.el= =
   - [X] custom structure templates arent loading
     - this is working in version 9.2.5
       - will probably need to use =org-tempo= and fix this again whenever i update org
-  - use yasnippet?
+    - use yasnippet?
+  - [ ] figure out why org agenda isnt working in 9.2.5 or 9.2.6
+    - it works with the built-in version of org, using that for now
 
 ** Cool looking packages to check out
 - =purpose= - https://github.com/bmag/emacs-purpose

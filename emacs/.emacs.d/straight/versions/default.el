@@ -46,7 +46,6 @@
  ("no-littering" . "53f57c67265703cf28fd613ed34120da68579df4")
  ("nord-emacs" . "ba8f9b98a5028d3ec8c44e43889e7edda9a3b8dd")
  ("ob-restclient.el" . "53376667eeddb1388fd6c6976f3222e7c8adcd46")
- ("org" . "57619362737680a64debf032b31989513fc33fa1")
  ("org-bullets" . "c19b13be00df8d8dc596e4f1aef4a094b08ac801")
  ("org-reveal" . "5fd940e01ae76ba305d46a0c0cfc4d27aa131d33")
  ("php-eldoc" . "df05064146b884d9081e10657e32dc480f070cfe")
