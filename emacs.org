@@ -53,6 +53,15 @@ Use the develop branch, this needs to be set before the bootstrap code below.
   (setq straight-repository-branch "develop")
 #+END_SRC
 
+Set up =straight-x.el= - this allows provides functionality to pin package versions. This needs to be done before straight is loaded
+#+BEGIN_SRC emacs-lisp
+  ;; Tell straight.el about the profiles we are going to be using.
+  (setq straight-profiles
+        '((nil . "default.el")
+          ;; Packages which are pinned to a specific commit.
+          (pinned . "pinned.el")))
+#+END_SRC
+
 Bootstrap code from the =straight.el= README
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)
@@ -67,6 +76,12 @@ Bootstrap code from the =straight.el= README
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
+#+END_SRC
+
+Now that =straight= has been loaded, we can load =straight-x=
+#+BEGIN_SRC emacs-lisp
+  (autoload #'straight-x-pull-all "straight-x")
+  (autoload #'straight-x-freeze-versions "straight-x")
 #+END_SRC
 
 From the straight docs:
