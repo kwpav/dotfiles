@@ -13,6 +13,7 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 To add a code block, type =<s= and press ~tab~, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press ~C-c '~ again to add the changes to the org file.
 * Emacs
+Lexical binding is supposed to make stuff faster
 #+BEGIN_SRC emacs-lisp
 ;;; -*- lexical-binding: t; -*-
 #+END_SRC
@@ -53,15 +54,6 @@ Use the develop branch, this needs to be set before the bootstrap code below.
   (setq straight-repository-branch "develop")
 #+END_SRC
 
-Set up =straight-x.el= - this allows provides functionality to pin package versions. This needs to be done before straight is loaded
-#+BEGIN_SRC emacs-lisp
-  ;; Tell straight.el about the profiles we are going to be using.
-  (setq straight-profiles
-        '((nil . "default.el")
-          ;; Packages which are pinned to a specific commit.
-          (pinned . "pinned.el")))
-#+END_SRC
-
 Bootstrap code from the =straight.el= README
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)
@@ -76,12 +68,6 @@ Bootstrap code from the =straight.el= README
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-#+END_SRC
-
-Now that =straight= has been loaded, we can load =straight-x=
-#+BEGIN_SRC emacs-lisp
-  (autoload #'straight-x-pull-all "straight-x")
-  (autoload #'straight-x-freeze-versions "straight-x")
 #+END_SRC
 
 From the straight docs:
@@ -1111,7 +1097,6 @@ Existing templates for reference:
 #+END_SRC
 *** Use Package Setup
 =my-org-mode-hook= enables:
-- =indent-mode= indents each header and text block
 - =org-bullets= provides prettier bullets for the header
 - =turn-on-visual-line-mode= is for visual word wrap
 
@@ -1123,7 +1108,7 @@ Using the built in org version because =org-indent-mode= and my agenda are not w
     :requires (org))
 
   (use-package org
-    :straight (org :type built-in)
+    :straight nil
     :preface
     (defun my-org-mode-hook ()
       (turn-on-visual-line-mode)
@@ -1484,9 +1469,9 @@ Test RESTful APIs in emacs!
 *** revealjs
 make reveal.js presentations in org mode
 #+BEGIN_SRC emacs-lisp
-  (use-package ox-reveal
-    :config
-    (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
+  ;; (use-package ox-reveal
+  ;;   :config
+  ;;   (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
 #+END_SRC
 * Languages
 Configuration for programming languages
