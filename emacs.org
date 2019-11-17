@@ -1043,19 +1043,41 @@ A file tree.
 ** Org Mode
 Set up everything for =org-mode=
 *** Prettify
+From http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 Stuff for making org-mode prettier:
 - =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
+- set up line spacing and margins
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify ()
     (setq org-src-fontify-natively t)
-    ;; (custom-set-faces
-    ;;  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
-    ;;  '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
-    ;;  '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
-    ;;  '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
-    ;;  '(org-level-5 ((t (:inherit outline-1 :height 1.0)))))
-    )
+    (setq org-hide-emphasis-markers t)
+    (setq line-spacing 0.2
+          left-margin-width 2
+          right-margin-width 2)
+    (setq org-agenda-block-separator ""
+          org-fontify-whole-heading-line t
+          org-fontify-done-headline t
+          org-fontify-quote-and-verse-blocks t)
+    (set-window-buffer nil (current-buffer))
+    (custom-theme-set-faces
+     'user
+     '(variable-pitch ((t (:family "EtBembo" :height 160 :weight normal :slant normal))))
+     '(fixed-pitch ((t (:family "Iosevka" :height 0.8))))
+     '(org-code ((t (:inherit (shadow fixed-pitch)))))
+     '(org-block ((t (:inherit fixed-pitch))))
+     '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+     '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+     '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-property-value ((t (:inherit fixed-pitch))) t)
+     '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+     '(org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold))))
+     '(org-level-2 ((t (:inherit outline-1 :height 1.2 :weight bold))))
+     '(org-level-3 ((t (:inherit outline-1 :height 1.1 :weight bold))))
+     '(org-level-4 ((t (:inherit outline-1 :height 1.0 :weight bold))))
+     '(org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold))))))
 #+END_SRC
+
 **** htmlize
 Provides syntax highlighting for =#+SRC= blocks in html exports.
 
@@ -1063,6 +1085,7 @@ Needed by =pelican= and =nikola=
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize)
 #+END_SRC
+
 *** Setup for TODOs
 Setup for TODO items.
 Change the status of the todo state by pressing ~C-c C-c t <KEY>~
@@ -1106,13 +1129,14 @@ Using the built in org version because =org-indent-mode= and my agenda are not w
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :requires (org))
-
   (use-package org
     :straight nil
     :preface
     (defun my-org-mode-hook ()
       (turn-on-visual-line-mode)
-      (org-bullets-mode 1))
+      (my-org-prettify)
+      (org-bullets-mode 1)
+      (variable-pitch-mode 1))
     :general
     (org-src-mode-map
      [remap evil-save-and-close]          'org-edit-src-exit
@@ -1128,7 +1152,6 @@ Using the built in org version because =org-indent-mode= and my agenda are not w
     (org-startup-indented t) ;; start with org-indent-mode
     :config
     (my-org-todo-setup)
-    (my-org-prettify)
     (my-structure-templates))
 #+END_SRC
 **** old stuff
