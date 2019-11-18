@@ -1044,6 +1044,10 @@ A file tree.
 *** Prettify
 Settings to make org mode look a bit nicer.
 
+A lot of this stuff is from:
+- http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html
+- https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+
 The prettify hook:
 - =turn-on-visual-line-mode= for visual word wrap
 - =org-bullets= provides good looking bullets for the header
@@ -1057,8 +1061,6 @@ The prettify hook:
     (use-package org-bullets
       :requires (org))
 #+END_SRC
-
-From http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 
 Various settings to make things look nicer:
 - =org-startup-indented= starts up =org-indent-mode=
@@ -1080,7 +1082,7 @@ Various settings to make things look nicer:
     (my-org-faces))
 #+END_SRC
 
-Customize some faces,  mainly for =variable-pitch-mode= to make things =monospaced=. The =org-level-*= stuff makes headings bigger.
+Customize some faces, mainly for =variable-pitch-mode= to make things =monospaced=. The =org-level-*= stuff makes headings bigger.
 #+BEGIN_SRC emacs-lisp
   (defun my-org-faces ()
     (custom-theme-set-faces
@@ -1114,20 +1116,20 @@ Needed by =pelican= and =nikola=
 Change the status of the todo state by pressing ~C-c C-c t <KEY>~
 - the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
 
-The todo states are largely based taken from from http://doc.norang.ca/org-mode.html
+The todo states are largely taken from from http://doc.norang.ca/org-mode.html
 #+BEGIN_SRC emacs-lisp
   (defun my-org-todo-setup ()
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "CURRENT(c)" "|" "DONE(d)")
-            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(a@/!)")))
     (setq org-todo-keyword-faces
-          (quote (("TODO" :foreground "#ff5555" :weight bold)
-                  ("NEXT" :foreground "#61bfff" :weight bold)
-                  ("CURRENT" :foreground "#8be9fd" :weight bold)
-                  ("DONE" :foreground "#50fa7b" :weight bold)
-                  ("WAITING" :foreground "orange" :weight bold)
-                  ("HOLD" :foreground "#ff79c6" :weight bold)
-                  ("CANCELLED" :foreground "forest green" :weight bold))))
+          (quote (("TODO" :foreground "#BF616A" :weight bold)
+                  ("NEXT" :foreground "#5E81AC" :weight bold)
+                  ("CURRENT" :foreground "#88C0D0" :weight bold)
+                  ("DONE" :foreground "#A3BE8C" :weight bold)
+                  ("WAITING" :foreground "#D08770" :weight bold)
+                  ("HOLD" :foreground "#848EAD" :weight bold)
+                  ("CANCELLED" :foreground "#8FBCBB" :weight bold))))
     (setq org-use-fast-todo-selection t)
     ;; insert time/date when moved to DONE
     (setq org-log-done 'time))
@@ -1956,8 +1958,11 @@ Use =PHP_CodeSniffer= to format files on save.
 * TODO Things to do
 An on-going list of things I want to change
 
-- [ ] make org prettier?
+- [ ] make org prettier [0/2]
+  + [ ] fix =company= results in =variable-pitch-mode=
   + [ ] bullets?
+- [ ] setup and use org capture
+  - this looks cool too https://addons.mozilla.org/en-US/firefox/addon/org-capture/
 - [ ] Configure C#
   + use the C# lsp??
 - [ ] fix =eslint= for lsp if possible
@@ -1977,10 +1982,8 @@ An on-going list of things I want to change
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent
-- [-] new org fixes [2/3]
-  - [X] =org-indent-mode= doesnt work in 9.2.6, it works in 9.2.5 and the built in version
-    - used the commit hash for 9.2.5 in =straight/version/default.el= =
-  - [X] custom structure templates arent loading
+- [ ] new org fixes [0/2]
+  - [ ] custom structure templates arent loading
     - this is working in version 9.2.5
       - will probably need to use =org-tempo= and fix this again whenever i update org
     - use yasnippet?
