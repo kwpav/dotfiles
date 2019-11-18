@@ -1041,24 +1041,48 @@ A file tree.
     :after (projectile treemacs))
 #+END_SRC
 ** Org Mode
-Set up everything for =org-mode=
 *** Prettify
-From http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
-Stuff for making org-mode prettier:
-- =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
-- set up line spacing and margins
+Settings to make org mode look a bit nicer.
+
+The prettify hook:
+- =turn-on-visual-line-mode= for visual word wrap
+- =org-bullets= provides good looking bullets for the header
+- =variable-pitch-mode= to use a non =monospaced= font
 #+BEGIN_SRC emacs-lisp
-  (defun my-org-prettify ()
-    (setq org-src-fontify-natively t)
-    (setq org-hide-emphasis-markers t)
-    (setq line-spacing 0.2
-          left-margin-width 2
-          right-margin-width 2)
-    (setq org-agenda-block-separator ""
+  (defun my-org-prettify-hook ()
+    (turn-on-visual-line-mode)
+    (variable-pitch-mode 1)
+    (org-bullets-mode 1))
+
+    (use-package org-bullets
+      :requires (org))
+#+END_SRC
+
+From http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+
+Various settings to make things look nicer:
+- =org-startup-indented= starts up =org-indent-mode=
+- =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
+- =org-hide-emphasis-markers= hides the things that make text *bold*, /italics/, =monospaced=, etc.
+- =org-fontify-whole-heading-line=  is useful when setting background colors for =org-level-*= faces
+- =org-fontify-done-headline= make DONE headlines look nicer
+- =org-fontify-quote-and-verse-blocks= makes quotes and verses italic
+- =line-spacing= to give the text a bit more breathing room
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-prettify-settings ()
+    (setq org-startup-indented t
+          org-src-fontify-natively t
+          org-hide-emphasis-markers t
           org-fontify-whole-heading-line t
           org-fontify-done-headline t
-          org-fontify-quote-and-verse-blocks t)
-    (set-window-buffer nil (current-buffer))
+          org-fontify-quote-and-verse-blocks t
+          line-spacing 0.2)
+    (my-org-faces))
+#+END_SRC
+
+Customize some faces,  mainly for =variable-pitch-mode= to make things =monospaced=. The =org-level-*= stuff makes headings bigger.
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-faces ()
     (custom-theme-set-faces
      'user
      '(variable-pitch ((t (:family "EtBembo" :height 160 :weight normal :slant normal))))
@@ -1066,7 +1090,7 @@ Stuff for making org-mode prettier:
      '(org-code ((t (:inherit (shadow fixed-pitch)))))
      '(org-block ((t (:inherit fixed-pitch))))
      '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-     '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+     '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
      '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
      '(org-property-value ((t (:inherit fixed-pitch))) t)
      '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
@@ -1087,7 +1111,6 @@ Needed by =pelican= and =nikola=
 #+END_SRC
 
 *** Setup for TODOs
-Setup for TODO items.
 Change the status of the todo state by pressing ~C-c C-c t <KEY>~
 - the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
 
@@ -1118,25 +1141,15 @@ Existing templates for reference:
     (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
     (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n\n#+END_SRC")))
 #+END_SRC
-*** Use Package Setup
-=my-org-mode-hook= enables:
-- =org-bullets= provides prettier bullets for the header
-- =turn-on-visual-line-mode= is for visual word wrap
+*** Use Package
+Put it all together with =use-package=.
 
-Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
+The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 
-Using the built in org version because =org-indent-mode= and my agenda are not working with the latest version
+*NOTE* Using the built in org version because =org-indent-mode= and my agenda are not working with the latest version
 #+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :requires (org))
   (use-package org
     :straight nil
-    :preface
-    (defun my-org-mode-hook ()
-      (turn-on-visual-line-mode)
-      (my-org-prettify)
-      (org-bullets-mode 1)
-      (variable-pitch-mode 1))
     :general
     (org-src-mode-map
      [remap evil-save-and-close]          'org-edit-src-exit
@@ -1146,11 +1159,11 @@ Using the built in org version because =org-indent-mode= and my agenda are not w
       "a" 'org-agenda)
     (my-local-leader-def 'org-mode-map
       "t" 'org-babel-tangle)
-    :hook (org-mode . my-org-mode-hook)
+    :hook (org-mode . my-org-prettify-hook)
     :custom
     (org-agenda-files (list "~/org/agenda/"))
-    (org-startup-indented t) ;; start with org-indent-mode
     :config
+    (my-org-prettify-settings)
     (my-org-todo-setup)
     (my-structure-templates))
 #+END_SRC
