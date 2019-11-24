@@ -1041,6 +1041,7 @@ A file tree.
     :after (projectile treemacs))
 #+END_SRC
 ** Org Mode
+Each of these sections contains functions that are called within the =:hook= or =:config= part of the =(use-package org)= block
 *** Prettify
 Settings to make org mode look a bit nicer.
 
@@ -1050,8 +1051,8 @@ A lot of this stuff is from:
 
 The prettify hook:
 - =turn-on-visual-line-mode= for visual word wrap
-- =org-bullets= provides good looking bullets for the header
 - =variable-pitch-mode= to use a non =monospaced= font
+- =org-bullets= provides good looking bullets for the header
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify-hook ()
     (turn-on-visual-line-mode)
@@ -1082,7 +1083,7 @@ Various settings to make things look nicer:
     (my-org-faces))
 #+END_SRC
 
-Customize some faces, mainly for =variable-pitch-mode= to make things =monospaced=. The =org-level-*= stuff makes headings bigger.
+Set up fonts and faces. Most of these are for for =variable-pitch-mode= to make things =monospaced=. The =org-level-*= stuff makes headings bigger.
 #+BEGIN_SRC emacs-lisp
   (defun my-org-faces ()
     (custom-theme-set-faces
@@ -1110,6 +1111,14 @@ Provides syntax highlighting for =#+SRC= blocks in html exports.
 Needed by =pelican= and =nikola=
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize)
+#+END_SRC
+*** Org Babel Languages
+Enable python for in-buffer evaluation
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-babel-languages ()
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t))))
 #+END_SRC
 
 *** Setup for TODOs
@@ -1167,7 +1176,8 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
     :config
     (my-org-prettify-settings)
     (my-org-todo-setup)
-    (my-structure-templates))
+    (my-structure-templates)
+    (my-org-babel-languages))
 #+END_SRC
 **** old stuff
 old snippets of things
@@ -1184,13 +1194,6 @@ old snippets of things
   ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
                                           ;(setq org-hide-emphasis-markers t)
-#+END_SRC
-*** Org Babel Languages
-Enable python for in-buffer evaluation
-#+BEGIN_SRC emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)))
 #+END_SRC
 ** Code
 Things that are used when coding.
@@ -2018,3 +2021,5 @@ An on-going list of things I want to change
 - =prescient= - sorts candiates in ivy, company, etc
 - =ivy-posframe= - load ivy in a popup frame type thing
 - =company-box= show cool icons in company results
+- =org-present= org mode presentations
+
