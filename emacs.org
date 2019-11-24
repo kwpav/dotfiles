@@ -1048,6 +1048,7 @@ Settings to make org mode look a bit nicer.
 A lot of this stuff is from:
 - http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html
 - https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+- http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
 
 The prettify hook:
 - =turn-on-visual-line-mode= for visual word wrap
@@ -1071,6 +1072,8 @@ Various settings to make things look nicer:
 - =org-fontify-done-headline= make DONE headlines look nicer
 - =org-fontify-quote-and-verse-blocks= makes quotes and verses italic
 - =line-spacing= to give the text a bit more breathing room
+- the =font-lock= part is a regex that uses a unicode bullet for lists (lines that start with "- " or "+ ")
+  - this is only for the first level of lists, other levels arent replaced
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify-settings ()
     (setq org-startup-indented t
@@ -1080,6 +1083,9 @@ Various settings to make things look nicer:
           org-fontify-done-headline t
           org-fontify-quote-and-verse-blocks t
           line-spacing 0.2)
+    (font-lock-add-keywords 'org-mode
+                            '(("^\\([-+]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
     (my-org-faces))
 #+END_SRC
 
@@ -1179,22 +1185,7 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
     (my-structure-templates)
     (my-org-babel-languages))
 #+END_SRC
-**** old stuff
-old snippets of things
-#+BEGIN_SRC emacs-lisp
-  ;; (font-lock-add-keywords 'org-mode
-  ;;                         '(("^ +\\([-*]\\) "
-  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-  ;; (setq org-todo-keywords
-  ;;       '((sequence "TODO" "CURRENT" "|" "DONE")))
-
-  ;; (font-lock-add-keywords 'org-mode
-  ;;                         '(("^ +\\([-*]\\) "
-  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-                                          ;(setq org-hide-emphasis-markers t)
-#+END_SRC
 ** Code
 Things that are used when coding.
 *** Line Numbers
@@ -1961,9 +1952,10 @@ Use =PHP_CodeSniffer= to format files on save.
 * TODO Things to do
 An on-going list of things I want to change
 
-- [ ] make org prettier [0/2]
+- [-] make org prettier [1/2]
   + [ ] fix =company= results in =variable-pitch-mode=
-  + [ ] bullets?
+  + [X] bullets?
+    + only did the first level of bullets though
 - [ ] setup and use org capture
   - this looks cool too https://addons.mozilla.org/en-US/firefox/addon/org-capture/
 - [ ] Configure C#
