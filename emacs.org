@@ -455,97 +455,96 @@ Theme I'm currently using
     :config
     (load-theme 'nord))
    #+END_SRC
-
+*** COMMENT other themes
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package doom-themes
-  ;;   :init
-  ;;   (setq doom-themes-enable-bold t
-  ;;         doom-themes-enable-italic t)
-  ;;   :config
-  ;;   (load-theme 'doom-nord))
+  (use-package doom-themes
+    :init
+    (setq doom-themes-enable-bold t
+          doom-themes-enable-italic t)
+    :config
+    (load-theme 'doom-nord))
 
-  ;; (use-package kaolin-themes
-  ;;   :init
-  ;;   ;; (setq doom-themes-enable-bold t
-  ;;   ;;       doom-themes-enable-italic t)
-  ;;   (setq kaolin-themes-hl-line-colored t
-  ;;         kaolin-themes-italic-comments t)
-  ;;   :config
-  ;;   ;; (load-theme 'doom-one t)
-  ;;   ;; (doom-themes-treemacs-config)
-  ;;   ;; (doom-themes-org-config)
-  ;;   (load-theme 'kaolin-ocean t)
-  ;;   (kaolin-treemacs-theme))
+  (use-package kaolin-themes
+    :init
+    ;; (setq doom-themes-enable-bold t
+    ;;       doom-themes-enable-italic t)
+    (setq kaolin-themes-hl-line-colored t
+          kaolin-themes-italic-comments t)
+    :config
+    ;; (load-theme 'doom-one t)
+    ;; (doom-themes-treemacs-config)
+    ;; (doom-themes-org-config)
+    (load-theme 'kaolin-ocean t)
+    (kaolin-treemacs-theme))
 
+  (use-package poet-theme
+     :config
+     (load-theme 'poet-dark))
 
-  ;; (use-package poet-theme
-  ;;    :config
-  ;;    (load-theme 'poet-dark))
+   ;; setup different fonts
+   (add-hook 'text-mode-hook
+             (lambda ()
+               (variable-pitch-mode 1)))
 
-  ;;  ;; setup different fonts
-  ;;  (add-hook 'text-mode-hook
-  ;;            (lambda ()
-  ;;              (variable-pitch-mode 1)))
+   (set-face-attribute 'default nil :family "Iosevka" :height 130)
+   (set-face-attribute 'fixed-pitch nil :family "Iosevka")
+   (set-face-attribute 'variable-pitch nil :family "ETBookOT")
 
-  ;;  (set-face-attribute 'default nil :family "Iosevka" :height 130)
-  ;;  (set-face-attribute 'fixed-pitch nil :family "Iosevka")
-  ;;  (set-face-attribute 'variable-pitch nil :family "ETBookOT")
-
-   ;;(load-theme 'base16-tomorrow-night)
-   ;;(load-theme 'kaolin-dark)
-   ;;(load-theme 'doom-one)
-   ;;(load-theme 'doom-tomorrow-night)
-   ;;(load-theme 'doom-city-lights)
-   ;;(load-theme 'kaolin-ocean)
-   ;; (load-theme 'base16-spacemacs)
-   ;;(load-theme 'gruvbox-dark-hard)
-   ;;(load-theme 'sourcerer)
-   ;;(load-theme 'spacemacs-dark)
-   ;;(load-theme 'base16-tomorrow-dark)
-   ;;(load-theme 'base16-twilight-dark)
-   ;;(load-theme 'base16-default-dark)
-   ;;(load-theme 'solarized-dark)
-   ;;(setq solarized-distinct-fringe-background t)
-   ;;(load-theme 'base16-ocean-dark)
-   ;;(load-theme 'material)
-   ;;(load-theme 'spacegray)
-   ;;(load-theme 'dracula)
-   ;;(load-theme 'reykjavik)
-   ;;(set-cursor-color "gainsboro")
+   (load-theme 'base16-tomorrow-night)
+   (load-theme 'kaolin-dark)
+   (load-theme 'doom-one)
+   (load-theme 'doom-tomorrow-night)
+   (load-theme 'doom-city-lights)
+   (load-theme 'kaolin-ocean)
+   (load-theme 'base16-spacemacs)
+   (load-theme 'gruvbox-dark-hard)
+   (load-theme 'sourcerer)
+   (load-theme 'spacemacs-dark)
+   (load-theme 'base16-tomorrow-dark)
+   (load-theme 'base16-twilight-dark)
+   (load-theme 'base16-default-dark)
+   (load-theme 'solarized-dark)
+   (setq solarized-distinct-fringe-background t)
+   (load-theme 'base16-ocean-dark)
+   (load-theme 'material)
+   (load-theme 'spacegray)
+   (load-theme 'dracula)
+   (load-theme 'reykjavik)
+   (set-cursor-color "gainsboro")
 #+END_SRC
 
 Some light themes I like
 #+BEGIN_SRC emacs-lisp
-  ;;(load-theme 'spacemacs-light)
-  ;;(load-theme 'light-soap)
-  ;;(load-theme 'solarized-light)
+  (load-theme 'spacemacs-light)
+  (load-theme 'light-soap)
+  (load-theme 'solarized-light)
 #+END_SRC
 *** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
 #+END_SRC
-
+**** COMMENT other fonts
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
-  ;; (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
-  ;; (add-to-list 'default-frame-alist '(font . "Monoid-10"))
-  ;; (add-to-list 'default-frame-alist '(font . "Hermit-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
-  ;; (add-to-list 'default-frame-alist '(font . "Cherry-13"))
-  ;; (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Curie-14" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Hack-12" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Hermit-10" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
-  ;; (add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
-  ;; (add-to-list 'default-frame-alist '(font . "envypn-11" ))
+  (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
+  (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
+  (add-to-list 'default-frame-alist '(font . "Monoid-10"))
+  (add-to-list 'default-frame-alist '(font . "Hermit-12"))
+  (add-to-list 'default-frame-alist '(font . "Lemon-12"))
+  (add-to-list 'default-frame-alist '(font . "Uushi-11"))
+  (add-to-list 'default-frame-alist '(font . "Cherry-13"))
+  (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
+  (add-to-list 'default-frame-alist '(font . "Curie-14" ))
+  (add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
+  (add-to-list 'default-frame-alist '(font . "Hack-12" ))
+  (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
+  (add-to-list 'default-frame-alist '(font . "Hermit-10" ))
+  (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
+  (add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
+  (add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
+  (add-to-list 'default-frame-alist '(font . "envypn-11" ))
 #+END_SRC
 *** Modeline
 **** telephone-line
@@ -753,7 +752,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                             telephone-line-airline-position-segment))
             (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
-**** doom modeline
+**** COMMENT doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
 #+BEGIN_SRC emacs-lisp
   ;; (use-package all-the-icons
@@ -766,7 +765,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
   ;;   :defer t
   ;;   :hook (after-init . my-doom-modeline-hook))
 #+END_SRC
-**** spaceline
+**** COMMENT spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nyan-mode
@@ -807,7 +806,7 @@ spacemacs modeline settings
   ;;   (setq spaceline-window-numbers-unicode t))
 #+END_SRC
 
-**** My custom modeline
+**** COMMENT My custom modeline
 #+BEGIN_SRC emacs-lisp
   ;; (setq-default mode-line-format
   ;;               (list
@@ -1364,7 +1363,7 @@ Get evil-mode to play nicely
   (use-package evil-magit
     :after (magit evil))
 #+END_SRC
-*** magithub
+*** COMMENT magithub
 Press ~H~ in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package magithub
