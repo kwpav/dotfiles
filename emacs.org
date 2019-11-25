@@ -1130,12 +1130,18 @@ Needed by =pelican= and =nikola=
 #+END_SRC
 
 *** Setup for TODOs
-Change the status of the todo state by pressing ~C-c C-c t <KEY>~
-- the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
+- =org-use-fast-todo-selection=
+  - Change the status of the todo state by pressing ~C-c C-c t <KEY>~
+  - the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
+- =org-todo-keywords=
+  - add things to the TODO states besides =TODO= and =DONE=
+  - mostly taken from from http://doc.norang.ca/org-mode.html
+- =org-log-done=
+  - insert time/date when moved to DONE
 
-The todo states are largely taken from from http://doc.norang.ca/org-mode.html
 #+BEGIN_SRC emacs-lisp
   (defun my-org-todo-setup ()
+    (setq org-use-fast-todo-selection t)
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "CURRENT(c)" "|" "DONE(d)")
             (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(a@/!)")))
@@ -1147,18 +1153,17 @@ The todo states are largely taken from from http://doc.norang.ca/org-mode.html
                   ("WAITING" :foreground "#D08770" :weight bold)
                   ("HOLD" :foreground "#848EAD" :weight bold)
                   ("CANCELLED" :foreground "#8FBCBB" :weight bold))))
-    (setq org-use-fast-todo-selection t)
-    ;; insert time/date when moved to DONE
     (setq org-log-done 'time))
 #+END_SRC
+
 *** Structure Templates
 Add structure templates, e.g. type <el ~TAB~ for =#+BEGIN_SRC emacs-lisp #+END_SRC=
 Existing templates for reference:
 - https://orgmode.org/manual/Easy-templates.html
 #+BEGIN_SRC emacs-lisp
   (defun my-structure-templates ()
-    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
-    (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n\n#+END_SRC")))
+    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+    (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC")))
 #+END_SRC
 *** Use Package
 Put it all together with =use-package=.
@@ -1177,7 +1182,8 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
     (my-leader-def
       "a" 'org-agenda)
     (my-local-leader-def 'org-mode-map
-      "t" 'org-babel-tangle)
+      "b" 'org-babel-tangle
+      "t" 'org-todo)
     :hook (org-mode . my-org-prettify-hook)
     :custom
     (org-agenda-files (list "~/org/agenda/"))
