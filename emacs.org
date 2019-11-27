@@ -1732,6 +1732,18 @@ Using this to mess with stumpwm right now.
     :config
     (slime-setup '(slime-company)))
 #+END_SRC
+
+***** StumpWM
+#+BEGIN_SRC emacs-lisp
+  (use-package stumpwm-mode)
+#+END_SRC
+
+slime connect command
+#+BEGIN_SRC emacs-lisp
+  (defun stumpwm-connect ()
+    (interactive)
+    (slime-connect "localhost" "4004"))
+#+END_SRC
 **** Hy
 Let's get hy. A lisp for Python.
 #+BEGIN_SRC emacs-lisp
