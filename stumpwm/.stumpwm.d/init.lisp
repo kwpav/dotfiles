@@ -1,6 +1,14 @@
+;; (ql:quickload "clx-truetype")
 (in-package :stumpwm)
 (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
 (load-module "swm-gaps")
+
+(ql:quickload "swank")
+(require :swank)
+(swank-loader:init)
+(swank:create-server :port 4004
+                     :style swank:*communication-style*
+                     :dont-close t)
 
 (set-prefix-key (kbd "s-SPC"))
 
@@ -77,9 +85,9 @@
 ;;(setf (group-name (car (screen-groups (current-screen)))) "dev")
 (run-commands "grename dev")
 
-;; (ql:quickload "clx-truetype")
-;; (load-module "ttf-fonts")
-;; (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 11))
+(ql:quickload "clx-truetype")
+(load-module "ttf-fonts")
+;; (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 11))
 
 (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 

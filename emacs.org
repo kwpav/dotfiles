@@ -1723,9 +1723,14 @@ Keys
 **** Common Lisp
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package slime
-  ;;   :init
-  ;;   (setq inferior-list-program "sbcl"))
+  (use-package slime
+    :custom
+    (inferior-lisp-program "/usr/bin/sbcl")
+    (slime-contribs '(slime-fancy)))
+
+  (use-package slime-company
+    :config
+    (slime-setup '(slime-company)))
 #+END_SRC
 **** Hy
 Let's get hy. A lisp for Python.

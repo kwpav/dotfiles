@@ -7,9 +7,21 @@ This is my configuration for StumpWM, a tiling window manager configured using l
 * Set up
 Set the module dir to the install folder because the =contrib/= folder is provided with the aur package
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  ;; (ql:quickload "clx-truetype")
   (in-package :stumpwm)
   (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
   (load-module "swm-gaps")
+#+END_SRC
+
+Set up =swank= to connect to =slime= in emacs
+From http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.html
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (ql:quickload "swank")
+  (require :swank)
+  (swank-loader:init)
+  (swank:create-server :port 4004
+                       :style swank:*communication-style*
+                       :dont-close t)
 #+END_SRC
 
 * Functionality
@@ -117,9 +129,9 @@ Set up how everything looks.
 ** Font and Color
 Using colors based off the =nord= theme
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  ;; (ql:quickload "clx-truetype")
-  ;; (load-module "ttf-fonts")
-  ;; (set-font (make-instance 'xft:font :family "Iosevka Term" :subfamily "Regular" :size 11))
+  (ql:quickload "clx-truetype")
+  (load-module "ttf-fonts")
+  ;; (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 11))
 
   (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 
@@ -244,12 +256,14 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
 
 * To Do List
 ** TODO Fix ttf-fonts module
-Need to set up the clx-ttf package
-
+Got the ttf package setup, need to figure out why the font isnt loading
 Example:
 #+BEGIN_SRC lisp
   (load-module "ttf-fonts")
   (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 14))
 #+END_SRC
-** TODO Set up swank
+** DONE Set up swank
+CLOSED: [2019-11-26 Tue 23:39]
 Set up swank to interact with stumpwm using a repl!
+
+use =slime-connect= with =localhost= (the default) and port =4004= (the one set in this config)
