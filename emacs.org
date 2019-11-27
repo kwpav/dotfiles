@@ -455,97 +455,96 @@ Theme I'm currently using
     :config
     (load-theme 'nord))
    #+END_SRC
-
+*** COMMENT other themes
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package doom-themes
-  ;;   :init
-  ;;   (setq doom-themes-enable-bold t
-  ;;         doom-themes-enable-italic t)
-  ;;   :config
-  ;;   (load-theme 'doom-nord))
+  (use-package doom-themes
+    :init
+    (setq doom-themes-enable-bold t
+          doom-themes-enable-italic t)
+    :config
+    (load-theme 'doom-nord))
 
-  ;; (use-package kaolin-themes
-  ;;   :init
-  ;;   ;; (setq doom-themes-enable-bold t
-  ;;   ;;       doom-themes-enable-italic t)
-  ;;   (setq kaolin-themes-hl-line-colored t
-  ;;         kaolin-themes-italic-comments t)
-  ;;   :config
-  ;;   ;; (load-theme 'doom-one t)
-  ;;   ;; (doom-themes-treemacs-config)
-  ;;   ;; (doom-themes-org-config)
-  ;;   (load-theme 'kaolin-ocean t)
-  ;;   (kaolin-treemacs-theme))
+  (use-package kaolin-themes
+    :init
+    ;; (setq doom-themes-enable-bold t
+    ;;       doom-themes-enable-italic t)
+    (setq kaolin-themes-hl-line-colored t
+          kaolin-themes-italic-comments t)
+    :config
+    ;; (load-theme 'doom-one t)
+    ;; (doom-themes-treemacs-config)
+    ;; (doom-themes-org-config)
+    (load-theme 'kaolin-ocean t)
+    (kaolin-treemacs-theme))
 
+  (use-package poet-theme
+     :config
+     (load-theme 'poet-dark))
 
-  ;; (use-package poet-theme
-  ;;    :config
-  ;;    (load-theme 'poet-dark))
+   ;; setup different fonts
+   (add-hook 'text-mode-hook
+             (lambda ()
+               (variable-pitch-mode 1)))
 
-  ;;  ;; setup different fonts
-  ;;  (add-hook 'text-mode-hook
-  ;;            (lambda ()
-  ;;              (variable-pitch-mode 1)))
+   (set-face-attribute 'default nil :family "Iosevka" :height 130)
+   (set-face-attribute 'fixed-pitch nil :family "Iosevka")
+   (set-face-attribute 'variable-pitch nil :family "ETBookOT")
 
-  ;;  (set-face-attribute 'default nil :family "Iosevka" :height 130)
-  ;;  (set-face-attribute 'fixed-pitch nil :family "Iosevka")
-  ;;  (set-face-attribute 'variable-pitch nil :family "ETBookOT")
-
-   ;;(load-theme 'base16-tomorrow-night)
-   ;;(load-theme 'kaolin-dark)
-   ;;(load-theme 'doom-one)
-   ;;(load-theme 'doom-tomorrow-night)
-   ;;(load-theme 'doom-city-lights)
-   ;;(load-theme 'kaolin-ocean)
-   ;; (load-theme 'base16-spacemacs)
-   ;;(load-theme 'gruvbox-dark-hard)
-   ;;(load-theme 'sourcerer)
-   ;;(load-theme 'spacemacs-dark)
-   ;;(load-theme 'base16-tomorrow-dark)
-   ;;(load-theme 'base16-twilight-dark)
-   ;;(load-theme 'base16-default-dark)
-   ;;(load-theme 'solarized-dark)
-   ;;(setq solarized-distinct-fringe-background t)
-   ;;(load-theme 'base16-ocean-dark)
-   ;;(load-theme 'material)
-   ;;(load-theme 'spacegray)
-   ;;(load-theme 'dracula)
-   ;;(load-theme 'reykjavik)
-   ;;(set-cursor-color "gainsboro")
+   (load-theme 'base16-tomorrow-night)
+   (load-theme 'kaolin-dark)
+   (load-theme 'doom-one)
+   (load-theme 'doom-tomorrow-night)
+   (load-theme 'doom-city-lights)
+   (load-theme 'kaolin-ocean)
+   (load-theme 'base16-spacemacs)
+   (load-theme 'gruvbox-dark-hard)
+   (load-theme 'sourcerer)
+   (load-theme 'spacemacs-dark)
+   (load-theme 'base16-tomorrow-dark)
+   (load-theme 'base16-twilight-dark)
+   (load-theme 'base16-default-dark)
+   (load-theme 'solarized-dark)
+   (setq solarized-distinct-fringe-background t)
+   (load-theme 'base16-ocean-dark)
+   (load-theme 'material)
+   (load-theme 'spacegray)
+   (load-theme 'dracula)
+   (load-theme 'reykjavik)
+   (set-cursor-color "gainsboro")
 #+END_SRC
 
 Some light themes I like
 #+BEGIN_SRC emacs-lisp
-  ;;(load-theme 'spacemacs-light)
-  ;;(load-theme 'light-soap)
-  ;;(load-theme 'solarized-light)
+  (load-theme 'spacemacs-light)
+  (load-theme 'light-soap)
+  (load-theme 'solarized-light)
 #+END_SRC
 *** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Iosevka-12"))
 #+END_SRC
-
+**** COMMENT other fonts
 Other fonts I like
 #+BEGIN_SRC emacs-lisp
-  ;; (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
-  ;; (add-to-list 'default-frame-alist '(font . "Monoid-10"))
-  ;; (add-to-list 'default-frame-alist '(font . "Hermit-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Lemon-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Uushi-11"))
-  ;; (add-to-list 'default-frame-alist '(font . "Cherry-13"))
-  ;; (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Curie-14" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Hack-12" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Hermit-10" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
-  ;; (add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
-  ;; (add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
-  ;; (add-to-list 'default-frame-alist '(font . "envypn-11" ))
+  (add-to-list 'default-frame-alist '(font . "Victor Mono-12"))
+  (add-to-list 'default-frame-alist '(font . "Monoid HalfTight-10"))
+  (add-to-list 'default-frame-alist '(font . "Monoid-10"))
+  (add-to-list 'default-frame-alist '(font . "Hermit-12"))
+  (add-to-list 'default-frame-alist '(font . "Lemon-12"))
+  (add-to-list 'default-frame-alist '(font . "Uushi-11"))
+  (add-to-list 'default-frame-alist '(font . "Cherry-13"))
+  (add-to-list 'default-frame-alist '(font . "Scientifica-14" ))
+  (add-to-list 'default-frame-alist '(font . "Curie-14" ))
+  (add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
+  (add-to-list 'default-frame-alist '(font . "Hack-12" ))
+  (add-to-list 'default-frame-alist '(font . "Input Mono Narrow-11" ))
+  (add-to-list 'default-frame-alist '(font . "Hermit-10" ))
+  (add-to-list 'default-frame-alist '(font . "Monaco-10" ))
+  (add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono-11" ))
+  (add-to-list 'default-frame-alist '(font . "GohuFont-14" ))
+  (add-to-list 'default-frame-alist '(font . "envypn-11" ))
 #+END_SRC
 *** Modeline
 **** telephone-line
@@ -753,7 +752,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                             telephone-line-airline-position-segment))
             (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
-**** doom modeline
+**** COMMENT doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
 #+BEGIN_SRC emacs-lisp
   ;; (use-package all-the-icons
@@ -766,7 +765,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
   ;;   :defer t
   ;;   :hook (after-init . my-doom-modeline-hook))
 #+END_SRC
-**** spaceline
+**** COMMENT spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nyan-mode
@@ -807,7 +806,7 @@ spacemacs modeline settings
   ;;   (setq spaceline-window-numbers-unicode t))
 #+END_SRC
 
-**** My custom modeline
+**** COMMENT My custom modeline
 #+BEGIN_SRC emacs-lisp
   ;; (setq-default mode-line-format
   ;;               (list
@@ -1041,21 +1040,86 @@ A file tree.
     :after (projectile treemacs))
 #+END_SRC
 ** Org Mode
-Set up everything for =org-mode=
-*** Prettify
-Stuff for making org-mode prettier:
-- =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
+Setup =org-mode=. Most of these are functions that will get called in either the =:hook= or =:config= part of the =use-package= setup for =org=.
+
+*** Look and Feel
+Settings to make org mode look a bit nicer.
+
+A lot of this stuff is from:
+- http://blog.lujun9972.win/emacs-document/blog/2018/10/22/ricing-up-org-mode/index.html
+- https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+- http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
+
+The prettify hook:
+- =turn-on-visual-line-mode= for visual word wrap
+- =variable-pitch-mode= to use a non =monospaced= font
+- =org-bullets= provides good looking bullets for the header
 #+BEGIN_SRC emacs-lisp
-  (defun my-org-prettify ()
-    (setq org-src-fontify-natively t)
-    ;; (custom-set-faces
-    ;;  '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
-    ;;  '(org-level-2 ((t (:inherit outline-1 :height 1.2))))
-    ;;  '(org-level-3 ((t (:inherit outline-1 :height 1.1))))
-    ;;  '(org-level-4 ((t (:inherit outline-1 :height 1.0))))
-    ;;  '(org-level-5 ((t (:inherit outline-1 :height 1.0)))))
-    )
+  (defun my-org-prettify-hook ()
+    (turn-on-visual-line-mode)
+    (variable-pitch-mode 1)
+    (org-bullets-mode 1))
+
+  (use-package org-bullets
+    :requires (org))
 #+END_SRC
+
+Various settings to make things look nicer:
+- =org-startup-indented= starts up =org-indent-mode=
+- =org-src-fontify-natively= turns on syntax highlighting for =#+SRC= blocks
+- =org-hide-emphasis-markers= hides the things that make text *bold*, /italics/, =monospaced=, etc.
+- =org-fontify-whole-heading-line=  is useful when setting background colors for =org-level-*= faces
+- =org-fontify-done-headline= make DONE headlines look nicer
+- =org-fontify-quote-and-verse-blocks= makes quotes and verses italic
+- =line-spacing= to give the text a bit more breathing room
+- the =font-lock= part is a regex that uses a unicode bullet for lists (lines that start with "- " or "+ ")
+  - this is only for the first level of lists, other levels arent replaced
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-prettify-settings ()
+    (setq org-startup-indented t
+          org-src-fontify-natively t
+          org-hide-emphasis-markers t
+          org-fontify-whole-heading-line t
+          org-fontify-done-headline t
+          org-fontify-quote-and-verse-blocks t
+          line-spacing 0.2)
+    (font-lock-add-keywords 'org-mode
+                            '(("^\\([-+]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    (my-org-faces))
+#+END_SRC
+
+Set up fonts and faces.
+- The =org-level-*= stuff makes headings bigger.
+- =org-indent= is to make =org-indent-mode= look right, otherwise the spacing is off
+- The =mapc= makes various org faces =monospaced= in =variable-pitch-mode=.
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-faces ()
+    (custom-theme-set-faces
+     'user
+     '(variable-pitch ((t (:family "EtBembo" :height 160 :weight normal :slant normal))))
+     '(fixed-pitch ((t (:family "Iosevka" :height 0.8))))
+     '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+     '(org-document-title ((t (:foreground "#B48EAD" :weight bold :height 1.4))))
+     '(org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold :foreground "#8fbcbb"))))
+     '(org-level-2 ((t (:inherit outline-1 :height 1.2 :weight bold :foreground "#88c0d0"))))
+     '(org-level-3 ((t (:inherit outline-1 :height 1.1 :weight bold :foreground "#81a1c1"))))
+     '(org-level-4 ((t (:inherit outline-1 :height 1.0 :weight bold :foreground "#5e81ac"))))
+     '(org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold)))))
+    (mapc
+     (lambda (face)
+       (set-face-attribute face nil :inherit 'fixed-pitch))
+     (list 'org-code
+           'org-link
+           'org-block
+           'org-table
+           'org-verbatim
+           'org-block-begin-line
+           'org-block-end-line
+           'org-meta-line
+           'org-document-info-keyword)))
+#+END_SRC
+
 **** htmlize
 Provides syntax highlighting for =#+SRC= blocks in html exports.
 
@@ -1063,56 +1127,52 @@ Needed by =pelican= and =nikola=
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize)
 #+END_SRC
-*** Setup for TODOs
-Setup for TODO items.
-Change the status of the todo state by pressing ~C-c C-c t <KEY>~
-- the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
 
-The todo states are largely based taken from from http://doc.norang.ca/org-mode.html
+*** Setup for TODOs
+- =org-use-fast-todo-selection=
+  - Change the status of the todo state by pressing ~C-c C-c t <KEY>~
+  - the =<KEY>= is the the letter in the parens after the state (e.g. =TODO(t)=)
+- =org-todo-keywords=
+  - add things to the TODO states besides =TODO= and =DONE=
+  - mostly taken from from http://doc.norang.ca/org-mode.html
+- =org-log-done=
+  - insert time/date when moved to DONE
+
 #+BEGIN_SRC emacs-lisp
   (defun my-org-todo-setup ()
+    (setq org-use-fast-todo-selection t)
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "CURRENT(c)" "|" "DONE(d)")
-            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(a@/!)")))
     (setq org-todo-keyword-faces
-          (quote (("TODO" :foreground "#ff5555" :weight bold)
-                  ("NEXT" :foreground "#61bfff" :weight bold)
-                  ("CURRENT" :foreground "#8be9fd" :weight bold)
-                  ("DONE" :foreground "#50fa7b" :weight bold)
-                  ("WAITING" :foreground "orange" :weight bold)
-                  ("HOLD" :foreground "#ff79c6" :weight bold)
-                  ("CANCELLED" :foreground "forest green" :weight bold))))
-    (setq org-use-fast-todo-selection t)
-    ;; insert time/date when moved to DONE
+          (quote (("TODO" :foreground "#BF616A" :weight bold)
+                  ("NEXT" :foreground "#5E81AC" :weight bold)
+                  ("CURRENT" :foreground "#88C0D0" :weight bold)
+                  ("DONE" :foreground "#A3BE8C" :weight bold)
+                  ("WAITING" :foreground "#D08770" :weight bold)
+                  ("HOLD" :foreground "#848EAD" :weight bold)
+                  ("CANCELLED" :foreground "#8FBCBB" :weight bold))))
     (setq org-log-done 'time))
 #+END_SRC
+
 *** Structure Templates
 Add structure templates, e.g. type <el ~TAB~ for =#+BEGIN_SRC emacs-lisp #+END_SRC=
 Existing templates for reference:
 - https://orgmode.org/manual/Easy-templates.html
 #+BEGIN_SRC emacs-lisp
   (defun my-structure-templates ()
-    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
-    (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n\n#+END_SRC")))
+    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+    (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC")))
 #+END_SRC
-*** Use Package Setup
-=my-org-mode-hook= enables:
-- =org-bullets= provides prettier bullets for the header
-- =turn-on-visual-line-mode= is for visual word wrap
+*** Use Package
+Put it all together with =use-package=.
 
-Put it all together. The =:general= block maps ~:x~ and ~:q~ to confirm and ~:q~ to abort when editing =SRC= blocks.
+The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 
-Using the built in org version because =org-indent-mode= and my agenda are not working with the latest version
+*NOTE* Using the built in org version because =org-indent-mode= and my agenda are not working with the latest version
 #+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :requires (org))
-
   (use-package org
     :straight nil
-    :preface
-    (defun my-org-mode-hook ()
-      (turn-on-visual-line-mode)
-      (org-bullets-mode 1))
     :general
     (org-src-mode-map
      [remap evil-save-and-close]          'org-edit-src-exit
@@ -1121,39 +1181,28 @@ Using the built in org version because =org-indent-mode= and my agenda are not w
     (my-leader-def
       "a" 'org-agenda)
     (my-local-leader-def 'org-mode-map
-      "t" 'org-babel-tangle)
-    :hook (org-mode . my-org-mode-hook)
+      "b" 'org-babel-tangle
+      "t" 'org-todo)
+    :hook (org-mode . my-org-prettify-hook)
     :custom
     (org-agenda-files (list "~/org/agenda/"))
-    (org-startup-indented t) ;; start with org-indent-mode
     :config
+    (my-org-prettify-settings)
     (my-org-todo-setup)
-    (my-org-prettify)
     (my-structure-templates))
 #+END_SRC
-**** old stuff
-old snippets of things
+*** Org Babel
+=org-babel-do-load-languages= enables languages for in-buffer evaluation
 #+BEGIN_SRC emacs-lisp
-  ;; (font-lock-add-keywords 'org-mode
-  ;;                         '(("^ +\\([-*]\\) "
-  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-  ;; (setq org-todo-keywords
-  ;;       '((sequence "TODO" "CURRENT" "|" "DONE")))
-
-  ;; (font-lock-add-keywords 'org-mode
-  ;;                         '(("^ +\\([-*]\\) "
-  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-                                          ;(setq org-hide-emphasis-markers t)
+  (use-package org-babel
+    :no-require
+    :straight nil
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t))))
 #+END_SRC
-*** Org Babel Languages
-Enable python for in-buffer evaluation
-#+BEGIN_SRC emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)))
-#+END_SRC
+
 ** Code
 Things that are used when coding.
 *** Line Numbers
@@ -1314,7 +1363,7 @@ Get evil-mode to play nicely
   (use-package evil-magit
     :after (magit evil))
 #+END_SRC
-*** magithub
+*** COMMENT magithub
 Press ~H~ in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package magithub
@@ -1457,14 +1506,11 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
 *** restclient
 Test RESTful APIs in emacs!
 #+BEGIN_SRC emacs-lisp
-  (use-package restclient
-    :defer t)
+  (use-package restclient)
 
-  (use-package company-restclient
-    :defer t)
+  (use-package company-restclient)
 
-  (use-package ob-restclient
-    :defer t)
+  (use-package ob-restclient)
 #+END_SRC
 *** revealjs
 make reveal.js presentations in org mode
@@ -1920,8 +1966,12 @@ Use =PHP_CodeSniffer= to format files on save.
 * TODO Things to do
 An on-going list of things I want to change
 
-- [ ] make org prettier?
-  + [ ] bullets?
+- [-] make org prettier [1/2]
+  + [ ] fix =company= results in =variable-pitch-mode=
+  + [X] bullets?
+    + only did the first level of bullets though
+- [ ] setup and use org capture
+  - this looks cool too https://addons.mozilla.org/en-US/firefox/addon/org-capture/
 - [ ] Configure C#
   + use the C# lsp??
 - [ ] fix =eslint= for lsp if possible
@@ -1941,10 +1991,8 @@ An on-going list of things I want to change
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent
-- [-] new org fixes [2/3]
-  - [X] =org-indent-mode= doesnt work in 9.2.6, it works in 9.2.5 and the built in version
-    - used the commit hash for 9.2.5 in =straight/version/default.el= =
-  - [X] custom structure templates arent loading
+- [ ] new org fixes [0/2]
+  - [ ] custom structure templates arent loading
     - this is working in version 9.2.5
       - will probably need to use =org-tempo= and fix this again whenever i update org
     - use yasnippet?
@@ -1979,3 +2027,5 @@ An on-going list of things I want to change
 - =prescient= - sorts candiates in ivy, company, etc
 - =ivy-posframe= - load ivy in a popup frame type thing
 - =company-box= show cool icons in company results
+- =org-present= org mode presentations
+
