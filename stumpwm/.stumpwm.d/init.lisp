@@ -87,9 +87,8 @@
 
 (ql:quickload "clx-truetype")
 (load-module "ttf-fonts")
-;; (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 11))
 
-(set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
+(set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 12))
 
 (setf *colors*
       '("#2E3440"                       ; black

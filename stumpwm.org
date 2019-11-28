@@ -23,6 +23,7 @@ From http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.
                        :style swank:*communication-style*
                        :dont-close t)
 #+END_SRC
+In emacs, use =M-x stumpwm-connect= to launch the repl.
 
 * Functionality
 Set up how everything works.
@@ -126,15 +127,42 @@ Set up the initial groups
 
 * Appearance
 Set up how everything looks.
-** Font and Color
-Using colors based off the =nord= theme
+** Font
+Set up =ttf-fonts=. The =ttf-fonts= module requires =clx-truetype= to work
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (ql:quickload "clx-truetype")
   (load-module "ttf-fonts")
-  ;; (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 11))
+#+END_SRC
 
+Now set the font
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 12))
+#+END_SRC
+
+For this to actually load the font, I had to run
+#+BEGIN_SRC lisp
+  (xft:cache-fonts)
+#+END_SRC
+
+To get a list of font families in the cache, run this from the REPL:
+#+BEGIN_SRC lisp
+  (clx-truetype:get-font-families)
+#+END_SRC
+
+To get a list of valid subfamilies for a given font:
+#+BEGIN_SRC lisp
+  (clx-truetype:get-font-subfamilies "Iosevka")
+#+END_SRC
+
+I also like bitmap fonts sometimes, leaving this here in case I ever want to switch back:
+#+BEGIN_SRC lisp
   (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
+#+END_SRC
 
+** Color
+Using colors based off the =nord= theme
+
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (setf *colors*
         '("#2E3440"                       ; black
           "#BF616A"                       ; red
@@ -234,7 +262,7 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
   (defun polybar-groups ()
     "Return string representation for polybar stumpgroups module"
     (apply #'concatenate 'string
-           (mapcar
+           (mapca
             (lambda (g)
               (let* ((name (group-name g))
                      (n-win (write-to-string (length (group-windows g))))
@@ -255,7 +283,8 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
 #+END_SRC
 
 * To Do List
-** TODO Fix ttf-fonts module
+** DONE Fix ttf-fonts module
+CLOSED: [2019-11-28 Thu 11:41]
 Got the ttf package setup, need to figure out why the font isnt loading
 Example:
 #+BEGIN_SRC lisp
