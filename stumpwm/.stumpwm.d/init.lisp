@@ -127,17 +127,22 @@
 (set-unfocus-color *background-color*)
 (set-frame-outline-width 1)
 
+(setf *mode-line-timeout* 2)
+
+(setf *mode-line-border-width* 0)
 (setf *mode-line-pad-y* 5)
 (setf *mode-line-pad-x* 10)
-(setf *mode-line-timeout* 1)
 
 (setf *bar-med-color* "^B^8")
 (setf *bar-hi-color* "^B^4")
 (setf *bar-crit-color* "^B^1")
+(setf *hidden-window-color* "^7")
+;; the foreground is the highlight for the windows too
+(setf *mode-line-background-color* *background-color*)
+(setf *mode-line-foreground-color* *foreground-color*)
 
-;(setf *group-format* " %t ")
-(setf *window-format* "%m%n%s%20t ")
-(setf *mode-line-timeout* 2)
+(setf *group-format* " %n%s%t ")
+(setf *window-format* "%m%n:%20t ")
 
 (setf *time-modeline-string* "^8 • , %a^n^B ^b")
 
@@ -157,12 +162,6 @@
             "  "
             "^B^2^n^b ^9"
             '(:eval (get-date-modeline))))
-
-(setf *hidden-window-color* "^7")
-(setf *mode-line-border-width* 0)
-;; the foreground is the highlight for the windows too
-(setf *mode-line-background-color* *background-color*)
-(setf *mode-line-foreground-color* *foreground-color*)
 
 (if (not (head-mode-line (current-head)))
 (toggle-mode-line (current-screen) (current-head)))
