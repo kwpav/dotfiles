@@ -7,7 +7,6 @@ This is my configuration for StumpWM, a tiling window manager configured using l
 * Set up
 Set the module dir to the install folder because the =contrib/= folder is provided with the aur package
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  ;; (ql:quickload "clx-truetype")
   (in-package :stumpwm)
   (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
   (load-module "swm-gaps")
@@ -51,10 +50,6 @@ Define commands to start up and switch to programs and set up keys.
   ;; stumpwm already defines emacs
   (define-key *top-map* (kbd "s-e") "emacs")
 
-  (defcommand termite () ()
-    (run-or-raise "termite -e tmux" '(:class "Termite")))
-  (defcommand urxvt () ()
-    (run-or-raise "urxvt -e tmux" '(:class "URxvt")))
   (defcommand alacritty () ()
     (run-or-raise "alacritty -e tmux" '(:class "Alacritty")))
   (define-key *root-map* (kbd "c") "alacritty")
@@ -197,20 +192,17 @@ Using colors based off the =nord= theme
 #+END_SRC
 ** Frames and Borders
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (set-frame-outline-width 2)
-  (setf *normal-border-width* 2
-        ,*maxsize-border-width* 4
-        ,*transient-border-width* 1)
+  (set-frame-outline-width 1)
+  (setf *normal-border-width* 2)
+  (setf *maxsize-border-width* 4)
+  (setf *transient-border-width* 2)
   (set-focus-color *border-color*)
   (set-unfocus-color *background-color*)
-  (set-frame-outline-width 1)
 #+END_SRC
 
 ** Modeline
 Official docs: https://stumpwm.github.io/git/stumpwm-git_7.html#Mode_002dline
 Mostly stolen from https://github.com/zarkone/stumpwm.d
-
-Colors are =^X= where =X= is the the index of the value in the =colors= list
 
 Refresh every 2 seconds
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
@@ -224,7 +216,8 @@ Set up the borders and padding
   (setf *mode-line-pad-x* 10)
 #+END_SRC
 
-Set up the colors
+Set up the colors. 
+Colors are =^X= where =X= is the the index of the value in the =colors= list
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (setf *bar-med-color* "^B^8")
   (setf *bar-hi-color* "^B^4")
@@ -235,7 +228,7 @@ Set up the colors
   (setf *mode-line-foreground-color* *foreground-color*)
 #+END_SRC
 
-Set up the group and window format,  this changes how the groups (=%g=) and windows (=%w=) are displayed.
+Set up the group and window format,  this changes how the groups (=%g=) and windows (=%v=) are displayed.
 - =%n= is the number
 - =%s= is the status, =*= means active, =+= is inactive
 - =%t= is the name
@@ -244,29 +237,40 @@ Set up the group and window format,  this changes how the groups (=%g=) and wind
   (setf *window-format* "%m%n:%20t ")
 #+END_SRC
 
-Set up the output
+How the date is formatted, this is using the formatting from the =date= command
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (setf *time-modeline-string* "^8 • , %a^n^B ^b")
+  (setf *time-modeline-string* "%Y-%m-%d %I:%M%p")
+#+END_SRC
 
-  (defun get-date-modeline ()
-    (stumpwm:run-shell-command
-     (format nil "date"
-             ,*time-modeline-string*) t))
+Load modules
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (load-module "cpu")
+  (load-module "mem")
+  (load-module "net")
+#+END_SRC
 
-  (defun get-layout-modeline ()
-    (if (= 0 (get-current-layout *display*))
-        "^4 en ^n"
-        "^4^R ru ^r^n"))
-
+Set up the output:
+- Left part:
+  - =%h= is the head (monitor) number
+  - =%g= is the current group
+  - =%h= is the current monitor, or head
+  - =%v= lists the windows on the current head, where non-visible windows are colored the =*hidden-window-color*=
+- Right part (starts after =^>=):
+  - =%l= is network info
+  - =%N= is memory info
+  - =%C= is cpu info
+  - =%d= is the date
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (setf *screen-mode-line-format*
-        (list "^B^8 %g ^n^b %v ^> "
-              '(:eval (get-layout-modeline))
-              "  "
-              "^B^2^n^b ^9"
-              '(:eval (get-date-modeline))))
+        (list "^9[%h]^n ^B^8%g^n^b %v"
+              "^>  "
+              "^n^b^9 %l| %N| %C | %d"))
+#+END_SRC
 
+When stumpwm starts, make the modeline appear on the current head
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (if (not (head-mode-line (current-head)))
-  (toggle-mode-line (current-screen) (current-head)))
+      (toggle-mode-line (current-screen) (current-head)))
 #+END_SRC
 
 *** Polybar
@@ -298,7 +302,6 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
 #+END_SRC
 
 * To Do List
-** DONE Fix ttf-fonts module
 CLOSED: [2019-11-28 Thu 11:41]
 Got the ttf package setup, need to figure out why the font isnt loading
 Example:

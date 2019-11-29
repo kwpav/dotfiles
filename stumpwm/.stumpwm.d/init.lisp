@@ -1,4 +1,3 @@
-;; (ql:quickload "clx-truetype")
 (in-package :stumpwm)
 (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
 (load-module "swm-gaps")
@@ -23,10 +22,6 @@
 ;; stumpwm already defines emacs
 (define-key *top-map* (kbd "s-e") "emacs")
 
-(defcommand termite () ()
-  (run-or-raise "termite -e tmux" '(:class "Termite")))
-(defcommand urxvt () ()
-  (run-or-raise "urxvt -e tmux" '(:class "URxvt")))
 (defcommand alacritty () ()
   (run-or-raise "alacritty -e tmux" '(:class "Alacritty")))
 (define-key *root-map* (kbd "c") "alacritty")
@@ -119,13 +114,12 @@
 (set-bg-color *background-color*)
 (set-border-color *border-color*)
 
-(set-frame-outline-width 2)
-(setf *normal-border-width* 2
-      *maxsize-border-width* 4
-      *transient-border-width* 1)
+(set-frame-outline-width 1)
+(setf *normal-border-width* 2)
+(setf *maxsize-border-width* 4)
+(setf *transient-border-width* 2)
 (set-focus-color *border-color*)
 (set-unfocus-color *background-color*)
-(set-frame-outline-width 1)
 
 (setf *mode-line-timeout* 2)
 
@@ -144,24 +138,16 @@
 (setf *group-format* " %n%s%t ")
 (setf *window-format* "%m%n:%20t ")
 
-(setf *time-modeline-string* "^8 • , %a^n^B ^b")
+(setf *time-modeline-string* "%Y-%m-%d %I:%M%p")
 
-(defun get-date-modeline ()
-  (stumpwm:run-shell-command
-   (format nil "date"
-           *time-modeline-string*) t))
-
-(defun get-layout-modeline ()
-  (if (= 0 (get-current-layout *display*))
-      "^4 en ^n"
-      "^4^R ru ^r^n"))
+(load-module "cpu")
+(load-module "mem")
+(load-module "net")
 
 (setf *screen-mode-line-format*
-      (list "^B^8 %g ^n^b %v ^> "
-            '(:eval (get-layout-modeline))
-            "  "
-            "^B^2^n^b ^9"
-            '(:eval (get-date-modeline))))
+      (list "^9[%h]^n ^B^8%g^n^b %v"
+            "^>  "
+            "^n^b^9 %l| %N| %C | %d"))
 
 (if (not (head-mode-line (current-head)))
-(toggle-mode-line (current-screen) (current-head)))
+    (toggle-mode-line (current-screen) (current-head)))
