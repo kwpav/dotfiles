@@ -29,11 +29,10 @@
 (define-key *top-map* (kbd "s-RET") "alacritty") 
 (define-key *top-map* (kbd "s-c") "alacritty")
 
-;; use stumpwm's exec instead of dmenu_run
 (define-key *top-map* (kbd "s-d") "exec")
-
+(define-key *top-map* (kbd "s-F") "fullscreen")
+(define-key *top-map* (kbd "s-w") "windowlist")
 ;; resize
-;; TODO: figure out how to tell which window is selected in order to resize like other WMs
 (define-key *top-map* (kbd "C-s-l") "resize 10 0")
 (define-key *top-map* (kbd "C-s-k") "resize 0 10")
 ;; groups
@@ -66,6 +65,10 @@
 (define-key *top-map* (kbd "s-L") "move-window right")
 (define-key *top-map* (kbd "s-n") "pull-hidden-next")
 (define-key *top-map* (kbd "s-p") "pull-hidden-previous")
+(define-key *top-map* (stumpwm:kbd "s-M") "exchange-direction down")
+(define-key *top-map* (stumpwm:kbd "s-N") "exchange-direction left")
+(define-key *top-map* (stumpwm:kbd "s-<") "exchange-direction up")
+(define-key *top-map* (stumpwm:kbd "s->") "exchange-direction right")
 (define-key *top-map* (kbd "s-!") "gmove 1")
 (define-key *top-map* (kbd "s-@") "gmove 2")
 (define-key *top-map* (kbd "s-#") "gmove 3")
@@ -146,8 +149,8 @@
 
 (setf *screen-mode-line-format*
       (list "^9[%h]^n ^B^8%g^n^b %v"
-            "^>  "
-            "^n^b^9 %l| %N| %C | %d"))
+            "^>"
+            "^n^b^9 %l| %M| %C | %d"))
 
 (if (not (head-mode-line (current-head)))
     (toggle-mode-line (current-screen) (current-head)))

@@ -58,13 +58,13 @@ Define commands to start up and switch to programs and set up keys.
   (define-key *top-map* (kbd "s-c") "alacritty")
 #+END_SRC
 
-** Keys
+** Action Keys
+Set up keys for stumpwm actions
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  ;; use stumpwm's exec instead of dmenu_run
   (define-key *top-map* (kbd "s-d") "exec")
-
+  (define-key *top-map* (kbd "s-F") "fullscreen")
+  (define-key *top-map* (kbd "s-w") "windowlist")
   ;; resize
-  ;; TODO: figure out how to tell which window is selected in order to resize like other WMs
   (define-key *top-map* (kbd "C-s-l") "resize 10 0")
   (define-key *top-map* (kbd "C-s-k") "resize 0 10")
   ;; groups
@@ -101,6 +101,10 @@ Set up keys using vim-like keybindings.
   (define-key *top-map* (kbd "s-L") "move-window right")
   (define-key *top-map* (kbd "s-n") "pull-hidden-next")
   (define-key *top-map* (kbd "s-p") "pull-hidden-previous")
+  (define-key *top-map* (stumpwm:kbd "s-M") "exchange-direction down")
+  (define-key *top-map* (stumpwm:kbd "s-N") "exchange-direction left")
+  (define-key *top-map* (stumpwm:kbd "s-<") "exchange-direction up")
+  (define-key *top-map* (stumpwm:kbd "s->") "exchange-direction right")
   (define-key *top-map* (kbd "s-!") "gmove 1")
   (define-key *top-map* (kbd "s-@") "gmove 2")
   (define-key *top-map* (kbd "s-#") "gmove 3")
@@ -249,7 +253,7 @@ Load modules
   (load-module "net")
 #+END_SRC
 
-Set up the output:
+Now put it all together and set up the actual output:
 - Left part:
   - =%h= is the head (monitor) number
   - =%g= is the current group
@@ -263,8 +267,8 @@ Set up the output:
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (setf *screen-mode-line-format*
         (list "^9[%h]^n ^B^8%g^n^b %v"
-              "^>  "
-              "^n^b^9 %l| %N| %C | %d"))
+              "^>"
+              "^n^b^9 %l| %M| %C | %d"))
 #+END_SRC
 
 When stumpwm starts, make the modeline appear on the current head
@@ -302,22 +306,15 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
 #+END_SRC
 
 * To Do List
-CLOSED: [2019-11-28 Thu 11:41]
-Got the ttf package setup, need to figure out why the font isnt loading
-Example:
-#+BEGIN_SRC lisp
-  (load-module "ttf-fonts")
-  (set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 14))
-#+END_SRC
-** DONE Set up swank
-CLOSED: [2019-11-26 Tue 23:39]
-Set up swank to interact with stumpwm using a repl!
-
-use =slime-connect= with =localhost= (the default) and port =4004= (the one set in this config)
-
+** TODO Resize based on window selected
+Make resize work based on the direction key pressed,
+e.g. if i'm on a window on the right, pressing =c-s-h= should grow the window to the right
 ** TODO MAYBE use powerline symbols in bar?
 #+BEGIN_SRC 
 
 
 
 #+END_SRC
+** TODO MAYBE use another bar?
+lemonbar
+polybar
