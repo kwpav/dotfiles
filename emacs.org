@@ -1665,8 +1665,10 @@ Keys
 
   (my-local-leader-def
     :keymaps 'lisp-mode-map
-    "er" 'eval-region
-    "ed" 'eval-defun)
+    "eb" 'slime-eval-buffer
+    "el" 'slime-eval-last-expression
+    "ed" 'slime-eval-defun
+    "er" 'slime-eval-region)
 
   (my-local-leader-def
     :keymaps 'scheme-mode-map
@@ -1733,7 +1735,7 @@ Using this to mess with stumpwm right now.
     (slime-setup '(slime-company)))
 #+END_SRC
 
-***** StumpWM
+****** StumpWM
 #+BEGIN_SRC emacs-lisp
   (use-package stumpwm-mode)
 #+END_SRC
@@ -1742,7 +1744,9 @@ slime connect command
 #+BEGIN_SRC emacs-lisp
   (defun stumpwm-connect ()
     (interactive)
-    (slime-connect "localhost" "4004"))
+    (slime-connect "localhost" "4004")
+    ;; select the window
+    (other-window 1))
 #+END_SRC
 **** Hy
 Let's get hy. A lisp for Python.
