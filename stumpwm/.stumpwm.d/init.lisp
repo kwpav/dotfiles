@@ -83,6 +83,18 @@
 ;;(setf (group-name (car (screen-groups (current-screen)))) "dev")
 (run-commands "grename dev")
 
+(defcommand my-power-menu () ()
+  (let ((choice
+         (select-from-menu (current-screen) '("shutdown" "restart" "quit") nil 0 nil)))
+    (cond ((null choice)
+           (throw 'error "Aborted."))
+          ((string= choice "shutdown")
+           (run-shell-command "poweroff"))
+          ((string= choice "restart")
+           (run-shell-command "reboot"))
+          ((string= choice "quit")
+           (quit)))))
+
 (ql:quickload "clx-truetype")
 (load-module "ttf-fonts")
 
@@ -141,7 +153,19 @@
 (setf *group-format* " %n%s%t ")
 (setf *window-format* "%m%n:%20t ")
 
-(setf *time-modeline-string* "%Y-%m-%d %I:%M%p")
+(defun my-time ()
+  "Return the time, HH:MM"
+  (multiple-value-bind
+        (second minute hour day month year day-of-week)
+      (get-decoded-time)
+    (format nil "~2,'0d:~2,0d" hour minute)))
+
+(defun my-date ()
+  "Return the date, YYYY-MM-DD"
+  (multiple-value-bind
+        (second minute hour day month year day-of-week)
+      (get-decoded-time)
+    (format nil "~4,'0d-~2,'0d-~2,'0d" year month day)))
 
 (load-module "cpu")
 (load-module "mem")
@@ -150,7 +174,10 @@
 (setf *screen-mode-line-format*
       (list "^9[%h]^n ^B^8%g^n^b %v"
             "^>"
-            "^n^b^9 %l| %M| %C | %d"))
+            "^n^b^9 %l| %M| %C | "
+            '(:eval (my-date))
+            "^B^6 "
+            '(:eval (my-time))))
 
 (if (not (head-mode-line (current-head)))
     (toggle-mode-line (current-screen) (current-head)))

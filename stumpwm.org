@@ -101,10 +101,10 @@ Set up keys using vim-like keybindings.
   (define-key *top-map* (kbd "s-L") "move-window right")
   (define-key *top-map* (kbd "s-n") "pull-hidden-next")
   (define-key *top-map* (kbd "s-p") "pull-hidden-previous")
-  (define-key *top-map* (stumpwm:kbd "s-M") "exchange-direction down")
-  (define-key *top-map* (stumpwm:kbd "s-N") "exchange-direction left")
-  (define-key *top-map* (stumpwm:kbd "s-<") "exchange-direction up")
-  (define-key *top-map* (stumpwm:kbd "s->") "exchange-direction right")
+  (define-key *top-map* (kbd "s-M") "exchange-direction down")
+  (define-key *top-map* (kbd "s-N") "exchange-direction left")
+  (define-key *top-map* (kbd "s-<") "exchange-direction up")
+  (define-key *top-map* (kbd "s->") "exchange-direction right")
   (define-key *top-map* (kbd "s-!") "gmove 1")
   (define-key *top-map* (kbd "s-@") "gmove 2")
   (define-key *top-map* (kbd "s-#") "gmove 3")
@@ -124,6 +124,21 @@ Set up the initial groups
   (run-commands "grename dev")
 #+END_SRC
 
+** Power Menu
+Define a custom power menu that lets you shutdown or restart your computer, or quit stumpwm
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (defcommand my-power-menu () ()
+    (let ((choice
+           (select-from-menu (current-screen) '("shutdown" "restart" "quit") nil 0 nil)))
+      (cond ((null choice)
+             (throw 'error "Aborted."))
+            ((string= choice "shutdown")
+             (run-shell-command "poweroff"))
+            ((string= choice "restart")
+             (run-shell-command "reboot"))
+            ((string= choice "quit")
+             (quit)))))
+#+END_SRC
 * Appearance
 Set up how everything looks.
 ** Font
@@ -180,7 +195,6 @@ Using colors based off the =nord= theme
   (defparameter *foreground-color* "#ECEFF4")
   (defparameter *background-color* "#2E3440")
   (defparameter *border-color* "#5E81AC")
-
 #+END_SRC
 ** Message Window
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
@@ -241,8 +255,25 @@ Set up the group and window format,  this changes how the groups (=%g=) and wind
   (setf *window-format* "%m%n:%20t ")
 #+END_SRC
 
-How the date is formatted, this is using the formatting from the =date= command
+Define functions to get time and date using lisp. Using separate functions so I can make the time a different color so it stands out.
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (defun my-time ()
+    "Return the time, HH:MM"
+    (multiple-value-bind
+          (second minute hour day month year day-of-week)
+        (get-decoded-time)
+      (format nil "~2,'0d:~2,'0d" hour minute)))
+
+  (defun my-date ()
+    "Return the date, YYYY-MM-DD"
+    (multiple-value-bind
+          (second minute hour day month year day-of-week)
+        (get-decoded-time)
+      (format nil "~4,'0d-~2,'0d-~2,'0d" year month day)))
+#+END_SRC
+
+Alternatively, I could use the built in date/time, using =%d= in the =*mode-line-format*=. The =*time-modeline-string*= variable controls how its formatted. It uses the same formatting as the =date= command
+#+BEGIN_SRC lisp
   (setf *time-modeline-string* "%Y-%m-%d %I:%M%p")
 #+END_SRC
 
@@ -261,14 +292,17 @@ Now put it all together and set up the actual output:
   - =%v= lists the windows on the current head, where non-visible windows are colored the =*hidden-window-color*=
 - Right part (starts after =^>=):
   - =%l= is network info
-  - =%N= is memory info
+  - =%M= is memory info
   - =%C= is cpu info
   - =%d= is the date
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (setf *screen-mode-line-format*
         (list "^9[%h]^n ^B^8%g^n^b %v"
               "^>"
-              "^n^b^9 %l| %M| %C | %d"))
+              "^n^b^9 %l| %M| %C | "
+              '(:eval (my-date))
+              "^B^6 "
+              '(:eval (my-time))))
 #+END_SRC
 
 When stumpwm starts, make the modeline appear on the current head
