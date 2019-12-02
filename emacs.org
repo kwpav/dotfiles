@@ -1791,7 +1791,7 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
     ;; :ensure-system-package ((prettier . "npm i -g prettier")
     ;;                         (eslint . "npm i -g eslint")
     ;;                         (eslint_d . "npm i -g eslint_d"))
-  
+
     :preface
     (defun my-tide-setup-hook ()
       "Configure tide"
@@ -1825,9 +1825,9 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
       (smartparens-mode t))
     :init
     ;; set the indent level to 2
-    (setq js2-basic-offset 4)
+    (setq js2-basic-offset 2)
     (setq js-chain-indent t)
-    (setq js-indent-level 4)
+    (setq js-indent-level 2)
 
     ;; use eslint_d instead of eslint for faster linting
     (setq flycheck-javascript-eslint-executable "eslint_d")
@@ -1905,6 +1905,18 @@ Dont need too much here because it uses =js2-mode= where most of the config is d
   (use-package rjsx-mode
     :mode "\\.jsx\\'")
 #+END_SRC
+**** REPL
+Setup up a javascript repl using =skewer=
+#+BEGIN_SRC emacs-lisp
+  (use-package skewer-mode
+    :ghook ('js2-mode-hook)
+    :general
+    (my-local-leader-def 'js2-mode-map
+      "eb" 'skewer-eval-defun
+      "el" 'skewer-eval-last-expression))
+#+END_SRC
+
+To use, =M-x run-skewer= and then =M-x skewer-repl=
 *** Web Mode
 Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
