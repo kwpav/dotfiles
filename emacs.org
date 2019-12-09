@@ -89,6 +89,11 @@ install  =use-package= and related packages
   (straight-use-package 'diminish) ;; for :diminish
   (straight-use-package 'bind-key) ;; for :bind
 #+END_SRC
+
+Install =ensure-system-package=
+#+BEGIN_SRC emacs-lisp
+  (use-package use-package-ensure-system-package)
+#+END_SRC
 *** OLD package.el config
 Keeping this for historical purposes
 
@@ -1235,15 +1240,27 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-  (use-package company-lsp)
-    ;; :after (company-mode)
-
-  (use-package lsp-ui
-    :after (flycheck-mode))
-
   (use-package lsp-mode
-    :config
-    (require 'lsp-clients))
+    :commands lsp)
+
+  ;; optionally
+  (use-package lsp-ui :commands lsp-ui-mode)
+  (use-package company-lsp :commands company-lsp)
+  ;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+  ;; optionally if you want to use debugger
+  (use-package dap-mode)
+
+
+  ;; (use-package company-lsp)
+  ;;   ;; :after (company-mode)
+
+  ;; (use-package lsp-ui
+  ;;   :after (flycheck-mode))
+
+  ;; (use-package lsp-mode
+  ;;   :config
+  ;;   (require 'lsp-clients))
 
   ;; lsp extras
   ;; (use-package lsp-ui
@@ -1775,6 +1792,34 @@ For xmonad and beyond
 **** Vanilla
 Setup for JavaScript using =js2-mode=.
 
+LSP mode using =typescript-language-server=.
+install using
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :mode (("\\.js$" . js2-mode))
+    ;; :hook (js2-mode . my-js-hook)
+    :hook (js2-mode . lsp)
+    :ensure-system-package ((typescript-language-server . "npm i -g typescript-language-server")
+                            (typescript . "npm i -g typescript"))
+
+    :init
+    ;; set the indent level to 2
+    (setq js2-basic-offset 2)
+    (setq js-chain-indent t)
+    (setq js-indent-level 2)
+
+    ;; use eslint_d instead of eslint for faster linting
+    (setq flycheck-javascript-eslint-executable "eslint_d")
+
+    ;; highlight most ECMA built-ins
+    (setq js2-highlight-level 3)
+
+    ;; turn off all warnings in js2-mode
+    (setq js2-mode-show-parse-errors t)
+    (setq js2-mode-show-strict-warnings nil)
+    (setq js2-strict-missing-semi-warning nil))
+#+END_SRC
+***** COMMENT JS without LSP
 - autocomplete with =tern=
 - using =tide= for:
   + info in the minibuffer about the highlighted item
@@ -1851,12 +1896,6 @@ Largely stolen from https://github.com/CSRaghunandan/.emacs.d/blob/master/setup-
   (use-package company-tern
     :config
     (add-to-list 'company-backends 'company-tern))
-#+END_SRC
-
-Set up javascript with LSP
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package lsp-javascript-typescript
-  ;;   ;; :ensure-system-package ((javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")))
 #+END_SRC
 
 Set up =tide-mode=
