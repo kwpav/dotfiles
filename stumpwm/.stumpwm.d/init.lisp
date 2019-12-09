@@ -65,10 +65,10 @@
 (define-key *top-map* (kbd "s-L") "move-window right")
 (define-key *top-map* (kbd "s-n") "pull-hidden-next")
 (define-key *top-map* (kbd "s-p") "pull-hidden-previous")
-(define-key *top-map* (stumpwm:kbd "s-M") "exchange-direction down")
-(define-key *top-map* (stumpwm:kbd "s-N") "exchange-direction left")
-(define-key *top-map* (stumpwm:kbd "s-<") "exchange-direction up")
-(define-key *top-map* (stumpwm:kbd "s->") "exchange-direction right")
+(define-key *top-map* (kbd "s-M") "exchange-direction down")
+(define-key *top-map* (kbd "s-N") "exchange-direction left")
+(define-key *top-map* (kbd "s-<") "exchange-direction up")
+(define-key *top-map* (kbd "s->") "exchange-direction right")
 (define-key *top-map* (kbd "s-!") "gmove 1")
 (define-key *top-map* (kbd "s-@") "gmove 2")
 (define-key *top-map* (kbd "s-#") "gmove 3")
@@ -94,6 +94,9 @@
            (run-shell-command "reboot"))
           ((string= choice "quit")
            (quit)))))
+
+;; (run-shell-command "xsetroot -solid \"#5e81ac\"" )
+(run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
 
 (ql:quickload "clx-truetype")
 (load-module "ttf-fonts")
@@ -158,7 +161,7 @@
   (multiple-value-bind
         (second minute hour day month year day-of-week)
       (get-decoded-time)
-    (format nil "~2,'0d:~2,0d" hour minute)))
+    (format nil "~2,'0d:~2,'0d" hour minute)))
 
 (defun my-date ()
   "Return the date, YYYY-MM-DD"
@@ -179,5 +182,5 @@
             "^B^6 "
             '(:eval (my-time))))
 
-(if (not (head-mode-line (current-head)))
-    (toggle-mode-line (current-screen) (current-head)))
+;; (if (not (head-mode-line (current-head)))
+;;     (toggle-mode-line (current-screen) (current-head)))

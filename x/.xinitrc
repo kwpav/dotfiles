@@ -30,7 +30,8 @@ setxkbmap -option 'ctrl:nocaps'
 # nitrogen --head=1 --set-zoom-fill wallpapers/night.png
 # nitrogen --head=2 --set-zoom-fill wallpapers/night.png
 # nitrogen --set-scaled wallpapers/atlantisnebula10-5745-1200.png
-nitrogen --set-scaled wallpapers/cathedralpillars.jpg
+# nitrogen --set-scaled wallpapers/cathedralpillars.jpg
+# xsetroot -solid "#5e81ac" # the darkest 'Frost' color from nord
 
 # start some nice programs
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then

@@ -141,6 +141,15 @@ Define a custom power menu that lets you shutdown or restart your computer, or q
 #+END_SRC
 * Appearance
 Set up how everything looks.
+
+** Wallpaper 
+Set up the wallpaper
+
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  ;; (run-shell-command "xsetroot -solid \"#5e81ac\"" )
+  (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
+#+END_SRC
+
 ** Font
 Set up =ttf-fonts=. The =ttf-fonts= module requires =clx-truetype= to work
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
@@ -307,8 +316,8 @@ Now put it all together and set up the actual output:
 
 When stumpwm starts, make the modeline appear on the current head
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (if (not (head-mode-line (current-head)))
-      (toggle-mode-line (current-screen) (current-head)))
+  ;; (if (not (head-mode-line (current-head)))
+  ;;     (toggle-mode-line (current-screen) (current-head)))
 #+END_SRC
 
 *** Polybar
