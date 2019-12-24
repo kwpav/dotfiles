@@ -1233,7 +1233,7 @@ Company provides code completion.
 #+END_SRC
 
 *** language server protocol
-Setup for Microsoft's (GASP!) Language Server Protocol.
+Setup for Microsoft's (GASP!) Language Server Protocol. Any language that needs it will have =lsp-mode= enabled in the language mode's =:hook= / =:ghook=
 
 #+BEGIN_QUOTE
 The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc.
@@ -1244,7 +1244,18 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     :commands lsp)
 
   ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode)
+  (use-package lsp-ui
+    :commands lsp-ui-mode
+    :custom
+    (lsp-ui-doc-enable t)
+    (lsp-ui-doc-header t)
+    (lsp-ui-doc-include-signature t)
+    (lsp-ui-doc-position 'top)
+    (lsp-ui-doc-border (face-foreground 'default))
+    (lsp-ui-sideline-enable t)
+    (lsp-ui-sideline-ignore-duplicate t)
+    (lsp-ui-sideline-show-code-actions nil))
+
   (use-package company-lsp :commands company-lsp)
   ;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
@@ -1796,27 +1807,17 @@ LSP mode is using =typescript-language-server=.
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
     :mode "\\.js$"
-    ;; :hook (js2-mode . my-js-hook)
     :hook (js2-mode . lsp)
+    :interpreter "node"
     :ensure-system-package ((typescript-language-server . "npm i -g typescript-language-server")
-                            (typescript . "npm i -g typescript")
                             (eslint_d . "npm i -g eslint_d"))
     :custom
     ;; set the indent level to 2
     (js2-basic-offset 2)
     (js-chain-indent t)
     (js-indent-level 2)
-
     ;; use eslint_d instead of eslint for faster linting
-    (flycheck-javascript-eslint-executable "eslint_d")
-
-    ;; highlight most ECMA built-ins
-    (js2-highlight-level 3)
-
-    ;; turn off all warnings in js2-mode
-    (js2-mode-show-parse-errors t)
-    (js2-mode-show-strict-warnings nil)
-    (js2-strict-missing-semi-warning nil))
+    (flycheck-javascript-eslint-executable "eslint_d"))
 #+END_SRC
 ***** COMMENT JS without LSP
 - autocomplete with =tern=
