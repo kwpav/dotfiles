@@ -11,8 +11,8 @@
 
 (set-prefix-key (kbd "s-SPC"))
 
-(setq *mouse-focus-policy* :sloppy)
-;;(setq *mouse-focus-policy* :click)
+;; (setq *mouse-focus-policy* :sloppy)
+(setq *mouse-focus-policy* :click)
 (run-shell-command "xsetroot -cursor_name left_ptr")
 
 (defcommand firefox () ()

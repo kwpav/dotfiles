@@ -35,8 +35,8 @@ Change the prefix key, I like using super + space.
 ** Mouse
 Set the focus to follow the mouse and use the normal mouse pointer instead of the X that StumpWM defaults to.
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (setq *mouse-focus-policy* :sloppy)
-  ;;(setq *mouse-focus-policy* :click)
+  ;; (setq *mouse-focus-policy* :sloppy)
+  (setq *mouse-focus-policy* :click)
   (run-shell-command "xsetroot -cursor_name left_ptr")
 #+END_SRC
 
