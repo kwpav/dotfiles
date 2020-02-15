@@ -22,20 +22,49 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("5e62fe2e73f4d646f37a1d04e92e61bc3d808bbf5032718aba06c44b0638878c" default)))
+    ("b30ab3b30e70f4350dad6bfe27366d573ace2190cc405c619bd5e602110c6e0c" "5e62fe2e73f4d646f37a1d04e92e61bc3d808bbf5032718aba06c44b0638878c" default)))
+ '(dumb-jump-force-searcher (quote rg) t)
+ '(dumb-jump-selector (quote ivy) t)
  '(enable-recursive-minibuffers t)
+ '(evil-want-keybinding nil)
+ '(flycheck-javascript-eslint-executable "eslint_d")
+ '(geiser-active-implementations (quote (guile mit racket)))
  '(general-override-states
    (quote
     (insert emacs hybrid normal visual motion operator replace)))
+ '(inferior-lisp-program "/usr/bin/sbcl")
  '(ivy-count-format "(%d/%d) ")
  '(ivy-height 20)
- '(ivy-use-virtual-buffers t))
+ '(ivy-use-virtual-buffers t)
+ '(js-chain-indent t)
+ '(js-indent-level 2)
+ '(js2-basic-offset 2)
+ '(lsp-ui-doc-border "#D8DEE9")
+ '(lsp-ui-doc-enable t)
+ '(lsp-ui-doc-header t)
+ '(lsp-ui-doc-include-signature t)
+ '(lsp-ui-doc-position (quote top))
+ '(lsp-ui-sideline-enable t)
+ '(lsp-ui-sideline-ignore-duplicate t)
+ '(lsp-ui-sideline-show-code-actions nil)
+ '(magit-completing-read-function (quote ivy-completing-read))
+ '(org-agenda-files (quote ("~/org/agenda/")))
+ '(slime-contribs (quote (slime-fancy)) t)
+ '(yas-snippet-dirs (quote ("~/.emacs.d/snippets"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(fixed-pitch ((t (:family "Iosevka" :height 0.8))))
+ '(org-document-title ((t (:foreground "#B48EAD" :weight bold :height 1.4))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold :foreground "#8fbcbb"))))
+ '(org-level-2 ((t (:inherit outline-1 :height 1.2 :weight bold :foreground "#88c0d0"))))
+ '(org-level-3 ((t (:inherit outline-1 :height 1.1 :weight bold :foreground "#81a1c1"))))
+ '(org-level-4 ((t (:inherit outline-1 :height 1.0 :weight bold :foreground "#5e81ac"))))
+ '(org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold))))
+ '(variable-pitch ((t (:family "EtBembo" :height 160 :weight normal :slant normal)))))
 
 (org-babel-load-file "~/dotfiles/emacs.org")
 
