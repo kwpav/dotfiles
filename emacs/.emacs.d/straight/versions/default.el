@@ -52,6 +52,7 @@
  ("php-mode" . "5580fe0e4aee6821f23fc92ea126c0abd202e91e")
  ("pipenv.el" . "b730bb509e8b60af9f5ab1f1e6c3458d1d95d789")
  ("projectile" . "341150c0e77c63075f53e346dae87a4c60ea3b5b")
+ ("psysh.el" . "21250984ad8137aa3440ac12e52475ef03f19fcb")
  ("rainbow-delimiters" . "5125f4e47604ad36c3eb4706310fcafac729ca8c")
  ("restart-emacs" . "9aa90d3df9e08bc420e1c9845ee3ff568e911bd9")
  ("restclient.el" . "e8ca809ace13549a1ddffb4e4aaa5d5fce750f3d")

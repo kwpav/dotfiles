@@ -2035,6 +2035,12 @@ Use =PHP_CodeSniffer= to format files on save.
     (setq phpcbf-executable "/usr/local/bin/phpcbf")
     (setq phpcbf-standard "WellspringCodingStandard"))
 #+END_SRC
+
+=psysh= is a php repl
+#+BEGIN_SRC emacs-lisp
+  (use-package psysh)
+#+END_SRC
+
 * TODO Things to do
 An on-going list of things I want to change
 
