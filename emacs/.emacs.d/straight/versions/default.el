@@ -34,6 +34,7 @@
  ("haskell-mode" . "4a87d7258936147180a2243fb23aada1c04da240")
  ("hy-mode" . "e2d5fecdaec602788aa7123ed13651c888b8d94b")
  ("hydra" . "e3beffdd804b87b20c87d7fb8e37d6eee2b0d763")
+ ("ivy-rich" . "af43abad5c87b44a46ce74d57e54cad5112c22eb")
  ("js2-mode" . "fe53814dc2a0db2e95ac06083362e43923bf83fc")
  ("json-mode" . "0e819e519ae17a2686e0881c4ca51fa873fa9b83")
  ("keyfreq" . "e5fe9d585ce882f1ba9afa5d894eaa82c79be4f4")

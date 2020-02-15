@@ -409,6 +409,15 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
   (use-package counsel-etags
     :after counsel)
 #+END_SRC
+
+Make =ivy= look a bit nicer
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-rich
+    :after (ivy counsel)
+    :config
+    (ivy-rich-mode 1)
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+#+END_SRC
 *** Search / Replace
 **** swiper
 Replace keybindings for emacs search and evil search with swiper.
