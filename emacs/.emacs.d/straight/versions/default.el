@@ -47,6 +47,7 @@
  ("magit" . "57f2d0f8308268913f4de6d06b968c05225b5e53")
  ("melpa" . "a0d294051a792679d215dbb830a600fdf5090866")
  ("multi-term" . "7307ddd456db44045206253e5a905d3d8c143d5c")
+ ("multiple-cursors.el" . "b880554d04b8f61165afba7d4de19ac9e39bb7ab")
  ("no-littering" . "14ed8ed2a2d8ae700ce1889d76bc4588d22549b1")
  ("nord-emacs" . "0f5295f99005a200191ce7b660e56cd0510cf710")
  ("ob-restclient.el" . "c5c22e603531dca48575d0a425fddff16dc0f391")

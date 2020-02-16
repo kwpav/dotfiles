@@ -451,6 +451,15 @@ This way I can use evil's undo (~u~ in Normal mode) and =undo-tree= at the same 
     (global-undo-tree-mode))
 #+END_SRC
 *** Text Editing
+**** multiple cursors
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :general
+    (my-leader-def
+      "v" 'mc/edit-lines))
+#+END_SRC
+
+**** iedit
 #+BEGIN_QUOTE
 Iedit - Edit multiple regions in the same way simultaneously
 #+END_QUOTE
@@ -462,7 +471,6 @@ Using the default keybinding of ~C-;~.
   (use-package iedit
     :diminish)
 #+END_SRC
-
 ** Look and Feel
 *** Change defaults
 Hide the gui and use a non-blinking cursor for a more zen-like experience.
@@ -2111,7 +2119,6 @@ An on-going list of things I want to change
 ** Cool looking packages to check out
 - =purpose= - https://github.com/bmag/emacs-purpose
   - window/buffer management
-- =multiple-cursors= - https://github.com/magnars/multiple-cursors.el
 - =eglot= - https://github.com/joaotavora/eglot
   - lightweight LSP
 - =targets= - https://github.com/noctuid/targets.el
