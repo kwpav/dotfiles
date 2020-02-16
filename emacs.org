@@ -450,6 +450,19 @@ This way I can use evil's undo (~u~ in Normal mode) and =undo-tree= at the same 
     (setq undo-tree-visualizer-diff t)
     (global-undo-tree-mode))
 #+END_SRC
+*** Text Editing
+#+BEGIN_QUOTE
+Iedit - Edit multiple regions in the same way simultaneously
+#+END_QUOTE
+Using the default keybinding of ~C-;~.
+- All occurrences of a symbol, string or a region in the buffer are highlighted corresponding to the thing under the point, current mark and prefix argument. Refer to the document of =iedit-mode= for details.
+- Edit one of the occurrences The change is applied to other occurrences simultaneously.
+- Finish - by pressing ~C-;~ again
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :diminish)
+#+END_SRC
+
 ** Look and Feel
 *** Change defaults
 Hide the gui and use a non-blinking cursor for a more zen-like experience.
@@ -670,7 +683,7 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
              (and (not (eq major-mode (all-the-icons-icon-for-mode major-mode)))
                   (telephone-line-selected-window-active))
            (format "%s " icon))
-         (propertize mode-name 'face `font-lock-string-face))))
+         (propertize mode-name 'face =font-lock-string-face))))
 
     (telephone-line-defsegment* my-major-mode-segment ()
       "Display the name of the major mode."
@@ -2090,8 +2103,6 @@ An on-going list of things I want to change
 - =purpose= - https://github.com/bmag/emacs-purpose
   - window/buffer management
 - =multiple-cursors= - https://github.com/magnars/multiple-cursors.el
-- =iedit= - https://github.com/victorhge/iedit
-  - like multiple cursors
 - =eglot= - https://github.com/joaotavora/eglot
   - lightweight LSP
 - =targets= - https://github.com/noctuid/targets.el
@@ -2115,4 +2126,3 @@ An on-going list of things I want to change
 - =ivy-posframe= - load ivy in a popup frame type thing
 - =company-box= show cool icons in company results
 - =org-present= org mode presentations
-
