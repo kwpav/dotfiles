@@ -32,6 +32,7 @@
  ("git-timemachine" . "391eb61050de321101e631fcf373fc70ec6e7700")
  ("gnu-elpa-mirror" . "3decb53aacf461b99799351f549a9b0f93eb80f8")
  ("haskell-mode" . "4a87d7258936147180a2243fb23aada1c04da240")
+ ("highlight-indent-guides" . "0b10f38c54ffc099861ce8463e16a1b07ddbb203")
  ("hy-mode" . "e2d5fecdaec602788aa7123ed13651c888b8d94b")
  ("hydra" . "e3beffdd804b87b20c87d7fb8e37d6eee2b0d763")
  ("iedit" . "e2c100cdd67b7d82835d281ac2cd1bf4f374bc8f")

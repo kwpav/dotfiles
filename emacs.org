@@ -919,6 +919,15 @@ Add rainbow delimiters in all programming language modes
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
+*** highlight indentation
+#+BEGIN_SRC emacs-lisp
+  (use-package highlight-indent-guides
+    :hook ((prog-mode web-mode) . highlight-indent-guides-mode)
+    :custom
+    (highlight-indent-guides-method 'character)
+    (highlight-indent-guides-responsive 'top)
+    (highlight-indent-guides-delay 0))
+#+END_SRC
 *** Other stuff
 Add a space between the line numbers and the text
 From https://www.emacswiki.org/emacs/LineNumbers
