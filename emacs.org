@@ -8,7 +8,7 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 - [[https://github.com/jwiegley/dot-emacs][jwiegly's config]]
 - [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
-
+- [[https://github.com/MatthewZMD/.emacs.d#org0f80f62][M-EMACS]]
 ** How to Add/Modify
 To add a code block, type =<s= and press ~tab~, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
 To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press ~C-c '~ again to add the changes to the org file.
@@ -486,19 +486,21 @@ Use C-mouse3 to open the menu-bar as a popup menu
 *** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (use-package nord-theme
+  (use-package doom-themes
     :config
-    (load-theme 'nord))
+    (setq doom-themes-enable-bold t
+          doom-themes-enable-italic t)
+    (load-theme 'doom-nord)
+    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    (doom-themes-treemacs-config)
+    (doom-themes-org-config))
    #+END_SRC
 *** COMMENT other themes
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
-  (use-package doom-themes
-    :init
-    (setq doom-themes-enable-bold t
-          doom-themes-enable-italic t)
+ (use-package nord-theme
     :config
-    (load-theme 'doom-nord))
+    (load-theme 'nord))
 
   (use-package kaolin-themes
     :init
@@ -792,13 +794,13 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
 #+BEGIN_SRC emacs-lisp
   ;; (use-package all-the-icons
 
-  ;; (defun my-doom-modeline-hook ()
-  ;;   (column-number-mode)
-  ;;   (doom-modeline-init))
+  (defun my-doom-modeline-hook ()
+    (column-number-mode)
+    (doom-modeline-init))
 
-  ;; (use-package doom-modeline
-  ;;   :defer t
-  ;;   :hook (after-init . my-doom-modeline-hook))
+  (use-package doom-modeline
+    :defer t
+    :hook (after-init . my-doom-modeline-hook))
 #+END_SRC
 **** COMMENT spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
@@ -915,11 +917,12 @@ spacemacs modeline settings
 *** solaire
 make certain buffers lighter/darker, e.g. treemacs
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package solaire-mode
-  ;;   :hook ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
-  ;;   :config
-  ;;   (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
-  ;;   (solaire-mode-swap-bg))
+  (use-package solaire-mode
+    :hook ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
+    (minibuffer-setup . solaire-mode-in-minibuffer)
+    :config
+    (solaire-global-mode +1)
+    (solaire-mode-swap-bg))
 #+END_SRC
 *** rainbow delimiters
 Add rainbow delimiters in all programming language modes
