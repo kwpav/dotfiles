@@ -584,7 +584,7 @@ Other fonts I like
   (add-to-list 'default-frame-alist '(font . "envypn-11" ))
 #+END_SRC
 *** Modeline
-**** telephone-line
+**** COMMENT telephone-line
 Set up all the icons
 #+BEGIN_SRC emacs-lisp
   (use-package all-the-icons)
@@ -789,18 +789,21 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                             telephone-line-airline-position-segment))
             (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
-**** COMMENT doom modeline
+**** doom modeline
 *NOTE* You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
 #+BEGIN_SRC emacs-lisp
   ;; (use-package all-the-icons
 
   (defun my-doom-modeline-hook ()
     (column-number-mode)
-    (doom-modeline-init))
+    (doom-modeline-mode 1))
 
   (use-package doom-modeline
     :defer t
-    :hook (after-init . my-doom-modeline-hook))
+    :hook (after-init . my-doom-modeline-hook)
+    :custom
+    (doom-modeline-vcs-max-length 50)
+    (doom-modeline-buffer-file-name-style 'truncate-upto-project))
 #+END_SRC
 **** COMMENT spaceline
 Add an animated nyan-cat to indicate the buffer position, because why not?
