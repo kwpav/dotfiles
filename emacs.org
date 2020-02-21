@@ -2046,10 +2046,10 @@ Set up web mode for html and css files
     (my-local-leader-def 'php-mode-map
       "a" 'my/align-php-dbl-arrow
       "j" 'ac-php-find-symbol-at-point)
-    :config
+    :custom
     ;; align -> on successive lines
-    (setq php-lineup-cascaded-calls t)
-    (setq flycheck-phpcs-standard "WellspringCodingStandard"))
+    (php-lineup-cascaded-calls t)
+    (flycheck-phpcs-standard "WellspringCodingStandard"))
 #+END_SRC
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
