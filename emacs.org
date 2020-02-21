@@ -2076,9 +2076,9 @@ Use =PHP_CodeSniffer= to format files on save.
   (use-package phpcbf
     :after (php-mode)
     ;;:hook ((php-mode . phpcbf-enable-on-save))
-    :config
-    (setq phpcbf-executable "/usr/local/bin/phpcbf")
-    (setq phpcbf-standard "WellspringCodingStandard"))
+    :custom
+    (phpcbf-executable "/usr/local/bin/phpcbf")
+    (phpcbf-standard "WellspringCodingStandard"))
 #+END_SRC
 
 =psysh= is a php repl
