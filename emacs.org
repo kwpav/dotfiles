@@ -487,11 +487,12 @@ Use C-mouse3 to open the menu-bar as a popup menu
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
   (use-package doom-themes
+    :custom
+    (doom-themes-enable-bold t)
+    (doom-themes-enable-italic t)
+    (doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
     :config
-    (setq doom-themes-enable-bold t
-          doom-themes-enable-italic t)
     (load-theme 'doom-nord)
-    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
     (doom-themes-treemacs-config)
     (doom-themes-org-config))
    #+END_SRC
