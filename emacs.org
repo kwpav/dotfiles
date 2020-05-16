@@ -1542,6 +1542,22 @@ Use python 3 by default
   (when (eq system-type 'darwin)
     (setq python-shell-interpreter "/usr/local/bin/python3"))
 #+END_SRC
+*** Linux
+**** StumpWM
+#+BEGIN_SRC emacs-lisp
+  (use-package stumpwm-mode
+    :if (memq window-system '(x)))
+#+END_SRC
+
+Connect to a slime repl that can control stumpwm
+#+BEGIN_SRC emacs-lisp
+  (when (eq window-system 'x)
+    (defun stumpwm-connect ()
+      (interactive)
+      (slime-connect "localhost" "4004")
+      ;; select the window
+      (other-window 1)))
+#+END_SRC
 
 ** Local file 
 The local file contains machine specific stuff, eg for my home and my work configs.
@@ -1809,19 +1825,6 @@ Using this to mess with stumpwm right now.
     (slime-setup '(slime-company)))
 #+END_SRC
 
-****** StumpWM
-#+BEGIN_SRC emacs-lisp
-  (use-package stumpwm-mode)
-#+END_SRC
-
-slime connect command
-#+BEGIN_SRC emacs-lisp
-  (defun stumpwm-connect ()
-    (interactive)
-    (slime-connect "localhost" "4004")
-    ;; select the window
-    (other-window 1))
-#+END_SRC
 **** Hy
 Let's get hy. A lisp for Python.
 #+BEGIN_SRC emacs-lisp
