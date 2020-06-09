@@ -24,10 +24,17 @@
 
 (defcommand alacritty () ()
   (run-or-raise "alacritty -e tmux" '(:class "Alacritty")))
-(define-key *root-map* (kbd "c") "alacritty")
-(define-key *root-map* (kbd "C-c") "alacritty")
-(define-key *top-map* (kbd "s-RET") "alacritty") 
-(define-key *top-map* (kbd "s-c") "alacritty")
+
+(defcommand kitty () ()
+  (run-or-raise "kitty" '(:class "kitty")))
+
+(defcommand terminal () ()
+  (kitty))
+
+(define-key *root-map* (kbd "c") "terminal")
+(define-key *root-map* (kbd "C-c") "terminal")
+(define-key *top-map* (kbd "s-RET") "terminal")
+(define-key *top-map* (kbd "s-c") "terminal")
 
 (define-key *top-map* (kbd "s-d") "exec")
 (define-key *top-map* (kbd "s-F") "fullscreen")
@@ -95,6 +102,8 @@
           ((string= choice "quit")
            (quit)))))
 
+(define-key *top-map* (kbd "s-ESC") "my-power-menu")
+
 ;; (run-shell-command "xsetroot -solid \"#5e81ac\"" )
 ;; (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
 (run-shell-command "nitrogen --set-centered ~/wallpapers/jerrygarcia_2880x1800.png")
@@ -140,7 +149,51 @@
 (set-focus-color *border-color*)
 (set-unfocus-color *background-color*)
 
-(run-shell-command "polybar screen --reload")
+(setf *mode-line-timeout* 2)
+
+(setf *mode-line-border-width* 0)
+(setf *mode-line-pad-y* 5)
+(setf *mode-line-pad-x* 10)
+
+(setf *bar-med-color* "^B^8")
+(setf *bar-hi-color* "^B^4")
+(setf *bar-crit-color* "^B^1")
+(setf *hidden-window-color* "^7")
+;; the foreground is the highlight for the windows too
+(setf *mode-line-background-color* *background-color*)
+(setf *mode-line-foreground-color* *foreground-color*)
+
+(setf *group-format* " %n%s%t ")
+(setf *window-format* "%m%n:%20t ")
+
+(defun my-time ()
+  "Return the time, HH:MM"
+  (multiple-value-bind
+        (second minute hour day month year day-of-week)
+      (get-decoded-time)
+    (format nil "~2,'0d:~2,'0d" hour minute)))
+
+(defun my-date ()
+  "Return the date, YYYY-MM-DD"
+  (multiple-value-bind
+        (second minute hour day month year day-of-week)
+      (get-decoded-time)
+    (format nil "~4,'0d-~2,'0d-~2,'0d" year month day)))
+
+(load-module "cpu")
+(load-module "mem")
+(load-module "net")
+
+(setf *screen-mode-line-format*
+      (list "^9[%h]^n ^B^8%g^n^b %v"
+            "^>"
+            "^n^b^9 %l| %M| %C | "
+            '(:eval (my-date))
+            "^B^6 "
+            '(:eval (my-time))))
+
+;; (if (not (head-mode-line (current-head)))
+;;     (toggle-mode-line (current-screen) (current-head)))
 
 (setf swm-gaps:*inner-gaps-size* 8)
 (setf swm-gaps:*outer-gaps-size* 10)

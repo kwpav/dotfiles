@@ -52,10 +52,17 @@ Define commands to start up and switch to programs and set up keys.
 
   (defcommand alacritty () ()
     (run-or-raise "alacritty -e tmux" '(:class "Alacritty")))
-  (define-key *root-map* (kbd "c") "alacritty")
-  (define-key *root-map* (kbd "C-c") "alacritty")
-  (define-key *top-map* (kbd "s-RET") "alacritty") 
-  (define-key *top-map* (kbd "s-c") "alacritty")
+
+  (defcommand kitty () ()
+    (run-or-raise "kitty" '(:class "kitty")))
+
+  (defcommand terminal () ()
+    (kitty))
+
+  (define-key *root-map* (kbd "c") "terminal")
+  (define-key *root-map* (kbd "C-c") "terminal")
+  (define-key *top-map* (kbd "s-RET") "terminal")
+  (define-key *top-map* (kbd "s-c") "terminal")
 #+END_SRC
 
 ** Action Keys
@@ -138,6 +145,8 @@ Define a custom power menu that lets you shutdown or restart your computer, or q
              (run-shell-command "reboot"))
             ((string= choice "quit")
              (quit)))))
+
+  (define-key *top-map* (kbd "s-ESC") "my-power-menu")
 #+END_SRC
 * Appearance
 Set up how everything looks.
@@ -147,7 +156,8 @@ Set up the wallpaper
 
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   ;; (run-shell-command "xsetroot -solid \"#5e81ac\"" )
-  (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
+  ;; (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
+  (run-shell-command "nitrogen --set-centered ~/wallpapers/jerrygarcia_2880x1800.png")
 #+END_SRC
 
 ** Font
@@ -226,6 +236,10 @@ Using colors based off the =nord= theme
   (set-focus-color *border-color*)
   (set-unfocus-color *background-color*)
 #+END_SRC
+** COMMENT Modeline Polybar
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (run-shell-command "polybar screen --reload")
+#+END_SRC
 
 ** Modeline
 Official docs: https://stumpwm.github.io/git/stumpwm-git_7.html#Mode_002dline
@@ -243,7 +257,7 @@ Set up the borders and padding
   (setf *mode-line-pad-x* 10)
 #+END_SRC
 
-Set up the colors. 
+Set up the colors.
 Colors are =^X= where =X= is the the index of the value in the =colors= list
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (setf *bar-med-color* "^B^8")
@@ -339,7 +353,7 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
             (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 
 
-  (run-shell-command "polybar screen0 --reload")
+  (run-shell-command "polybar screen --reload")
 
   ;; Update polybar group indicator
   (add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
@@ -347,7 +361,12 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
   (add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
   (add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
 #+END_SRC
-
+** Gaps
+Set the gap size
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+(setf swm-gaps:*inner-gaps-size* 8)
+(setf swm-gaps:*outer-gaps-size* 10)
+#+END_SRC
 * To Do List
 ** TODO Resize based on window selected
 Make resize work based on the direction key pressed,
