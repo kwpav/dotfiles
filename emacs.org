@@ -1304,7 +1304,6 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     (lsp-ui-sideline-ignore-duplicate t)
     (lsp-ui-sideline-show-code-actions nil))
 
-  (use-package company-lsp :commands company-lsp)
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
   (use-package dap-mode)
