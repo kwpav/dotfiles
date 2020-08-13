@@ -1288,6 +1288,8 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
+  (setq lsp-keymap-prefix "C-l")
+
   (use-package lsp-mode
     :hook (lsp-mode . lsp-mode-which-key-integration)
     :commands lsp)
