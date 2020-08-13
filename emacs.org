@@ -1210,10 +1210,13 @@ Needed by =pelican= and =nikola=
 Add structure templates, e.g. type <el ~TAB~ for =#+BEGIN_SRC emacs-lisp #+END_SRC=
 Existing templates for reference:
 - https://orgmode.org/manual/Easy-templates.html
+
+As of Emacs 27.1, =org-tempo= is required to use these.
 #+BEGIN_SRC emacs-lisp
-  (defun my-structure-templates ()
-    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
-    (add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC")))
+  (defun my-org-structure-templates ()
+    (require 'org-tempo)
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("sh" . "src sh")))
 #+END_SRC
 *** Use Package
 Put it all together with =use-package=.
@@ -1240,7 +1243,7 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
     :config
     (my-org-prettify-settings)
     (my-org-todo-setup)
-    (my-structure-templates))
+    (my-org-structure-templates))
 #+END_SRC
 *** Org Babel
 =org-babel-do-load-languages= enables languages for in-buffer evaluation
