@@ -1841,6 +1841,11 @@ Let's get hy. A lisp for Python.
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode)
 #+END_SRC
+
+CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
+#+BEGIN_SRC emacs-lisp
+  (use-package cider)
+#+END_SRC
 *** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
