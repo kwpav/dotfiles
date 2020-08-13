@@ -355,12 +355,11 @@ Better mouse scrolling - the default scrolling is too quick.
         mouse-wheel-follow-mouse 't
         mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 #+END_SRC
-*** Ivy / Counsel
-Some nice tools that use the minibuffer.
+*** Ivy / Counsel / Swiper
+#+begin_quote
+Ivy is a generic completion mechanism for Emacs
+#+end_quote
 
-#+BEGIN_QUOTE
-Ivy, a generic completion mechanism for Emacs.
-#+END_QUOTE
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :demand t
@@ -1290,9 +1289,9 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
+    :hook (lsp-mode . lsp-mode-which-key-integration)
     :commands lsp)
 
-  ;; optionally
   (use-package lsp-ui
     :commands lsp-ui-mode
     :custom
@@ -1306,34 +1305,9 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     (lsp-ui-sideline-show-code-actions nil))
 
   (use-package company-lsp :commands company-lsp)
-  ;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-  ;; optionally if you want to use debugger
   (use-package dap-mode)
-
-
-  ;; (use-package company-lsp)
-  ;;   ;; :after (company-mode)
-
-  ;; (use-package lsp-ui
-  ;;   :after (flycheck-mode))
-
-  ;; (use-package lsp-mode
-  ;;   :config
-  ;;   (require 'lsp-clients))
-
-  ;; lsp extras
-  ;; (use-package lsp-ui
-  ;;   :after (lsp-mode)
-  ;;   :hook (lsp-mode . lsp-ui-mode)
-  ;;   :config
-  ;;   (setq lsp-ui-sideline-ignore-duplicate t
-  ;;         lsp-ui-flycheck-enable t))
-
-  ;; (use-package company-lsp
-  ;;   :after (lsp-mode company-mode)
-  ;;   :config
-  ;;   (push 'company-lsp company-backends))
 #+END_SRC
 *** smartparens
 autocomplete for brackets
