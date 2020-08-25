@@ -45,7 +45,7 @@ Set up =straight.el= instead of the built-in =package.el= to manage my packages.
 Using straight because:
 - it allows me to exactly reproduce my config on other machines, it creates a =default.el= file that acts as a lockfile for package versions
 - it gets the latest package versions from git
-- it's intregated well with =use-package=
+- it's integated well with =use-package=
 - I can edit package code if I want to, and straight will rebuilt the package
 - lots of other stuff, the README is quite good.
 
@@ -1758,11 +1758,12 @@ Keys
       geiser-repl-mode-hook
       hy-mode-hook
       inferior-hy-mode-hook
+      clojurescript-mode-hoook
       clojure-mode-hook))
 #+END_SRC
 
 - =show-paren-mode= highlights matching parentheses
-- =paredit= inserts matching parentheses, among other things..
+- =lispy= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
   (setq show-paren-delay 0)
   (show-paren-mode 1)
@@ -2072,7 +2073,11 @@ Use =PHP_CodeSniffer= to format files on save.
 #+BEGIN_SRC emacs-lisp
   (use-package psysh)
 #+END_SRC
-
+*** Latex
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package auctex)
+  ;; (use-package company-auctex)
+#+END_SRC
 * TODO Things to do
 An on-going list of things I want to change
 
