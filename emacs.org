@@ -1396,11 +1396,11 @@ use git in emacs!
       "gS" 'magit-stage-file
       "gU" 'magit-unstage-file
       "gg" 'hydra-my-git-menu/body
-      "gy" 'magit-yank-branch-name)
+      "gy" 'my/magit-yank-branch-name)
     :custom
     (magit-completing-read-function 'ivy-completing-read)
     :config
-    (defun magit-yank-branch-name ()
+    (defun my/magit-yank-branch-name ()
       "Show the current branch in the echo-area and add it to the `kill-ring'."
       (interactive)
       (let ((branch (magit-get-current-branch)))
@@ -1550,7 +1550,7 @@ Use python 3 by default
 Connect to a slime repl that can control stumpwm
 #+BEGIN_SRC emacs-lisp
   (when (eq window-system 'x)
-    (defun stumpwm-connect ()
+    (my/defun stumpwm-connect ()
       (interactive)
       (slime-connect "localhost" "4004")
       ;; select the window
