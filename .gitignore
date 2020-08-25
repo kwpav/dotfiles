@@ -17,6 +17,7 @@ emacs-local.el
 /emacs/.emacs.d/etc
 /emacs/.emacs.d/straight/build
 /emacs/.emacs.d/straight/repos
+/emacs/.emacs.d/straight/modified
 
 # qtile ignores
 /qtile/.config/qtile/__pycache__
