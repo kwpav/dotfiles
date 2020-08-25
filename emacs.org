@@ -1463,6 +1463,26 @@ Taken from the doom-emacs config.
       "XXX....."
       "XXXX...."))
 #+END_SRC
+*** git-link
+Get the URLs for links/commits/repo homepages. This is useful for PRs and tickets when you need to link to a certain line of code.
+
+#+begin_src emacs-lisp
+  (use-package git-link
+    :general
+    (my-leader-def
+      "gl" '(:ignore t :wk "git link")
+      "gll" 'git-link
+      "glc" 'git-link-commit
+      "glh" 'git-link-homepage))
+#+end_src
+*** browse-at-remote
+This is almost the opposite of =git-link=, it will open selected line(s) on the remote (e.g. github).
+#+begin_src emacs-lisp
+  (use-package browse-at-remote
+    :general
+    (my-leader-def
+      "glg" 'browse-at-remote))
+#+end_src
 *** My Git Hydra
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-my-git-menu (global-map "<f7>"
