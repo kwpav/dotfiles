@@ -1291,20 +1291,21 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
   (setq lsp-keymap-prefix "C-l")
 
   (use-package lsp-mode
-    :hook (lsp-mode . lsp-mode-which-key-integration)
+    :hook (lsp-mode . lsp-enable-which-key-integration)
     :commands lsp)
 
   (use-package lsp-ui
     :commands lsp-ui-mode
-    :custom
-    (lsp-ui-doc-enable t)
-    (lsp-ui-doc-header t)
-    (lsp-ui-doc-include-signature t)
-    (lsp-ui-doc-position 'top)
-    (lsp-ui-doc-border (face-foreground 'default))
-    (lsp-ui-sideline-enable t)
-    (lsp-ui-sideline-ignore-duplicate t)
-    (lsp-ui-sideline-show-code-actions nil))
+    ;; :custom
+    ;; (lsp-ui-doc-enable t)
+    ;; (lsp-ui-doc-header t)
+    ;; (lsp-ui-doc-include-signature t)
+    ;; (lsp-ui-doc-position 'top)
+    ;; (lsp-ui-doc-border (face-foreground 'default))
+    ;; (lsp-ui-sideline-enable t)
+    ;; (lsp-ui-sideline-ignore-duplicate t)
+    ;; (lsp-ui-sideline-show-code-actions nil)
+    )
 
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
@@ -1550,7 +1551,7 @@ Use python 3 by default
 Connect to a slime repl that can control stumpwm
 #+BEGIN_SRC emacs-lisp
   (when (eq window-system 'x)
-    (my/defun stumpwm-connect ()
+    (defun my/stumpwm-connect ()
       (interactive)
       (slime-connect "localhost" "4004")
       ;; select the window
@@ -1969,7 +1970,12 @@ Set up =prettier-js-mode=
   (use-package json-mode
     :mode "\\.json\\'")
 #+END_SRC
-**** TODO TypeScript
+**** CURRENT TypeScript
+#+begin_src emacs-lisp
+  (use-package typescript-mode
+    :mode "\\.ts$"
+    :hook (typescript-mode . lsp))
+#+end_src
 #+BEGIN_SRC emacs-lisp
   ;; (use-package tide
   ;;   :config
