@@ -2046,7 +2046,8 @@ Set up web mode for html and css files
     :preface
     (defun my-php-hook ()
       (php-enable-default-coding-style)
-      (smartparens-mode t))
+      (smartparens-mode t)
+      (lsp))
     (defun my/align-php-dbl-arrow ()
       "Align the => in arrays."
       (interactive)
@@ -2068,20 +2069,20 @@ Set up web mode for html and css files
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
 #+BEGIN_SRC emacs-lisp
-  (use-package php-eldoc
-    :after (php-mode))
+  ;; (use-package php-eldoc
+  ;;   :after (php-mode))
 #+END_SRC
 
 Setup code completion and documentation.
 #+BEGIN_SRC emacs-lisp
-  (use-package company-php
-    :after (php-eldoc)
-    :hook (php-mode . my-company-php-hook)
-    :preface
-    (defun my-company-php-hook ()
-      (ac-php-core-eldoc-setup)
-      (make-local-variable 'company-backends)
-      (add-to-list 'company-backends 'company-ac-php-backend)))
+  ;; (use-package company-php
+  ;;   :after (php-eldoc)
+  ;;   :hook (php-mode . my-company-php-hook)
+  ;;   :preface
+  ;;   (defun my-company-php-hook ()
+  ;;     (ac-php-core-eldoc-setup)
+  ;;     (make-local-variable 'company-backends)
+  ;;     (add-to-list 'company-backends 'company-ac-php-backend)))
 #+END_SRC
 
 Use =PHP_CodeSniffer= to format files on save.
@@ -2104,6 +2105,11 @@ Use =PHP_CodeSniffer= to format files on save.
   ;; (use-package auctex)
   ;; (use-package company-auctex)
 #+END_SRC
+*** YAML
+For editing =.yml= files
+#+begin_src emacs-lisp
+  (use-package yaml-mode)
+#+end_src
 * TODO Things to do
 An on-going list of things I want to change
 
