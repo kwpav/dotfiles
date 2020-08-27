@@ -38,7 +38,8 @@ zstyle ':completion:*:*:xdvi:*' menu yes select
 zstyle ':completion:*:*:xdvi:*' file-sort time
 
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$HOME/.config/composer/vendor/bin:$PATH"
-export npm_config_prefix=~/.node_modules
+
+source /usr/share/nvm/init-nvm.sh
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
