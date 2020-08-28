@@ -39,7 +39,12 @@ zstyle ':completion:*:*:xdvi:*' file-sort time
 
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$HOME/.config/composer/vendor/bin:$PATH"
 
-source /usr/share/nvm/init-nvm.sh
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    source /usr/share/nvm/init-nvm.sh
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+fi
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -72,7 +72,13 @@ you can avoid having to complete at all in many cases, but if you do, you might 
 
 Set up =nvm= to use different verions of node
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-  source /usr/share/nvm/init-nvm.sh
+
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+      source /usr/share/nvm/init-nvm.sh
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+      export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+  fi
 #+END_SRC
 
 * Plugins
