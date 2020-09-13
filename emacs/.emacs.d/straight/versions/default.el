@@ -18,6 +18,7 @@
  ("diminish.el" . "6ec6ebc391371418efc6c98d70b013f34af5a2ee")
  ("dired-git-info" . "b47f2b0c3a6cb9b7a62a4ee2605a492e512d40a9")
  ("diredfl" . "cd052dfef602fe79d8dfbcf9f06e6da74412218b")
+ ("dockerfile-mode" . "d31f7685ebc5832d957e25070a930aa42984327d")
  ("doom-modeline" . "aa056cfca639c9c41306fad9f5eb502cffc7fc1a")
  ("dumb-jump" . "0d74b2f2aa834b602e91d99e9cb23197a389f042")
  ("editorconfig-emacs" . "9bc1343ce8bd2cc84bf04b58a053b7ec700244c0")

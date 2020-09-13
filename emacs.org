@@ -2120,6 +2120,13 @@ For editing =.yml= files
 #+begin_src emacs-lisp
   (use-package yaml-mode)
 #+end_src
+*** Docker
+Docker setup
+
+Get syntax highlighting for Dockerfiles
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode)
+#+end_src
 * TODO Things to do
 An on-going list of things I want to change
 
