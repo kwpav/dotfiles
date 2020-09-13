@@ -41,6 +41,7 @@
  ("f.el" . "1814209e2ff43cf2e6d38c4cd476218915f550fb")
  ("flycheck" . "806f2a8c21231a0dddd0a48d27fa4021729ee365")
  ("fringe-helper.el" . "ef4a9c023bae18ec1ddd7265f1f2d6d2e775efdd")
+ ("gcmh" . "b1bde5089169a74f62033d027e06e98cbeedd43f")
  ("geiser" . "2accab72e289ed82707237d2013ba034c88ff6c2")
  ("general.el" . "a0b17d207badf462311b2eef7c065b884462cb7c")
  ("git-gutter" . "2c3242116a42dbbe30fc0844d1ec3c41074cdaba")

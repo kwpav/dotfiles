@@ -23,27 +23,6 @@ Who am I?
   (setq user-full-name "Kevin Pavao"
         user-mail-address "kpavao84@gmail.com")
 #+END_SRC
-** Garbage Collection
-Modify garbage collection. This is supposed to speed things up a bit.
-#+BEGIN_SRC emacs-lisp
-  (setq gc-cons-threshold 100000000)
-  (defvar gc-timer nil)
-  (defun maybe-gc ()
-    (let ((original gc-cons-threshold))
-      (setq gc-cons-threshold 800000)
-      (setq gc-cons-threshold original
-            gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
-
-  (defun schedule-maybe-gc ()
-    (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
-
-  (schedule-maybe-gc)
-#+END_SRC
-
-Increase the amount of data which Emacs reads from the process. Again the emacs default is too low 4k considering that the some of the language server responses are in 800k - 3M range.
-#+begin_src emacs-lisp
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
-#+end_src
 ** Package Setup
 Set up =straight.el= instead of the built-in =package.el= to manage my packages.
 
@@ -137,6 +116,40 @@ Display the scratch buffer when starting up, use =org-mode= for the scratch buff
          initial-major-mode 'org-mode
          initial-scratch-message nil)
 #+END_SRC
+
+** Garbage Collection
+Modify garbage collection. This is supposed to speed things up a bit.
+#+BEGIN_SRC emacs-lisp
+  (use-package gcmh
+    :hook (after-init . gcmh-mode))
+#+END_SRC
+
+Increase the amount of data which Emacs reads from the process. Again the emacs default is too low 4k considering that the some of the language server responses are in 800k - 3M range.
+#+begin_src emacs-lisp
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+#+end_src
+
+*** OLD Garbage Collection
+#+BEGIN_SRC emacs-lisp
+  ;; (setq gc-cons-threshold 100000000)
+  ;; (defvar gc-timer nil)
+  ;; (defun maybe-gc ()
+  ;;   (let ((original gc-cons-threshold))
+  ;;     (setq gc-cons-threshold 800000)
+  ;;     (setq gc-cons-threshold original
+  ;;           gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
+
+  ;; (defun schedule-maybe-gc ()
+  ;;   (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
+
+  ;; (schedule-maybe-gc)
+#+END_SRC
+
+#+begin_src emacs-lisp
+  ;;(use-package gcmh
+  ;;  :hook (after-init . gcmh-mode))
+#+end_src
+
 ** Core
 Things that modify or replace the core functionality of Emacs, or are needed by the rest of the config.
 *** Saner Defaults
@@ -480,12 +493,12 @@ Using the default keybinding of ~C-;~.
 Hide the gui and use a non-blinking cursor for a more zen-like experience.
 Use C-mouse3 to open the menu-bar as a popup menu
 #+BEGIN_SRC emacs-lisp
-  (menu-bar-mode -99)
-  (tool-bar-mode -1) ;; hide the toolbar
-  (scroll-bar-mode -1) ;; hide the scrollbar
+  ;; (menu-bar-mode -99)
+  ;; (tool-bar-mode -1) ;; hide the toolbar
+  ;; (scroll-bar-mode -1) ;; hide the scrollbar
   (blink-cursor-mode 0) ;; dont blink the cursor
-  (set-fringe-mode '(10 . 0)) ;; remove the extra border around frames
-  (global-hl-line-mode 1) ;; highlight the current line
+  ;; (set-fringe-mode '(10 . 0)) ;; remove the extra border around frames
+  ;; (global-hl-line-mode 1) ;; highlight the current line
 #+END_SRC
 *** Theme
 Theme I'm currently using
@@ -1292,6 +1305,14 @@ Setup for Microsoft's (GASP!) Language Server Protocol. Any language that needs 
 The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc.
 #+END_QUOTE
 
+TODO
+look into these
+lsp enable-file-watchers
+lsp-file-watch-threshold
+lsp-file-watch-ignored
+
+
+
 #+BEGIN_SRC emacs-lisp
   (setq lsp-keymap-prefix "C-l")
 
@@ -1646,6 +1667,16 @@ Use =pipenv= to handle virtual environments
     :init
     (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
 #+END_SRC
+
+Use =lsp-jedi= for the =jedi-language-server=
+#+begin_src emacs-lisp
+  ;; (use-package lsp-jedi
+  ;;   :ensure t
+  ;;   :config
+  ;;   (with-eval-after-load "lsp-mode"
+  ;;     (add-to-list 'lsp-disabled-clients 'pyls)
+  ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
+#+end_src
 ***** Elpy - OLD
 trying out LSP instead of elpy, keeping this in case I want to go back.
 
