@@ -2,7 +2,7 @@
  
 * emacs.org
 ** What is this?
-This is my emacs configuration in org-mode using org-babel. It's loaded using =(org-babel-load-file "~/dotfiles/emacs.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as:
+This is my emacs configuration in =org-mode=. It's loaded using =(org-babel-load-file "~/dotfiles/emacs.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as:
 - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's config]]
 - [[https://github.com/TheBB/dotemacs][TheBB's config]]
 - [[https://github.com/jwiegley/dot-emacs][jwiegly's config]]
@@ -10,8 +10,8 @@ This is my emacs configuration in org-mode using org-babel. It's loaded using =(
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 - [[https://github.com/MatthewZMD/.emacs.d#org0f80f62][M-EMACS]]
 ** How to Add/Modify
-To add a code block, type =<s= and press ~tab~, this adds a code block. Type =emacs-lisp= after =#BEGIN_SRC= to ensure the correct language.
-To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away. Use =eval-buffer= to test the changes, and press ~C-c '~ again to add the changes to the org file.
+To add a code block, type =<el= and press ~tab~, this adds an =emacs-lisp= code block.
+To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away. Use ~SPC m e b~ to =eval-buffer= and implement the changes. Save or clear the changes with evil's =:w=, =:x=, or =:q=.
 * Emacs
 Lexical binding is supposed to make stuff faster
 #+BEGIN_SRC emacs-lisp
@@ -299,7 +299,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
     (which-key-mode)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0)
+    (setq which-key-idle-delay 0.1)
     ;; (which-key-add-key-based-replacements "SPC w" "windows")
     ;; (which-key-add-key-based-replacements "SPC b" "buffers")
     ;; (which-key-add-key-based-replacements "SPC p" "projects")
@@ -457,7 +457,6 @@ Add find and replace info to the modeline.
 *** Undo
 Replace standard Emacs undo with =undo-tree=. Press ~C-x u~ to use =undo-tree=. and ~q~ to quit.
 
-This way I can use evil's undo (~u~ in Normal mode) and =undo-tree= at the same time.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :diminish undo-tree-mode
@@ -611,12 +610,12 @@ You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the 
 
 =column-number-mode= displays the cursors current line on the modeline
 #+BEGIN_SRC emacs-lisp
-  (defun my-doom-modeline-hook ()
+  (defun my-doom-modeline-setup ()
     (column-number-mode)
     (doom-modeline-mode 1))
 
   (use-package doom-modeline
-    :hook (window-setup . my-doom-modeline-hook)
+    :init (my-doom-modeline-setup)
     :custom
     (doom-modeline-vcs-max-length 50)
     (doom-modeline-buffer-file-name-style 'truncate-upto-project))
@@ -826,101 +825,69 @@ this is modified from [[https://github.com/ogdenwebb/snug-emacs][ogdenwebb/snug-
                             telephone-line-airline-position-segment))
             (blue-accent . (telephone-line-atom-encoding-segment)))))
 #+END_SRC
-**** COMMENT spaceline
-Add an animated nyan-cat to indicate the buffer position, because why not?
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package nyan-mode
-  ;;   :init
-  ;;   (setq nyan-wavy-trail t)
-  ;;   :config
-  ;;   (nyan-mode 1)
-  ;;   (nyan-start-animation))
-#+END_SRC
-
-spacemacs modeline settings
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package spaceline
-
-  ;; (use-package spaceline-config
-  ;;   :straight spaceline
-  ;;   :config
-  ;;   ;; (setq powerline-default-separator 'wave)
-  ;;   ;; (setq powerline-default-separator 'alternate)
-  ;;   ;; (setq powerline-default-separator 'arrow)
-  ;;   ;; (setq powerline-default-separator 'arrow-fade)
-  ;;   ;; (setq powerline-default-separator 'box)
-  ;;   ;; (setq powerline-default-separator 'brace)
-  ;;   ;; (setq powerline-default-separator 'butt)
-  ;;   ;; (setq powerline-default-separator 'chamfer)
-  ;;   ;; (setq powerline-default-separator 'contour)
-  ;;   ;; (setq powerline-default-separator 'curve)
-  ;;   ;; (setq powerline-default-separator 'rounded)
-  ;;   ;; (setq powerline-default-separator 'roundstub)
-  ;;   ;; (setq powerline-default-separator 'wave)
-  ;;   ;; (setq powerline-default-separator 'zigzag)
-  ;;   ;; (setq powerline-default-separator 'utf-8)
-
-  ;;   (setq powerline-default-separator 'bar)
-  ;;   (spaceline-spacemacs-theme)
-  ;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-  ;;   (setq spaceline-workspace-numbers-unicode t)
-  ;;   (setq spaceline-window-numbers-unicode t))
-#+END_SRC
-
 **** COMMENT My custom modeline
+From various places, like:
+- https://occasionallycogent.com/custom_emacs_modeline/index.html
+- https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
 #+BEGIN_SRC emacs-lisp
-  ;; (setq-default mode-line-format
-  ;;               (list
-  ;;      "-- "
-  ;;      ;; the buffer name; the file name as a tool tip
-  ;;      '(:eval (propertize "%b " 'face 'font-lock-keyword-face
-  ;;                         'help-echo (buffer-file-name)))
+  (setq-default
+   mode-line-format
+   (list
+    '(:eval (propertize evil-mode-line-tag
+                        'face 'font-lock-preprocessor-face))
+    " "
 
-  ;;     ;; the current major mode for the buffer.
-  ;;      "["
+    mode-line-misc-info ; for eyebrowse
 
-  ;;      '(:eval (propertize "%m" 'face 'font-lock-string-face
-  ;;                          'help-echo buffer-file-coding-system))
-  ;;      " -"
-  ;;      minor-mode-alist ;; the minor modes for the current buffer
-  ;;      "] "
+    ;; the buffer name; the file name as a tool tip
+    '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+                        'help-echo (buffer-file-name)))
 
-  ;;      "[" ;; insert vs overwrite mode, input-method in a tooltip
-  ;;      '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
-  ;;             'face 'font-lock-preprocessor-face
-  ;;             'help-echo (concat "Buffer is in "
-  ;;                             (if overwrite-mode "overwrite" "insert") " mode")))
+    ;; the current major mode for the buffer.
+    "["
 
-  ;;      ;; was this buffer modified since the last save?
-  ;;      '(:eval (when (buffer-modified-p)
-  ;;             (concat ","  (propertize "Mod"
-  ;;             'face 'font-lock-warning-face
-  ;;                               'help-echo "Buffer has been modified"))))
+    '(:eval (propertize "%m" 'face 'font-lock-string-face
+                        'help-echo buffer-file-coding-system))
+    ;;" -"
+    ;;minor-mode-alist ;; the minor modes for the current buffer
+    "] "
 
-  ;;      ;; is this buffer read-only?
-  ;;      '(:eval (when buffer-read-only
-  ;;                (concat ","  (propertize "RO"
-  ;;                               'face 'font-lock-type-face
-  ;;                               'help-echo "Buffer is read-only"))))
-  ;;      "] "
+    "[" ;; insert vs overwrite mode, input-method in a tooltip
+    '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+                        'face 'font-lock-preprocessor-face
+                        'help-echo (concat "Buffer is in "
+                                           (if overwrite-mode "overwrite" "insert") " mode")))
 
-  ;;      ;; line and column
-  ;;      "(" ;; '%02' to set to 2 chars at least; prevents flickering
-  ;;        (propertize "%02l" 'face 'font-lock-type-face) ","
-  ;;        (propertize "%02c" 'face 'font-lock-type-face)
-  ;;      ") "
+    ;; was this buffer modified since the last save?
+    '(:eval (when (buffer-modified-p)
+              (concat ","  (propertize "Mod"
+                                       'face 'font-lock-warning-face
+                                       'help-echo "Buffer has been modified"))))
 
-  ;;      ;; '(:eval (list (nyan-create)))
+    ;; is this buffer read-only?
+    '(:eval (when buffer-read-only
+              (concat ","  (propertize "RO"
+                                       'face 'font-lock-type-face
+                                       'help-echo "Buffer is read-only"))))
+    "] "
 
-  ;;      ;; relative position, size of file
-  ;;      "["
-  ;;      (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
-  ;;      ;;"/"
-  ;;      ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
-  ;;      "] "
+    ;; line and column
+    "(" ;; '%02' to set to 2 chars at least; prevents flickering
+    (propertize "%02l" 'face 'font-lock-type-face) ","
+    (propertize "%02c" 'face 'font-lock-type-face)
+    ") "
 
-  ;;      " %-" ;; fill with '-'
-  ;;      ))
+    ;; '(:eval (list (nyan-create)))
+
+    ;; relative position, size of file
+    "["
+    (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+    ;;"/"
+    ;;(propertize "%I" 'face 'font-lock-constant-face) ;; size
+    "] "
+
+    ;;" %-" ;; fill with '-'
+    ))
 #+END_SRC
 
 ****** TODO make the color of the bar change when switching between evil modes
@@ -1056,7 +1023,7 @@ Eyebrowse provides a way to manage workspaces like tiling window managers.
 *** windmove
 Windmove provides a way to move around emacs windows.
 
-Default keybindings are: S-arrowkey (e.g. S-Left) to move around
+Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
 #+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings)
 #+END_SRC
@@ -1124,7 +1091,7 @@ A lot of this stuff is from:
 The prettify hook:
 - =turn-on-visual-line-mode= for visual word wrap
 - =variable-pitch-mode= to use a non =monospaced= font
-- =org-bullets= provides good looking bullets for the header
+- =org-bullets= provides good looking bullets for headers
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify-hook ()
     (turn-on-visual-line-mode)
@@ -1227,7 +1194,7 @@ Needed by =pelican= and =nikola=
 #+END_SRC
 
 *** Structure Templates
-Add structure templates, e.g. type <el ~TAB~ for =#+BEGIN_SRC emacs-lisp #+END_SRC=
+Add structure templates, e.g. type =<el= ~TAB~ for =#+BEGIN_SRC emacs-lisp #+END_SRC=
 Existing templates for reference:
 - https://orgmode.org/manual/Easy-templates.html
 
@@ -1243,7 +1210,7 @@ Put it all together with =use-package=.
 
 The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 
-*NOTE* Using the built in org version because =org-indent-mode= and my agenda are not working with the latest version
+*NOTE* Using the built in org version.
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :straight nil
@@ -2014,7 +1981,7 @@ Set up =prettier-js-mode=
   (use-package json-mode
     :mode "\\.json\\'")
 #+END_SRC
-**** CURRENT TypeScript
+**** TypeScript
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :mode "\\.ts$"
@@ -2160,6 +2127,11 @@ Docker setup
 Get syntax highlighting for Dockerfiles
 #+begin_src emacs-lisp
   (use-package dockerfile-mode)
+#+end_src
+
+Use =docker= commands in emacs
+#+begin_src emacs-lisp
+  (use-package docker)
 #+end_src
 * TODO Things to do
 An on-going list of things I want to change
