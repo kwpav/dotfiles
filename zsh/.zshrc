@@ -20,6 +20,8 @@ setopt extended_glob
 # autocompletion of command line switches for aliases
 setopt COMPLETE_ALIASES
 
+kitty + complete setup zsh | source /dev/stdin
+
 zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' menu select
 

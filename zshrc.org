@@ -28,6 +28,11 @@ Set up the history file.
   setopt COMPLETE_ALIASES
 #+END_SRC
 
+Completion for kitty
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  kitty + complete setup zsh | source /dev/stdin
+#+END_SRC
+
 Autocompletion of privileged environments in privileged commands, e.g. sudo
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   zstyle ':completion::complete:*' gain-privileges 1
