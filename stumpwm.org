@@ -155,9 +155,11 @@ Set up how everything looks.
 Set up the wallpaper
 
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (run-shell-command "xsetroot -solid \"#2E3440\"" )
+  ;; (run-shell-command "xsetroot -solid \"#2E3440\"" )
   ;; (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
-  ;; (run-shell-command "nitrogen --set-centered ~/wallpapers/jerrygarcia_2880x1800.png")
+  (run-shell-command "nitrogen --set-centered --head=0 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png && nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
+  ;; (run-shell-command "nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
+  ;; (run-shell-command "nitrogen --restore &")
 #+END_SRC
 
 ** Font

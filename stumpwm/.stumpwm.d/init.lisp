@@ -104,9 +104,11 @@
 
 (define-key *top-map* (kbd "s-ESC") "my-power-menu")
 
-(run-shell-command "xsetroot -solid \"#2E3440\"" )
+;; (run-shell-command "xsetroot -solid \"#2E3440\"" )
 ;; (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
-;; (run-shell-command "nitrogen --set-centered ~/wallpapers/jerrygarcia_2880x1800.png")
+(run-shell-command "nitrogen --set-centered --head=0 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png && nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
+;; (run-shell-command "nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
+;; (run-shell-command "nitrogen --restore &")
 
 (ql:quickload "clx-truetype")
 (load-module "ttf-fonts")
