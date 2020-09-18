@@ -435,8 +435,8 @@ Make =ivy= look a bit nicer
     (ivy-rich-mode 1)
     (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 #+END_SRC
+
 *** Search / Replace
-**** swiper
 Replace keybindings for emacs search and evil search with swiper.
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
@@ -445,7 +445,7 @@ Replace keybindings for emacs search and evil search with swiper.
     ("C-s" 'swiper)
     (evil-normal-state-map "/" 'swiper))
 #+END_SRC
-**** anzu
+
 Add find and replace info to the modeline.
 #+BEGIN_SRC emacs-lisp
   (use-package anzu
@@ -1656,7 +1656,7 @@ trying out LSP instead of elpy, keeping this in case I want to go back.
   ;;   :config
   ;;   (elpy-enable))
 #+END_SRC
-*** C#
+*** COMMENT C#
 #+BEGIN_SRC emacs-lisp
   ;; (use-package csharp-mode
   ;;   :init
@@ -1747,7 +1747,6 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
 #+END_SRC
 *** Lisp
 **** Keys
-Keys
 #+BEGIN_SRC emacs-lisp
   (my-local-leader-def
     :keymaps 'emacs-lisp-mode-map
@@ -2122,8 +2121,6 @@ For editing =.yml= files
   (use-package yaml-mode)
 #+end_src
 *** Docker
-Docker setup
-
 Get syntax highlighting for Dockerfiles
 #+begin_src emacs-lisp
   (use-package dockerfile-mode)
@@ -2135,7 +2132,8 @@ Use =docker= commands in emacs
 #+end_src
 * TODO Things to do
 An on-going list of things I want to change
-
+- [ ] Look into the build in =js-mode= in place of =js2-mode= and =rjsx=, it can now work with =jsx= files
+- [ ] Look into =web-mode= for =tsx= files
 - [-] make org prettier [1/2]
   + [ ] fix =company= results in =variable-pitch-mode=
   + [X] bullets?
@@ -2144,8 +2142,6 @@ An on-going list of things I want to change
   - this looks cool too https://addons.mozilla.org/en-US/firefox/addon/org-capture/
 - [ ] Configure C#
   + use the C# lsp??
-- [ ] fix =eslint= for lsp if possible
-  + eslint works fine without the =lsp-javascript-typescript=
 - [ ] setup =forge= to replace =magithub=
 - [ ] window management hydra?
 - [-] telephone-line [3/6]
@@ -2161,13 +2157,7 @@ An on-going list of things I want to change
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent
-- [ ] new org fixes [0/2]
-  - [ ] custom structure templates arent loading
-    - this is working in version 9.2.5
-      - will probably need to use =org-tempo= and fix this again whenever i update org
-    - use yasnippet?
-  - [ ] figure out why org agenda isnt working in 9.2.5 or 9.2.6
-    - it works with the built-in version of org, using that for now
+  - [ ] lsp!
 
 ** Cool looking packages to check out
 - =purpose= - https://github.com/bmag/emacs-purpose
