@@ -1790,7 +1790,8 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
       hy-mode-hook
       inferior-hy-mode-hook
       clojurescript-mode-hoook
-      clojure-mode-hook))
+      clojure-mode-hook
+      cider-repl-mode-hook))
 #+END_SRC
 
 - =show-paren-mode= highlights matching parentheses
@@ -1854,7 +1855,12 @@ Let's get hy. A lisp for Python.
 
 CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
 #+BEGIN_SRC emacs-lisp
-  (use-package cider)
+  (use-package cider
+    :general
+    (my-local-leader-def 'cider-mode-map
+      "er" 'cider-eval-region
+      "eb" 'cider-eval-buffer
+      "el" 'cider-eval-last-sexp))
 #+END_SRC
 *** Haskell
 For xmonad and beyond
