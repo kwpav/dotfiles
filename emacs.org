@@ -1281,8 +1281,6 @@ lsp enable-file-watchers
 lsp-file-watch-threshold
 lsp-file-watch-ignored
 
-
-
 #+BEGIN_SRC emacs-lisp
   (setq lsp-keymap-prefix "C-l")
 
@@ -2076,7 +2074,7 @@ Set up web mode for html and css files
      "C-c a" 'my/align-php-dbl-arrow)
     (my-local-leader-def 'php-mode-map
       "a" 'my/align-php-dbl-arrow
-      "j" 'ac-php-find-symbol-at-point)
+      "j" 'lsp-find-definition)
     :custom
     ;; align -> on successive lines
     (php-lineup-cascaded-calls t)
