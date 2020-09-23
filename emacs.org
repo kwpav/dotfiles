@@ -1949,24 +1949,25 @@ Now setup packages that will be used for all the lisp modes above.
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+end_src
-**** Scheme
-=geiser= provides a nice repl for *scheme* and other things
+**** Clojure
 #+BEGIN_SRC emacs-lisp
-  (use-package geiser
+  (use-package clojure-mode
+    :defer t)
+#+END_SRC
+
+CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
+
+=cider-repl-set-ns= sets the repl's namespace (ns) to the current file so you can eval and then use functions without adding the ns
+#+BEGIN_SRC emacs-lisp
+  (use-package cider
     :defer t
     :general
-    (my-local-leader-def
-      :keymaps 'scheme-mode-map
-      "r" 'run-geiser
-      "er" 'geiser-eval-region
-      "eR" 'geiser-eval-region-and-go
-      "eb" 'geiser-eval-buffer
-      "eB" 'geiser-eval-buffer-and-go
-      "ed" 'geiser-eval-definition
-      "eD" 'geiser-eval-definition-and-go
-      "el" 'geiser-eval-eval-sexp)
-    :custom
-    (geiser-active-implementations '(guile mit racket)))
+    (my-local-leader-def 'cider-mode-map
+      "r" 'cider
+      "n" 'cider-repl-set-ns
+      "er" 'cider-eval-region
+      "eb" 'cider-eval-buffer
+      "el" 'cider-eval-last-sexp))
 #+END_SRC
 **** Common Lisp
 Using this to mess with stumpwm right now.
@@ -2000,21 +2001,24 @@ Let's get hy. A lisp for Python.
       "el" 'hy-shell-eval-last-sexp
       "ed" 'hy-shell-eval-current-form))
 #+END_SRC
-**** Clojure
+**** Scheme
+=geiser= provides a nice repl for *scheme* and other things
 #+BEGIN_SRC emacs-lisp
-  (use-package clojure-mode
-    :defer t)
-#+END_SRC
-
-CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
-#+BEGIN_SRC emacs-lisp
-  (use-package cider
+  (use-package geiser
     :defer t
     :general
-    (my-local-leader-def 'cider-mode-map
-      "er" 'cider-eval-region
-      "eb" 'cider-eval-buffer
-      "el" 'cider-eval-last-sexp))
+    (my-local-leader-def
+      :keymaps 'scheme-mode-map
+      "r" 'run-geiser
+      "er" 'geiser-eval-region
+      "eR" 'geiser-eval-region-and-go
+      "eb" 'geiser-eval-buffer
+      "eB" 'geiser-eval-buffer-and-go
+      "ed" 'geiser-eval-definition
+      "eD" 'geiser-eval-definition-and-go
+      "el" 'geiser-eval-eval-sexp)
+    :custom
+    (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
 *** PHP
 #+BEGIN_SRC emacs-lisp
