@@ -308,19 +308,7 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
     (which-key-mode)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0.1)
-    ;; (which-key-add-key-based-replacements "SPC w" "windows")
-    ;; (which-key-add-key-based-replacements "SPC b" "buffers")
-    ;; (which-key-add-key-based-replacements "SPC p" "projects")
-    ;; (which-key-add-key-based-replacements "SPC b" "buffers")
-    ;; (which-key-add-key-based-replacements "SPC r" "bookmarks")
-    ;; (which-key-add-key-based-replacements "SPC t" "terminal")
-    ;; (which-key-add-key-based-replacements "SPC g" "magit")
-    ;; (which-key-add-key-based-replacements "SPC j" "dumb-jump")
-    ;; (which-key-add-key-based-replacements "SPC jg" "go")
-    (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
-    (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
-    (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC m e" "eval"))
+    (setq which-key-idle-delay 0))
 #+END_SRC
 **** hydra
 Add a zoom hydra from hydras github and a =straight= hydra from its github.
@@ -1879,14 +1867,22 @@ All lisp languages have a set of shared keys:
 | Key       | Command        |
 |-----------+----------------|
 | SPC m e b | eval buffer    |
-| SPC e l   | eval last sexp |
-| SPC e d   | eval defun     |
-| SPC e r   | eval region    |
+| SPC m e l | eval last sexp |
+| SPC m e d | eval defun     |
+| SPC m e r | eval region    |
 
 Some languages have some more, but those are the base keys for all lisps.
 
+Replace =+prefix=  with =+eval= in =which-key= for =SPC m e=
+#+begin_src emacs-lisp
+  (which-key-add-major-mode-key-based-replacements 'clojure-mode "SPC m e" "eval")
+  (which-key-add-major-mode-key-based-replacements 'emacs-lisp-mode "SPC m e" "eval")
+  (which-key-add-major-mode-key-based-replacements 'hy-mode "SPC m e" "eval")
+  (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
+  (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
+#+end_src
 **** Shared
-Setup for all lisp modes.
+Shared setup for all lisp modes.
 
 A list of all lisp modes that I use. This is used with =:ghook= to enable =lispy= in all of these modes.
 #+BEGIN_SRC emacs-lisp
@@ -1924,7 +1920,6 @@ Now setup packages that will be used for all the lisp modes above.
     ("}" 'lispy-brackets)
     (";" 'lispy-comment))
 #+END_SRC
-
 **** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
   (my-local-leader-def
@@ -1960,9 +1955,9 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
 =cider-repl-set-ns= sets the repl's namespace (ns) to the current file so you can eval and then use functions without adding the ns
 #+BEGIN_SRC emacs-lisp
   (use-package cider
-    :defer t
+    :after clojure-mode
     :general
-    (my-local-leader-def 'cider-mode-map
+    (my-local-leader-def 'clojure-mode-map
       "r" 'cider
       "n" 'cider-repl-set-ns
       "er" 'cider-eval-region
