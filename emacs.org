@@ -1314,9 +1314,6 @@ Some handy links
 autocomplete for brackets
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
-    ;; :config
-    ;; (add-hook 'python-mode-hook (function (lambda ()
-    ;;                                         (smartparens-mode t))))
     :config
     (smartparens-global-mode))
 #+END_SRC
@@ -1766,17 +1763,6 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
     "el" 'slime-eval-last-expression
     "ed" 'slime-eval-defun
     "er" 'slime-eval-region)
-
-  (my-local-leader-def
-    :keymaps 'scheme-mode-map
-    "r" 'run-geiser
-    "er" 'geiser-eval-region
-    "eR" 'geiser-eval-region-and-go
-    "eb" 'geiser-eval-buffer
-    "eB" 'geiser-eval-buffer-and-go
-    "ed" 'geiser-eval-definition
-    "eD" 'geiser-eval-definition-and-go
-    "el" 'geiser-eval-eval-sexp)
 #+END_SRC
 **** Shared
 #+BEGIN_SRC emacs-lisp
@@ -1787,7 +1773,6 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
       geiser-repl-mode-hook
       hy-mode-hook
       inferior-hy-mode-hook
-      clojurescript-mode-hoook
       clojure-mode-hook
       cider-repl-mode-hook))
 #+END_SRC
@@ -1795,8 +1780,21 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
 - =show-paren-mode= highlights matching parentheses
 - =lispy= inserts matching parentheses, among other things..
 #+BEGIN_SRC emacs-lisp
-  (setq show-paren-delay 0)
-  (show-paren-mode 1)
+  (defun my-lisp-setup ()
+    ;; (turn-off-smartparens-mode)
+    (lispyville-mode 1)
+    (setq show-paren-delay 0)
+    (show-paren-mode 1))
+
+  (use-package lispyville)
+
+  (use-package lispy
+    :ghook my-lisp-mode-hooks
+    :gfhook #'my-lisp-setup)
+
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
   ;; (use-package paredit
   ;;   :init
@@ -1806,18 +1804,22 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
   ;;   (add-hook 'inferior-hy-mode-hook #'enable-paredit-mode)
   ;;   (add-hook 'scheme-mode-hook #'enable-paredit-mode)
   ;;   (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
-
-  (use-package lispy
-    :ghook my-lisp-mode-hooks)
-
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 **** Scheme
 =geiser= provides a nice repl for *scheme* and other things
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
+    :general
+    (my-local-leader-def
+      :keymaps 'scheme-mode-map
+      "r" 'run-geiser
+      "er" 'geiser-eval-region
+      "eR" 'geiser-eval-region-and-go
+      "eb" 'geiser-eval-buffer
+      "eB" 'geiser-eval-buffer-and-go
+      "ed" 'geiser-eval-definition
+      "eD" 'geiser-eval-definition-and-go
+      "el" 'geiser-eval-eval-sexp)
     :custom
     (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
@@ -1833,7 +1835,6 @@ Using this to mess with stumpwm right now.
     :config
     (slime-setup '(slime-company)))
 #+END_SRC
-
 **** Hy
 Let's get hy. A lisp for Python.
 #+BEGIN_SRC emacs-lisp
