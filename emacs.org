@@ -192,6 +192,12 @@ Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by
           (expand-file-name "var/" user-emacs-directory)))
 #+END_SRC
 
+=show-paren-mode= highlights matching parentheses. The default delay is annoying so change it to =0=.
+#+begin_src emacs-lisp
+  (setq show-paren-delay 0)
+  (show-paren-mode 1)
+#+end_src
+
 *** Vim Emulation
 This allows you to use emacs keybindings while in evil's insert mode.
 from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
@@ -1742,29 +1748,20 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
 #+END_SRC
 *** Lisp
 **** Keys
-#+BEGIN_SRC emacs-lisp
-  (my-local-leader-def
-    :keymaps 'emacs-lisp-mode-map
-    "eb" 'eval-buffer
-    "el" 'eval-last-sexp
-    "ed" 'eval-defun
-    "er" 'eval-region)
+All lisp languages have a set of shared keys:
+| Key       | Command        |
+|-----------+----------------|
+| SPC m e b | eval buffer    |
+| SPC e l   | eval last sexp |
+| SPC e d   | eval defun     |
+| SPC e r   | eval region    |
 
-  (my-local-leader-def
-    :keymaps 'lisp-interaction-mode-map
-    "eb" 'eval-buffer
-    "el" 'eval-last-sexp
-    "ed" 'eval-defun
-    "er" 'eval-region)
+Some languages have some more, but those are the base keys for all lisps.
 
-  (my-local-leader-def
-    :keymaps 'lisp-mode-map
-    "eb" 'slime-eval-buffer
-    "el" 'slime-eval-last-expression
-    "ed" 'slime-eval-defun
-    "er" 'slime-eval-region)
-#+END_SRC
 **** Shared
+Setup for all lisp modes.
+
+A list of all lisp modes that I use. This is used with =:ghook= to enable =lispy= in all of these modes.
 #+BEGIN_SRC emacs-lisp
   (defconst my-lisp-mode-hooks
     '(lisp-mode-hook
@@ -1777,38 +1774,59 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
       cider-repl-mode-hook))
 #+END_SRC
 
-- =show-paren-mode= highlights matching parentheses
-- =lispy= inserts matching parentheses, among other things..
+Now setup packages that will be used for all the lisp modes above.
+- =lispy= inserts matching parentheses, among other things.
+- turn off =smartparens= because it is not needed with =lispy= (it also adds pairs for single quotes, which is annoying in lisp)
+- =lispyville= makes =evil-mode= play nice with =lispy=
 #+BEGIN_SRC emacs-lisp
   (defun my-lisp-setup ()
-    ;; (turn-off-smartparens-mode)
-    (lispyville-mode 1)
-    (setq show-paren-delay 0)
-    (show-paren-mode 1))
+    (turn-off-smartparens-mode)
+    (lispyville-mode 1))
 
   (use-package lispyville)
 
   (use-package lispy
+    :defer t
     :ghook my-lisp-mode-hooks
-    :gfhook #'my-lisp-setup)
+    :gfhook #'my-lisp-setup
+    :general
+    ("\"" 'lispy-quotes)
+    ("(" 'lispy-parens)
+    (")" 'lispy-right-nostring)
+    ("{" 'lispy-braces)
+    ("}" 'lispy-brackets)
+    (";" 'lispy-comment))
+#+END_SRC
 
+**** Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+  (my-local-leader-def
+    :keymaps 'emacs-lisp-mode-map
+    "eb" 'eval-buffer
+    "el" 'eval-last-sexp
+    "ed" 'eval-defun
+    "er" 'eval-region)
+#+END_SRC
+
+#+begin_src emacs-lisp
+  (my-local-leader-def
+    :keymaps 'lisp-interaction-mode-map
+    "eb" 'eval-buffer
+    "el" 'eval-last-sexp
+    "ed" 'eval-defun
+    "er" 'eval-region)
+#+end_src
+
+#+begin_src emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-
-  ;; (use-package paredit
-  ;;   :init
-  ;;   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-  ;;   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-  ;;   (add-hook 'hy-mode-hook #'enable-paredit-mode)
-  ;;   (add-hook 'inferior-hy-mode-hook #'enable-paredit-mode)
-  ;;   (add-hook 'scheme-mode-hook #'enable-paredit-mode)
-  ;;   (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode))
-#+END_SRC
+#+end_src
 **** Scheme
 =geiser= provides a nice repl for *scheme* and other things
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
+    :defer t
     :general
     (my-local-leader-def
       :keymaps 'scheme-mode-map
@@ -1827,6 +1845,14 @@ Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Inde
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
   (use-package slime
+    :defer t
+    :general
+    (my-local-leader-def
+      :keymaps 'lisp-mode-map
+      "eb" 'slime-eval-buffer
+      "el" 'slime-eval-last-expression
+      "ed" 'slime-eval-defun
+      "er" 'slime-eval-region)
     :custom
     (inferior-lisp-program "/usr/bin/sbcl")
     (slime-contribs '(slime-fancy)))
@@ -1849,12 +1875,14 @@ Let's get hy. A lisp for Python.
 #+END_SRC
 **** Clojure
 #+BEGIN_SRC emacs-lisp
-  (use-package clojure-mode)
+  (use-package clojure-mode
+    :defer t)
 #+END_SRC
 
 CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
 #+BEGIN_SRC emacs-lisp
   (use-package cider
+    :defer t
     :general
     (my-local-leader-def 'cider-mode-map
       "er" 'cider-eval-region
@@ -2137,6 +2165,7 @@ Use =docker= commands in emacs
 #+end_src
 * TODO Things to do
 An on-going list of things I want to change
+- [ ] Figure out why =lispy= doesn't bind its keys correctly, e.g. =(= to =lispy-parens=
 - [ ] Look into the build in =js-mode= in place of =js2-mode= and =rjsx=, it can now work with =jsx= files
 - [ ] Look into =web-mode= for =tsx= files
 - [-] make org prettier [1/2]
@@ -2185,7 +2214,6 @@ An on-going list of things I want to change
 - =evil-escape=
 - =evil-indent=
 - =emacs-libvterm= - https://github.com/akermu/emacs-libvterm
-- =lispyville= - safe paren editing for evil, uses lispy?
 - =prescient= - sorts candiates in ivy, company, etc
 - =ivy-posframe= - load ivy in a popup frame type thing
 - =company-box= show cool icons in company results
