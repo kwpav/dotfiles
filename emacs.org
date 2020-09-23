@@ -1341,7 +1341,8 @@ Use snippets in specific modes
 
 Install the official snippets
 #+BEGIN_SRC emacs-lisp
-  (use-package yasnippet-snippets)
+  (use-package yasnippet-snippets
+    :after yasnippet)
 #+END_SRC
 *** editorconfig
 Use editorconfig for projects that have them
@@ -2016,32 +2017,39 @@ Let's get hy. A lisp for Python.
     (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
 *** PHP
+Setup the default coding style and LSP for php. Need to set =lsp-enable-file-watchers= to nil because the project has a large amount of files and it causes performance issues.
+#+begin_src emacs-lisp
+      (defun my-php-setup ()
+        (php-enable-default-coding-style)
+        (setq lsp-enable-file-watchers nil)
+        (lsp))
+#+end_src
+
+Align the ==>= in arrays
+#+begin_src emacs-lisp
+  (defun my/align-php-dbl-arrow ()
+    "Align the => in arrays."
+    (interactive)
+    (align-regexp
+     (region-beginning) (region-end)
+     "\\(\\s-*\\) => " 1 0 nil))
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
-  (use-package php-mode
-    :mode "\\.php\\'"
-    :hook (php-mode . my-php-hook)
-    :preface
-    (defun my-php-hook ()
-      (php-enable-default-coding-style)
-      (smartparens-mode t)
-      (lsp))
-    (defun my/align-php-dbl-arrow ()
-      "Align the => in arrays."
-      (interactive)
-      (align-regexp
-       (region-beginning) (region-end)
-       "\\(\\s-*\\) => " 1 0 nil))
-    :general
-    (general-define-key
-     :keymaps 'php-mode-map
-     "C-c a" 'my/align-php-dbl-arrow)
-    (my-local-leader-def 'php-mode-map
-      "a" 'my/align-php-dbl-arrow
-      "j" 'lsp-find-definition)
-    :custom
-    ;; align -> on successive lines
-    (php-lineup-cascaded-calls t)
-    (flycheck-phpcs-standard "WellspringCodingStandard"))
+   (use-package php-mode
+     :mode "\\.php\\'"
+     :hook (php-mode . my-php-setup)
+     :general
+     (general-define-key
+      :keymaps 'php-mode-map
+      "C-c a" 'my/align-php-dbl-arrow)
+     (my-local-leader-def 'php-mode-map
+       "a" 'my/align-php-dbl-arrow
+       "j" 'lsp-find-definition)
+     :custom
+     ;; align -> on successive lines
+     (php-lineup-cascaded-calls t)
+     (flycheck-phpcs-standard "WellspringCodingStandard"))
 #+END_SRC
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
