@@ -9,10 +9,15 @@ This is my emacs configuration in =org-mode=. It's loaded using =(org-babel-load
 - [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 - [[https://github.com/MatthewZMD/.emacs.d#org0f80f62][M-EMACS]]
+
+It is divided into two major parts:
+1. *Emacs* - settings and packages that change how emacs works/looks/etc
+2. *Languages* - setup for programming languages
 ** How to Add/Modify
 To add a code block, type =<el= and press ~tab~, this adds an =emacs-lisp= code block.
 To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away. Use ~SPC m e b~ to =eval-buffer= and implement the changes. Save or clear the changes with evil's =:w=, =:x=, or =:q=.
 * Emacs
+** Lexical binding
 Lexical binding is supposed to make stuff faster
 #+BEGIN_SRC emacs-lisp
 ;;; -*- lexical-binding: t; -*-
@@ -30,8 +35,8 @@ Using straight because:
 - it allows me to exactly reproduce my config on other machines, it creates a =default.el= file that acts as a lockfile for package versions
 - it gets the latest package versions from git
 - it's integated well with =use-package=
-- I can edit package code if I want to, and straight will rebuilt the package
-- lots of other stuff, the README is quite good.
+- I can edit package code if I want to, and straight will rebuild the package
+- lots of other stuff, the README is quite good
 
 Use the develop branch, this needs to be set before the bootstrap code below.
 #+BEGIN_SRC emacs-lisp
@@ -78,7 +83,7 @@ Install =ensure-system-package=
 #+BEGIN_SRC emacs-lisp
   (use-package use-package-ensure-system-package)
 #+END_SRC
-*** OLD package.el config
+*** COMMENT OLD package.el config
 Keeping this for historical purposes
 
 Setup the package repositories.
@@ -116,7 +121,6 @@ Display the scratch buffer when starting up, use =org-mode= for the scratch buff
          initial-major-mode 'org-mode
          initial-scratch-message nil)
 #+END_SRC
-
 ** Garbage Collection
 Modify garbage collection. This is supposed to speed things up a bit.
 #+BEGIN_SRC emacs-lisp
@@ -128,8 +132,7 @@ Increase the amount of data which Emacs reads from the process. Again the emacs 
 #+begin_src emacs-lisp
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 #+end_src
-
-*** OLD Garbage Collection
+*** COMMENT OLD Garbage Collection
 #+BEGIN_SRC emacs-lisp
   ;; (setq gc-cons-threshold 100000000)
   ;; (defvar gc-timer nil)
@@ -197,7 +200,6 @@ Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by
   (setq show-paren-delay 0)
   (show-paren-mode 1)
 #+end_src
-
 *** Vim Emulation
 This allows you to use emacs keybindings while in evil's insert mode.
 from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
@@ -210,6 +212,7 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
 Evil mode is vim in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package evil
+    :defer t
     :custom
     (evil-want-keybinding nil)  ;; evil-collection assumes this
     :config
@@ -254,7 +257,7 @@ This creates a =leader=, which allows you to set up custom keys after pressing a
 - Keys for all modes appear after pressing ~SPC~ in normal and visual mode, or ~M-SPC~ in everything else.
 - Mode specific keys appear after pressing ~SPC m~ in normal and visual mode, or ~M-,~ in everything else.
 
-It also a =:general= use-package keyword, so this needs to be setup before that is used anywhere.
+It also adds a =:general= use-package keyword, so this needs to be setup before that is used anywhere.
 
 #+BEGIN_SRC emacs-lisp
   (use-package general
@@ -320,6 +323,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
     (which-key-add-major-mode-key-based-replacements 'emacs-lispmode "SPC m e" "eval"))
 #+END_SRC
 **** hydra
+Add a zoom hydra from hydras github and a =straight= hydra from its github.
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
     :config
@@ -346,11 +350,7 @@ It also a =:general= use-package keyword, so this needs to be setup before that 
       ("P" straight-pull-package)
       ("m" straight-merge-all)
       ("M" straight-merge-package)
-      ("n" straight-
-
-       normalize
-
-       -all)
+      ("n" straight-normalize-all)
       ("N" straight-normalize-package)
       ("u" straight-push-all)
       ("U" straight-push-package)
@@ -937,24 +937,6 @@ Add rainbow delimiters in all programming language modes
     (highlight-indent-guides-delay 0))
 #+END_SRC
 *** Other stuff
-Add a space between the line numbers and the text
-From https://www.emacswiki.org/emacs/LineNumbers
-#+BEGIN_SRC emacs-lisp
-  ;; (add-hook 'linum-before-numbering-hook
-  ;;           (lambda ()
-  ;;             (setq-local linum-format-fmt
-  ;;                         (let ((w (length (number-to-string
-  ;;                                           (count-lines (point-min) (point-max))))))
-  ;;                           (concat "%" (number-to-string w) "d")))))
-
-  ;; (defun linum-format-func (line)
-  ;;   (concat
-  ;;    (propertize (format linum-format-fmt line) 'face 'linum)
-  ;;    (propertize " " 'face 'mode-line)))
-
-  ;; (setq linum-format 'linum-format-func)
-#+END_SRC
-
 Remove black stuff around the edges
 #+BEGIN_SRC emacs-lisp
   (setq frame-resize-pixelwise t)
@@ -1565,7 +1547,8 @@ The local file contains machine specific stuff, eg for my home and my work confi
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file "~/dotfiles/emacs-local.org")
 #+END_SRC
-** Mail
+** COMMENT Mail
+I need to re-set this up on OSX .
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e
     :straight nil
@@ -1612,52 +1595,14 @@ make reveal.js presentations in org mode
 #+END_SRC
 * Languages
 Configuration for programming languages
-*** Python
-For =flycheck= to work, install =flake8=.
-
-LSP uses the [[https://github.com/palantir/python-language-server][palantir python language server]] (pyls).
+*** C
+Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Indenting C]]
 #+BEGIN_SRC emacs-lisp
-  (use-package python
-    ;; :mode "\\.py\\'"
-    :ghook
-    ('python-mode-hook #'lsp)
-    ('python-mode-hook #'smartparens-mode)
-    :general
-    (my-local-leader-def 'python-mode-map
-      "er" 'python-shell-send-region
-      "eb" 'python-shell-send-buffer
-      "ef" 'python-shell-send-file
-      "es" 'python-shell-send-string))
-#+END_SRC
-
-Use =pipenv= to handle virtual environments
-#+BEGIN_SRC emacs-lisp
-  (use-package pipenv
-    :hook ((python-mode . pipenv-mode)
-           (hy-mode . pipenv-mode))
-    :init
-    (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
-#+END_SRC
-
-Use =lsp-jedi= for the =jedi-language-server=
-#+begin_src emacs-lisp
-  ;; (use-package lsp-jedi
-  ;;   :ensure t
-  ;;   :config
-  ;;   (with-eval-after-load "lsp-mode"
-  ;;     (add-to-list 'lsp-disabled-clients 'pyls)
-  ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
-#+end_src
-***** Elpy - OLD
-trying out LSP instead of elpy, keeping this in case I want to go back.
-
-[[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package elpy
-  ;;   :config
-  ;;   (elpy-enable))
+  (setq c-default-style "linux"
+        c-basic-offset 4)
 #+END_SRC
 *** COMMENT C#
+I don't really use C# anymore, but I should re-set this up at some point.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package csharp-mode
   ;;   :init
@@ -1739,156 +1684,20 @@ taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-con
   (setq omnisharp-auto-complete-want-documentation nil)
 #+END_SRC
 
-*** C
-***** TODO set this up using use-package
-Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Indenting C]]
-#+BEGIN_SRC emacs-lisp
-  (setq c-default-style "linux"
-        c-basic-offset 4)
-#+END_SRC
-*** Lisp
-**** Keys
-All lisp languages have a set of shared keys:
-| Key       | Command        |
-|-----------+----------------|
-| SPC m e b | eval buffer    |
-| SPC e l   | eval last sexp |
-| SPC e d   | eval defun     |
-| SPC e r   | eval region    |
+*** Docker
+Docker is not necessarily a programming langage, but....
 
-Some languages have some more, but those are the base keys for all lisps.
-
-**** Shared
-Setup for all lisp modes.
-
-A list of all lisp modes that I use. This is used with =:ghook= to enable =lispy= in all of these modes.
-#+BEGIN_SRC emacs-lisp
-  (defconst my-lisp-mode-hooks
-    '(lisp-mode-hook
-      emacs-lisp-mode-hook
-      scheme-mode-hook
-      geiser-repl-mode-hook
-      hy-mode-hook
-      inferior-hy-mode-hook
-      clojure-mode-hook
-      cider-repl-mode-hook))
-#+END_SRC
-
-Now setup packages that will be used for all the lisp modes above.
-- =lispy= inserts matching parentheses, among other things.
-- turn off =smartparens= because it is not needed with =lispy= (it also adds pairs for single quotes, which is annoying in lisp)
-- =lispyville= makes =evil-mode= play nice with =lispy=
-#+BEGIN_SRC emacs-lisp
-  (defun my-lisp-setup ()
-    (turn-off-smartparens-mode)
-    (lispyville-mode 1))
-
-  (use-package lispyville)
-
-  (use-package lispy
-    :defer t
-    :ghook my-lisp-mode-hooks
-    :gfhook #'my-lisp-setup
-    :general
-    ("\"" 'lispy-quotes)
-    ("(" 'lispy-parens)
-    (")" 'lispy-right-nostring)
-    ("{" 'lispy-braces)
-    ("}" 'lispy-brackets)
-    (";" 'lispy-comment))
-#+END_SRC
-
-**** Emacs Lisp
-#+BEGIN_SRC emacs-lisp
-  (my-local-leader-def
-    :keymaps 'emacs-lisp-mode-map
-    "eb" 'eval-buffer
-    "el" 'eval-last-sexp
-    "ed" 'eval-defun
-    "er" 'eval-region)
-#+END_SRC
-
+=Dockerfile= is
 #+begin_src emacs-lisp
-  (my-local-leader-def
-    :keymaps 'lisp-interaction-mode-map
-    "eb" 'eval-buffer
-    "el" 'eval-last-sexp
-    "ed" 'eval-defun
-    "er" 'eval-region)
-#+end_src
-
-#+begin_src emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-#+end_src
-**** Scheme
-=geiser= provides a nice repl for *scheme* and other things
-#+BEGIN_SRC emacs-lisp
-  (use-package geiser
-    :defer t
-    :general
-    (my-local-leader-def
-      :keymaps 'scheme-mode-map
-      "r" 'run-geiser
-      "er" 'geiser-eval-region
-      "eR" 'geiser-eval-region-and-go
-      "eb" 'geiser-eval-buffer
-      "eB" 'geiser-eval-buffer-and-go
-      "ed" 'geiser-eval-definition
-      "eD" 'geiser-eval-definition-and-go
-      "el" 'geiser-eval-eval-sexp)
-    :custom
-    (geiser-active-implementations '(guile mit racket)))
-#+END_SRC
-**** Common Lisp
-Using this to mess with stumpwm right now.
-#+BEGIN_SRC emacs-lisp
-  (use-package slime
-    :defer t
-    :general
-    (my-local-leader-def
-      :keymaps 'lisp-mode-map
-      "eb" 'slime-eval-buffer
-      "el" 'slime-eval-last-expression
-      "ed" 'slime-eval-defun
-      "er" 'slime-eval-region)
-    :custom
-    (inferior-lisp-program "/usr/bin/sbcl")
-    (slime-contribs '(slime-fancy)))
-
-  (use-package slime-company
-    :config
-    (slime-setup '(slime-company)))
-#+END_SRC
-**** Hy
-Let's get hy. A lisp for Python.
-#+BEGIN_SRC emacs-lisp
-  (use-package hy-mode
-    :mode "\\.hy\\'"
-    :general
-    (my-local-leader-def 'hy-mode-map
-      "er" 'hy-shell-eval-region
-      "eb" 'hy-shell-eval-buffer
-      "el" 'hy-shell-eval-last-sexp
-      "ed" 'hy-shell-eval-current-form))
-#+END_SRC
-**** Clojure
-#+BEGIN_SRC emacs-lisp
-  (use-package clojure-mode
+  (use-package dockerfile-mode
     :defer t)
-#+END_SRC
+#+end_src
 
-CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
-#+BEGIN_SRC emacs-lisp
-  (use-package cider
-    :defer t
-    :general
-    (my-local-leader-def 'cider-mode-map
-      "er" 'cider-eval-region
-      "eb" 'cider-eval-buffer
-      "el" 'cider-eval-last-sexp))
-#+END_SRC
+Use =docker= commands in emacs
+#+begin_src emacs-lisp
+  (use-package docker
+    :defer t)
+#+end_src
 *** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
@@ -2050,6 +1859,7 @@ Dont need too much here because it uses =js2-mode= where most of the config is d
 Setup up a javascript repl using =skewer=
 #+BEGIN_SRC emacs-lisp
   (use-package skewer-mode
+    :defer t
     :ghook ('js2-mode-hook)
     :general
     (my-local-leader-def 'js2-mode-map
@@ -2058,28 +1868,153 @@ Setup up a javascript repl using =skewer=
 #+END_SRC
 
 To use, =M-x run-skewer= and then =M-x skewer-repl=
-*** Web Mode
-Set up web mode for html and css files
+*** COMMENT Latex
 #+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :preface
-    (defun my-web-mode-hook ()
-      ;; set the html indent to 2
-      (setq web-mode-markup-indent-offset 2)
-      (setq evil-shift-width 2)
-      ;; highlight matching elements in html
-      (setq web-mode-enable-current-element-highlight 1))
-    :hook (web-mode . my-web-mode-hook)
-    :init
-    ;; (setq web-mode-ac-sources-alist
-    ;;       '(("css" . (ac-source-css-property))
-    ;;         ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-    (add-hook 'web-mode-before-auto-complete-hooks
-              '(lambda ()
-                 (let ((web-mode-cur-language
-                        (web-mode-language-at-pos))))))
-    (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
-    (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode)))
+  ;; (use-package auctex)
+  ;; (use-package company-auctex)
+#+END_SRC
+*** Lisp
+**** Keys
+All lisp languages have a set of shared keys:
+| Key       | Command        |
+|-----------+----------------|
+| SPC m e b | eval buffer    |
+| SPC e l   | eval last sexp |
+| SPC e d   | eval defun     |
+| SPC e r   | eval region    |
+
+Some languages have some more, but those are the base keys for all lisps.
+
+**** Shared
+Setup for all lisp modes.
+
+A list of all lisp modes that I use. This is used with =:ghook= to enable =lispy= in all of these modes.
+#+BEGIN_SRC emacs-lisp
+  (defconst my-lisp-mode-hooks
+    '(lisp-mode-hook
+      emacs-lisp-mode-hook
+      scheme-mode-hook
+      geiser-repl-mode-hook
+      hy-mode-hook
+      inferior-hy-mode-hook
+      clojure-mode-hook
+      cider-repl-mode-hook))
+#+END_SRC
+
+Now setup packages that will be used for all the lisp modes above.
+- =lispy= inserts matching parentheses, among other things.
+- turn off =smartparens= because it is not needed with =lispy= (it also adds pairs for single quotes, which is annoying in lisp)
+- =lispyville= makes =evil-mode= play nice with =lispy=
+#+BEGIN_SRC emacs-lisp
+  (defun my-lisp-setup ()
+    (turn-off-smartparens-mode)
+    (lispyville-mode 1))
+
+  (use-package lispyville)
+
+  (use-package lispy
+    :defer t
+    :ghook my-lisp-mode-hooks
+    :gfhook #'my-lisp-setup
+    :general
+    ("\"" 'lispy-quotes)
+    ("(" 'lispy-parens)
+    (")" 'lispy-right-nostring)
+    ("{" 'lispy-braces)
+    ("}" 'lispy-brackets)
+    (";" 'lispy-comment))
+#+END_SRC
+
+**** Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+  (my-local-leader-def
+    :keymaps 'emacs-lisp-mode-map
+    "eb" 'eval-buffer
+    "el" 'eval-last-sexp
+    "ed" 'eval-defun
+    "er" 'eval-region)
+#+END_SRC
+
+#+begin_src emacs-lisp
+  (my-local-leader-def
+    :keymaps 'lisp-interaction-mode-map
+    "eb" 'eval-buffer
+    "el" 'eval-last-sexp
+    "ed" 'eval-defun
+    "er" 'eval-region)
+#+end_src
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+#+end_src
+**** Scheme
+=geiser= provides a nice repl for *scheme* and other things
+#+BEGIN_SRC emacs-lisp
+  (use-package geiser
+    :defer t
+    :general
+    (my-local-leader-def
+      :keymaps 'scheme-mode-map
+      "r" 'run-geiser
+      "er" 'geiser-eval-region
+      "eR" 'geiser-eval-region-and-go
+      "eb" 'geiser-eval-buffer
+      "eB" 'geiser-eval-buffer-and-go
+      "ed" 'geiser-eval-definition
+      "eD" 'geiser-eval-definition-and-go
+      "el" 'geiser-eval-eval-sexp)
+    :custom
+    (geiser-active-implementations '(guile mit racket)))
+#+END_SRC
+**** Common Lisp
+Using this to mess with stumpwm right now.
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :defer t
+    :general
+    (my-local-leader-def
+      :keymaps 'lisp-mode-map
+      "eb" 'slime-eval-buffer
+      "el" 'slime-eval-last-expression
+      "ed" 'slime-eval-defun
+      "er" 'slime-eval-region)
+    :custom
+    (inferior-lisp-program "/usr/bin/sbcl")
+    (slime-contribs '(slime-fancy)))
+
+  (use-package slime-company
+    :config
+    (slime-setup '(slime-company)))
+#+END_SRC
+**** Hy
+Let's get hy. A lisp for Python.
+#+BEGIN_SRC emacs-lisp
+  (use-package hy-mode
+    :mode "\\.hy\\'"
+    :general
+    (my-local-leader-def 'hy-mode-map
+      "er" 'hy-shell-eval-region
+      "eb" 'hy-shell-eval-buffer
+      "el" 'hy-shell-eval-last-sexp
+      "ed" 'hy-shell-eval-current-form))
+#+END_SRC
+**** Clojure
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :defer t)
+#+END_SRC
+
+CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
+#+BEGIN_SRC emacs-lisp
+  (use-package cider
+    :defer t
+    :general
+    (my-local-leader-def 'cider-mode-map
+      "er" 'cider-eval-region
+      "eb" 'cider-eval-buffer
+      "el" 'cider-eval-last-sexp))
 #+END_SRC
 *** PHP
 #+BEGIN_SRC emacs-lisp
@@ -2141,27 +2076,82 @@ Use =PHP_CodeSniffer= to format files on save.
 
 =psysh= is a php repl
 #+BEGIN_SRC emacs-lisp
-  (use-package psysh)
+  (use-package psysh
+    :defer t)
 #+END_SRC
-*** Latex
+*** Python
+For =flycheck= to work, install =flake8=.
+
+LSP uses the [[https://github.com/palantir/python-language-server][palantir python language server]] (pyls).
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package auctex)
-  ;; (use-package company-auctex)
+  (use-package python
+    :mode "\\.py\\'"
+    :ghook
+    ('python-mode-hook #'lsp)
+    :general
+    (my-local-leader-def 'python-mode-map
+      "er" 'python-shell-send-region
+      "eb" 'python-shell-send-buffer
+      "ef" 'python-shell-send-file
+      "es" 'python-shell-send-string))
+#+END_SRC
+
+Use =pipenv= to handle virtual environments
+#+BEGIN_SRC emacs-lisp
+  (use-package pipenv
+    :hook ((python-mode . pipenv-mode)
+           (hy-mode . pipenv-mode))
+    :init
+    (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
+#+END_SRC
+
+Use =lsp-jedi= for the =jedi-language-server=
+#+begin_src emacs-lisp
+  ;; (use-package lsp-jedi
+  ;;   :ensure t
+  ;;   :config
+  ;;   (with-eval-after-load "lsp-mode"
+  ;;     (add-to-list 'lsp-disabled-clients 'pyls)
+  ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
+#+end_src
+***** Elpy - OLD
+trying out LSP instead of elpy, keeping this in case I want to go back.
+
+[[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package elpy
+  ;;   :config
+  ;;   (elpy-enable))
+#+END_SRC
+*** Web Mode
+Set up web mode for html and css files
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :defer t
+    :preface
+    (defun my-web-mode-hook ()
+      ;; set the html indent to 2
+      (setq web-mode-markup-indent-offset 2)
+      (setq evil-shift-width 2)
+      ;; highlight matching elements in html
+      (setq web-mode-enable-current-element-highlight 1))
+    :hook (web-mode . my-web-mode-hook)
+    :init
+    ;; (setq web-mode-ac-sources-alist
+    ;;       '(("css" . (ac-source-css-property))
+    ;;         ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+    (add-hook 'web-mode-before-auto-complete-hooks
+              '(lambda ()
+                 (let ((web-mode-cur-language
+                        (web-mode-language-at-pos))))))
+    (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
+    (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode)))
 #+END_SRC
 *** YAML
 For editing =.yml= files
 #+begin_src emacs-lisp
-  (use-package yaml-mode)
-#+end_src
-*** Docker
-Get syntax highlighting for Dockerfiles
-#+begin_src emacs-lisp
-  (use-package dockerfile-mode)
-#+end_src
-
-Use =docker= commands in emacs
-#+begin_src emacs-lisp
-  (use-package docker)
+  (use-package yaml-mode
+    :defer t)
 #+end_src
 * TODO Things to do
 An on-going list of things I want to change
