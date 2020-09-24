@@ -2017,6 +2017,23 @@ Let's get hy. A lisp for Python.
     (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
 *** PHP
+#+BEGIN_SRC emacs-lisp
+  (use-package php-mode
+    :mode "\\.php\\'"
+    :gfhook #'my-php-setup
+    :general
+    (general-define-key
+     :keymaps 'php-mode-map
+     "C-c a" 'my/align-php-dbl-arrow)
+    (my-local-leader-def 'php-mode-map
+      "a" 'my/align-php-dbl-arrow
+      "j" 'lsp-find-definition)
+    :custom
+    ;; align -> on successive lines
+    (php-lineup-cascaded-calls t)
+    (flycheck-phpcs-standard "WellspringCodingStandard"))
+#+END_SRC
+
 Setup the default coding style and LSP for php. Need to set =lsp-enable-file-watchers= to nil because the project has a large amount of files and it causes performance issues.
 #+begin_src emacs-lisp
       (defun my-php-setup ()
@@ -2034,23 +2051,6 @@ Align the ==>= in arrays
      (region-beginning) (region-end)
      "\\(\\s-*\\) => " 1 0 nil))
 #+end_src
-
-#+BEGIN_SRC emacs-lisp
-   (use-package php-mode
-     :mode "\\.php\\'"
-     :hook (php-mode . my-php-setup)
-     :general
-     (general-define-key
-      :keymaps 'php-mode-map
-      "C-c a" 'my/align-php-dbl-arrow)
-     (my-local-leader-def 'php-mode-map
-       "a" 'my/align-php-dbl-arrow
-       "j" 'lsp-find-definition)
-     :custom
-     ;; align -> on successive lines
-     (php-lineup-cascaded-calls t)
-     (flycheck-phpcs-standard "WellspringCodingStandard"))
-#+END_SRC
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
 #+BEGIN_SRC emacs-lisp
