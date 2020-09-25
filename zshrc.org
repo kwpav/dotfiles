@@ -175,6 +175,12 @@ Git aliases
   alias gss='git status -s'
 #+END_SRC
 
+Aliases to sync my KeePass db
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+alias keypush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
+alias keypull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
+#+END_SRC
+
 * Fixes
 ** Delete Key
 The delete key by default inserts a ~, this makes it act like it should

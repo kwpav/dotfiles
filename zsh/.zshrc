@@ -105,4 +105,7 @@ alias g='git'
 alias gs='git status'
 alias gss='git status -s'
 
+alias keypush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
+alias keypull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
+
 bindkey "^[[3~" delete-char
