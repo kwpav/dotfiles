@@ -1,7 +1,7 @@
 #+TITLE: zsh
 * History
 Set up the history file.
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zprofile
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   HISTFILE=~/.histfile
   HISTSIZE=1000
   SAVEHIST=1000
@@ -88,7 +88,7 @@ Set up =nvm= to use different verions of node
 
 * Plugins
 Plugins installed from =pacman= and =brew= in different locations.
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zprofile
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
       source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
       source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
