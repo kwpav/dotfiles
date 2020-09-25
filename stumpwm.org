@@ -89,7 +89,7 @@ Set up keys for stumpwm actions
   ;; frames
   (define-key *top-map* (kbd "s-o") "hsplit")
   (define-key *top-map* (kbd "s-u") "vsplit")
-  (define-key *top-map* (kbd "s-r") "remove")
+  (define-key *top-map* (kbd "s-r") "remove-split")
 #+END_SRC
 
 ** Navigation and Movement
