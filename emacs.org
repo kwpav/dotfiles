@@ -1223,13 +1223,12 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
 ** Code
 Things that are used when coding.
 *** Line Numbers
-Add line numbers everywhere
+Add line numbers to programming mode buffers. I think they look wierd in my org config due to the different sized fonts.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-  ;;(global-display-line-numbers-mode)
 #+END_SRC
 *** flycheck
-Error checking.
+Enable error checking everywhere.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :diminish flycheck-mode
@@ -1243,19 +1242,12 @@ Company provides code completion.
     :config
     (global-company-mode))
 #+END_SRC
-
 *** language server protocol
-Setup for Microsoft's (GASP!) Language Server Protocol. Any language that needs it will have =lsp-mode= enabled in the language mode's =:hook= / =:ghook=
+Setup for Microsoft's (GASP!) Language Server Protocol. Any language that uses this calls =lsp= in the language mode's =:hook= / =:ghook=
 
 #+BEGIN_QUOTE
 The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc.
 #+END_QUOTE
-
-TODO
-look into these
-lsp enable-file-watchers
-lsp-file-watch-threshold
-lsp-file-watch-ignored
 
 #+BEGIN_SRC emacs-lisp
   (setq lsp-keymap-prefix "C-l")
@@ -1267,17 +1259,7 @@ lsp-file-watch-ignored
     (lsp-completion-provider :capf))
 
   (use-package lsp-ui
-    :commands lsp-ui-mode
-    ;; :custom
-    ;; (lsp-ui-doc-enable t)
-    ;; (lsp-ui-doc-header t)
-    ;; (lsp-ui-doc-include-signature t)
-    ;; (lsp-ui-doc-position 'top)
-    ;; (lsp-ui-doc-border (face-foreground 'default))
-    ;; (lsp-ui-sideline-enable t)
-    ;; (lsp-ui-sideline-ignore-duplicate t)
-    ;; (lsp-ui-sideline-show-code-actions nil)
-    )
+    :commands lsp-ui-mode)
 
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
@@ -1902,6 +1884,7 @@ Now setup packages that will be used for all the lisp modes above.
 - =lispy= inserts matching parentheses, among other things.
 - turn off =smartparens= because it is not needed with =lispy= (it also adds pairs for single quotes, which is annoying in lisp)
 - =lispyville= makes =evil-mode= play nice with =lispy=
+
 #+BEGIN_SRC emacs-lisp
   (defun my-lisp-setup ()
     (turn-off-smartparens-mode)
@@ -1946,9 +1929,19 @@ Now setup packages that will be used for all the lisp modes above.
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+end_src
 **** Clojure
+=lsp= is using [[https://github.com/snoe/clojure-lsp][snoe/clojure-lsp]]
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
-    :defer t)
+    :hook ((clojure-mode . lsp)
+           (clojurec-mode . lsp)
+           (clojurescript-mode . lsp))
+    :config
+    (dolist (m '(clojure-mode
+                 clojurec-mode
+                 clojurescript-mode
+                 clojurex-mode))
+      (add-to-list 'lsp-language-id-configuration `(,m . "clojure")))
+    (setq lsp-enable-indentation nil))
 #+END_SRC
 
 CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
@@ -2018,7 +2011,6 @@ Let's get hy. A lisp for Python.
 #+END_SRC
 *** PHP
 I use PHP for my job, so I need to use the =WellspringCodingStandard=.
-
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :mode "\\.php\\'"
