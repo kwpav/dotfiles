@@ -1,7 +1,7 @@
-#+TITLE: ~/.zshrc
+#+TITLE: zsh
 * History
 Set up the history file.
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zprofile
   HISTFILE=~/.histfile
   HISTSIZE=1000
   SAVEHIST=1000
@@ -71,7 +71,7 @@ you can avoid having to complete at all in many cases, but if you do, you might 
 #+END_SRC
 
 * Paths
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshenv
   export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$HOME/.config/composer/vendor/bin:$PATH"
 #+END_SRC
 
@@ -88,7 +88,7 @@ Set up =nvm= to use different verions of node
 
 * Plugins
 Plugins installed from =pacman= and =brew= in different locations.
-#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zprofile
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
       source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
       source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -177,8 +177,8 @@ Git aliases
 
 Aliases to sync my KeePass db
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
-alias keypush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
-alias keypull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
+alias keepush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
+alias keepull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
 #+END_SRC
 
 * Fixes

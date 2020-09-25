@@ -1,14 +1,3 @@
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-# save each command's beginning timestamp and the duration to the history file
-setopt extended_history
-
-zstyle :compinstall filename '/home/kevin/.zshrc'
-
-# display PID when suspending processes as well
-setopt longlistjobs
-
 autoload -Uz compinit
 compinit
 
@@ -39,24 +28,11 @@ xdvi() { command xdvi ${*:-*.dvi(om[1])} }
 zstyle ':completion:*:*:xdvi:*' menu yes select
 zstyle ':completion:*:*:xdvi:*' file-sort time
 
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$HOME/.config/composer/vendor/bin:$PATH"
-
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     source /usr/share/nvm/init-nvm.sh
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-fi
-
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    # Mac OSX
-    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 fi
 
 autoload -Uz promptinit vcs_info
@@ -105,7 +81,7 @@ alias g='git'
 alias gs='git status'
 alias gss='git status -s'
 
-alias keypush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
-alias keypull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
+alias keepush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
+alias keepull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
 
 bindkey "^[[3~" delete-char

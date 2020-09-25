@@ -7,12 +7,11 @@ I am currently using:
 
 | wm (main) | [[file:stumpwm.org][StumpWM]] |
 | wm (alt)  | [[file:qtile.org][qtile]]   |
-| shell     | [[file:zshrc.org][ZSH]]     |
+| shell     | [[file:zsh.org][ZSH]]     |
 | editor    | [[file:emacs.org][Emacs]]   |
 
 * How it works
-** Org and Babel
-All configuration is done in org-mode files containing code snippets. These code snippets can be copied to a specified path using babels =tangle=.
+All configuration is done in =.org= files containing code snippets. These code snippets can be copied to a specified path using babels =tangle=.
 
 For example, if you wanted to create your StumpWM configuration file and store it in =~/dotfiles/stumpwm/.stumpwm.d/init.lisp=, you would use:
 #+BEGIN_SRC org -r -k
