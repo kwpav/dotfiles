@@ -1503,14 +1503,12 @@ Use python 3 by default
     :if (memq window-system '(x)))
 #+END_SRC
 
-Connect to a slime repl that can control stumpwm
+Connect to a sly repl that can control stumpwm
 #+BEGIN_SRC emacs-lisp
   (when (eq window-system 'x)
     (defun my/stumpwm-connect ()
       (interactive)
-      (sly-connect "localhost" "4004")
-      ;; select the window
-      ))
+      (sly-connect "localhost" "4004")))
 #+END_SRC
 
 ** Local file 
@@ -1871,6 +1869,7 @@ A list of all lisp modes that I use. This is used with =:ghook= to enable =lispy
 #+BEGIN_SRC emacs-lisp
   (defconst my-lisp-mode-hooks
     '(lisp-mode-hook
+      sly-mrepl-mode-hook
       emacs-lisp-mode-hook
       scheme-mode-hook
       geiser-repl-mode-hook
