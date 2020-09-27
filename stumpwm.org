@@ -14,8 +14,14 @@ Set the module dir to the install folder because the =contrib/= folder is provid
 
 Set up =slynk= to connect to =sly= in emacs
 From http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.html
-#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+
+In order for this to work, slynk needs to be installed
+#+begin_src lisp
   (ql:quickload "slynk")
+#+end_src
+
+Create a slynk server.
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (require :slynk)
   (defcommand stump-slynk-server () ()
     (slynk:create-server :port 4004

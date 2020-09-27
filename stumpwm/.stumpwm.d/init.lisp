@@ -2,7 +2,6 @@
 (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
 (load-module "swm-gaps")
 
-(ql:quickload "slynk")
 (require :slynk)
 (defcommand stump-slynk-server () ()
   (slynk:create-server :port 4004
