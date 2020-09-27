@@ -212,7 +212,6 @@ from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-
 Evil mode is vim in emacs!
 #+BEGIN_SRC emacs-lisp
   (use-package evil
-    :defer t
     :custom
     (evil-want-keybinding nil)  ;; evil-collection assumes this
     :config
@@ -599,7 +598,8 @@ Other fonts I like
 You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
 
 #+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons)
+  (use-package all-the-icons
+    :defer t)
 #+END_SRC
 
 =column-number-mode= displays the cursors current line on the modeline
