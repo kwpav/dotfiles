@@ -2,12 +2,13 @@
 (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
 (load-module "swm-gaps")
 
-(ql:quickload "swank")
-(require :swank)
-(swank-loader:init)
-(swank:create-server :port 4004
-                     :style swank:*communication-style*
-                     :dont-close t)
+(ql:quickload "slynk")
+(require :slynk)
+(defcommand stump-slynk-server () ()
+  (slynk:create-server :port 4004
+                       :style slynk:*communication-style*
+                       :dont-close t))
+(stump-slynk-server)
 
 (set-prefix-key (kbd "s-SPC"))
 
@@ -57,7 +58,7 @@
 ;; frames
 (define-key *top-map* (kbd "s-o") "hsplit")
 (define-key *top-map* (kbd "s-u") "vsplit")
-(define-key *top-map* (kbd "s-r") "remove")
+(define-key *top-map* (kbd "s-r") "remove-split")
 
 ;; navigation
 (define-key *top-map* (kbd "s-TAB") "fnext")
@@ -76,6 +77,17 @@
 (define-key *top-map* (kbd "s-N") "exchange-direction left")
 (define-key *top-map* (kbd "s-<") "exchange-direction up")
 (define-key *top-map* (kbd "s->") "exchange-direction right")
+;; groups
+(define-key *top-map* (kbd "s-1") "gselect 1")
+(define-key *top-map* (kbd "s-2") "gselect 2")
+(define-key *top-map* (kbd "s-3") "gselect 3")
+(define-key *top-map* (kbd "s-4") "gselect 4")
+(define-key *top-map* (kbd "s-5") "gselect 5")
+(define-key *top-map* (kbd "s-6") "gselect 6")
+(define-key *top-map* (kbd "s-7") "gselect 7")
+(define-key *top-map* (kbd "s-8") "gselect 8")
+(define-key *top-map* (kbd "s-9") "gselect 9")
+(define-key *top-map* (kbd "s-0") "gselect 0")
 (define-key *top-map* (kbd "s-!") "gmove 1")
 (define-key *top-map* (kbd "s-@") "gmove 2")
 (define-key *top-map* (kbd "s-#") "gmove 3")

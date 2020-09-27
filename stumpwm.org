@@ -12,17 +12,18 @@ Set the module dir to the install folder because the =contrib/= folder is provid
   (load-module "swm-gaps")
 #+END_SRC
 
-Set up =swank= to connect to =slime= in emacs
+Set up =slynk= to connect to =sly= in emacs
 From http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.html
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (ql:quickload "swank")
-  (require :swank)
-  (swank-loader:init)
-  (swank:create-server :port 4004
-                       :style swank:*communication-style*
-                       :dont-close t)
+  (ql:quickload "slynk")
+  (require :slynk)
+  (defcommand stump-slynk-server () ()
+    (slynk:create-server :port 4004
+                         :style slynk:*communication-style*
+                         :dont-close t))
+  (stump-slynk-server)
 #+END_SRC
-In emacs, use =M-x stumpwm-connect= to launch the repl.
+In emacs, use =M-x my/stumpwm-connect= to launch the repl.
 
 * Functionality
 Set up how everything works.
@@ -112,6 +113,17 @@ Set up keys using vim-like keybindings.
   (define-key *top-map* (kbd "s-N") "exchange-direction left")
   (define-key *top-map* (kbd "s-<") "exchange-direction up")
   (define-key *top-map* (kbd "s->") "exchange-direction right")
+  ;; groups
+  (define-key *top-map* (kbd "s-1") "gselect 1")
+  (define-key *top-map* (kbd "s-2") "gselect 2")
+  (define-key *top-map* (kbd "s-3") "gselect 3")
+  (define-key *top-map* (kbd "s-4") "gselect 4")
+  (define-key *top-map* (kbd "s-5") "gselect 5")
+  (define-key *top-map* (kbd "s-6") "gselect 6")
+  (define-key *top-map* (kbd "s-7") "gselect 7")
+  (define-key *top-map* (kbd "s-8") "gselect 8")
+  (define-key *top-map* (kbd "s-9") "gselect 9")
+  (define-key *top-map* (kbd "s-0") "gselect 0")
   (define-key *top-map* (kbd "s-!") "gmove 1")
   (define-key *top-map* (kbd "s-@") "gmove 2")
   (define-key *top-map* (kbd "s-#") "gmove 3")

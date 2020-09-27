@@ -1508,9 +1508,9 @@ Connect to a slime repl that can control stumpwm
   (when (eq window-system 'x)
     (defun my/stumpwm-connect ()
       (interactive)
-      (slime-connect "localhost" "4004")
+      (sly-connect "localhost" "4004")
       ;; select the window
-      (other-window 1)))
+      ))
 #+END_SRC
 
 ** Local file 
@@ -1959,6 +1959,20 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
       "el" 'cider-eval-last-sexp))
 #+END_SRC
 **** Common Lisp
+***** Sly
+#+begin_src emacs-lisp
+  (use-package sly
+    :defer t
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl"))
+
+  (use-package sly-quicklisp
+    :after sly)
+
+  (use-package sly-asdf
+    :after sly)
+#+end_src
+***** COMMENT Slime
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
   (use-package slime
