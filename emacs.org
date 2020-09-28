@@ -1201,6 +1201,9 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
     :gfhook
     #'my-org-prettify-hook
     :hook (org-src-mode . my-disable-flycheck-for-elisp)
+    :preface
+    (defun my-disable-flycheck-for-elisp ()
+      (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
     :custom
     (org-agenda-files (list "~/org/agenda/"))
     :config
@@ -1208,8 +1211,6 @@ The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~
     (my-org-todo-setup)
     (my-org-structure-templates))
 
-  (defun my-disable-flycheck-for-elisp ()
-    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 #+END_SRC
 *** Org Babel
 =org-babel-do-load-languages= enables languages for in-buffer evaluation
