@@ -5,11 +5,12 @@
 This is my configuration for StumpWM, a tiling window manager configured using lisp.
 
 * Set up
+Set the module directory. Using a cloned folder from github.
 Set the module dir to the install folder because the =contrib/= folder is provided with the aur package
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (in-package :stumpwm)
-  (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
-  (load-module "swm-gaps")
+  ;; (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
+  (set-module-dir (pathname-as-directory "/home/kevin/.stumpwm.d/modules"))
 #+END_SRC
 
 Set up =slynk= to connect to =sly= in emacs
@@ -25,11 +26,11 @@ Create a slynk server.
   (require :slynk)
   (defcommand stump-slynk-server () ()
     (slynk:create-server :port 4004
-                         :style slynk:*communication-style*
                          :dont-close t))
   (stump-slynk-server)
 #+END_SRC
-In emacs, use =M-x my/stumpwm-connect= to launch the repl.
+
+In emacs, use =M-x my/stumpwm-connect= to launch the repl. Set up stumpwm with =(in-package :stumpwm)= and eval away!
 
 * Functionality
 Set up how everything works.
@@ -75,7 +76,7 @@ Define commands to start up and switch to programs and set up keys.
 ** Action Keys
 Set up keys for stumpwm actions
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-  (define-key *top-map* (kbd "s-d") "exec")
+  ;; (define-key *top-map* (kbd "s-d") "exec")
   (define-key *top-map* (kbd "s-F") "fullscreen")
   (define-key *top-map* (kbd "s-w") "windowlist")
   ;; resize
@@ -88,16 +89,21 @@ Set up keys for stumpwm actions
   (define-key *top-map* (kbd "s-;") "colon")
   (define-key *top-map* (kbd "s-:") "eval")
   (define-key *top-map* (kbd "s-R") "restart-hard")
-  ;; gaps
-  (define-key *top-map* (kbd "s-g") "toggle-gaps")
   ;; modeline
   (define-key *top-map* (kbd "s-y") "mode-line")
-
   ;; frames
   (define-key *top-map* (kbd "s-o") "hsplit")
   (define-key *top-map* (kbd "s-u") "vsplit")
   (define-key *top-map* (kbd "s-r") "remove-split")
 #+END_SRC
+
+Setup for rofi
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (defcommand rofi-run () ()
+    (run-shell-command "rofi -show run"))
+
+  (define-key *top-map* (kbd "s-d") "rofi-run")
+#+end_src
 
 ** Navigation and Movement
 Set up keys using vim-like keybindings.
@@ -181,6 +187,12 @@ Set up the wallpaper
 #+END_SRC
 
 ** Font
+*** Bitmap Font
+Use a bitmap font. Check out how fonts look with the =xfontsel= program.
+#+BEGIN_SRC lisp
+  (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
+#+END_SRC
+*** COMMENT TTF Font
 Set up =ttf-fonts=. The =ttf-fonts= module requires =clx-truetype= to work
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (ql:quickload "clx-truetype")
@@ -205,11 +217,6 @@ To get a list of font families in the cache, run this from the REPL:
 To get a list of valid subfamilies for a given font:
 #+BEGIN_SRC lisp
   (clx-truetype:get-font-subfamilies "Iosevka")
-#+END_SRC
-
-I also like bitmap fonts sometimes, leaving this here in case I ever want to switch back:
-#+BEGIN_SRC lisp
-  (set-font "-*-cherry-*-*-*-*-13-*-*-*-*-*-*-*")
 #+END_SRC
 
 ** Color
@@ -333,7 +340,7 @@ Now put it all together and set up the actual output:
   - =%g= is the current group
   - =%h= is the current monitor, or head
   - =%v= lists the windows on the current head, where non-visible windows are colored the =*hidden-window-color*=
-- Right part (starts after =^>=):
+- Right part (starts after =^>=)    :
   - =%l= is network info
   - =%M= is memory info
   - =%C= is cpu info
@@ -354,7 +361,7 @@ When stumpwm starts, make the modeline appear on the current head
   ;;     (toggle-mode-line (current-screen) (current-head)))
 #+END_SRC
 
-*** Polybar
+*** COMMENT Polybar
 Was testing out polybar, may switch to it in the future. Keeping this here for reference.
 
 This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmrc
@@ -382,12 +389,31 @@ This is mostly from https://github.com/lepisma/cfg/blob/master/stumpwm/.stumpwmr
   (add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpwmgroups 1")))
 #+END_SRC
 ** Gaps
+Load the gaps module
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (load-module "swm-gaps")
+#+END_SRC
+
 Set the gap size
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
-(setf swm-gaps:*inner-gaps-size* 8)
-(setf swm-gaps:*outer-gaps-size* 10)
+  (setf swm-gaps:*inner-gaps-size* 8)
+  (setf swm-gaps:*outer-gaps-size* 10)
+#+END_SRC
+
+Turn on/off gaps with =s-g=
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (define-key *top-map* (kbd "s-g") "toggle-gaps")
 #+END_SRC
 * To Do List
+** TODO Rebuild stumpwm-git
+right now there is a bug when trying to make
+#+begin_src sh
+  make: *** No rule to make target 'debug.lisp', needed by 'stumpwm'.  Stop.
+#+end_src
+
+Seems to be a bug in the actual project, I cloned the repo and tried and got the same error as the aur package.
+** TODO Figure out why ttf-fonts breaks things
+ttf-fonts seems to have broken in a recent archlinux update
 ** TODO Resize based on window selected
 Make resize work based on the direction key pressed,
 e.g. if i'm on a window on the right, pressing =c-s-h= should grow the window to the right

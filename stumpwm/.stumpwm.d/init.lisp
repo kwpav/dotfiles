@@ -1,11 +1,10 @@
 (in-package :stumpwm)
-(set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
-(load-module "swm-gaps")
+;; (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
+(set-module-dir (pathname-as-directory "/home/kevin/.stumpwm.d/modules"))
 
 (require :slynk)
 (defcommand stump-slynk-server () ()
   (slynk:create-server :port 4004
-                       :style slynk:*communication-style*
                        :dont-close t))
 (stump-slynk-server)
 
@@ -36,7 +35,7 @@
 (define-key *top-map* (kbd "s-RET") "terminal")
 (define-key *top-map* (kbd "s-c") "terminal")
 
-(define-key *top-map* (kbd "s-d") "exec")
+;; (define-key *top-map* (kbd "s-d") "exec")
 (define-key *top-map* (kbd "s-F") "fullscreen")
 (define-key *top-map* (kbd "s-w") "windowlist")
 ;; resize
@@ -49,11 +48,8 @@
 (define-key *top-map* (kbd "s-;") "colon")
 (define-key *top-map* (kbd "s-:") "eval")
 (define-key *top-map* (kbd "s-R") "restart-hard")
-;; gaps
-(define-key *top-map* (kbd "s-g") "toggle-gaps")
 ;; modeline
 (define-key *top-map* (kbd "s-y") "mode-line")
-
 ;; frames
 (define-key *top-map* (kbd "s-o") "hsplit")
 (define-key *top-map* (kbd "s-u") "vsplit")
@@ -120,11 +116,6 @@
 (run-shell-command "nitrogen --set-centered --head=0 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png && nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
 ;; (run-shell-command "nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
 ;; (run-shell-command "nitrogen --restore &")
-
-(ql:quickload "clx-truetype")
-(load-module "ttf-fonts")
-
-(set-font (make-instance 'xft:font :family "Iosevka" :subfamily "Regular" :size 12))
 
 (setf *colors*
       '("#2E3440"                       ; black
@@ -208,5 +199,9 @@
 ;; (if (not (head-mode-line (current-head)))
 ;;     (toggle-mode-line (current-screen) (current-head)))
 
+(load-module "swm-gaps")
+
 (setf swm-gaps:*inner-gaps-size* 8)
 (setf swm-gaps:*outer-gaps-size* 10)
+
+(define-key *top-map* (kbd "s-g") "toggle-gaps")
