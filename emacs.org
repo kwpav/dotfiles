@@ -1965,6 +1965,13 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
 #+begin_src emacs-lisp
   (use-package sly
     :defer t
+    :general
+    (my-local-leader-def
+      :keymaps 'lisp-mode-map
+      "eb" 'sly-eval-buffer
+      "el" 'sly-eval-last-expression
+      "ed" 'sly-eval-defun
+      "er" 'sly-eval-region)
     :config
     (setq inferior-lisp-program "/usr/bin/sbcl"))
 
