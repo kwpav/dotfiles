@@ -302,7 +302,6 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
 **** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
-    :diminish which-key-mode
     :config
     (which-key-mode)
     (which-key-setup-minibuffer)
@@ -452,7 +451,6 @@ Replace standard Emacs undo with =undo-tree=. Press ~C-x u~ to use =undo-tree=. 
 
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
-    :diminish undo-tree-mode
     :defer t
     :config
     (setq undo-tree-visualizer-timestamps t)
@@ -1236,7 +1234,6 @@ Add line numbers to programming mode buffers. I think they look wierd in my org 
 Enable error checking everywhere.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :diminish flycheck-mode
     :config
     (global-flycheck-mode))
 #+END_SRC
