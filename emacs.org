@@ -118,8 +118,8 @@ Automatically install and then setup =use-package= and =diminish=
 Display the scratch buffer when starting up, use =org-mode= for the scratch buffer, and remove the default message.
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen t
-         initial-major-mode 'org-mode
-         initial-scratch-message nil)
+        initial-major-mode 'org-mode
+        initial-scratch-message nil)
 #+END_SRC
 ** Garbage Collection
 Modify garbage collection. This is supposed to speed things up a bit.
@@ -185,7 +185,7 @@ Don't create any extra files.
         create-lockfiles nil) ; stop creating .# files
 #+END_SRC
 
-Create a =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
+Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
 #+BEGIN_SRC emacs-lisp
   (use-package no-littering
     :init
@@ -461,6 +461,7 @@ Replace standard Emacs undo with =undo-tree=. Press ~C-x u~ to use =undo-tree=. 
 **** multiple cursors
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
+    :defer t
     :general
     (my-leader-def
       "v" 'mc/edit-lines))
@@ -475,8 +476,7 @@ Using the default keybinding of ~C-;~.
 - Edit one of the occurrences The change is applied to other occurrences simultaneously.
 - Finish - by pressing ~C-;~ again
 #+BEGIN_SRC emacs-lisp
-  (use-package iedit
-    :diminish)
+  (use-package iedit)
 #+END_SRC
 ** Look and Feel
 *** Change defaults
@@ -1184,10 +1184,11 @@ Put it all together with =use-package=.
 
 The =org-src-mode-map= bit in the =:general= block maps ~:x~ to confirm and ~:q~ to abort when editing =SRC= blocks.
 
-*NOTE* Using the built in org version.
+I dont need documentation for elisp in this config, so =my-disable-flycheck-for-elisp= disables flycheck for it.
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :straight nil
+    :defer t
+    :straight nil                         ;use built in version
     :general
     (org-src-mode-map
      [remap evil-save-and-close]          'org-edit-src-exit
