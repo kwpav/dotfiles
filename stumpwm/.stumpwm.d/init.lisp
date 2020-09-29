@@ -55,6 +55,11 @@
 (define-key *top-map* (kbd "s-u") "vsplit")
 (define-key *top-map* (kbd "s-r") "remove-split")
 
+(defcommand rofi-run () ()
+  (run-shell-command "rofi -show run"))
+
+(define-key *top-map* (kbd "s-d") "rofi-run")
+
 ;; navigation
 (define-key *top-map* (kbd "s-TAB") "fnext")
 (define-key *top-map* (kbd "s-h") "move-focus left")
