@@ -1568,13 +1568,13 @@ make reveal.js presentations in org mode
 #+END_SRC
 * Languages
 Configuration for programming languages
-*** C
+** C
 Example taken from [[https://www.emacswiki.org/emacs/IndentingC][EmacsWIki: Indenting C]]
 #+BEGIN_SRC emacs-lisp
   (setq c-default-style "linux"
         c-basic-offset 4)
 #+END_SRC
-*** COMMENT C#
+** COMMENT C#
 I don't really use C# anymore, but I should re-set this up at some point.
 #+BEGIN_SRC emacs-lisp
   ;; (use-package csharp-mode
@@ -1657,7 +1657,7 @@ taken from: https://github.com/OmniSharp/omnisharp-emacs/blob/master/example-con
   (setq omnisharp-auto-complete-want-documentation nil)
 #+END_SRC
 
-*** Docker
+** Docker
 Docker is not necessarily a programming langage, but....
 
 =Dockerfile= is
@@ -1671,15 +1671,15 @@ Use =docker= commands in emacs
   (use-package docker
     :defer t)
 #+end_src
-*** Haskell
+** Haskell
 For xmonad and beyond
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
     :mode "\\.hs\\'"
     :hook (haskell-mode . turn-on-haskell-indent))
 #+END_SRC
-*** Javascript
-**** Vanilla
+** Javascript
+*** Vanilla
 Setup for JavaScript using =js2-mode= and =LSP=.
 
 LSP mode is using =typescript-language-server=.
@@ -1698,7 +1698,7 @@ LSP mode is using =typescript-language-server=.
     ;; use eslint_d instead of eslint for faster linting
     (flycheck-javascript-eslint-executable "eslint_d"))
 #+END_SRC
-***** COMMENT JS without LSP
+**** COMMENT JS without LSP
 - autocomplete with =tern=
 - using =tide= for:
   + info in the minibuffer about the highlighted item
@@ -1790,12 +1790,12 @@ Set up =prettier-js-mode=
   ;;          (rjsx-mode . prettier-js-mode)))
 #+END_SRC
 
-**** JSON
+*** JSON
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :mode "\\.json\\'")
 #+END_SRC
-**** TypeScript
+*** TypeScript
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :mode "\\.ts$"
@@ -1820,7 +1820,7 @@ Set up =prettier-js-mode=
   ;;             (lambda ()
   ;;               (define-key tide-mode-map (kbd "<f12>") 'tide-jump-to-definition))))
 #+END_SRC
-**** React
+*** React
 =rjsx-mode= is for editing =.jsx= files
 
 Dont need too much here because it uses =js2-mode= where most of the config is done
@@ -1828,7 +1828,7 @@ Dont need too much here because it uses =js2-mode= where most of the config is d
   (use-package rjsx-mode
     :mode "\\.jsx\\'")
 #+END_SRC
-**** REPL
+*** REPL
 Setup up a javascript repl using =skewer=
 #+BEGIN_SRC emacs-lisp
   (use-package skewer-mode
@@ -1841,13 +1841,13 @@ Setup up a javascript repl using =skewer=
 #+END_SRC
 
 To use, =M-x run-skewer= and then =M-x skewer-repl=
-*** COMMENT Latex
+** COMMENT Latex
 #+BEGIN_SRC emacs-lisp
   ;; (use-package auctex)
   ;; (use-package company-auctex)
 #+END_SRC
-*** Lisp
-**** Keys
+** Lisp
+*** Keys
 All lisp languages have a set of shared keys:
 | Key       | Command        |
 |-----------+----------------|
@@ -1866,7 +1866,7 @@ Replace =+prefix=  with =+eval= in =which-key= for =SPC m e=
   (which-key-add-major-mode-key-based-replacements 'lisp-interaction-mode "SPC m e" "eval")
   (which-key-add-major-mode-key-based-replacements 'scheme-mode "SPC m e" "eval")
 #+end_src
-**** Shared
+*** Shared
 Shared setup for all lisp modes.
 
 A list of all lisp modes that I use. This is used with =:ghook= to enable =lispy= in all of these modes.
@@ -1907,7 +1907,7 @@ Now setup packages that will be used for all the lisp modes above.
     ("}" 'lispy-brackets)
     (";" 'lispy-comment))
 #+END_SRC
-**** Emacs Lisp
+*** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
   (my-local-leader-def
     :keymaps 'emacs-lisp-mode-map
@@ -1931,7 +1931,7 @@ Now setup packages that will be used for all the lisp modes above.
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+end_src
-**** Clojure
+*** Clojure
 =lsp= is using [[https://github.com/snoe/clojure-lsp][snoe/clojure-lsp]]
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
@@ -1961,8 +1961,8 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
       "eb" 'cider-eval-buffer
       "el" 'cider-eval-last-sexp))
 #+END_SRC
-**** Common Lisp
-***** Sly
+*** Common Lisp
+**** Sly
 #+begin_src emacs-lisp
   (use-package sly
     :defer t
@@ -1982,7 +1982,7 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
   (use-package sly-asdf
     :after sly)
 #+end_src
-***** COMMENT Slime
+**** COMMENT Slime
 Using this to mess with stumpwm right now.
 #+BEGIN_SRC emacs-lisp
   (use-package slime
@@ -2002,7 +2002,7 @@ Using this to mess with stumpwm right now.
     :config
     (slime-setup '(slime-company)))
 #+END_SRC
-**** Hy
+*** Hy
 Let's get hy. A lisp for Python.
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
@@ -2014,7 +2014,7 @@ Let's get hy. A lisp for Python.
       "el" 'hy-shell-eval-last-sexp
       "ed" 'hy-shell-eval-current-form))
 #+END_SRC
-**** Scheme
+*** Scheme
 =geiser= provides a nice repl for *scheme* and other things
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
@@ -2033,7 +2033,7 @@ Let's get hy. A lisp for Python.
     :custom
     (geiser-active-implementations '(guile mit racket)))
 #+END_SRC
-*** PHP
+** PHP
 I use PHP for my job, so I need to use the =WellspringCodingStandard=.
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
@@ -2085,7 +2085,7 @@ Use =PHP_CodeSniffer= to format files
   (use-package psysh
     :defer t)
 #+END_SRC
-**** COMMENT OLD company-php setup
+*** COMMENT OLD company-php setup
 keeping this here in case I want to stop using lsp
 
 Documentation in the minibuffer and with =company=. This is needed by =company-php=.
@@ -2106,7 +2106,7 @@ Setup code completion and documentation.
   ;;     (add-to-list 'company-backends 'company-ac-php-backend)))
 #+END_SRC
 
-*** Python
+** Python
 For =flycheck= to work, install =flake8=.
 
 LSP uses the [[https://github.com/palantir/python-language-server][palantir python language server]] (pyls).
@@ -2141,7 +2141,7 @@ Use =lsp-jedi= for the =jedi-language-server=
   ;;     (add-to-list 'lsp-disabled-clients 'pyls)
   ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
 #+end_src
-***** Elpy - OLD
+**** Elpy - OLD
 trying out LSP instead of elpy, keeping this in case I want to go back.
 
 [[https://github.com/jorgenschaefer/elpy][elpy]] is an "Emacs Lisp Python Environment"
@@ -2150,7 +2150,7 @@ trying out LSP instead of elpy, keeping this in case I want to go back.
   ;;   :config
   ;;   (elpy-enable))
 #+END_SRC
-*** Web Mode
+** Web Mode
 Set up web mode for html and css files
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
@@ -2174,7 +2174,7 @@ Set up web mode for html and css files
     (add-to-list `auto-mode-alist '("\\.html?\\'" . web-mode))
     (add-to-list `auto-mode-alist '("\\.css\\'" . web-mode)))
 #+END_SRC
-*** YAML
+** YAML
 For editing =.yml= files
 #+begin_src emacs-lisp
   (use-package yaml-mode
