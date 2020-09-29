@@ -118,7 +118,7 @@
 
 ;; (run-shell-command "xsetroot -solid \"#2E3440\"" )
 ;; (run-shell-command "nitrogen --set-scaled ~/wallpapers/cathedralpillars.jpg")
-(run-shell-command "nitrogen --set-centered --head=0 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png && nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
+(run-shell-command "nitrogen --set-centered --head=0 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png && nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/thanos-nord2.png")
 ;; (run-shell-command "nitrogen --set-centered --head=1 --set-color=\"#2E3440\" ~/wallpapers/silversurfer-nord.png")
 ;; (run-shell-command "nitrogen --restore &")
 
