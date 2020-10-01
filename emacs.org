@@ -20,7 +20,7 @@ To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away
 ** Lexical binding
 Lexical binding is supposed to make stuff faster
 #+BEGIN_SRC emacs-lisp
-;;; -*- lexical-binding: t; -*-
+  ;;; -*- lexical-binding: t; -*-
 #+END_SRC
 ** Personal Information
 Who am I?
@@ -1353,6 +1353,7 @@ use git in emacs!
 =magit-yank-branch-name= is from https://emacs.stackexchange.com/questions/30487/add-copy-to-kill-ring-current-branch-name-with-magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
+    :defer t
     :general
     ("C-x g" 'magit-status)
     (my-leader-def
