@@ -1,27 +1,30 @@
 #+TITLE: ~/dotfiles/stumpwm.org
 
 * stumpwm.org
-** What is this?
 This is my configuration for StumpWM, a tiling window manager configured using lisp.
 
 * Set up
-Set the module directory. Using a cloned folder from github.
-Set the module dir to the install folder because the =contrib/= folder is provided with the aur package
+Use =in-package= so I don't need to prefix everything with =stumpwm=.
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (in-package :stumpwm)
-  ;; (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
   (set-module-dir (pathname-as-directory "/home/kevin/.stumpwm.d/modules"))
 #+END_SRC
 
-Set up =slynk= to connect to =sly= in emacs
-From http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.html
+Set the module directory. This includes user contributed functionality, such as gaps, ability to use TTF fonts, modeline info, etc. I am using a cloned folder from github for this so I can pull in any updates.
+#+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
+  (set-module-dir (pathname-as-directory "/home/kevin/.stumpwm.d/modules"))
+#+END_SRC
 
-In order for this to work, slynk needs to be installed
+Set up =slynk= to connect to =sly= in Emacs. This allows me to use a REPL and/or eval lisp code to hack around with Stump in Emacs.
+
+This is mostly adopted from http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/index.html
+
+First, slynk needs to be installed.
 #+begin_src lisp
   (ql:quickload "slynk")
 #+end_src
 
-Create a slynk server.
+Now create a slynk server that Emacs can connect to.
 #+BEGIN_SRC lisp :tangle ~/dotfiles/stumpwm/.stumpwm.d/init.lisp
   (require :slynk)
   (defcommand stump-slynk-server () ()
@@ -30,7 +33,7 @@ Create a slynk server.
   (stump-slynk-server)
 #+END_SRC
 
-In emacs, use =M-x my/stumpwm-connect= to launch the repl. Set up stumpwm with =(in-package :stumpwm)= and eval away!
+In Emacs, you can use =M-x sly-connect= using port =4004= to connect. I created a function =my/stumpwm-connect= make this a little easier. Once the REPL is opened, type in =(in-package :stumpwm)= and hack away!
 
 * Functionality
 Set up how everything works.
