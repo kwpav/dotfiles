@@ -1898,22 +1898,32 @@ Now setup packages that will be used for all the lisp modes above.
 
 #+BEGIN_SRC emacs-lisp
   (defun my-lisp-setup ()
-    (turn-off-smartparens-mode)
-    (lispyville-mode 1))
+    (turn-off-smartparens-mode))
 
-  (use-package lispyville)
-
-  (use-package lispy
+  (use-package paredit
     :defer t
     :ghook my-lisp-mode-hooks
-    :gfhook #'my-lisp-setup
-    :general
-    ("\"" 'lispy-quotes)
-    ("(" 'lispy-parens)
-    (")" 'lispy-right-nostring)
-    ("{" 'lispy-braces)
-    ("}" 'lispy-brackets)
-    (";" 'lispy-comment))
+    :gfhook #'my-lisp-setup)
+
+  ;; (defun my-lisp-setup ()
+  ;;   (turn-off-smartparens-mode)
+  ;;   (lispyville-mode 1))
+
+  ;; (use-package lispyville)
+
+  ;; (use-package lispy
+  ;;   :defer t
+  ;;   :ghook my-lisp-mode-hooks
+  ;;   :gfhook #'my-lisp-setup
+  ;;   :general
+  ;;   ("\"" 'lispy-quotes)
+  ;;   ("(" 'lispy-parens)
+  ;;   (")" 'lispy-right-nostring)
+  ;;   ("}" 'lispy-brackets)
+  ;;   ("{" 'lispy-braces)
+  ;;   ("[" 'lispy-forward)
+  ;;   ("]" 'lispy-backward)
+  ;;   (";" 'lispy-comment))
 #+END_SRC
 *** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
