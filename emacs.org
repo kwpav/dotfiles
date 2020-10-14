@@ -1124,7 +1124,9 @@ Set up fonts and faces.
      '(org-level-2 ((t (:inherit outline-1 :height 1.2 :weight bold :foreground "#88c0d0"))))
      '(org-level-3 ((t (:inherit outline-1 :height 1.1 :weight bold :foreground "#81a1c1"))))
      '(org-level-4 ((t (:inherit outline-1 :height 1.0 :weight bold :foreground "#5e81ac"))))
-     '(org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold)))))
+     '(org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold))))
+     '(org-block-begin-line ((t (:inherit 'fixed-pitch :background nil))))
+     '(org-block-end-line ((t (:inherit 'org-block-begin-line)))))
     (mapc
      (lambda (face)
        (set-face-attribute face nil :inherit 'fixed-pitch))
@@ -1133,8 +1135,6 @@ Set up fonts and faces.
            'org-block
            'org-table
            'org-verbatim
-           'org-block-begin-line
-           'org-block-end-line
            'org-meta-line
            'org-document-info-keyword)))
 #+END_SRC
