@@ -2002,6 +2002,7 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
 #+BEGIN_SRC emacs-lisp
   (use-package cider
     :after clojure-mode
+    :hook (cider-repl-mode . rainbow-delimiters-mode)
     :general
     (my-local-leader-def 'clojure-mode-map
       "r" 'cider
@@ -2015,6 +2016,7 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
 #+begin_src emacs-lisp
   (use-package sly
     :defer t
+    :hook (sly-mrepl-mode . rainbow-delimiters-mode)
     :general
     (my-local-leader-def
       :keymaps 'lisp-mode-map
