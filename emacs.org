@@ -1383,6 +1383,12 @@ Get evil-mode to play nicely
   (use-package evil-magit
     :after (magit evil))
 #+END_SRC
+*** Forge
+This adds integration with github
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit)
+#+end_src
 *** COMMENT magithub
 Press ~H~ in the magit status window to get the popup for magithub.
 #+BEGIN_SRC emacs-lisp
