@@ -1528,6 +1528,37 @@ The local file contains machine specific stuff, eg for my home and my work confi
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file "~/dotfiles/emacs-local.org")
 #+END_SRC
+
+** Chat
+Configuration for the built in =erc= client.
+
+This uses IRC credentials in the =~/.authinfo= file:
+#+begin_src
+machine irc.freenode.net login <nickname> password <password> port 6697
+#+end_src
+#+begin_src emacs-lisp
+  (use-package erc
+    :ensure nil
+    :init
+    (defcustom my-irc-nick "kpav"
+      "Nickname used to log into IRC"
+      :type 'string)
+    :custom
+    (erc-autojoin-channels-alist '(("freenode.net" "#emacs" "#archlinux" "#python" "#clojure" "#hy" "#stumpwm")))
+    (erc-track-exclude-types '("NICK" "PART" "MODE" "324" "329" "332" "333" "353" "477"))
+    (erc-server-coding-system '(utf-8 . utf-8))
+    (erc-interpret-mirc-color t)
+    (erc-kill-buffer-on-part t)
+    (erc-kill-queries-on-quit t)
+    (erc-kill-server-buffer-on-quit t)
+    :config
+    (defun erc-start-or-switch ()
+      "Start ERC or switch to ERC buffer if it has started already."
+      (interactive)
+      (if (get-buffer "irc.freenode.net:6697")
+          (erc-track-switch-buffer 1)
+        (erc-tls :server "irc.freenode.net" :port 6697 :nick my-irc-nick :full-name user-full-name))))
+#+end_src
 ** COMMENT Mail
 I need to re-set this up on OSX .
 #+BEGIN_SRC emacs-lisp
