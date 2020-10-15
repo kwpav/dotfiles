@@ -1000,7 +1000,6 @@ list minor modes
 Eyebrowse provides a way to manage workspaces like tiling window managers.
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
-    :defer t
     :config
     (eyebrowse-mode t))
 #+END_SRC
@@ -1195,9 +1194,9 @@ As of Emacs 27.1, =org-tempo= is required to use these.
 #+begin_src emacs-lisp
   (defun my-org-capture-templates ()
     (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+          '(("t" "Todo" entry (file+headline "~/org/agenda/todo.org" "Tasks")
              "* TODO %?\n %i\n %a")
-            ("s" "Standup" entry (file+olp+datetree "~/org/todo.org" "Standup")
+            ("s" "Standup" entry (file+olp+datetree "~/org/agenda/todo.org" "Standup")
              "* Planned\n- %?\n %i\n %a"))))
 #+end_src
 *** Use Package
