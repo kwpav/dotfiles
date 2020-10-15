@@ -615,6 +615,7 @@ You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the 
     (doom-modeline-mode 1))
 
   (use-package doom-modeline
+    :demand t
     :init (my-doom-modeline-setup)
     :custom
     (doom-modeline-vcs-max-length 50)
@@ -999,6 +1000,7 @@ list minor modes
 Eyebrowse provides a way to manage workspaces like tiling window managers.
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
+    :defer t
     :config
     (eyebrowse-mode t))
 #+END_SRC
@@ -1032,6 +1034,7 @@ Press ~C-(~ to get git info
 Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
+    :defer t
     :config
     (projectile-global-mode))
 
@@ -1051,6 +1054,7 @@ Projectile allows some nice things for projects, such as searching for files, ma
 A file tree.
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
+    :defer t
     :general ([f8] 'treemacs))
 
   (use-package treemacs-evil
@@ -1145,9 +1149,9 @@ Provides syntax highlighting for =#+SRC= blocks in html exports.
 
 Needed by =pelican= and =nikola=
 #+BEGIN_SRC emacs-lisp
-  (use-package htmlize)
+  (use-package htmlize
+    :defer t)
 #+END_SRC
-
 *** Setup for TODOs
 - =org-use-fast-todo-selection=
   - Change the status of the todo state by pressing ~C-c C-c t <KEY>~
@@ -1301,6 +1305,7 @@ autocomplete for brackets
 Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
+    :defer t
     :general
     ("M-g o" 'dumb-jump-go-other-window)
     ("M-g j" 'dumb-jump-go)
@@ -1555,7 +1560,15 @@ machine irc.freenode.net login <nickname> password <password> port 6697
 #+end_src
 #+begin_src emacs-lisp
   (use-package erc
+    :defer t
     :ensure nil
+    :preface
+    (defun erc-start-or-switch ()
+      "Start ERC or switch to ERC buffer if it has started already."
+      (interactive)
+      (if (get-buffer "irc.freenode.net:6697")
+          (erc-track-switch-buffer 1)
+        (erc-tls :server "irc.freenode.net" :port 6697 :nick my-irc-nick :full-name user-full-name)))
     :init
     (defcustom my-irc-nick "kpav"
       "Nickname used to log into IRC"
@@ -1567,14 +1580,7 @@ machine irc.freenode.net login <nickname> password <password> port 6697
     (erc-interpret-mirc-color t)
     (erc-kill-buffer-on-part t)
     (erc-kill-queries-on-quit t)
-    (erc-kill-server-buffer-on-quit t)
-    :config
-    (defun erc-start-or-switch ()
-      "Start ERC or switch to ERC buffer if it has started already."
-      (interactive)
-      (if (get-buffer "irc.freenode.net:6697")
-          (erc-track-switch-buffer 1)
-        (erc-tls :server "irc.freenode.net" :port 6697 :nick my-irc-nick :full-name user-full-name))))
+    (erc-kill-server-buffer-on-quit t))
 #+end_src
 ** COMMENT Mail
 I need to re-set this up on OSX .
@@ -1593,7 +1599,8 @@ I need to re-set this up on OSX .
 Yo dawg, use =restart-emacs= to restart emacs within emacs.
 Using this because I'm constantly making changes to this file and sometimes I need to restart things for changes to take affect.
 #+BEGIN_SRC emacs-lisp
-  (use-package restart-emacs)
+  (use-package restart-emacs
+    :defer t)
 #+END_SRC
 *** multi-term
 run multiple terminals at once (as opposed to =M-x term=, which can only run one terminal at a time)
@@ -1609,11 +1616,14 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
 *** restclient
 Test RESTful APIs in emacs!
 #+BEGIN_SRC emacs-lisp
-  (use-package restclient)
+  (use-package restclient
+    :defer  t)
 
-  (use-package company-restclient)
+  (use-package company-restclient
+    :defer t)
 
-  (use-package ob-restclient)
+  (use-package ob-restclient
+    :defer t)
 #+END_SRC
 *** revealjs
 make reveal.js presentations in org mode
