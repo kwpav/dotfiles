@@ -1034,7 +1034,6 @@ Press ~C-(~ to get git info
 Projectile allows some nice things for projects, such as searching for files, managing buffers, etc.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
-    :defer t
     :config
     (projectile-global-mode))
 
