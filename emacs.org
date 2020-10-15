@@ -1186,6 +1186,16 @@ As of Emacs 27.1, =org-tempo= is required to use these.
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("sh" . "src sh")))
 #+END_SRC
+
+*** Capture Templates
+#+begin_src emacs-lisp
+  (defun my-org-capture-templates ()
+    (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+             "* TODO %?\n %i\n %a")
+            ("s" "Standup" entry (file+olp+datetree "~/org/todo.org" "Standup")
+             "* Planned\n- %?\n %i\n %a"))))
+#+end_src
 *** Use Package
 Put it all together with =use-package=.
 
@@ -1217,8 +1227,8 @@ I dont need documentation for elisp in this config, so =my-disable-flycheck-for-
     :config
     (my-org-prettify-settings)
     (my-org-todo-setup)
-    (my-org-structure-templates))
-
+    (my-org-structure-templates)
+    (my-org-capture-templates))
 #+END_SRC
 *** Org Babel
 =org-babel-do-load-languages= enables languages for in-buffer evaluation
