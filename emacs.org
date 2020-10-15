@@ -309,11 +309,12 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
 **** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
+    :custom
+    (which-key-idle-delay 0)
     :config
     (which-key-mode)
     (which-key-setup-minibuffer)
-    (which-key-setup-side-window-bottom)
-    (setq which-key-idle-delay 0))
+    (which-key-setup-side-window-bottom))
 #+END_SRC
 **** hydra
 Add a zoom hydra from hydras github and a =straight= hydra from its github.
