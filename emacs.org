@@ -249,7 +249,6 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
       "r" '(:ignore t :wk "bookmarks")
       "t" '(:ignore t :wk "terminal")
       "g" '(:ignore t :wk "git")
-      ;; "j" '(:ignore t :wk "jump")
       "q" '(:ignore t :wk "quit / restart")
       "P" 'hydra-straight-helper/body)
 
@@ -362,8 +361,11 @@ Jump around a file with a few keystrokes.
     :after evil
     :general
     (my-leader-def
-      "j" 'evilem-motion-next-line
-      "k" 'evilem-motion-previous-line))
+      "j" '(:ignore t :wk "easymotion")
+      "jj" 'evilem-motion-next-line
+      "jk" 'evilem-motion-previous-line
+      "jw" 'evilem-motion-forward-word-begin
+      "jW" 'evilem-motion-forward-WORD-begin))
 #+end_src
 
 Show tildes in the fringe on empty lines.
