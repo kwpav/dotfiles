@@ -374,6 +374,7 @@ Jump around a file with a few keystrokes.
       "jj" 'evilem-motion-next-line
       "jk" 'evilem-motion-previous-line
       "jw" 'evilem-motion-forward-word-begin
+      "jb" 'evilem-motion-backward-word-begin
       "je" 'evilem-motion-forward-word-end
       "jW" 'evilem-motion-forward-WORD-begin
       "jE" 'evilem-motion-forward-WORD-end)
