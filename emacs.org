@@ -95,30 +95,30 @@ Keeping this for historical purposes
 
 Setup the package repositories.
 #+BEGIN_SRC emacs-lisp
-  ;; (require 'package)
-  ;; (setq package-enable-at-startup nil)
-  ;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  ;;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-  ;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-  ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  ;; (add-to-list 'package-archives
-  ;;              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-  ;; (package-initialize)
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives
+               '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+  (package-initialize)
 #+END_SRC
 
 Automatically install and then setup =use-package= and =diminish=
 #+BEGIN_SRC emacs-lisp
-  ;; (unless (package-installed-p 'use-package)
-  ;;   (package-refresh-contents)
-  ;;   (package-install 'use-package))
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
 
-  ;; (unless (package-installed-p 'diminish)
-  ;;   (package-install 'diminish))
+  (unless (package-installed-p 'diminish)
+    (package-install 'diminish))
 
-  ;; (eval-when-compile
-  ;;   (require 'use-package))
-  ;; (require 'diminish) ;; for :diminish
-  ;; (require 'bind-key) ;; for :bind
+  (eval-when-compile
+    (require 'use-package))
+  (require 'diminish) ;; for :diminish
+  (require 'bind-key) ;; for :bind
 #+END_SRC
 
 ** Startup
@@ -147,24 +147,19 @@ Increase the amount of data which Emacs reads from the process. Again the emacs 
 #+end_src
 *** COMMENT OLD Garbage Collection
 #+BEGIN_SRC emacs-lisp
-  ;; (setq gc-cons-threshold 100000000)
-  ;; (defvar gc-timer nil)
-  ;; (defun maybe-gc ()
-  ;;   (let ((original gc-cons-threshold))
-  ;;     (setq gc-cons-threshold 800000)
-  ;;     (setq gc-cons-threshold original
-  ;;           gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
+  (setq gc-cons-threshold 100000000)
+  (defvar gc-timer nil)
+  (defun maybe-gc ()
+    (let ((original gc-cons-threshold))
+      (setq gc-cons-threshold 800000)
+      (setq gc-cons-threshold original
+            gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
 
-  ;; (defun schedule-maybe-gc ()
-  ;;   (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
+  (defun schedule-maybe-gc ()
+    (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
 
-  ;; (schedule-maybe-gc)
+  (schedule-maybe-gc)
 #+END_SRC
-
-#+begin_src emacs-lisp
-  ;;(use-package gcmh
-  ;;  :hook (after-init . gcmh-mode))
-#+end_src
 
 ** Core
 Things that modify or replace the core functionality of Emacs, or are needed by the rest of the config.
@@ -218,7 +213,6 @@ To set up custom keys, I use a combination of:
 - =general= - an easier way to define custom keys than the built in one
 - =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing ~SPC~
 - =hydra= - create a "mode" (similar to how i3 does resize mode) for repeated actions
-- =keyfreq= - use =keyfreq-show= to get a list of most use commands and then make keybindings/hydras out of them
 **** general
 #+BEGIN_QUOTE
 =general.el= provides a more convenient method for binding keys in emacs ... Like =use-package= ...
@@ -320,7 +314,7 @@ Add a zoom hydra from hydras github and a =straight= hydra from its github.
       ("e" straight-prune-build)
       ("q" nil)))
 #+END_SRC
-**** keyfreq
+**** COMMENT keyfreq
 #+BEGIN_SRC emacs-lisp
   (use-package keyfreq
     :config
