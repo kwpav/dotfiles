@@ -366,7 +366,14 @@ Jump around a file with a few keystrokes.
       "jj" 'evilem-motion-next-line
       "jk" 'evilem-motion-previous-line
       "jw" 'evilem-motion-forward-word-begin
-      "jW" 'evilem-motion-forward-WORD-begin))
+      "je" 'evilem-motion-forward-word-end
+      "jW" 'evilem-motion-forward-WORD-begin
+      "jE" 'evilem-motion-forward-WORD-end
+      "jgg" 'evil-avy-goto-word-0
+      "jgj" 'avy-goto-word-0-below
+      "jgk" 'avy-goto-word-0-above)
+    :config
+    (evilem-default-keybindings "S-SPC"))
 #+end_src
 
 Show tildes in the fringe on empty lines.
@@ -2282,7 +2289,7 @@ For editing =.yml= files
 #+end_src
 * TODO Things to do
 An on-going list of things I want to change
-- [ ] Add more keybindings for =evil-easymotion=
+- [X] Add more keybindings for =evil-easymotion=
 - [ ] Figure out why =lispy= doesn't bind its keys correctly, e.g. =(= to =lispy-parens=
 - [ ] Look into the build in =js-mode= in place of =js2-mode= and =rjsx=, it can now work with =jsx= files
 - [ ] Look into =web-mode= for =tsx= files
