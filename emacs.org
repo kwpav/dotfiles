@@ -1083,15 +1083,24 @@ A lot of this stuff is from:
 The prettify hook:
 - =turn-on-visual-line-mode= for visual word wrap
 - =variable-pitch-mode= to use a non =monospaced= font
-- =org-bullets= provides good looking bullets for headers
+- =org-superstar= provides good looking bullets for headers and lists
+  - replacement for =org-bullets=
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify-hook ()
     (turn-on-visual-line-mode)
     (variable-pitch-mode 1)
-    (org-bullets-mode 1))
+    (my-auto-lightweight-mode))
 
-  (use-package org-bullets
-    :requires (org))
+  (use-package org-superstar)
+
+  (defun my-auto-lightweight-mode ()
+    "Start Org Superstar differently depending on the number of lists items."
+    (let ((list-items
+           (count-matches "^[ \t]*?\\([+-]\\|[ \t]\\*\\)"
+                          (point-min) (point-max))))
+      (unless (< list-items 100)
+        (org-superstar-toggle-lightweight-lists)))
+    (org-superstar-mode 1))
 #+END_SRC
 
 Various settings to make things look nicer:
@@ -1113,9 +1122,9 @@ Various settings to make things look nicer:
           org-fontify-done-headline t
           org-fontify-quote-and-verse-blocks t
           line-spacing 0.2)
-    (font-lock-add-keywords 'org-mode
-                            '(("^\\([-+]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    ;; (font-lock-add-keywords 'org-mode
+    ;;                         '(("^\\([-+]\\) "
+    ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
     (my-org-faces))
 #+END_SRC
 
