@@ -23,7 +23,6 @@
  ("docker.el" . "3773112eea3fc99704b5ca50c1e9a3db2cb8e4f3")
  ("dockerfile-mode" . "d31f7685ebc5832d957e25070a930aa42984327d")
  ("doom-modeline" . "86d91e891b7d587b6680b19eda5ce2ca3df5b0ab")
- ("dumb-jump" . "fbbe6b0c3010bea8a6eaac2297080137319160e2")
  ("editorconfig-emacs" . "a6c70da2cf3a3a2aac2b204828f1acd243cd7529")
  ("emacs-async" . "14f48de586b0977e3470f053b810d77b07ea427a")
  ("emacs-doom-themes" . "d6ee47dc8ed2cf9e585f62243214af03ba5b1687")

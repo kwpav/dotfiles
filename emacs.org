@@ -1309,7 +1309,7 @@ autocomplete for brackets
     :config
     (smartparens-global-mode))
 #+END_SRC
-*** dumb-jump
+*** COMMENT dumb-jump
 Get some nice go-to-definition functionality
 #+BEGIN_SRC emacs-lisp
   (use-package dumb-jump
@@ -1633,12 +1633,12 @@ Test RESTful APIs in emacs!
   (use-package ob-restclient
     :defer t)
 #+END_SRC
-*** revealjs
+*** COMMENT revealjs
 make reveal.js presentations in org mode
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package ox-reveal
-  ;;   :config
-  ;;   (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
+  (use-package ox-reveal
+    :config
+    (setq org-reveal-root "file:///Users/kevinpavao/reveal.js-3.8.0"))
 #+END_SRC
 * Languages
 Configuration for programming languages
@@ -1917,8 +1917,8 @@ Setup up a javascript repl using =skewer=
 To use, =M-x run-skewer= and then =M-x skewer-repl=
 ** COMMENT Latex
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package auctex)
-  ;; (use-package company-auctex)
+  (use-package auctex)
+  (use-package company-auctex)
 #+END_SRC
 ** Lisp
 *** Keys
@@ -2268,6 +2268,7 @@ For editing =.yml= files
 #+end_src
 * TODO Things to do
 An on-going list of things I want to change
+- [ ] Add more keybindings for =evil-easymotion=
 - [ ] Figure out why =lispy= doesn't bind its keys correctly, e.g. =(= to =lispy-parens=
 - [ ] Look into the build in =js-mode= in place of =js2-mode= and =rjsx=, it can now work with =jsx= files
 - [ ] Look into =web-mode= for =tsx= files
