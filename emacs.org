@@ -20,7 +20,7 @@ To modify a code block, press ~C-c '~ to open an emacs-lisp buffer and hack away
 ** Lexical binding
 Lexical binding is supposed to make stuff faster
 #+BEGIN_SRC emacs-lisp
-  ;;; -*- lexical-binding: t; -*-
+  ;;; -*- lexical-binding: t -*-
 #+END_SRC
 ** Personal Information
 Who am I?
@@ -1040,15 +1040,20 @@ Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
 #+END_SRC
 ** Project and File Management
 *** dired
+Some tips for using dired:
+- Toggle =dired-details-mode= with ~(~
+- Toggle writeable mode with ~C-x C-q~
 #+BEGIN_SRC emacs-lisp
   (use-package dired
     :straight nil
-    :hook (dired-mode . dired-hide-details-mode)
+    :defer t
+    :hook (dired-mode . dired-hide-details-mode))
+
+  ;; Colourful columns.
+  (use-package diredfl
+    :after dired
     :config
-    ;; Colourful columns.
-    (use-package diredfl
-      :config
-      (diredfl-global-mode 1)))
+    (diredfl-global-mode 1))
 #+END_SRC
 
 Press ~C-(~ to get git info
@@ -1062,7 +1067,7 @@ Projectile allows some nice things for projects, such as searching for files, ma
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :config
-    (projectile-global-mode))
+    (projectile-mode 1))
 
   (use-package counsel-projectile
     :after (counsel projectile)
@@ -1074,7 +1079,7 @@ Projectile allows some nice things for projects, such as searching for files, ma
       "pp" 'counsel-projectile-switch-project
       "pg" 'counsel-projectile-rg) ;;ripgrep
     :config
-    (counsel-projectile-mode))
+    (counsel-projectile-mode 1))
 #+END_SRC
 *** treemacs
 A file tree.
