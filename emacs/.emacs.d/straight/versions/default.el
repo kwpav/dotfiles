@@ -58,7 +58,6 @@
  ("gnu-elpa-mirror" . "87168508db0553275e6638988f8be1b25782b007")
  ("goto-chg" . "5c057c8623abadf7fd57ce625843435d231f2739")
  ("haskell-mode" . "e72677668f5fc7cc148008e885a0f256e245dd43")
- ("highlight-indent-guides" . "cf352c85cd15dd18aa096ba9d9ab9b7ab493e8f6")
  ("ht.el" . "fff8c43f0e03d5b98deb9f988522b839ce2ca253")
  ("hy-mode" . "7256844f24a3b727e252a008d7a142fd3b3921da")
  ("hydra" . "112e689f75b59398d8eca79ac6562dca12b8a959")

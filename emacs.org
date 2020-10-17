@@ -934,7 +934,7 @@ Add rainbow delimiters in all programming language modes
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
-*** highlight indentation
+*** COMMENT  highlight indentation
 #+BEGIN_SRC emacs-lisp
   (use-package highlight-indent-guides
     :hook ((prog-mode web-mode) . highlight-indent-guides-mode)
@@ -2300,6 +2300,8 @@ An on-going list of things I want to change
   - [ ] lsp!
 
 ** Cool looking packages to check out
+- =org-superstar= - replacement for =org-bullets=
+- =evil-snipe= - more motions in evil
 - =purpose= - https://github.com/bmag/emacs-purpose
   - window/buffer management
 - =eglot= - https://github.com/joaotavora/eglot
