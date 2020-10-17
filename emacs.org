@@ -334,6 +334,7 @@ Evil mode is vim in emacs!
   (use-package evil
     :custom
     (evil-want-keybinding nil)  ;; evil-collection assumes this
+    (evil-undo-system 'undo-fu)
     :config
     (evil-mode 1)
     (my-emacs-in-normal-mode))
@@ -467,15 +468,10 @@ Add find and replace info to the modeline.
     (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp))
 #+END_SRC
 *** Undo
-Replace standard Emacs undo with =undo-tree=. Press ~C-x u~ to use =undo-tree=. and ~q~ to quit.
+Using this for =evil= undo/redo.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    :defer t
-    :config
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)
-    (global-undo-tree-mode))
+  (use-package undo-fu)
 #+END_SRC
 *** Text Editing
 **** multiple cursors
