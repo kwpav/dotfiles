@@ -1093,6 +1093,9 @@ A file tree.
 
   (use-package treemacs-projectile
     :after (projectile treemacs))
+
+  (use-package treemacs-magit
+    :after (treemacs))
 #+END_SRC
 ** Org Mode
 Setup =org-mode=. Most of these are functions that will get called in either the =:hook= or =:config= part of the =use-package= setup for =org=.
@@ -2172,10 +2175,10 @@ I use PHP for my job, so I need to use the =WellspringCodingStandard=.
 
 Setup the default coding style and LSP for php. Need to set =lsp-enable-file-watchers= to nil because the project has a large amount of files and it causes performance issues.
 #+begin_src emacs-lisp
-      (defun my-php-setup ()
-        (php-enable-default-coding-style)
-        (setq lsp-enable-file-watchers nil)
-        (lsp))
+  (defun my-php-setup ()
+    (php-enable-default-coding-style)
+    (setq lsp-enable-file-watchers nil)
+    (lsp))
 #+end_src
 
 Align the ==>= in arrays
@@ -2249,16 +2252,6 @@ Use =pipenv= to handle virtual environments
     :init
     (setq pipenv-projectile-after-switch-function #'pipenv-projectile-after-switch-extended))
 #+END_SRC
-
-Use =lsp-jedi= for the =jedi-language-server=
-#+begin_src emacs-lisp
-  ;; (use-package lsp-jedi
-  ;;   :ensure t
-  ;;   :config
-  ;;   (with-eval-after-load "lsp-mode"
-  ;;     (add-to-list 'lsp-disabled-clients 'pyls)
-  ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
-#+end_src
 **** Elpy - OLD
 trying out LSP instead of elpy, keeping this in case I want to go back.
 
@@ -2305,25 +2298,25 @@ An on-going list of things I want to change
 - [ ] Look into the build in =js-mode= in place of =js2-mode= and =rjsx=, it can now work with =jsx= files
 - [ ] Look into =web-mode= for =tsx= files
 - [-] make org prettier [1/2]
-  + [ ] fix =company= results in =variable-pitch-mode=
-  + [X] bullets?
-    + only did the first level of bullets though
+  - [ ] fix =company= results in =variable-pitch-mode=
+  - [X] bullets?
+    - only did the first level of bullets though
 - [ ] setup and use org capture
   - this looks cool too https://addons.mozilla.org/en-US/firefox/addon/org-capture/
 - [ ] Configure C#
-  + use the C# lsp??
+  - use the C# lsp??
 - [ ] setup =forge= to replace =magithub=
 - [ ] window management hydra?
 - [-] telephone-line [3/6]
-  + [X] my-buffer-segment [3/3]
-    + [X] display truncated path up to project name, full path up to file name
-    + [X] color project name
-    + [X] different colors for path / file name?
-  + [X] fix colors
-  + [X] git
-  + [ ] eyebrowse
-  + [ ] anzu
-  + [ ] flycheck
+  - [X] my-buffer-segment [3/3]
+    - [X] display truncated path up to project name, full path up to file name
+    - [X] color project name
+    - [X] different colors for path / file name?
+  - [X] fix colors
+  - [X] git
+  - [ ] eyebrowse
+  - [ ] anzu
+  - [ ] flycheck
 - [ ] make jumping better
   - [ ] use 'ac' package jumps along with smart and dumb jump?
   - [ ] make keybindings consistent

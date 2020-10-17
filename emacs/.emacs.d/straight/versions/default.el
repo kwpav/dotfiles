@@ -70,7 +70,6 @@
  ("json-mode" . "0e819e519ae17a2686e0881c4ca51fa873fa9b83")
  ("json-reformat" . "8eb6668ed447988aea06467ba8f42e1f2178246f")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
- ("keyfreq" . "e5fe9d585ce882f1ba9afa5d894eaa82c79be4f4")
  ("know-your-http-well" . "3cc5ab6d2764ab7aacb1b6e026abaccbeb6c37f2")
  ("let-alist" . "b299c78897cc307f9d5521927376fbd06a26f123")
  ("lsp-ivy" . "20cac6296e5038b7131ee6f34a96635f1d30fe3c")
