@@ -358,6 +358,14 @@ surround.vim emulation.
 
 Jump around a file with a few keystrokes.
 #+begin_src emacs-lisp
+  (use-package evil-avy
+    :after evil
+    :general
+    (my-leader-def
+      "jgg" 'evil-avy-goto-word-0
+      "jgj" 'avy-goto-word-0-below
+      "jgk" 'avy-goto-word-0-above))
+
   (use-package evil-easymotion
     :after evil
     :general
@@ -368,10 +376,7 @@ Jump around a file with a few keystrokes.
       "jw" 'evilem-motion-forward-word-begin
       "je" 'evilem-motion-forward-word-end
       "jW" 'evilem-motion-forward-WORD-begin
-      "jE" 'evilem-motion-forward-WORD-end
-      "jgg" 'evil-avy-goto-word-0
-      "jgj" 'avy-goto-word-0-below
-      "jgk" 'avy-goto-word-0-above)
+      "jE" 'evilem-motion-forward-WORD-end)
     :config
     (evilem-default-keybindings "S-SPC"))
 #+end_src
