@@ -15,7 +15,8 @@
 (defvar doom--file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
-(org-babel-load-file "~/dotfiles/emacs.org")
+;; (org-babel-load-file "~/dotfiles/emacs.org")
+(load "~/.emacs.d/config.el")
 
 ;; Then restore it later:
 (setq file-name-handler-alist doom--file-name-handler-alist)
