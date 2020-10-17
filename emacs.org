@@ -207,47 +207,6 @@ Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by E
   (setq show-paren-delay 0)
   (show-paren-mode 1)
 #+end_src
-*** Vim Emulation
-This allows you to use emacs keybindings while in evil's insert mode.
-from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
-#+BEGIN_SRC emacs-lisp
-  (defun my-emacs-in-normal-mode ()
-    (setq evil-insert-state-map (make-sparse-keymap))
-    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
-#+END_SRC
-
-Evil mode is vim in emacs!
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :custom
-    (evil-want-keybinding nil)  ;; evil-collection assumes this
-    :config
-    (evil-mode 1)
-    (my-emacs-in-normal-mode))
-#+END_SRC
-
-Use evil bindings in various modes.
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-collection
-    :after evil
-    :config
-    (evil-collection-init))
-#+END_SRC
-
-surround.vim emulation.
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-surround
-    :after evil
-    :config
-    (global-evil-surround-mode 1))
-#+END_SRC
-
-Show tildes in the fringe on empty lines.
-#+BEGIN_SRC emacs-lisp
-  (use-package vi-tilde-fringe
-    :config
-    (global-vi-tilde-fringe-mode 1))
-#+END_SRC
 *** Keys
 To set up custom keys, I use a combination of:
 - =general= - an easier way to define custom keys than the built in one
@@ -290,7 +249,7 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
       "r" '(:ignore t :wk "bookmarks")
       "t" '(:ignore t :wk "terminal")
       "g" '(:ignore t :wk "git")
-      "j" '(:ignore t :wk "jump")
+      ;; "j" '(:ignore t :wk "jump")
       "q" '(:ignore t :wk "quit / restart")
       "P" 'hydra-straight-helper/body)
 
@@ -361,6 +320,57 @@ Add a zoom hydra from hydras github and a =straight= hydra from its github.
   (use-package keyfreq
     :config
     (keyfreq-autosave-mode 1))
+#+END_SRC
+*** Vim Emulation
+This allows you to use emacs keybindings while in evil's insert mode.
+from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
+#+BEGIN_SRC emacs-lisp
+  (defun my-emacs-in-normal-mode ()
+    (setq evil-insert-state-map (make-sparse-keymap))
+    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
+#+END_SRC
+
+Evil mode is vim in emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :custom
+    (evil-want-keybinding nil)  ;; evil-collection assumes this
+    :config
+    (evil-mode 1)
+    (my-emacs-in-normal-mode))
+#+END_SRC
+
+Use evil bindings in various modes.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+#+END_SRC
+
+surround.vim emulation.
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+Jump around a file with a few keystrokes.
+#+begin_src emacs-lisp
+  (use-package evil-easymotion
+    :after evil
+    :general
+    (my-leader-def
+      "j" 'evilem-motion-next-line
+      "k" 'evilem-motion-previous-line))
+#+end_src
+
+Show tildes in the fringe on empty lines.
+#+BEGIN_SRC emacs-lisp
+  (use-package vi-tilde-fringe
+    :config
+    (global-vi-tilde-fringe-mode 1))
 #+END_SRC
 *** Mouse
 Better mouse scrolling - the default scrolling is too quick.
@@ -1311,16 +1321,16 @@ Get some nice go-to-definition functionality
     ("M-g x" 'dumb-jump-go-prefer-external)
     ("M-g z" 'dumb-jump-go-prefer-external-other-window)
     ("<f9>"  'dumb-jump-hydra/body)
-    (my-leader-def
-      "jg" '(:ignore t :wk "go")
-      "jgg" 'dumb-jump-go
-      "jgc" 'dumb-jump-go-current-window
-      "jgo" 'dumb-jump-go-other-window
-      "jgp" 'dumb-jump-go-prefer-external
-      "jgP" 'dumb-jump-go-prefer-external-other-window
-      "jgp" 'dumb-jump-go-prompt
-      "jb" 'dumb-jump-back
-      "jq" 'dumb-jump-quick-look)
+    ;; (my-leader-def
+    ;;   "jg" '(:ignore t :wk "go")
+    ;;   "jgg" 'dumb-jump-go
+    ;;   "jgc" 'dumb-jump-go-current-window
+    ;;   "jgo" 'dumb-jump-go-other-window
+    ;;   "jgp" 'dumb-jump-go-prefer-external
+    ;;   "jgP" 'dumb-jump-go-prefer-external-other-window
+    ;;   "jgp" 'dumb-jump-go-prompt
+    ;;   "jb" 'dumb-jump-back
+    ;;   "jq" 'dumb-jump-quick-look)
     :custom
     (dumb-jump-selector 'ivy)
     (dumb-jump-force-searcher 'rg)

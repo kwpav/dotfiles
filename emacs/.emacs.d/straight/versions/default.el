@@ -38,6 +38,7 @@
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("evil" . "32b2783d2cb7e093ac284fa6af9ceed8e4418826")
  ("evil-collection" . "2141f29c796ee3600ca40f24eed16f88ff7b3ebf")
+ ("evil-easymotion" . "f96c2ed38ddc07908db7c3c11bcd6285a3e8c2e9")
  ("evil-magit" . "88dc26ce59dbf4acb4e2891c79c4bd329553ba56")
  ("evil-surround" . "346d4d85fcf1f9517e9c4991c1efe68b4130f93a")
  ("exec-path-from-shell" . "18cad603c45c5544e8a9666be64d0c51bbc1af90")
