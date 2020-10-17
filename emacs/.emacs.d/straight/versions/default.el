@@ -36,6 +36,7 @@
  ("emacsmirror-mirror" . "1b523112d1571a0c276c3791e6aae4b44e56ce38")
  ("emacsql" . "6d8cd9366284b5a27268ff4b783e2c34573d5b60")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
+ ("esup" . "0de8af8233d9ce1b67f05a50f25c481c4f1118d8")
  ("evil" . "32b2783d2cb7e093ac284fa6af9ceed8e4418826")
  ("evil-avy" . "2dd955cc3ecaa7ddeb67b295298abdc6d16dd3a5")
  ("evil-collection" . "2141f29c796ee3600ca40f24eed16f88ff7b3ebf")
