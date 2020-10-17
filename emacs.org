@@ -918,11 +918,18 @@ From various places, like:
 make certain buffers lighter/darker, e.g. treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package solaire-mode
-    :hook ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
-    (minibuffer-setup . solaire-mode-in-minibuffer)
+    ;; Ensure solaire-mode is running in all solaire-mode buffers
+    :hook (change-major-mode . turn-on-solaire-mode)
+    ;; ...if you use auto-revert-mode, this prevents solaire-mode from turning
+    ;; itself off every time Emacs reverts the file
+    :hook (after-revert . turn-on-solaire-mode)
+    ;; To enable solaire-mode unconditionally for certain modes:
+    :hook (ediff-prepare-buffer . solaire-mode)
+    ;; Highlight the minibuffer when it is activated:
+    :hook (minibuffer-setup . solaire-mode-in-minibuffer)
     :config
-    (solaire-global-mode +1)
-    (solaire-mode-swap-bg))
+    (setq solaire-mode-auto-swap-bg nil)
+    (solaire-global-mode +1))
 #+END_SRC
 *** rainbow delimiters
 Add rainbow delimiters in all programming language modes
