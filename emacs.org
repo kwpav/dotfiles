@@ -378,7 +378,7 @@ Jump around a file with a few keystrokes.
       "je" 'evilem-motion-forward-word-end
       "jW" 'evilem-motion-forward-WORD-begin
       "jE" 'evilem-motion-forward-WORD-end)
-    :config
+    :init
     (evilem-default-keybindings "S-SPC"))
 #+end_src
 
