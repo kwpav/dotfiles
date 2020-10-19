@@ -1677,10 +1677,11 @@ Test RESTful APIs in emacs!
     :defer t)
 #+END_SRC
 *** ox-hugo
-org mode for hugo blogs
+org mode for hugo blogs. Having an issue with loading this on OSX so only install it on Linux for now.
 #+begin_src emacs-lisp
   (use-package ox-hugo
-    :after ox)
+    :after ox
+    :if (memq window-system '(x)))
 #+end_src
 *** COMMENT revealjs
 make reveal.js presentations in org mode
