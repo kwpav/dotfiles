@@ -1297,7 +1297,39 @@ I dont need documentation for elisp in this config, so =my-disable-flycheck-for-
      'org-babel-load-languages
      '((python . t))))
 #+END_SRC
+*** Writing
+Some things to make writing nicer.
 
+Olivetti centers the text and sets a minimum width. It makes reading things, especially on widescreens, a bit nicer.
+#+begin_src emacs-lisp
+  (use-package olivetti
+    :defer t
+    :custom
+    (olivetti-body-width 90))
+#+end_src
+
+Writegood highlights text based on a set of weasel-words, passive-voice and duplicate words.
+#+begin_src emacs-lisp
+  (use-package writegood-mode
+    :defer t)
+#+end_src
+
+Enable the minor modes I use for writing
+#+begin_src emacs-lisp
+  (defun my/writing-modes ()
+    (interactive)
+    (flyspell-mode 1)
+    (olivetti-mode 1)
+    (writegood-mode 1))
+#+end_src
+
+*** ox-hugo
+org mode for hugo blogs. Having an issue with loading this on OSX so only install it on Linux for now.
+#+begin_src emacs-lisp
+  (when (eq system-type 'gnu/linux)
+    (use-package ox-hugo
+      :after ox))
+#+end_src
 ** Code
 Things that are used when coding.
 *** Line Numbers
@@ -1678,13 +1710,6 @@ Test RESTful APIs in emacs!
   (use-package ob-restclient
     :defer t)
 #+END_SRC
-*** ox-hugo
-org mode for hugo blogs. Having an issue with loading this on OSX so only install it on Linux for now.
-#+begin_src emacs-lisp
-  (when (eq system-type 'gnu/linux)
-    (use-package ox-hugo
-      :after ox))
-#+end_src
 *** COMMENT revealjs
 make reveal.js presentations in org mode
 #+BEGIN_SRC emacs-lisp
