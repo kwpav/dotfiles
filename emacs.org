@@ -1571,9 +1571,10 @@ Paths need to be explicitly defined for some reason in OSX.
 #+END_SRC
 
 Enable ligatures for fonts that have them
+Only seems to work on railwaycat/homebrew-emacsmacport
 #+BEGIN_SRC emacs-lisp
-  (when (eq system-type 'darwin)
-    (mac-auto-operator-composition-mode))
+  ;; (when (eq system-type 'darwin)
+  ;;   (mac-auto-operator-composition-mode))
 #+END_SRC
 
 Use python 3 by default
@@ -1584,8 +1585,9 @@ Use python 3 by default
 *** Linux
 **** StumpWM
 #+BEGIN_SRC emacs-lisp
-  (use-package stumpwm-mode
-    :if (memq window-system '(x)))
+  (when (eq window-system 'x)
+    (use-package stumpwm-mode
+      :defer t))
 #+END_SRC
 
 Connect to a sly repl that can control stumpwm
@@ -1679,9 +1681,9 @@ Test RESTful APIs in emacs!
 *** ox-hugo
 org mode for hugo blogs. Having an issue with loading this on OSX so only install it on Linux for now.
 #+begin_src emacs-lisp
-  (use-package ox-hugo
-    :after ox
-    :if (memq window-system '(x)))
+  (when (eq system-type 'gnu/linux)
+    (use-package ox-hugo
+      :after ox))
 #+end_src
 *** COMMENT revealjs
 make reveal.js presentations in org mode
