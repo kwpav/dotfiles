@@ -242,7 +242,8 @@ Using colors based off the =nord= theme
   (update-color-map (current-screen))
 
   (defparameter *foreground-color* "#ECEFF4")
-  (defparameter *background-color* "#2E3440")
+  ;; (defparameter *background-color* "#2E3440")
+  (defparameter *background-color* "#272C36")
   (defparameter *border-color* "#5E81AC")
 #+END_SRC
 ** Message Window

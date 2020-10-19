@@ -1,5 +1,6 @@
 (in-package :stumpwm)
-;; (set-module-dir (pathname-as-directory "/usr/share/stumpwm"))
+(set-module-dir (pathname-as-directory "/home/kevin/.stumpwm.d/modules"))
+
 (set-module-dir (pathname-as-directory "/home/kevin/.stumpwm.d/modules"))
 
 (require :slynk)
@@ -138,7 +139,8 @@
 (update-color-map (current-screen))
 
 (defparameter *foreground-color* "#ECEFF4")
-(defparameter *background-color* "#2E3440")
+;; (defparameter *background-color* "#2E3440")
+(defparameter *background-color* "#272C36")
 (defparameter *border-color* "#5E81AC")
 
 (setf *message-window-gravity* :center
