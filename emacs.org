@@ -1282,10 +1282,10 @@ I dont need documentation for elisp in this config, so =my-disable-flycheck-for-
       "t" 'org-todo)
     :gfhook
     #'my-org-prettify-hook
-    :hook (org-src-mode . my-disable-flycheck-for-elisp)
+    ('org-src-mode-hook #'my-disable-flycheck-for-elisp)
     :preface
     (defun my-disable-flycheck-for-elisp ()
-      (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+      (setq flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
     :custom
     (org-agenda-files (list "~/org/agenda/"))
     :config
