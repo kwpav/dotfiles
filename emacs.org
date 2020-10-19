@@ -356,6 +356,13 @@ surround.vim emulation.
     (global-evil-surround-mode 1))
 #+END_SRC
 
+vim-commentary emulation
+#+begin_src emacs-lisp
+  (use-package evil-commentary
+    :config
+    (evil-commentary-mode 1))
+#+end_src
+
 Jump around a file with a few keystrokes.
 #+begin_src emacs-lisp
   (use-package evil-avy
@@ -509,15 +516,14 @@ Using the default keybinding of ~C-;~.
 #+END_SRC
 ** Look and Feel
 *** Change defaults
-Hide the gui and use a non-blinking cursor for a more zen-like experience.
-Use C-mouse3 to open the menu-bar as a popup menu
+Use a non-blinking cursor for a more zen-like experience.
 #+BEGIN_SRC emacs-lisp
-  ;; (menu-bar-mode -99)
-  ;; (tool-bar-mode -1) ;; hide the toolbar
-  ;; (scroll-bar-mode -1) ;; hide the scrollbar
   (blink-cursor-mode 0) ;; dont blink the cursor
-  ;; (set-fringe-mode '(10 . 0)) ;; remove the extra border around frames
-  ;; (global-hl-line-mode 1) ;; highlight the current line
+#+END_SRC
+
+If the frame isnt a specific height/width, some black edges will appear around it. This removes them.
+#+BEGIN_SRC emacs-lisp
+  (setq frame-resize-pixelwise t)
 #+END_SRC
 *** Theme
 Theme I'm currently using
@@ -535,57 +541,57 @@ Theme I'm currently using
 *** COMMENT other themes
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
- (use-package nord-theme
-    :config
-    (load-theme 'nord))
-
-  (use-package kaolin-themes
-    :init
-    ;; (setq doom-themes-enable-bold t
-    ;;       doom-themes-enable-italic t)
-    (setq kaolin-themes-hl-line-colored t
-          kaolin-themes-italic-comments t)
-    :config
-    ;; (load-theme 'doom-one t)
-    ;; (doom-themes-treemacs-config)
-    ;; (doom-themes-org-config)
-    (load-theme 'kaolin-ocean t)
-    (kaolin-treemacs-theme))
-
-  (use-package poet-theme
+  (use-package nord-theme
      :config
-     (load-theme 'poet-dark))
+     (load-theme 'nord))
 
-   ;; setup different fonts
-   (add-hook 'text-mode-hook
-             (lambda ()
-               (variable-pitch-mode 1)))
+   (use-package kaolin-themes
+     :init
+     ;; (setq doom-themes-enable-bold t
+     ;;       doom-themes-enable-italic t)
+     (setq kaolin-themes-hl-line-colored t
+           kaolin-themes-italic-comments t)
+     :config
+     ;; (load-theme 'doom-one t)
+     ;; (doom-themes-treemacs-config)
+     ;; (doom-themes-org-config)
+     (load-theme 'kaolin-ocean t)
+     (kaolin-treemacs-theme))
 
-   (set-face-attribute 'default nil :family "Iosevka" :height 130)
-   (set-face-attribute 'fixed-pitch nil :family "Iosevka")
-   (set-face-attribute 'variable-pitch nil :family "ETBookOT")
+   (use-package poet-theme
+      :config
+      (load-theme 'poet-dark))
 
-   (load-theme 'base16-tomorrow-night)
-   (load-theme 'kaolin-dark)
-   (load-theme 'doom-one)
-   (load-theme 'doom-tomorrow-night)
-   (load-theme 'doom-city-lights)
-   (load-theme 'kaolin-ocean)
-   (load-theme 'base16-spacemacs)
-   (load-theme 'gruvbox-dark-hard)
-   (load-theme 'sourcerer)
-   (load-theme 'spacemacs-dark)
-   (load-theme 'base16-tomorrow-dark)
-   (load-theme 'base16-twilight-dark)
-   (load-theme 'base16-default-dark)
-   (load-theme 'solarized-dark)
-   (setq solarized-distinct-fringe-background t)
-   (load-theme 'base16-ocean-dark)
-   (load-theme 'material)
-   (load-theme 'spacegray)
-   (load-theme 'dracula)
-   (load-theme 'reykjavik)
-   (set-cursor-color "gainsboro")
+    ;; setup different fonts
+    (add-hook 'text-mode-hook
+              (lambda ()
+                (variable-pitch-mode 1)))
+
+    (set-face-attribute 'default nil :family "Iosevka" :height 130)
+    (set-face-attribute 'fixed-pitch nil :family "Iosevka")
+    (set-face-attribute 'variable-pitch nil :family "ETBookOT")
+
+    (load-theme 'base16-tomorrow-night)
+    (load-theme 'kaolin-dark)
+    (load-theme 'doom-one)
+    (load-theme 'doom-tomorrow-night)
+    (load-theme 'doom-city-lights)
+    (load-theme 'kaolin-ocean)
+    (load-theme 'base16-spacemacs)
+    (load-theme 'gruvbox-dark-hard)
+    (load-theme 'sourcerer)
+    (load-theme 'spacemacs-dark)
+    (load-theme 'base16-tomorrow-dark)
+    (load-theme 'base16-twilight-dark)
+    (load-theme 'base16-default-dark)
+    (load-theme 'solarized-dark)
+    (setq solarized-distinct-fringe-background t)
+    (load-theme 'base16-ocean-dark)
+    (load-theme 'material)
+    (load-theme 'spacegray)
+    (load-theme 'dracula)
+    (load-theme 'reykjavik)
+    (set-cursor-color "gainsboro")
 #+END_SRC
 
 Some light themes I like
@@ -594,6 +600,19 @@ Some light themes I like
   (load-theme 'light-soap)
   (load-theme 'solarized-light)
 #+END_SRC
+
+WCAG AAA Themes!
+- modus-operandi is light
+- modus-vivendi is dark
+#+begin_src emacs-lisp
+  (use-package modus-vivendi-theme
+    :config
+    (load-theme 'modus-vivendi))
+
+  (use-package modus-operandi-theme
+    :config
+    (load-theme 'modus-operandi))
+#+end_src
 *** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
@@ -927,7 +946,7 @@ From various places, like:
   ;;      (set-face-background 'mode-line (car color))
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
-*** solaire
+*** COMMENT solaire
 make certain buffers lighter/darker, e.g. treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package solaire-mode
@@ -958,11 +977,6 @@ Add rainbow delimiters in all programming language modes
     (highlight-indent-guides-method 'character)
     (highlight-indent-guides-responsive 'top)
     (highlight-indent-guides-delay 0))
-#+END_SRC
-*** Other stuff
-Remove black stuff around the edges
-#+BEGIN_SRC emacs-lisp
-  (setq frame-resize-pixelwise t)
 #+END_SRC
 ** Custom Functions
 *** what-minor-mode
@@ -1242,7 +1256,9 @@ As of Emacs 27.1, =org-tempo= is required to use these.
           '(("t" "Todo" entry (file+headline "~/org/agenda/todo.org" "Tasks")
              "* TODO %?\n %i\n %a")
             ("s" "Standup" entry (file+olp+datetree "~/org/agenda/todo.org" "Standup")
-             "* Planned\n- %?\n %i\n %a"))))
+             "* Planned\n- %?\n %i\n %a")
+            ("b" "Blog Idea" entry (file+headline "~/projects/blog-drafts/blog.org" "Ideas")
+             "* %?\n %i\n %a"))))
 #+end_src
 *** Use Package
 Put it all together with =use-package=.
@@ -1588,7 +1604,7 @@ Connect to a sly repl that can control stumpwm
       (sly-connect "localhost" "4004")))
 #+END_SRC
 
-** Local file 
+** Local file
 The local file contains machine specific stuff, eg for my home and my work configs.
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file "~/dotfiles/emacs-local.org")
@@ -1668,6 +1684,12 @@ Test RESTful APIs in emacs!
   (use-package ob-restclient
     :defer t)
 #+END_SRC
+*** ox-hugo
+org mode for hugo blogs
+#+begin_src emacs-lisp
+  (use-package ox-hugo
+    :after ox)
+#+end_src
 *** COMMENT revealjs
 make reveal.js presentations in org mode
 #+BEGIN_SRC emacs-lisp
@@ -2323,7 +2345,6 @@ An on-going list of things I want to change
   - [ ] lsp!
 
 ** Cool looking packages to check out
-- =org-superstar= - replacement for =org-bullets=
 - =evil-snipe= - more motions in evil
 - =purpose= - https://github.com/bmag/emacs-purpose
   - window/buffer management
