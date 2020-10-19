@@ -84,7 +84,7 @@
  ("no-littering" . "60ce8946226882cda4561da47453fcf9b9da8ddc")
  ("ob-restclient.el" . "f7449b2068498fe9d8ab9589e0a638148861533f")
  ("org" . "ff6508ad4b68d936e79640699a9f3d994ae8fe58")
- ("org-superstar-mode" . "7f83636db215bf5a10edbfdf11d12a132864a914")
+ ("org-bullets" . "767f55feb58b840a5a04eabfc3fbbf0d257c4792")
  ("ox-hugo" . "95723cd4ff977fed11b5a952aacec9604eb45761")
  ("paredit" . "8330a41e8188fe18d3fa805bb9aa529f015318e8")
  ("parseclj" . "eff941126859bc9e949eae5cd6c2592e731629f2")

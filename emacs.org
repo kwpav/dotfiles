@@ -1125,24 +1125,14 @@ A lot of this stuff is from:
 The prettify hook:
 - =turn-on-visual-line-mode= for visual word wrap
 - =variable-pitch-mode= to use a non =monospaced= font
-- =org-superstar= provides good looking bullets for headers and lists
-  - replacement for =org-bullets=
+- =org-bullets= provides good looking bullets for headers
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify-hook ()
     (turn-on-visual-line-mode)
     (variable-pitch-mode 1)
-    (my-auto-lightweight-mode))
+    (org-bullets-mode 1))
 
-  (use-package org-superstar)
-
-  (defun my-auto-lightweight-mode ()
-    "Start Org Superstar differently depending on the number of lists items."
-    (let ((list-items
-           (count-matches "^[ \t]*?\\([+-]\\|[ \t]\\*\\)"
-                          (point-min) (point-max))))
-      (unless (< list-items 100)
-        (org-superstar-toggle-lightweight-lists)))
-    (org-superstar-mode 1))
+  (use-package org-bullets)
 #+END_SRC
 
 Various settings to make things look nicer:
@@ -1257,8 +1247,10 @@ As of Emacs 27.1, =org-tempo= is required to use these.
              "* TODO %?\n %i\n %a")
             ("s" "Standup" entry (file+olp+datetree "~/org/agenda/todo.org" "Standup")
              "* Planned\n- %?\n %i\n %a")
-            ("b" "Blog Idea" entry (file+headline "~/projects/blog-drafts/blog.org" "Ideas")
-             "* %?\n %i\n %a"))))
+            ("b" "Blog Draft" entry (file+headline "~/projects/blog-drafts/blog.org" "In Draft")
+             "* DRAFT %?\n:PROPERTIES:\n:EXPORT_FILE_NAME:\n:EXPORT_DATE:\n:PROPERTIES:\n %i\n %a")
+            ("i" "Blog Idea" entry (file+headline "~/projects/blog-drafts/blog.org" "Ideas")
+             "* TODO %?\n %i\n %a"))))
 #+end_src
 *** Use Package
 Put it all together with =use-package=.
@@ -2316,6 +2308,7 @@ For editing =.yml= files
 * TODO Things to do
 An on-going list of things I want to change
 - [X] Add more keybindings for =evil-easymotion=
+- [ ] Look into why =org-superstar= doesnt work on mac
 - [ ] Figure out why =lispy= doesn't bind its keys correctly, e.g. =(= to =lispy-parens=
 - [ ] Look into the build in =js-mode= in place of =js2-mode= and =rjsx=, it can now work with =jsx= files
 - [ ] Look into =web-mode= for =tsx= files
