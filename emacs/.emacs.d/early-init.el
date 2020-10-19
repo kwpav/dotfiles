@@ -1,8 +1,16 @@
 ;;; early-init.el --- -*- lexical-binding: t -*-
 
-(setq gc-cons-threshold most-positive-fixnum)
+;;; Commentary:
+;; This file runs before init.el.
+;; It mostly contains things to start up a little faster.
+
+;;; Code:
+
+;; (setq gc-cons-threshold most-positive-fixnum)
 
 (setq package-enable-at-startup nil)
+
+(setq site-run-file nil)
 
 ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
 (push '(menu-bar-lines . 0) default-frame-alist)
