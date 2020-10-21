@@ -512,7 +512,8 @@ Using the default keybinding of ~C-;~.
 - Edit one of the occurrences The change is applied to other occurrences simultaneously.
 - Finish - by pressing ~C-;~ again
 #+BEGIN_SRC emacs-lisp
-  (use-package iedit)
+  (use-package iedit
+    :defer 1)
 #+END_SRC
 ** Look and Feel
 *** Change defaults
@@ -1614,6 +1615,17 @@ Use python 3 by default
   (when (eq system-type 'darwin)
     (setq python-shell-interpreter "/usr/local/bin/python3"))
 #+END_SRC
+
+OSX displays a big yellow warning sign for a visual bell and I think its annoying. This flashes the modeline instead.
+Taken from here https://www.emacswiki.org/emacs/AlarmBell
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq visible-bell nil
+          ring-bell-function 'flash-mode-line)
+    (defun flash-mode-line ()
+      (invert-face 'mode-line)
+      (run-with-timer 0.1 nil #'invert-face 'mode-line)))
+#+end_src
 *** Linux
 **** StumpWM
 #+BEGIN_SRC emacs-lisp
