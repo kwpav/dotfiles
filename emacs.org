@@ -210,7 +210,7 @@ Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by E
 #+end_src
 *** Keys
 To set up custom keys, I use a combination of:
-- =general= - an easier way to define custom keys than the built in one
+- =general= - provides a leader key and gives us an easy way to define custom keys in =use-package=
 - =which-key= - shows a list of all available keybindings, it works nicely with =general=, as it will show all the keybindings available after pressing ~SPC~
 - =hydra= - create a "mode" (similar to how i3 does resize mode) for repeated actions
 **** general
@@ -255,7 +255,6 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
     (my-leader-def
       "c" 'comment-dwim
       "RET" 'make-frame-command
-      "l" 'my/what-minor-mode
       ;; bookmarks
       "rm" 'bookmark-set
       "rb" 'bookmark-jump
@@ -278,6 +277,7 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
 Add a zoom hydra from hydras github and a =straight= hydra from its github.
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
+    :defer t
     :config
     (defhydra hydra-zoom (global-map "<f5>")
       "zoom"
@@ -1007,41 +1007,41 @@ list minor modes
        (symbol mode)
        (t (error "Expected a symbol/string, got a %s" (type-of mode))))))
 #+END_SRC
+
+Add a key for it:
+#+begin_src emacs-lisp
+  (my-leader-def
+    "l" 'my/what-minor-mode)
+#+end_src
 ** Window and Buffer Management
 *** Keys
 #+BEGIN_SRC emacs-lisp
   (my-leader-def
-    "c" 'comment-dwim
-    "RET" 'make-frame-command
-    "l" 'my/what-minor-mode
-    ;; buffers and windows
     "bb" 'switch-to-buffer
     "bk" 'kill-buffer
     "wo" 'split-window-horizontally
     "wu" 'split-window-vertically
-    "wd" 'delete-window
-    "wh" 'windmove-left
-    "wj" 'windmove-down
-    "wk" 'windmove-up
-    "wl" 'windmove-right
-    "w." 'eyebrowse-switch-to-window-config
-    "w," 'eyebrowse-rename-window-config
-    "w1" 'eyebrowse-switch-to-window-config-1
-    "w2" 'eyebrowse-switch-to-window-config-2
-    "w3" 'eyebrowse-switch-to-window-config-3
-    "w4" 'eyebrowse-switch-to-window-config-4
-    "w4" 'eyebrowse-switch-to-window-config-4
-    "w5" 'eyebrowse-switch-to-window-config-5
-    "w6" 'eyebrowse-switch-to-window-config-6
-    "w7" 'eyebrowse-switch-to-window-config-7
-    "w8" 'eyebrowse-switch-to-window-config-8
-    "w9" 'eyebrowse-switch-to-window-config-9
-    "w0" 'eyebrowse-switch-to-window-config-0)
+    "wd" 'delete-window)
 #+END_SRC
 *** eyebrowse
 Eyebrowse provides a way to manage workspaces like tiling window managers.
 #+BEGIN_SRC emacs-lisp
   (use-package eyebrowse
+    :general
+    (my-leader-def
+      "w." 'eyebrowse-switch-to-window-config
+      "w," 'eyebrowse-rename-window-config
+      "w1" 'eyebrowse-switch-to-window-config-1
+      "w2" 'eyebrowse-switch-to-window-config-2
+      "w3" 'eyebrowse-switch-to-window-config-3
+      "w4" 'eyebrowse-switch-to-window-config-4
+      "w4" 'eyebrowse-switch-to-window-config-4
+      "w5" 'eyebrowse-switch-to-window-config-5
+      "w6" 'eyebrowse-switch-to-window-config-6
+      "w7" 'eyebrowse-switch-to-window-config-7
+      "w8" 'eyebrowse-switch-to-window-config-8
+      "w9" 'eyebrowse-switch-to-window-config-9
+      "w0" 'eyebrowse-switch-to-window-config-0)
     :config
     (eyebrowse-mode t))
 #+END_SRC
@@ -1050,7 +1050,16 @@ Windmove provides a way to move around emacs windows.
 
 Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
 #+BEGIN_SRC emacs-lisp
-  (windmove-default-keybindings)
+  (use-package windmove
+    :straight nil
+    :general
+    (my-leader-def
+      "wh" 'windmove-left
+      "wj" 'windmove-down
+      "wk" 'windmove-up
+      "wl" 'windmove-right)
+    :config
+    (windmove-default-keybindings))
 #+END_SRC
 ** Project and File Management
 *** dired
