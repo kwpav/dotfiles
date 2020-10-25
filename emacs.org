@@ -650,12 +650,12 @@ You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the 
 
 =column-number-mode= displays the cursors current line on the modeline
 #+BEGIN_SRC emacs-lisp
-  (defun my-doom-modeline-setup ()
-    (column-number-mode)
-    (doom-modeline-mode 1))
-
   (use-package doom-modeline
     :demand t
+    :preface
+    (defun my-doom-modeline-setup ()
+      (column-number-mode)
+      (doom-modeline-mode 1))
     :init (my-doom-modeline-setup)
     :custom
     (doom-modeline-vcs-max-length 50)
