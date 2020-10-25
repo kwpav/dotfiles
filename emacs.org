@@ -512,8 +512,7 @@ Using the default keybinding of ~C-;~.
 - Edit one of the occurrences The change is applied to other occurrences simultaneously.
 - Finish - by pressing ~C-;~ again
 #+BEGIN_SRC emacs-lisp
-  (use-package iedit
-    :defer 1)
+  (use-package iedit)
 #+END_SRC
 ** Look and Feel
 *** Change defaults
