@@ -1258,11 +1258,31 @@ As of Emacs 27.1, =org-tempo= is required to use these.
           '(("t" "Todo" entry (file+headline "~/org/agenda/todo.org" "Tasks")
              "* TODO %?\n %i\n %a")
             ("s" "Standup" entry (file+olp+datetree "~/org/agenda/todo.org" "Standup")
-             "* Planned\n- %?\n %i\n %a")
-            ("b" "Blog Draft" entry (file+headline "~/projects/blog-drafts/blog.org" "In Draft")
-             "* DRAFT %?\n:PROPERTIES:\n:EXPORT_FILE_NAME:\n:EXPORT_DATE:\n:PROPERTIES:\n %i\n %a")
-            ("i" "Blog Idea" entry (file+headline "~/projects/blog-drafts/blog.org" "Ideas")
-             "* TODO %?\n %i\n %a"))))
+             "* Planned\n- %?\n %i\n %a")))
+
+    (defun org-hugo-new-subtree-post-capture-template ()
+      "Returns `org-capture' template string for new Hugo post.
+  See `org-capture-templates' for more information."
+      (let* ((title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+             (fname (org-hugo-slug title)))
+        (mapconcat #'identity
+                   `(
+                     ,(concat "* TODO " title)
+                     ":PROPERTIES:"
+                     ,(concat ":EXPORT_FILE_NAME: " fname)
+                     ":END:"
+                     "%?\n")          ;Place the cursor here finally
+                   "\n")))
+
+    (add-to-list 'org-capture-templates
+                 '("b"
+                   "Blog Post"
+                   entry
+                   ;; It is assumed that below file is present in `org-directory'
+                   ;; and that it has a "Blog Ideas" heading. It can even be a
+                   ;; symlink pointing to the actual location of all-posts.org!
+                   (file+olp "blog-posts.org" "Ideas")
+                   (function org-hugo-new-subtree-post-capture-template))))
 #+end_src
 *** Use Package
 Put it all together with =use-package=.
