@@ -2,7 +2,7 @@
 ;; ~/.emacs.d/init.el
 
 ;;; Commentary:
-;; This holds custom variables and loads emacs.org, where my actual config is
+;; This loads emacs.org, where my actual config is.
 
 ;;; Code:
 

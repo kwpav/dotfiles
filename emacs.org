@@ -547,7 +547,10 @@ Using the default keybinding of ~C-;~.
 *** Change defaults
 Use a non-blinking cursor for a more zen-like experience.
 #+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode 0) ;; dont blink the cursor
+  (use-package frame
+    :straight nil
+    :config
+    (blink-cursor-mode -1)) ;; dont blink the cursor
 #+END_SRC
 
 If the frame isnt a specific height/width, some black edges will appear around it. This removes them.
@@ -2140,7 +2143,7 @@ Now setup packages that will be used for all the lisp modes above.
 
 #+BEGIN_SRC emacs-lisp
   (defun my-lisp-setup ()
-    (electric-pair-mode 0))
+    (electric-pair-mode -1))
 
   (use-package paredit
     :defer t
