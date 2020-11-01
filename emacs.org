@@ -961,7 +961,7 @@ From various places, like:
   ;;      (set-face-background 'mode-line (car color))
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
-*** COMMENT solaire
+*** solaire
 make certain buffers lighter/darker, e.g. treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package solaire-mode
