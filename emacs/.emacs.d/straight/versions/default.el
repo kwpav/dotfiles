@@ -114,7 +114,6 @@
  ("sly" . "8b737a1bd9524ea7a00a700683ecd4ab5e328282")
  ("sly-asdf" . "32ce14994e8faee9321605cec36d156b02996c46")
  ("sly-quicklisp" . "4707b62803d7a29f172e9c5ff993b91187a9aaf3")
- ("smartparens" . "c59bfef7e8f1687ac77b0afaaaed86d8051d3de1")
  ("spinner" . "2daa167bec1c7566d662d48613a94453536b524a")
  ("straight.el" . "68dade0cc0f94f90a212a3ed9f7a6330b2d64770")
  ("stumpwm" . "61a7cf27e49e0779a53c018b2342f5f1c5cc70b4")

@@ -193,7 +193,7 @@ Don't create any extra files.
 #+BEGIN_SRC emacs-lisp
   (setq make-backup-files nil ; stop creating backup~ files
         auto-save-default nil ; stop creating #autosave# files
-        create-lockfiles nil) ; stop creating .# files
+        create-lockfiles nil) ; stop creating .# files)
 #+END_SRC
 
 Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
@@ -208,8 +208,12 @@ Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by E
 
 =show-paren-mode= highlights matching parentheses. The default delay is annoying so change it to =0=.
 #+begin_src emacs-lisp
-  (setq show-paren-delay 0)
-  (show-paren-mode 1)
+  (use-package paren
+    :straight nil
+    :init
+    (setq show-paren-delay 0)
+    :config
+    (show-paren-mode 1))
 #+end_src
 *** Keys
 To set up custom keys, I use a combination of:
@@ -1452,12 +1456,14 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 
 Some handy links
 - https://emacs-lsp.github.io/lsp-mode/page/performance/
-*** smartparens
-autocomplete for brackets
+*** electric pair
+Use the built in =electric-pair-mode= to autocomplete brackets.
 #+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :config
-    (smartparens-global-mode))
+  (use-package elec-pair
+    :straight nil
+    :hook
+    (prog-mode . electric-pair-mode)
+    (org-mode . electric-pair-mode))
 #+END_SRC
 *** COMMENT dumb-jump
 Get some nice go-to-definition functionality
@@ -1732,7 +1738,7 @@ machine irc.freenode.net login <nickname> password <password> port 6697
 #+begin_src emacs-lisp
   (use-package erc
     :defer t
-    :ensure nil
+    :straight nil
     :preface
     (defun erc-start-or-switch ()
       "Start ERC or switch to ERC buffer if it has started already."
@@ -2127,7 +2133,7 @@ Now setup packages that will be used for all the lisp modes above.
 
 #+BEGIN_SRC emacs-lisp
   (defun my-lisp-setup ()
-    (turn-off-smartparens-mode))
+    (electric-pair-mode 0))
 
   (use-package paredit
     :defer t
