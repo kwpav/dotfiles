@@ -9,6 +9,7 @@ This is my emacs configuration in =org-mode=. It's loaded using =(org-babel-load
 - [[https://github.com/syl20bnr/spacemacs][Spacemacs]]
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]]
 - [[https://github.com/MatthewZMD/.emacs.d#org0f80f62][M-EMACS]]
+- [[https://github.com/ianpan870102/yay-evil-emacs/blob/master/config.org][yay-evil]]
 
 It is divided into two major parts:
 1. *Emacs* - settings and packages that change how emacs works/looks/etc
@@ -176,7 +177,10 @@ Change "yes or no" to "y or n"
 
 Update buffers automatically when underlying files are changed externally.
 #+BEGIN_SRC emacs-lisp
-  (global-auto-revert-mode t)
+  (use-package autorevert
+    :straight nil
+    :config
+    (global-auto-revert-mode +1))
 #+END_SRC
 
 Use UTF-8, this should fix flycheck errors with python-flake8
@@ -191,9 +195,12 @@ A package that provides some good defaults, e.g. using the X clipboard for yanki
 
 Don't create any extra files.
 #+BEGIN_SRC emacs-lisp
-  (setq make-backup-files nil ; stop creating backup~ files
-        auto-save-default nil ; stop creating #autosave# files
-        create-lockfiles nil) ; stop creating .# files)
+  (use-package files
+    :straight nil
+    :custom
+    (make-backup-files nil) ; stop creating backup~ files
+    (auto-save-default nil) ; stop creating #autosave# files
+    (create-lockfiles nil)) ; stop creating .# files)
 #+END_SRC
 
 Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
