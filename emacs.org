@@ -124,9 +124,12 @@ Automatically install and then setup =use-package= and =diminish=
 ** Startup
 Display the scratch buffer when starting up, use =org-mode= for the scratch buffer, and remove the default message.
 #+BEGIN_SRC emacs-lisp
-  (setq inhibit-startup-screen t
-        initial-major-mode 'org-mode
-        initial-scratch-message nil)
+  (use-package "startup"
+    :straight nil
+    :custom
+    (inhibit-startup-screen t)
+    (initial-major-mode 'org-mode)
+    (initial-scratch-message nil))
 #+END_SRC
 
 See how long startup takes with ~M-x esup~
