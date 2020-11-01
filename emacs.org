@@ -469,6 +469,22 @@ Make =ivy= look a bit nicer
     (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 #+END_SRC
 
+Sort results with =prescient=
+#+begin_src emacs-lisp
+  (use-package prescient
+    :after counsel)
+
+  (use-package ivy-prescient
+    :after prescient
+    :custom
+    (ivy-prescient-sort-commands t)
+    (ivy-prescient-retain-classic-highlighting t)
+    (ivy-prescient-enable-filtering t)
+    (ivy-prescient-enable-sorting t)
+    :config
+    (ivy-prescient-mode +1))
+#+end_src
+
 *** Search / Replace
 Replace keybindings for emacs search and evil search with swiper.
 #+BEGIN_SRC emacs-lisp
@@ -2458,3 +2474,5 @@ An on-going list of things I want to change
 - =ivy-posframe= - load ivy in a popup frame type thing
 - =company-box= show cool icons in company results
 - =org-present= org mode presentations
+- =selectrum= replacement for ivy
+- =ctrlf= replacement for swiper
