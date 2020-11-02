@@ -6,8 +6,12 @@
 
 ;;; Code:
 
-;; (setq gc-cons-threshold most-positive-fixnum)
+;; Defer garbage collection further back in the startup process.
+(setq gc-cons-threshold most-positive-fixnum)
 
+;; Package initialize occurs automatically, before `user-init-file' is
+;; loaded, but after `early-init-file'. We handle package
+;; initialization, so we must prevent Emacs from doing it early!
 (setq package-enable-at-startup nil)
 
 (setq site-run-file nil)
@@ -16,6 +20,15 @@
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
+
+;; Access the menu bar by right-clicking.
+(setq menu-bar-mode -99)
+
+ ;; Remove the extra border around frames.
+(set-fringe-mode '(10 . 0))
+
+ ;; Highlight the current line.
+(global-hl-line-mode +1)
 
 ;; Resizing the Emacs frame can be a terribly expensive part of changing the
 ;; font. By inhibiting this, we easily halve startup times with fonts that are
@@ -26,12 +39,6 @@
 ;; in this file and can conflict with later config (particularly where the
 ;; cursor color is concerned).
 (advice-add #'x-apply-session-resources :override #'ignore)
-
-(setq menu-bar-mode -99)
-;; (setq tool-bar-mode nil) ;; hide the toolbar
-;; (setq scroll-bar-mode nil) ;; hide the scrollbar
-(set-fringe-mode '(10 . 0)) ;; remove the extra border around frames
-(global-hl-line-mode 1) ;; highlight the current line
 
 (provide 'early-init)
 

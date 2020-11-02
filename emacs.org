@@ -185,7 +185,10 @@ Update buffers automatically when underlying files are changed externally.
 
 Use UTF-8, this should fix flycheck errors with python-flake8
 #+BEGIN_SRC emacs-lisp
-  (set-default-coding-systems 'utf-8)
+  (use-package "mule-cmds"
+    :straight nil
+    :config
+    (set-default-coding-systems 'utf-8))
 #+END_SRC
 
 A package that provides some good defaults, e.g. using the X clipboard for yanking
@@ -220,7 +223,7 @@ Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by E
     :init
     (setq show-paren-delay 0)
     :config
-    (show-paren-mode 1))
+    (show-paren-mode +1))
 #+end_src
 *** Keys
 To set up custom keys, I use a combination of:
@@ -283,7 +286,7 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
     :custom
     (which-key-idle-delay 0)
     :config
-    (which-key-mode)
+    (which-key-mode +1)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom))
 #+END_SRC
@@ -350,7 +353,7 @@ Evil mode is vim in emacs!
     (evil-want-keybinding nil)  ;; evil-collection assumes this
     (evil-undo-system 'undo-fu)
     :config
-    (evil-mode 1)
+    (evil-mode +1)
     (my-emacs-in-normal-mode))
 #+END_SRC
 
@@ -686,8 +689,8 @@ You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the 
     :demand t
     :preface
     (defun my-doom-modeline-setup ()
-      (column-number-mode)
-      (doom-modeline-mode 1))
+      (column-number-mode +1)
+      (doom-modeline-mode +1))
     :init (my-doom-modeline-setup)
     :custom
     (doom-modeline-vcs-max-length 50)
@@ -1108,7 +1111,7 @@ Some tips for using dired:
   (use-package diredfl
     :after dired
     :config
-    (diredfl-global-mode 1))
+    (diredfl-global-mode +1))
 #+END_SRC
 
 Press ~C-(~ to get git info
@@ -1122,7 +1125,7 @@ Projectile allows some nice things for projects, such as searching for files, ma
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :config
-    (projectile-mode 1))
+    (projectile-mode +1))
 
   (use-package counsel-projectile
     :after (counsel projectile)
@@ -1134,7 +1137,7 @@ Projectile allows some nice things for projects, such as searching for files, ma
       "pp" 'counsel-projectile-switch-project
       "pg" 'counsel-projectile-rg) ;;ripgrep
     :config
-    (counsel-projectile-mode 1))
+    (counsel-projectile-mode +1))
 #+END_SRC
 *** treemacs
 A file tree.
@@ -1170,8 +1173,8 @@ The prettify hook:
 #+BEGIN_SRC emacs-lisp
   (defun my-org-prettify-hook ()
     (turn-on-visual-line-mode)
-    (variable-pitch-mode 1)
-    (org-bullets-mode 1))
+    (variable-pitch-mode +1)
+    (org-bullets-mode +1))
 
   (use-package org-bullets)
 #+END_SRC
@@ -1407,9 +1410,9 @@ Enable the minor modes I use for writing
 #+begin_src emacs-lisp
   (defun my/writing-modes ()
     (interactive)
-    (flyspell-mode 1)
-    (olivetti-mode 1)
-    (writegood-mode 1))
+    (flyspell-mode +1)
+    (olivetti-mode +1)
+    (writegood-mode +1))
 #+end_src
 
 *** ox-hugo
@@ -1519,7 +1522,7 @@ Use snippets in specific modes
    (yas-snippet-dirs
     '("~/.emacs.d/snippets"))
    :config
-   (yas-global-mode 1))
+   (yas-global-mode +1))
 #+END_SRC
 
 Install the official snippets
@@ -1534,7 +1537,7 @@ Use editorconfig for projects that have them
   (use-package editorconfig
     :delight
     :config
-    (editorconfig-mode 1))
+    (editorconfig-mode +1))
 #+END_SRC
 ** Version Control
 *** magit
@@ -1606,7 +1609,7 @@ Taken from the doom-emacs config.
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
     :config
-    (global-git-gutter-mode 1)
+    (global-git-gutter-mode +1)
     (setq-default fringes-outside-margins t)
     (define-fringe-bitmap 'git-gutter-fr:added
       [240 240 240 240 240 240 240 240 240 240 240 240 240 240]
