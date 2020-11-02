@@ -225,6 +225,14 @@ Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by E
     :config
     (show-paren-mode +1))
 #+end_src
+
+Set up so-long mode to handle files with large lines. If a line in a file is too long, this will turn off syntax highlighting, which causes slowness when using files with long lines.
+#+begin_src emacs-lisp
+  (use-package so-long
+    :straight nil
+    :config
+    (global-so-long-mode +1))
+#+end_src
 *** Keys
 To set up custom keys, I use a combination of:
 - =general= - provides a leader key and gives us an easy way to define custom keys in =use-package=
