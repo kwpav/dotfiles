@@ -1135,7 +1135,10 @@ Some tips for using dired:
   (use-package dired
     :straight nil
     :defer t
-    :hook (dired-mode . dired-hide-details-mode))
+    :hook (dired-mode . dired-hide-details-mode)
+    :general
+    (my-leader-def
+      "d" 'dired))
 
   ;; Colourful columns.
   (use-package diredfl
