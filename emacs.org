@@ -416,9 +416,9 @@ Jump around a file with a few keystrokes.
 
 Show tildes in the fringe on empty lines.
 #+BEGIN_SRC emacs-lisp
-  (use-package vi-tilde-fringe
-    :config
-    (global-vi-tilde-fringe-mode 1))
+  ;; (use-package vi-tilde-fringe
+  ;;   :config
+  ;;   (global-vi-tilde-fringe-mode 1))
 #+END_SRC
 *** Mouse
 Better mouse scrolling - the default scrolling is too quick.
@@ -571,15 +571,28 @@ If the frame isnt a specific height/width, some black edges will appear around i
 *** Theme
 Theme I'm currently using
 #+BEGIN_SRC emacs-lisp
-  (use-package doom-themes
+  ;; (use-package doom-themes
+  ;;   :custom
+  ;;   (doom-themes-enable-bold t)
+  ;;   (doom-themes-enable-italic t)
+  ;;   (doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  ;;   :config
+  ;;   (load-theme 'doom-nord)
+  ;;   (doom-themes-treemacs-config)
+  ;;   (doom-themes-org-config))
+
+  (use-package modus-vivendi-theme
     :custom
-    (doom-themes-enable-bold t)
-    (doom-themes-enable-italic t)
-    (doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    (modus-vivendi-theme-bold-constructs t)
+    (modus-vivendi-theme-slanted-constructs t)
+    (modus-vivendi-theme-intense-paren-match t)
+    (modus-vivendi-theme-completions 'opinionated)
+    ;; org specific settings
+    (modus-vivendi-theme-org-blocks 'grayscale)
+    (modus-vivendi-theme-headings '((t . rainbow)))
+    (modus-vivendi-theme-scale-headings t)
     :config
-    (load-theme 'doom-nord)
-    (doom-themes-treemacs-config)
-    (doom-themes-org-config))
+    (load-theme 'modus-vivendi))
    #+END_SRC
 *** COMMENT other themes
 Some dark themes I Like
@@ -989,7 +1002,7 @@ From various places, like:
   ;;      (set-face-background 'mode-line (car color))
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
-*** solaire
+*** COMMENT solaire
 make certain buffers lighter/darker, e.g. treemacs
 #+BEGIN_SRC emacs-lisp
   (use-package solaire-mode
@@ -1266,14 +1279,14 @@ Needed by =pelican= and =nikola=
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "CURRENT(c)" "|" "DONE(d)")
             (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(a@/!)")))
-    (setq org-todo-keyword-faces
-          (quote (("TODO" :foreground "#BF616A" :weight bold)
-                  ("NEXT" :foreground "#5E81AC" :weight bold)
-                  ("CURRENT" :foreground "#88C0D0" :weight bold)
-                  ("DONE" :foreground "#A3BE8C" :weight bold)
-                  ("WAITING" :foreground "#D08770" :weight bold)
-                  ("HOLD" :foreground "#848EAD" :weight bold)
-                  ("CANCELLED" :foreground "#8FBCBB" :weight bold))))
+    ;; (setq org-todo-keyword-faces
+    ;;       (quote (("TODO" :foreground "#BF616A" :weight bold)
+    ;;               ("NEXT" :foreground "#5E81AC" :weight bold)
+    ;;               ("CURRENT" :foreground "#88C0D0" :weight bold)
+    ;;               ("DONE" :foreground "#A3BE8C" :weight bold)
+    ;;               ("WAITING" :foreground "#D08770" :weight bold)
+    ;;               ("HOLD" :foreground "#848EAD" :weight bold)
+    ;;               ("CANCELLED" :foreground "#8FBCBB" :weight bold))))
     (setq org-log-done 'time))
 #+END_SRC
 
@@ -1343,7 +1356,7 @@ I dont need documentation for elisp in this config, so =my-disable-flycheck-for-
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :defer t
-    :straight nil                         ;use built in version
+    :straight nil
     :general
     (org-src-mode-map
      [remap evil-save-and-close]          'org-edit-src-exit
@@ -1363,22 +1376,27 @@ I dont need documentation for elisp in this config, so =my-disable-flycheck-for-
     :custom-face
     (variable-pitch ((t (:family "EtBembo" :height 160 :weight normal :slant normal))))
     (fixed-pitch ((t (:family "Iosevka" :height 0.8))))
-    (org-indent ((t (:inherit (org-hide fixed-pitch)))))
-    (org-document-title ((t (:foreground "#B48EAD" :weight bold :height 1.4))))
-    (org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold :foreground "#8fbcbb"))))
-    (org-level-2 ((t (:inherit outline-1 :height 1.2 :weight bold :foreground "#88c0d0"))))
-    (org-level-3 ((t (:inherit outline-1 :height 1.1 :weight bold :foreground "#81a1c1"))))
-    (org-level-4 ((t (:inherit outline-1 :height 1.0 :weight bold :foreground "#5e81ac"))))
-    (org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold))))
-    (org-block-begin-line ((t (:inherit 'fixed-pitch :background nil))))
-    (org-block-end-line ((t (:inherit 'org-block-begin-line))))
-    (org-code ((t (:inherit 'fixed-pitch))))
-    (org-link ((t (:inherit 'fixed-pitch))))
-    (org-block ((t (:inherit 'fixed-pitch))))
-    (org-table ((t (:inherit 'fixed-pitch))))
-    (org-verbatim ((t (:inherit 'fixed-pitch))))
-    (org-meta-line ((t (:inherit 'fixed-pitch))))
-    (org-document-info-keyword ((t (:inherit 'fixed-pitch))))
+    ;; this is all handled in modus-vivendi!
+    ;; (org-indent ((t (:inherit (org-hide fixed-pitch)))))
+    ;; (org-document-title ((t (:foreground "#B48EAD" :weight bold :height 1.4))))
+    ;; (org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold ;; :foreground "#8fbcbb"
+    ;;                            ))))
+    ;; (org-level-2 ((t (:inherit outline-1 :height 1.2 :weight bold ;; :foreground "#88c0d0"
+    ;;                            ))))
+    ;; (org-level-3 ((t (:inherit outline-1 :height 1.1 :weight bold ;; :foreground "#81a1c1"
+    ;;                            ))))
+    ;; (org-level-4 ((t (:inherit outline-1 :height 1.0 :weight bold ;; :foreground "#5e81ac"
+    ;;                            ))))
+    ;; (org-level-5 ((t (:inherit outline-1 :height 1.0 :weight bold))))
+    ;; (org-block-begin-line ((t (:inherit 'fixed-pitch :background nil))))
+    ;; (org-block-end-line ((t (:inherit 'org-block-begin-line))))
+    ;; (org-code ((t (:inherit 'fixed-pitch))))
+    ;; (org-link ((t (:inherit 'fixed-pitch))))
+    ;; (org-block ((t (:inherit 'fixed-pitch))))
+    ;; (org-table ((t (:inherit 'fixed-pitch))))
+    ;; (org-verbatim ((t (:inherit 'fixed-pitch))))
+    ;; (org-meta-line ((t (:inherit 'fixed-pitch))))
+    ;; (org-document-info-keyword ((t (:inherit 'fixed-pitch))))
     :custom
     (org-agenda-files (list "~/org/agenda/"))
     :config
