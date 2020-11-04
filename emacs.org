@@ -200,9 +200,19 @@ Use UTF-8 for (almost) everything. This should also fix flycheck errors with pyt
     (set-language-environment "UTF-8"))
 #+END_SRC
 
-A package that provides some good defaults, e.g. using the X clipboard for yanking
+Settings from =better-defaults=
 #+BEGIN_SRC emacs-lisp
-  (use-package better-defaults)
+  (setq-default indent-tabs-mode nil)
+
+  (setq save-interprogram-paste-before-kill t
+        apropos-do-all t
+        mouse-yank-at-point t
+        require-final-newline t
+        visible-bell t
+        load-prefer-newer t
+        ediff-window-setup-function 'ediff-setup-windows-plain)
+
+  (save-place-mode 1)
 #+END_SRC
 
 Don't create any extra files.
@@ -1642,7 +1652,14 @@ Show commit info
 #+END_SRC
 *** git-gutter-fringe
 Show whether something has been added, modified, or deleted on the side of the screen.
-
+#+begin_src emacs-lisp
+  (use-package git-gutter-fringe
+    :config
+    (global-git-gutter-mode +1)
+    (setq-default fringes-outside-margins t))
+#+end_src
+*** COMMENT git-gutter-fringe old
+This doesn't look great with modus-themes, so commenting it out for now.
 Taken from the doom-emacs config.
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe

@@ -24,11 +24,8 @@
 ;; Access the menu bar by right-clicking.
 (setq menu-bar-mode -99)
 
- ;; Remove the extra border around frames.
+;; Remove the extra border around frames.
 (set-fringe-mode '(10 . 0))
-
- ;; Highlight the current line.
-(global-hl-line-mode +1)
 
 ;; Resizing the Emacs frame can be a terribly expensive part of changing the
 ;; font. By inhibiting this, we easily halve startup times with fonts that are
@@ -39,6 +36,9 @@
 ;; in this file and can conflict with later config (particularly where the
 ;; cursor color is concerned).
 (advice-add #'x-apply-session-resources :override #'ignore)
+
+;; Highlight the current line.
+(global-hl-line-mode +1)
 
 (provide 'early-init)
 
