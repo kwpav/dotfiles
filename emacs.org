@@ -84,8 +84,8 @@ Automatically enable =:straight t=, which is basically the same as =:ensure t= b
 install  =use-package= and related packages
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'use-package)
-  (straight-use-package 'diminish) ;; for :diminish
-  (straight-use-package 'bind-key) ;; for :bind
+  (use-package diminish) ;; for :diminish
+  (use-package bind-key) ;; for :bind
 #+END_SRC
 
 Install =ensure-system-package=
