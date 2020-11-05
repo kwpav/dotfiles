@@ -181,6 +181,35 @@ alias keepush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
 alias keepull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
 #+END_SRC
 
+* vterm
+Set up things for vterm in Emacs
+
+#+begin_quote
+Some of the most useful features in vterm (e.g., directory-tracking and prompt-tracking or message passing) require shell-side configurations. The main goal of these additional functions is to enable the shell to send information to vterm via properly escaped sequences. A function that helps in this task, vterm_printf, is defined below. This function is widely used throughout this readme.
+#+end_quote
+#+begin_src sh :tangle ~/dotfiles/zsh/.zshrc
+  vterm_printf(){
+      if [ -n "$TMUX" ]; then
+          # Tell tmux to pass the escape sequences through
+          # (Source: http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324)
+          printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+      elif [ "${TERM%%-*}" = "screen" ]; then
+          # GNU screen (screen, screen-256color, screen-256color-bce)
+          printf "\eP\e]%s\007\e\\" "$1"
+      else
+          printf "\e]%s\e\\" "$1"
+      fi
+  }
+#+end_src
+
+#+begin_quote
+vterm-clear-scrollback does exactly what the name suggests: it clears the current buffer from the data that it is not currently visible. vterm-clear-scrollback is bound to C-c C-l. This function is typically used with the clear function provided by the shell to clear both screen and scrollback. In order to achieve this behavior, you need to add a new shell alias.
+#+end_quote
+#+begin_src sh :tangle ~/dotfiles/zsh/.zshrc
+if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+    alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
+fi
+#+end_src
 * Fixes
 ** Delete Key
 The delete key by default inserts a ~, this makes it act like it should
