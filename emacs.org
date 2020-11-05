@@ -589,17 +589,11 @@ If the frame isnt a specific height/width, some black edges will appear around i
 #+END_SRC
 *** Theme
 Theme I'm currently using
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package doom-themes
-  ;;   :custom
-  ;;   (doom-themes-enable-bold t)
-  ;;   (doom-themes-enable-italic t)
-  ;;   (doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  ;;   :config
-  ;;   (load-theme 'doom-nord)
-  ;;   (doom-themes-treemacs-config)
-  ;;   (doom-themes-org-config))
 
+Modus themes are WCAG AAA compliant, easy on the eyes, and super customizeable.
+
+Dark theme
+#+BEGIN_SRC emacs-lisp
   (use-package modus-vivendi-theme
     :custom
     (modus-vivendi-theme-bold-constructs t)
@@ -613,9 +607,46 @@ Theme I'm currently using
     :config
     (load-theme 'modus-vivendi))
    #+END_SRC
+
+Light theme
+#+begin_src emacs-lisp
+  (use-package modus-operandi-theme
+    :custom
+    (modus-operandi-theme-bold-constructs t)
+    (modus-operandi-theme-slanted-constructs t)
+    (modus-operandi-theme-intense-paren-match t)
+    (modus-operandi-theme-completions 'opinionated)
+    ;; org specific settings
+    (modus-operandi-theme-org-blocks 'grayscale)
+    (modus-operandi-theme-headings '((t . rainbow)))
+    (modus-operandi-theme-scale-headings t))
+#+end_src
+
+Toggle between them
+#+begin_src emacs-lisp
+  (defun modus-themes-toggle ()
+      "Toggle between `modus-operandi' and `modus-vivendi' themes."
+      (interactive)
+      (if (eq (car custom-enabled-themes) 'modus-operandi)
+          (progn
+            (disable-theme 'modus-operandi)
+            (load-theme 'modus-vivendi t))
+        (disable-theme 'modus-vivendi)
+        (load-theme 'modus-operandi t)))
+#+end_src
 *** COMMENT other themes
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
+  (use-package doom-themes
+    :custom
+    (doom-themes-enable-bold t)
+    (doom-themes-enable-italic t)
+    (doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    :config
+    (load-theme 'doom-nord)
+    (doom-themes-treemacs-config)
+    (doom-themes-org-config))
+
   (use-package nord-theme
      :config
      (load-theme 'nord))
@@ -675,19 +706,6 @@ Some light themes I like
   (load-theme 'light-soap)
   (load-theme 'solarized-light)
 #+END_SRC
-
-WCAG AAA Themes!
-- modus-operandi is light
-- modus-vivendi is dark
-#+begin_src emacs-lisp
-  (use-package modus-vivendi-theme
-    :config
-    (load-theme 'modus-vivendi))
-
-  (use-package modus-operandi-theme
-    :config
-    (load-theme 'modus-operandi))
-#+end_src
 *** Font
 Font I'm currently using
 #+BEGIN_SRC emacs-lisp
