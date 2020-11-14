@@ -285,25 +285,16 @@ It also adds a =:general= use-package keyword, so this needs to be setup before 
       :prefix "SPC m"
       :non-normal-prefix "M-,")
 
-    ;; define which-key prefixes
-    (my-leader-def
-      "p" '(:ignore t :wk "projects")
-      "b" '(:ignore t :wk "buffers")
-      "w" '(:ignore t :wk "windows")
-      "r" '(:ignore t :wk "bookmarks")
-      "t" '(:ignore t :wk "terminal")
-      "g" '(:ignore t :wk "git")
-      "q" '(:ignore t :wk "quit / restart")
-      "P" 'hydra-straight-helper/body)
-
     (my-leader-def
       "c" 'comment-dwim
       "RET" 'make-frame-command
       ;; bookmarks
+      "r" '(:ignore t :wk "bookmarks")
       "rm" 'bookmark-set
       "rb" 'bookmark-jump
       "rl" 'bookmark-bmenu-list
       ;; quit / restart
+      "q" '(:ignore t :wk "quit / restart")
       "qq" 'save-buffers-kill-terminal
       "qr" 'restart-emacs))
 #+END_SRC
@@ -322,6 +313,9 @@ Add a zoom hydra from hydras github and a =straight= hydra from its github.
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
     :defer t
+    :general
+    (my-leader-def
+     "P" '(hydra-straight-helper/body :wk "package management"))
     :config
     (defhydra hydra-zoom (global-map "<f5>")
       "zoom"
@@ -330,6 +324,7 @@ Add a zoom hydra from hydras github and a =straight= hydra from its github.
       ("r" (text-scale-set 0) "reset")
       ("0" (text-scale-set 0) :bind nil :exit t))
     (defhydra hydra-straight-helper (:hint nil :color green)
+
       "
   _c_heck all       |_f_etch all     |_m_erge all      |_n_ormalize all   |p_u_sh all
   _C_heck package   |_F_etch package |_M_erge package  |_N_ormlize package|p_U_sh package
@@ -1110,6 +1105,7 @@ Add a key for it:
 *** Keys
 #+BEGIN_SRC emacs-lisp
   (my-leader-def
+    "b" '(:ignore t :wk "buffers")
     "bb" 'switch-to-buffer
     "bk" 'kill-buffer
     "wo" 'split-window-horizontally
@@ -1147,6 +1143,7 @@ Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
     :straight nil
     :general
     (my-leader-def
+      "w" '(:ignore t :wk "windows")
       "wh" 'windmove-left
       "wj" 'windmove-down
       "wk" 'windmove-up
@@ -1192,6 +1189,7 @@ Projectile allows some nice things for projects, such as searching for files, ma
     :after (counsel projectile)
     :general
     (my-leader-def
+      "p" '(:ignore t :wk "projects")
       "pf" 'counsel-projectile-find-file
       "pd" 'counsel-projectile-find-dir
       "pb" 'counsel-projectile-switch-to-buffer
@@ -1616,6 +1614,7 @@ use git in emacs!
     :general
     ("C-x g" 'magit-status)
     (my-leader-def
+      "g" '(:ignore t :wk "git")
       "gs" 'magit-status
       "gc" 'magit-checkout
       "gC" 'magit-commit
@@ -1885,6 +1884,7 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
   (use-package multi-vterm
     :general
     (my-leader-def
+      "t" '(:ignore t :wk "terminal")
       "tt" 'multi-vterm
       "tn" 'multi-vterm-next
       "tp" 'multi-vterm-prev)
