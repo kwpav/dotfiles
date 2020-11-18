@@ -1798,6 +1798,12 @@ Taken from here https://www.emacswiki.org/emacs/AlarmBell
       (invert-face 'mode-line)
       (run-with-timer 0.1 nil #'invert-face 'mode-line)))
 #+end_src
+
+Point to the git executable, this is supposed to speed up =magit=
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq magit-git-executable "/usr/bin/git"))
+#+end_src
 *** Linux
 **** StumpWM
 #+BEGIN_SRC emacs-lisp
