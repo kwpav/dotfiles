@@ -1485,6 +1485,9 @@ Enable the minor modes I use for writing
 *** ox-hugo
 org mode for hugo blogs. Having an issue with loading this on OSX so only install it on Linux for now.
 #+begin_src emacs-lisp
+  ;; this seems to be required for ox-hugo to work
+  (use-package ox :straight nil)
+
   (when (eq system-type 'gnu/linux)
     (use-package ox-hugo
       :after ox))
