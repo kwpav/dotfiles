@@ -145,62 +145,80 @@ Increase the amount of data which Emacs reads from the process. Again the emacs 
 
 ** Core
 Things that modify or replace the core functionality of Emacs, or are needed by the rest of the config.
+
 *** Saner Defaults
-Modify some of the default settings.
+Settings for things that are defined in the C source code, so we use =emacs= as the package.
+#+begin_src emacs-lisp
+  (use-package emacs
+    :straight nil
+    :init
+    ;; answer with y/n instead of typing out yes/no
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    :custom
+    ;; load new source files instead of stale elisp bytecode
+    (load-prefer-newer t)
+    ;; allow emacs to be any size, removes black bars
+    (frame-resize-pixelwise t))
+#+end_src
 
-Change "yes or no" to "y or n"
-#+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-
-Update buffers automatically when underlying files are changed externally.
-#+BEGIN_SRC emacs-lisp
+Refresh (revert in Emacs' terms) buffers when files change on disk. Makes sure to update any version control info that changes also.
+#+begin_src emacs-lisp
   (use-package autorevert
     :straight nil
+    :custom
+    (global-revert-check-vc-info t)
     :config
     (global-auto-revert-mode +1))
-#+END_SRC
+#+end_src
 
-Use UTF-8 for (almost) everything. This should also fix flycheck errors with python-flake8.
-#+BEGIN_SRC emacs-lisp
+Use utf-8 for everything.
+#+begin_src emacs-lisp
   (use-package mule
     :straight nil
     :config
     (prefer-coding-system 'utf-8)
     (set-default-coding-systems 'utf-8)
-    ;; (set-terminal-coding-system 'utf-8)
-    ;; (set-keyboard-coding-system 'utf-8)
-    ;; (set-selection-coding-system 'utf-8)
-    ;; (set-file-name-coding-system 'utf-8)
-    ;; (set-clipboard-coding-system 'utf-8)
-    ;; (set-buffer-file-coding-system 'utf-8)
     (set-language-environment "UTF-8"))
-#+END_SRC
+#+end_src
 
-Settings from =better-defaults=
-#+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-
-  (setq save-interprogram-paste-before-kill t
-        apropos-do-all t
-        mouse-yank-at-point t
-        require-final-newline t
-        visible-bell t
-        load-prefer-newer t
-        ediff-window-setup-function 'ediff-setup-windows-plain)
-
-  (save-place-mode 1)
-#+END_SRC
-
-Don't create any extra files.
-#+BEGIN_SRC emacs-lisp
+Emacs likes to create lots of extra files for things, these settings prevent that. Also, create a newline at the end of the file on save.
+#+begin_src emacs-lisp
   (use-package files
     :straight nil
     :custom
-    (make-backup-files nil) ; stop creating backup~ files
-    (auto-save-default nil) ; stop creating #autosave# files
-    (create-lockfiles nil)) ; stop creating .# files)
-#+END_SRC
+    (make-backup-files nil)    ;; stop creating backup~ files
+    (auto-save-default nil)    ;; stop creating #autosave# files
+    (create-lockfiles nil)     ;; stop creating .# files
+    (require-final-newline t)) ;; auto add newline at the end of file
+#+end_src
+
+Use the system clipboard for killing/yanking (copying/pasting) and display column information in the modeline.
+#+begin_src emacs-lisp
+  (use-package simple
+    :straight nil
+    :custom
+    ;; killing and yanking uses the system clipboard
+    (save-interprogram-paste-before-kill t)
+    :config
+    ;; display column info in the modeline
+    (column-number-mode +1))
+#+end_src
+
+When the lines in a file are so long that performance could suffer to an unacceptable degree, we say "so long" to the slow modes and options enabled  in that buffer, and invoke something much more basic in their place.
+#+begin_src emacs-lisp
+  (use-package so-long
+    :straight nil
+    :config
+    (global-so-long-mode +1))
+#+end_src
+
+When you visit a file, point goes to the last place where it was when you previously visited the same file.
+#+begin_src emacs-lisp
+  (use-package saveplace
+    :straight nil
+    :config
+    (save-place-mode +1))
+#+end_src
 
 Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by Emacs packages.
 #+BEGIN_SRC emacs-lisp
@@ -222,13 +240,6 @@ Create =~/.emacs.d/etc/= and =~/.emacs.d/var/= to store files and data used by E
     (show-paren-mode +1))
 #+end_src
 
-Set up so-long mode to handle files with large lines. If a line in a file is too long, this will turn off syntax highlighting, which causes slowness when using files with long lines.
-#+begin_src emacs-lisp
-  (use-package so-long
-    :straight nil
-    :config
-    (global-so-long-mode +1))
-#+end_src
 *** Keys
 To set up custom keys, I use a combination of:
 - =general= - provides a leader key and gives us an easy way to define custom keys in =use-package=
