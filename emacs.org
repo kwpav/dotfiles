@@ -127,22 +127,6 @@ Increase the amount of data which Emacs reads from the process. Again the emacs 
 #+begin_src emacs-lisp
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 #+end_src
-*** COMMENT OLD Garbage Collection
-#+BEGIN_SRC emacs-lisp
-  (setq gc-cons-threshold 100000000)
-  (defvar gc-timer nil)
-  (defun maybe-gc ()
-    (let ((original gc-cons-threshold))
-      (setq gc-cons-threshold 800000)
-      (setq gc-cons-threshold original
-            gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
-
-  (defun schedule-maybe-gc ()
-    (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
-
-  (schedule-maybe-gc)
-#+END_SRC
-
 ** Core
 Things that modify or replace the core functionality of Emacs, or are needed by the rest of the config.
 
@@ -559,7 +543,7 @@ Using the default keybinding of ~C-;~.
 ** Startup
 Display the scratch buffer when starting up, use =org-mode= for the scratch buffer, and remove the default message.
 #+BEGIN_SRC emacs-lisp
-  (use-package "startup"
+  (use-package emacs
     :straight nil
     :custom
     (inhibit-startup-screen t)
@@ -593,10 +577,6 @@ Use a non-blinking cursor for a more zen-like experience.
     (blink-cursor-mode -1)) ;; dont blink the cursor
 #+END_SRC
 
-If the frame isnt a specific height/width, some black edges will appear around it. This removes them.
-#+BEGIN_SRC emacs-lisp
-  (setq frame-resize-pixelwise t)
-#+END_SRC
 *** Theme
 Theme I'm currently using
 
@@ -1050,7 +1030,7 @@ From various places, like:
   ;;      (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
 *** COMMENT solaire
-make certain buffers lighter/darker, e.g. treemacs
+Make certain buffers lighter/darker, e.g. treemacs. This only works in doom and kaolin themes.
 #+BEGIN_SRC emacs-lisp
   (use-package solaire-mode
     ;; Ensure solaire-mode is running in all solaire-mode buffers
