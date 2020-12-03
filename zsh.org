@@ -127,7 +127,7 @@ Set up how git is displayed.
   zstyle ':vcs_info:*' formats \
     '%F{8}[%F{7}±%B%b%%b %F{2}%c%F{3}%u%F{8}]%f' # %%b is bold off
   zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-  zstyle ':vcs_info:*' enable git 
+  zstyle ':vcs_info:*' enable git
   +vi-git-untracked() {
     if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
     [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
@@ -152,6 +152,7 @@ Set up the actual prompt.
 #+END_SRC
 
 * Aliases
+** Pacman
 Pacman aliases
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   alias pac='sudo pacman'
@@ -161,26 +162,30 @@ Pacman aliases
   alias pacss='pac -Ss'
   alias pacq='pac -Qs'
 #+END_SRC
-
+** Xorg
+Xorg aliases
+#+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
+  alias x='startx'
+#+END_SRC
+** List
 List aliases
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   alias ll='ls -l'
   alias lla='ls -la'
 #+END_SRC
-
+** Git
 Git aliases
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
   alias g='git'
   alias gs='git status'
   alias gss='git status -s'
 #+END_SRC
-
+** KeePass
 Aliases to sync my KeePass db
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
 alias keepush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
 alias keepull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
 #+END_SRC
-
 * vterm
 Set up things for vterm in Emacs
 

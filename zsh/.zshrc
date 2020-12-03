@@ -96,6 +96,8 @@ alias pacy='pac -Sy'
 alias pacss='pac -Ss'
 alias pacq='pac -Qs'
 
+alias x='startx'
+
 alias ll='ls -l'
 alias lla='ls -la'
 
