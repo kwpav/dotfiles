@@ -1,5 +1,5 @@
 #+TITLE: ~/dotfiles/emacs.org
- 
+
 * emacs.org
 ** What is this?
 This is my emacs configuration in =org-mode=. It's loaded using =(org-babel-load-file "~/dotfiles/emacs.org")= from my =init.el=. It contains a lot of things inspired (stolen) from places around the on web such as:
@@ -582,48 +582,22 @@ Theme I'm currently using
 
 Modus themes are WCAG AAA compliant, easy on the eyes, and super customizeable.
 
-Dark theme
 #+BEGIN_SRC emacs-lisp
-  (use-package modus-vivendi-theme
+  (use-package modus-themes
+    :init
+    (modus-themes-load-themes)
     :custom
-    (modus-vivendi-theme-bold-constructs t)
-    (modus-vivendi-theme-slanted-constructs t)
-    (modus-vivendi-theme-intense-paren-match t)
-    (modus-vivendi-theme-completions 'opinionated)
+    (modus-themes-bold-constructs t)
+    (modus-themes-slanted-constructs t)
+    (modus-themes-intense-paren-match t)
+    (modus-themes-completions 'opinionated)
     ;; org specific settings
-    (modus-vivendi-theme-org-blocks 'grayscale)
-    (modus-vivendi-theme-headings '((t . rainbow)))
-    (modus-vivendi-theme-scale-headings t)
+    (modus-themes-org-blocks 'grayscale)
+    (modus-themes-headings '((t . rainbow)))
+    (modus-themes-scale-headings t)
     :config
-    (load-theme 'modus-vivendi))
+    (modus-themes-load-vivendi))
    #+END_SRC
-
-Light theme
-#+begin_src emacs-lisp
-  (use-package modus-operandi-theme
-    :custom
-    (modus-operandi-theme-bold-constructs t)
-    (modus-operandi-theme-slanted-constructs t)
-    (modus-operandi-theme-intense-paren-match t)
-    (modus-operandi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-operandi-theme-org-blocks 'grayscale)
-    (modus-operandi-theme-headings '((t . rainbow)))
-    (modus-operandi-theme-scale-headings t))
-#+end_src
-
-Toggle between them
-#+begin_src emacs-lisp
-  (defun modus-themes-toggle ()
-      "Toggle between `modus-operandi' and `modus-vivendi' themes."
-      (interactive)
-      (if (eq (car custom-enabled-themes) 'modus-operandi)
-          (progn
-            (disable-theme 'modus-operandi)
-            (load-theme 'modus-vivendi t))
-        (disable-theme 'modus-vivendi)
-        (load-theme 'modus-operandi t)))
-#+end_src
 *** COMMENT other themes
 Some dark themes I Like
 #+BEGIN_SRC emacs-lisp
@@ -1348,7 +1322,9 @@ As of Emacs 27.1, =org-tempo= is required to use these.
           '(("t" "Todo" entry (file+headline "~/org/agenda/todo.org" "Tasks")
              "* TODO %?\n %i\n %a")
             ("s" "Standup" entry (file+olp+datetree "~/org/agenda/todo.org" "Standup")
-             "* Planned\n- %?\n %i\n %a")))
+             "* Planned\n- %?\n %i\n %a")
+            ("g" "Grow Log" entry (file+olp+datetree "~/grow/grow.org" "Log")
+             "* Day Xn\n** Log\n** Notes\n %?\n %i\n")))
 
     (defun org-hugo-new-subtree-post-capture-template ()
       "Returns `org-capture' template string for new Hugo post.
