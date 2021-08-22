@@ -173,6 +173,12 @@ List aliases
   alias ll='ls -l'
   alias lla='ls -la'
 #+END_SRC
+** Folder Navigation
+Navigate around folders
+#+begin_src sh :tangle ~/dotfiles/zsh.zshrc
+  alias '..'='cd ../'
+  alias '...'='cd ../../'
+#+end_src
 ** Git
 Git aliases
 #+BEGIN_SRC sh :tangle ~/dotfiles/zsh/.zshrc
