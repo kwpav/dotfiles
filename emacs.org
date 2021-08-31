@@ -1613,11 +1613,6 @@ use git in emacs!
           (user-error "There is not current branch")))))
 #+END_SRC
 
-Get evil-mode to play nicely
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-magit
-    :after (magit evil))
-#+END_SRC
 *** Forge
 This adds integration with github
 #+begin_src emacs-lisp
@@ -1874,7 +1869,7 @@ run multiple terminals at once (as opposed to =M-x term=, which can only run one
     :config
     (add-hook 'vterm-mode-hook
               (lambda ()
-                (setq-local evil-insert-state-cursor 'box)
+                ;; (setq-local evil-insert-state-cursor 'box)
                 (evil-insert-state)))
     (define-key vterm-mode-map [return]                      #'vterm-send-return)
 
