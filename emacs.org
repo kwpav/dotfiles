@@ -1583,7 +1583,7 @@ Use editorconfig for projects that have them
 *** agressive-indent
 Keep code nicely aligned automatically! This will be turned in on language modes that work will with it (e.g. lisps).
 #+begin_src emacs-lisp
-  (use-package aggressive-indent-mode
+  (use-package aggressive-indent
     :defer t)
 #+end_src
 ** Version Control
