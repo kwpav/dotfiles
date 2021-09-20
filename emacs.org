@@ -1580,6 +1580,12 @@ Use editorconfig for projects that have them
     :config
     (editorconfig-mode +1))
 #+END_SRC
+*** agressive-indent
+Keep code nicely aligned automatically! This will be turned in on language modes that work will with it (e.g. lisps).
+#+begin_src emacs-lisp
+  (use-package aggressive-indent-mode
+    :defer t)
+#+end_src
 ** Version Control
 *** magit
 use git in emacs!
@@ -2243,6 +2249,7 @@ Now setup packages that will be used for all the lisp modes above.
 
 #+BEGIN_SRC emacs-lisp
   (defun my-lisp-setup ()
+    (aggressive-indent-mode +1)
     (electric-pair-mode -1))
 
   (use-package paredit

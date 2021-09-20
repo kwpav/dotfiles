@@ -1,5 +1,6 @@
 (("a.el" . "3d341eb7813ee02b00ab28e11c915295bfd4b5a7")
  ("ace-window" . "c7cb315c14e36fded5ac4096e158497ae974bec9")
+ ("aggressive-indent-mode" . "cb416faf61c46977c06cf9d99525b04dc109a33c")
  ("all-the-icons.el" . "c0d288a41faea2ecb7e8dd947486764a2ee17ec9")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("anzu" . "bdb3da5028935a4aea55c40769bc191a81afb54e")
