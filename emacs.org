@@ -2330,6 +2330,7 @@ CIDER is the Clojure(Script) Interactive Development Environment that Rocks!
       "n" 'cider-repl-set-ns
       "er" 'cider-eval-region
       "eb" 'cider-eval-buffer
+      "ef" 'cider-eval-sexp-at-point
       "el" 'cider-eval-last-sexp))
 #+END_SRC
 *** Common Lisp
