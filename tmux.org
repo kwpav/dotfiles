@@ -24,9 +24,9 @@ Set up proper colors, using either =screen= or =tmux-256-color= depending on the
 * Keys
 Set the prefix key to be ~C-a~ instead of the default, ~C-b~
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-  unbind C-b
-  set -g prefix C-a
-  bind C-a send-prefix
+  # unbind C-b
+  # set -g prefix C-a
+  # bind C-b send-prefix
 #+END_SRC
 
 Split windows using ~o~ and ~u~
@@ -59,16 +59,13 @@ get colours using:
 
 Set up the colors
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-  # black='colour16'
-  # white='colour255'
-  # gray='colour236'
-  # dark_gray='colour236'
-  # yellow='colour215'
-  # light_purple='colour141'
-  # dark_purple='colour61'
-
-
-
+  black='colour0'
+  white='colour255'
+  gray='colour7'
+  dark_gray='colour8'
+  yellow='colour215'
+  light_purple='colour141'
+  dark_purple='colour61'
   # black='colour233'
   # white='colour255'
   # gray='colour246'
@@ -76,6 +73,7 @@ Set up the colors
   # cyan='colour159'
   # light_blue='colour75'
   # dark_blue='colour31'
+  blue=color4
 #+END_SRC
 
 Example of powerline separators (not using these at the moment)
@@ -87,10 +85,11 @@ Example of powerline separators (not using these at the moment)
 
 Set up what is displayed on the status bar
 #+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-  # set-option -g status on
+  set-option -g status on
   # set-option -g status-left-length 100
   # set-option -g status-right-length 100
-  # set-option -g status-bg "${dark_gray}"
+  set-option -g status-bg "${black}"
+  set-option -g status-fg "${blue}"
   # set-option -g pane-active-border-fg "${dark_blue}"
   # set-option -g pane-border-fg "${gray}"
   # set-option -g message-bg "${gray}"
@@ -105,8 +104,17 @@ Set up what is displayed on the status bar
   # set-window-option -g window-status-separator ''
   # set-window-option -g window-status-format ' #I:#W '
   # set-window-option -g window-status-style "fg=${cyan},bg=${dark_gray}"
-  # set-window-option -g window-status-current-format "#[fg=${black}] #I:#W #[fg=${dark_gray},reverse]"
+  # set-window-option -g window-status-current-format "#[fg=${white}] #I:#W #[fg=${dark_gray},reverse]"
   # set-window-option -g window-status-current-style "fg=${dark_gray},bg=${light_blue}"
+  # set -g status-left " #I "
+  set -g status-left ""
+  set-window-option -g window-status-activity-style "fg=${white},bg=${gray}"
+  set-window-option -g window-status-separator "  "
+  set-window-option -g window-status-format " #I:#W "
+  set-window-option -g window-status-style "fg=${black},bg=${dark_gray}"
+  set-window-option -g window-status-current-style "fg=${black},bg=${blue}"
+  set-window-option -g window-status-current-format " #I:#W "
+  set -g status-justify centre
 #+END_SRC
 
 * Plugins
@@ -124,10 +132,4 @@ Tmux Plugin Manager
 
   # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
   run -b '~/.tmux/plugins/tpm/tpm'
-#+END_SRC
-** nord plugin
-#+BEGIN_SRC conf-space :tangle tmux/.tmux.conf
-  set -g @plugin "arcticicestudio/nord-tmux"
-
-  run "~/.tmux/plugins/tpm/tpm"
 #+END_SRC
