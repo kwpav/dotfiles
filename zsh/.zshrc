@@ -50,7 +50,7 @@ fi
 
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init-)"
+eval "$(pyenv init -)"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
