@@ -20,7 +20,7 @@ setopt extended_glob
 # autocompletion of command line switches for aliases
 setopt COMPLETE_ALIASES
 
-kitty + complete setup zsh | source /dev/stdin
+# kitty + complete setup zsh | source /dev/stdin
 
 zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' menu select
@@ -39,12 +39,18 @@ xdvi() { command xdvi ${*:-*.dvi(om[1])} }
 zstyle ':completion:*:*:xdvi:*' menu yes select
 zstyle ':completion:*:*:xdvi:*' file-sort time
 
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$HOME/.node_modules/bin:$(ruby -e 'print Gem.user_dir')/bin:$HOME/.config/composer/vendor/bin:$PATH"
+
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     source /usr/share/nvm/init-nvm.sh
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 fi
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init-)"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -101,12 +107,18 @@ alias x='startx'
 alias ll='ls -l'
 alias lla='ls -la'
 
+alias '..'='cd ../'
+alias '...'='cd ../../'
+
 alias g='git'
 alias gs='git status'
 alias gss='git status -s'
 
 alias keepush='CUR=$PWD && cd ~/gdrive && drive push KeePass && cd $CUR'
 alias keepull='CUR=$PWD && cd ~/gdrive && drive pull KeePass && cd $CUR'
+
+alias basemacs='emacs-sandbox.sh -PRd ~/.basemacs/'
+# alias basemacs='emacs --with-profile base'
 
 vterm_printf(){
     if [ -n "$TMUX" ]; then
