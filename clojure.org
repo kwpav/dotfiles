@@ -1,0 +1,15 @@
+#+TITLE: Clojure
+* User config
+User config for Clojure goes into the =$HOME/.clojure/= folder.
+
+Set up =deps.edn=  with portal
+#+begin_src clojure :tangle ~/dotfiles/clojure/.clojure/deps.edn
+{:deps {djblue/portal {:mvn/version "0.35.1"}}}
+#+end_src
+* COMMENT Tools
+Found t his  in =.clojure/tools/tools.edn=. Not sure if I need it?
+#+begin_src clojure
+{:lib io.github.clojure/tools.tools
+ :coord {:git/tag "v0.3.0"
+         :git/sha "12f7f66ee85578ae939c0b40b71a2f1811afac04"}}
+#+end_src
