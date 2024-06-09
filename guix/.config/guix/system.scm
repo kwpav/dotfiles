@@ -52,6 +52,7 @@
               gvfs
               zsh
               ;; nix
+              hikari
               hyprland
               ;; sway
               river
