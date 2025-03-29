@@ -1,0 +1,142 @@
+;; references
+;; https://github.com/owenrumney/eww-bar/blob/master/eww.yuck
+(defwindow bar-1
+           :monitor '[0, "DP-1"]'
+           :stacking "fg"
+           :exclusive "true"
+           :geometry (geometry :x "0%"
+                               :y "0%"
+                               :width "40px"
+                               :height "100%"
+                               :anchor  "center left")
+           (bar :screen 1))
+
+(defwindow bar-2
+           :monitor '[1, "DP-2"]'
+           :stacking "fg"
+           :exclusive "true"
+           :geometry (geometry :x "0%"
+                               :y "0%"
+                               :width "40px"
+                               :height "100%"
+                               :anchor  "center right")
+           (bar :screen 2))
+
+(defwidget bar [screen]
+           (centerbox :orientation "v"
+                      (box :class "segment-top"
+                           :valign "start"
+                           (top :screen screen))
+                      (box :class "segment-middle"
+                           :valign "center"
+                           (middle :screen screen))
+                      (box :class "segment-bottom"
+                           :valign "end"
+                           (bottom :screen screen))))
+
+(defwidget top [screen]
+           (box
+            :orientation "v"
+            ;; :space-evenly false
+            (disk)
+            (cpu)
+            (memory)
+            (volume)))
+
+(defwidget middle [screen]
+           (workspaces :screen {screen == 1 ? "DP-1" : "DP-2"}))
+
+(defwidget bottom [screen]
+           (time))
+
+(defwidget time []
+           (box :orientation "v"
+                :class "time"
+                hour min sec))
+
+(defwidget memory []
+           (box :orientation "v"
+                :space-evenly false
+                :class "memory"
+                (box :orientation "v"
+                     :class "memory-icon"
+                     "")
+                (box :orientation "v"
+                     :class "memory-stat"
+                     "${round(EWW_RAM.used_mem_perc, 0)}%")))
+
+(defwidget cpu []
+           (box :orientation "v"
+                :space-evenly false
+                :class "cpu"
+                (box :orientation "v"
+                     :class "cpu-icon"
+                     "")
+                (box :orientation "v"
+                     :class "memory-stat"
+                     "${round(EWW_CPU.avg, 0)}%")))
+
+(defwidget volume []
+           (box :orientation "v"
+                :space-evenly false
+                :class "volume"
+                (box :orientation "v"
+                     :class "volume-icon"
+                     "")
+                (box :orientation "v"
+                     :class "volume-stat"
+                     "${volume}%")))
+
+(defwidget disk []
+           (box :orientation "v"
+                :space-evenly false
+                :class "disk"
+                (box :orientation "v"
+                     :class "disk-icon"
+                     "")
+                (box :orientation "v"
+                     :class "disk-stat"
+                     "${round(EWW_DISK["/"].used_perc, 0)}%")))
+
+(defwidget workspaces [screen]
+           (box :orientation "v"
+                :class "workspaces"
+                (for wsp in {workspaces[screen]}
+                     (button :class "${wsp.focused ? "active" : "inactive"}"
+                             :onclick "swaymsg workspace ${wsp.name}"
+                             {wsp.name}))))
+
+;; (defpoll time :interval "10s"
+;;          "date '+%H:%M %b %d, %Y'")
+
+(defpoll hour :interval "1s" "date +%H")
+(defpoll min  :interval "1s" "date +%M")
+(defpoll sec  :interval "1s" "date +%S")
+
+(deflisten workspaces :initial '{"DP-1": [], "DP-2": []}' "./swayspaces.py")
+
+(defpoll memory :interval "5s" "./memory.sh")
+(defpoll volume :interval "1s" "bb -m eww.volume")
+
+;; (defwidget greeter [?text name]
+;;   (box :orientation "horizontal"
+;;        :halign "center"
+;;     text
+;;     (button :onclick "notify-send 'Hello' 'Hello, ${name}'"
+;;       "Greet")))
+
+;; (defwindow example
+;;            :monitor 0
+;;            :geometry (geometry :x "0%"
+;;                                :y "20px"
+;;                                :width "90%"
+;;                                :height "30px"
+;;                                :anchor "top center")
+;;            :stacking "fg"
+;;            :exclusive "true"
+;;            ;; :reserve (struts :distance "40px" :side  "top")
+;;            ;; :windowtype "dock"
+;;            ;; :wm-ignore false
+;;            (greeter :text "Say hello!"
+;;                     :name "Kevin"))
+

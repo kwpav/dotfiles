@@ -1,0 +1,133 @@
+/*
+Colors
+from:
+https://catppuccin.ryanccn.dev/palette
+*/
+$bg: #2E3440;
+$fg: #D8DEE9;
+$rosewater1:  #f5e0dc;
+$flamingo1: #f2cdcd;
+$pink1: #f5c2e7;
+$mauve1: #cba6f7;
+$red1: #fe8ba8;
+$maroon1: #eba0ac;
+$peach1: #fab387;
+$yellow1: #f9e2af;
+$green1: #a6e3a1;
+$teal1: #94e2d5;
+$sky1: #89dceb;
+$sapphire1: #74c7ec;
+$blue1: #89b4fa;
+$lavender1: #b4befe;
+$text: #cdd6f5;
+$subtext1: #bac2de;
+$subtext0: #a6adc8;
+$overlay2: #9399b2;
+$overlay1: #7f849c;
+$overlay0: #6c7086;
+$surface2: #585b70;
+$surface1: #45475a;
+$surface0: #313244;
+$base: #1e1e2e;
+$mantle: #181825;
+$crust: #11111b;
+
+// $mantle: #181825;
+// $text: #cdd6f5;
+
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+//Global Styles
+window {
+    font-family: "Rec Mono Semicasual";
+    background-color: $mantle;
+    color: $text;
+    font-size: 14px;
+    & > * {
+        margin: 3px;
+    }
+}
+
+.workspaces {
+    button {
+        border-radius: 5px;
+        font-weight: bold;
+    background: $base;
+    margin: 4px;
+    padding-left: 1px;
+    &.inactive {
+        color: $subtext1;
+    }
+    &.active {
+        color: $blue1;
+        background: $surface0;
+    }
+    &.occupied {
+        background: $surface0;
+        // font-size: 1.01rem;
+    }
+    // &.empty {
+    //   // font-size: 0.8rem;
+    // }
+  }
+}
+
+.time {
+    font-weight: bold;
+    margin: 3px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 5px;
+  background: $surface0;
+  color: $rosewater1;
+}
+
+.memory {
+    font-weight: bold;
+    margin: 1px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 5px;
+  background: $surface0;
+  color: $lavender1;
+}
+
+.cpu
+{
+    font-weight: bold;
+    margin: 1px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 5px;
+  background: $surface0;
+  color: $teal1;
+}
+
+.disk
+{
+    font-weight: bold;
+    margin: 1px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 5px;
+  background: $surface0;
+  color: $mauve1;
+}
+
+.volume
+{
+    font-weight: bold;
+    margin: 1px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 5px;
+  background: $surface0;
+  color: $flamingo1;
+}
+
+// .memory-stat {
+//     // text-orientation: sideways;
+//     transform: rotate(-90deg);
+// }
