@@ -1,0 +1,4 @@
+#!/bin/sh
+# ./init.old
+bb /home/kpav/.config/river/init.testing.clj
+rivertile -view-padding 6 -outer-padding 6 &
