@@ -1,0 +1,134 @@
+/*
+Colors
+from:
+https://catppuccin.ryanccn.dev/palette
+*/
+@define-color bg #2E3440;
+@define-color fg #D8DEE9;
+@define-color rosewater1  #f5e0dc;
+@define-color flamingo1 #f2cdcd;
+@define-color pink1 #f5c2e7;
+@define-color mauve1 #cba6f7;
+@define-color red1 #fe8ba8;
+@define-color maroon1 #eba0ac;
+@define-color peach1 #fab387;
+@define-color yellow1 #f9e2af;
+@define-color green1 #a6e3a1;
+@define-color teal1 #94e2d5;
+@define-color sky1 #89dceb;
+@define-color sapphire1 #74c7ec;
+@define-color blue1 #89b4fa;
+@define-color lavender1 #b4befe;
+@define-color text #cdd6f5;
+@define-color subtext1 #bac2de;
+@define-color subtext0 #a6adc8;
+@define-color overlay2 #9399b2;
+@define-color overlay1 #7f849c;
+@define-color overlay0 #6c7086;
+@define-color surface2 #585b70;
+@define-color surface1 #45475a;
+@define-color surface0 #313244;
+@define-color base #1e1e2e;
+@define-color mantle #181825;
+@define-color crust #11111b;
+
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    /* top right bottom left */
+    margin: 0.1em 0.2em 0.1em 0.2em;
+}
+
+#waybar {
+    background: @mantle;
+    color: @text;
+    font-family: "Rec Mono Semicasual";
+    font-weight: bold;
+    font-size: 14px;
+}
+
+tooltip {
+    background: #e7e7ec;
+    opacity: 0.8;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #11111b;
+}
+
+tooltip label{
+    color: #2b2b2c;
+}
+
+#tags button {
+    color: @text;
+    border-radius: 3px;
+    /* margin: 0; */
+    padding-left: 5px;
+    padding-right: 5px;
+    opacity: 0.3;
+    background: @surface1;
+}
+
+#tags button.occupied {
+    opacity: 0.5;
+    color: @green1;
+}
+
+#tags button.focused {
+    color: @blue1;
+    opacity: 1;
+}
+
+#tags button.urgent {
+    background: @maroon1;
+    border-color: @red1;
+    color: @crust;
+    opacity: 1;
+}
+
+#mode {
+    background: @surface0;
+    opacity: 0.5;
+}
+
+#cpu,
+#disk,
+#memory,
+#clock,
+#pulseaudio,
+#network,
+#tray,
+#temperature,
+#tags,
+#network,
+#mode {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    border-radius: 3px;
+}
+
+#network {
+    background: @surface0;
+}
+
+#cpu {
+    background: @surface0;
+}
+
+#memory {
+    background: @surface0;
+}
+
+#pulseaudio {
+    background: @surface0;
+}
+
+#disk {
+    background: @surface0;
+}
+
+#clock {
+    background: @blue1;
+    color: @crust;
+}

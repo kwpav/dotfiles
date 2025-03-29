@@ -8,8 +8,11 @@
              (gnu)
              (gnu packages)
              (gnu services)
+             ;; (gnu packages base)
              (nongnu packages clojure)
+             (nongnu packages game-client)
              (nongnu packages mozilla)
+             (saayix packages wm)
              (guix gexp)
              (gnu home services shells)
              (gnu home services ssh))
@@ -17,9 +20,14 @@
 (use-service-modules guix)
 
 (use-package-modules
- ;; base
+ base
+ linux
+ librewolf
+ image-viewers
  java
  clojure
+ rust
+ zig
  curl
  commencement
  gl
@@ -30,7 +38,6 @@
  terminals
  bittorrent
  rust-apps
- linux
  package-management
  emacs
  cmake
@@ -43,7 +50,9 @@
  ssh
  xdisorg
  wm
- python)
+ xfce
+ python
+ )
 
 (home-environment
  ;; Below is the list of packages that will show up in your
@@ -51,42 +60,66 @@
  ;; TODO dont use specifications->packages!!!
  (packages
   (list
+   ;; programming languages
    ;; guile
    (list openjdk "jdk")
    clojure
+   clojure-lsp
    clojure-tools
+   ;; babashka is missing libs?
    babashka
    python
+   rust
+   rust-cargo
+   zig
    gcc-toolchain
-   papirus-icon-theme
-   emacs
+   gnu-make
+   cmake
+   libvterm
+   ;; desktop apps
+   ;; gnome-tweaks
+   ;; emacs
+   emacs-no-x-toolkit
+   eww
+   imv
+   librewolf
    firefox
+   fuzzel
+   wofi
    foot
    qbittorrent
+   thunar
+   waybar-experimental
+   swaybg
+   steam
+   ;; fonts & icons
+   papirus-icon-theme
+   font-recursive
+   font-awesome
+   ;; package managers
+   flatpak
+   nix
+   ;; utils
+   sysstat
+   bat
+   eza
+   fd
+   fzf
+   wlr-randr
    curl
+   git
    mesa-utils
    mangohud
    pulsemixer
-   gnome-tweaks
+   ;; pipewire
    ripgrep
    lm-sensors
    htop
-   flatpak
-   ;; make
-   cmake
-   libvterm
-   nix
    qemu
    zip
    unzip
-   font-recursive
-   font-awesome
-   git
    tmux
-   openssh-sans-x
-   fuzzel
-   waybar-experimental
-   swaybg)
+   openssh-sans-x)
   ;; (specifications->packages (list
   ;;                            ;; programming
   ;;                            "guile"
@@ -148,6 +181,7 @@
          (home-zsh-configuration
           (zshrc (list (local-file "/home/kpav/.config/guix/.zshrc"
                                    "zshrc"))))
+
          ;; home-bash-service-type
          ;;         (home-bash-configuration
          ;;          (aliases '(("sys-reconfigure" . "sudo -E guix system reconfigure /home/kpav/.config/guix/system.scm")
@@ -161,6 +195,13 @@
          ;;                               "/home/kpav/.config/guix/.bash_profile"
          ;;                               "bash_profile"))))
          )
+        ;; https://git.savannah.gnu.org/cgit/guix.git/tree/gnu/home/services/shells.scm?id=master#n595
+        (service
+         home-fish-service-type
+         (home-fish-configuration
+          (config (list (local-file "/home/kpav/.config/guix/config.fish")))
+          )
+         )
         (service home-openssh-service-type
                  (home-openssh-configuration
                   (hosts
@@ -169,5 +210,8 @@
                          (openssh-host (name "*sr.ht")
                                        (identity-file  "~/.ssh/srht_ed25519"))))
                   (add-keys-to-agent "yes")))
+        ;; TODO this needs dbus?
+        ;; (service home-pipewire-service-type)
         ;; TODO look into home-gpg-agent-service-type
+        ;; TODO look into home-dotfiles-service
         (service home-ssh-agent-service-type))))

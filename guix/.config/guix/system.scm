@@ -17,25 +17,26 @@
              (nongnu packages linux)
              (nongnu system linux-initrd)
              (rosenthal packages wm))
-(use-service-modules desktop xorg nix)
+(use-service-modules desktop xorg nix networking)
 (use-package-modules certs gnome wm package-management)
 
 (operating-system
  (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
-  (locale "en_US.utf8")
-  (timezone "America/Chicago")
-  (keyboard-layout (keyboard-layout "us"))
-  (host-name "valinor")
+ (locale "en_US.utf8")
+ (timezone "America/Chicago")
+ (keyboard-layout (keyboard-layout "us"))
+ (host-name "valinor")
 
-  (groups (cons* (user-group (name "nixbld")) %base-groups))
+ (groups (cons* (user-group (name "nixbld")) %base-groups))
 
   ;; The list of user accounts ('root' is implicit).
   (users (cons* (user-account
                  (name "kpav")
                  (comment "Kevin Pavao")
-                 (shell (file-append zsh "/bin/zsh"))
+                 ;; (shell (file-append zsh "/bin/zsh"))
+                 (shell (file-append fish "/bin/fish"))
                  (group "users")
                  (home-directory "/home/kpav")
                  (supplementary-groups '("wheel" "netdev" "audio" "video")))
@@ -51,12 +52,14 @@
               ;; for user mounts
               gvfs
               zsh
+              fish
               ;; nix
               hikari
               hyprland
-              ;; sway
+              sway
               river
-              swayfx)
+              ;; swayfx
+              )
              ;; (map specification->package '("nss-certs"
              ;;                                      "git"
              ;;                                      "stow"
@@ -70,11 +73,10 @@
   ;; Below is the list of system services.  To search for available
   ;; services, run 'guix system search KEYWORD' in a terminal.
   (services
-   (append (list (service gnome-desktop-service-type)
+   (append (list ;; (service gnome-desktop-service-type)
                  ;;(set-xorg-configuration
                  ;;(xorg-configuration (keyboard-layout keyboard-layout)))
                  ;; TODO add these?
-                 ;; %base-services
                  ;;(service ntp-service-type) ;; sync system clock
                  ;;(service udisks-service-type) ;; usbs
                  ;;(service upower-service-type)
@@ -82,11 +84,11 @@
                  ;;(service elogind-service-type)
                  ;;(service dbus-root-service-type)
                  ;; (service nix-service-type)
-
-                 ;; set this for lutris
-                 (pam-limits-service
-                  (list (pam-limits-entry "*" 'hard 'nofile 524288))))
-
+            ;; set this for lutris
+            ;; TODO doesnt work?
+            ;; (pam-limits-service
+            ;;  (list (pam-limits-entry "*" 'hard 'nofile 524288)))
+            )
            ;; This is the default list of services we
            ;; are appending to.
            (modify-services %desktop-services
@@ -99,10 +101,12 @@
                                                 (authorized-keys
                                                  (append (list (local-file "signing-keys.pub"))
                                                          %default-authorized-guix-keys))))
-                            (gdm-service-type config =>
-                                              (gdm-configuration
-                                               (inherit config)
-                                               (wayland? #t))))))
+                            (delete gdm-service-type)
+                            ;; (gdm-service-type config =>
+                            ;;                   (gdm-confgiuration
+                            ;;                    (inherit config)
+                            ;;                    (wayland? #t)))
+                            )))
   (bootloader (bootloader-configuration
                 (bootloader grub-efi-bootloader)
                 (targets (list "/boot/efi"))
